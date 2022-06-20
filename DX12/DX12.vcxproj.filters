@@ -611,6 +611,9 @@
     <ClInclude Include="Gaussian.h">
       <Filter>ヘッダー ファイル\PostEffect\Gaussian</Filter>
     </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\FBXPS.hlsl">
