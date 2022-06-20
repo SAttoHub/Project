@@ -1,0 +1,806 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル\sprite">
+      <UniqueIdentifier>{8e2a22d1-8ea9-4ea5-836a-bfd903de3843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\object">
+      <UniqueIdentifier>{fb0ece3f-b106-4ed1-a2e0-d5085163f7c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\mat">
+      <UniqueIdentifier>{90f5433d-f06b-4db1-b179-c5f79a06c014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Particle">
+      <UniqueIdentifier>{64f7c84f-4e5b-4870-83a5-88c7c55c17bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base">
+      <UniqueIdentifier>{9e03fa9e-90d0-4940-9bd0-055226bb9358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base">
+      <UniqueIdentifier>{68dc2617-051c-49cd-9a00-9f5166ca0334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Collider">
+      <UniqueIdentifier>{23e37a51-93f9-48cd-b499-1ae136c878c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collider">
+      <UniqueIdentifier>{dabf251b-ab3c-4755-81f0-f2be12ff36dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\3DObject">
+      <UniqueIdentifier>{e746c248-0074-49d4-8c14-cfca4e2cea6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\3DObject\FBX">
+      <UniqueIdentifier>{4bd749ea-6c0e-42f1-8abe-c1669c0af0de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\3DObject">
+      <UniqueIdentifier>{dc193011-25c2-4af9-b3da-d399e36968cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\3DObject\FBX">
+      <UniqueIdentifier>{ab6ebb67-06d9-4fe4-99c6-5c13bea38ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX">
+      <UniqueIdentifier>{73c5a946-763c-4589-9783-07b6798355b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\Particle">
+      <UniqueIdentifier>{21344d5e-09c6-4b06-8f68-81bf5532abb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Particle">
+      <UniqueIdentifier>{6005c3c9-ee79-4692-b54d-cf3a37cddbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\Light">
+      <UniqueIdentifier>{7bfcaa1a-7cb2-4f6b-af1a-4c5e440f593f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Light">
+      <UniqueIdentifier>{04c58391-743a-40b7-9ec0-a62c19dc4e09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common">
+      <UniqueIdentifier>{d7db121c-0cef-435f-8034-647a8bbfd197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Math">
+      <UniqueIdentifier>{7685ec8d-6f50-47d6-9bf6-653cb8bcaf23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Colors">
+      <UniqueIdentifier>{24f3595b-9d47-46e5-9ccc-78a3d1d986f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Primitive">
+      <UniqueIdentifier>{15e8e221-c478-40f5-bb3b-995db4d12604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\Primitive">
+      <UniqueIdentifier>{c3f27619-be7c-405a-9fae-2822523c1086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive">
+      <UniqueIdentifier>{ddbf6c6b-c021-449e-9cc8-a213fb18cf2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Primitive\3D">
+      <UniqueIdentifier>{5a69f24b-c159-4913-b562-f9c815abf399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Primitive\2D">
+      <UniqueIdentifier>{ec7179a1-d44b-4b60-8dba-d27633927645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D">
+      <UniqueIdentifier>{f6f5034e-244d-4a08-ba21-45c1c5de67df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D\Line3D">
+      <UniqueIdentifier>{467a5237-21f5-4fcb-a753-075137e9c5e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D\Octahedron">
+      <UniqueIdentifier>{cfb6b47a-71a7-437e-8e96-cec5ab2b56a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D\Tetrahedron">
+      <UniqueIdentifier>{560ff64e-9b1d-47ea-a8e7-8f1c9392a461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D\Icosahedron">
+      <UniqueIdentifier>{d5cb4340-b193-4f46-ae64-ef5508b65c90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\3D\Cube3D">
+      <UniqueIdentifier>{fb214282-f0f9-44f7-b82c-8bc54ea1c957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\2D">
+      <UniqueIdentifier>{a4e83808-a753-490a-83f2-24ebb8dc75fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\2D\Box">
+      <UniqueIdentifier>{1e7f4df8-4f35-492e-ae86-af6e61013544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Primitive\2D\Graph">
+      <UniqueIdentifier>{f8b0fef3-daee-4aa8-8753-5a6851d7f728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game">
+      <UniqueIdentifier>{f8efa1e4-a8ac-417e-b402-0cd88da0e94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game">
+      <UniqueIdentifier>{da1ce8de-8298-42d7-afcd-c79c7a6afd7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Imgui">
+      <UniqueIdentifier>{63ab7cce-7ee2-4fa7-90db-cc704bd54b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Random">
+      <UniqueIdentifier>{79f44e1c-2f0c-4d49-af05-63efeb15c015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Math\DirectXMath拡張">
+      <UniqueIdentifier>{0ca97315-27e9-4fe4-906c-0a2619df9fa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Math\型">
+      <UniqueIdentifier>{2b9f0ec8-6f5c-4c2c-9c9f-4996234d9298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\基礎">
+      <UniqueIdentifier>{8c823acb-b9bc-48ee-b63d-1ace17c74deb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\バンプマッピング">
+      <UniqueIdentifier>{75e2b0d8-31c0-4315-a7bf-685533271682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\視差マッピング">
+      <UniqueIdentifier>{3f93cd2f-4130-46ad-a013-73ad7dee58b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect">
+      <UniqueIdentifier>{3050bb2c-afe9-45b9-b771-e181b3e0c759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect">
+      <UniqueIdentifier>{d57c739b-fbf5-43f8-ab30-688a146c2c0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect">
+      <UniqueIdentifier>{157a1677-2989-4e8b-b765-d3d92839df23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\GameCollider">
+      <UniqueIdentifier>{4df29b53-41bd-47dd-a2a2-54da255038ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\GameCollider">
+      <UniqueIdentifier>{c87f84f5-4659-4d43-87ca-c6e47926043c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\AStar">
+      <UniqueIdentifier>{e949789f-008b-4614-a576-406936b1d517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\AStar">
+      <UniqueIdentifier>{5ac2c3af-8590-4c8d-9314-2256f8f4fc55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common\Containers">
+      <UniqueIdentifier>{eb0b3d47-7800-4d3f-a760-6b0db65526a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Scenes">
+      <UniqueIdentifier>{31a42a49-fdd5-49b4-8f6d-90b82d6ecfdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Scenes">
+      <UniqueIdentifier>{d59400c0-0749-49be-92e1-520eeb1bbc15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\アウトライン">
+      <UniqueIdentifier>{299e3968-7fc8-4025-aa64-10e64593f4bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\ライン描画">
+      <UniqueIdentifier>{b58d4412-b93b-4fae-b51f-57379c8eb1c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\モザイク">
+      <UniqueIdentifier>{82fad832-83a4-4b59-9ff0-8a5b930953e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\グレースケール">
+      <UniqueIdentifier>{33d20ab4-619d-4619-84f7-cef363ccb3eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\海">
+      <UniqueIdentifier>{6294fb92-9b12-4f7f-923f-b6cfa41c657b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\ガウシアン">
+      <UniqueIdentifier>{68b84d8b-4896-4e2a-9e22-41b1c6061fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\Gaussian">
+      <UniqueIdentifier>{31c46a98-1a1d-45ca-818c-84befbbbfd66}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXBase.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DXAudio.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineManager.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="TexManager.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision2.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxLoader.cpp">
+      <Filter>ソース ファイル\Base\3DObject\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="3DObject.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>ソース ファイル\Base\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Base\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugText.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshCollider.cpp">
+      <Filter>ソース ファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="LightGroup.cpp">
+      <Filter>ソース ファイル\Base\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LinePrimitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive3D.cpp">
+      <Filter>ソース ファイル\Base\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive2D.cpp">
+      <Filter>ソース ファイル\Base\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx12.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_stdlib.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>ソース ファイル\Base\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="TargetPoint.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCollisionManager.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCircleCollider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBoxCollider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="NumsDraw.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>ソース ファイル\Game\AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawStrings.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBaseCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScenes.cpp">
+      <Filter>ソース ファイル\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticCameraPos.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Gaussian.cpp">
+      <Filter>ソース ファイル\Base\PostEffect</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXBase.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DXAudio.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="FPS.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineManager.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="TexManager.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ease.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionInfo.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionPrimitive.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision2.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxLoader.h">
+      <Filter>ヘッダー ファイル\Base\3DObject\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="3DObject.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>ヘッダー ファイル\Base\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Base\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Smath.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugText.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshCollider.h">
+      <Filter>ヘッダー ファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightGroup.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleShadow.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorDefines.h">
+      <Filter>ヘッダー ファイル\Common\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorFuncs.h">
+      <Filter>ヘッダー ファイル\Common\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveFunc.h">
+      <Filter>ヘッダー ファイル\Base\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="IcosahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="OctahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="TetrahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="CubePrimitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive2D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Funcs.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx12.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_stdlib.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ShiftStringCode.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendedRandom.h">
+      <Filter>ヘッダー ファイル\Common\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXMathExpansion.h">
+      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXMathOperators.h">
+      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Smath_vector.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="SDifines.h">
+      <Filter>ヘッダー ファイル\Common\基礎</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonBaseFunc.h">
+      <Filter>ヘッダー ファイル\Common\基礎</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtraTypeFunc.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffect.h">
+      <Filter>ヘッダー ファイル\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PostGraphPrimitive.h">
+      <Filter>ヘッダー ファイル\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetPoint.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCollisionManager.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBaseCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCircleCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBoxCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>ヘッダー ファイル\Game\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="AstarNode.h">
+      <Filter>ヘッダー ファイル\Game\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawStrings.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="NumsDraw.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFList.h">
+      <Filter>ヘッダー ファイル\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScenes.h">
+      <Filter>ヘッダー ファイル\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCameraPos.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Lissajous.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Variadic_templates_Func.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Gaussian.h">
+      <Filter>ヘッダー ファイル\PostEffect\Gaussian</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resource\shader\FBXPS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXVS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OBJPixelShader.hlsl">
+      <Filter>リソース ファイル\mat</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OBJVertexShader.hlsl">
+      <Filter>リソース ファイル\mat</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BasicPixelShader.hlsl">
+      <Filter>リソース ファイル\object</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BasicVertexShader.hlsl">
+      <Filter>リソース ファイル\object</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\ParticleGeometryShader.hlsl">
+      <Filter>リソース ファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\ParticlePixelShader.hlsl">
+      <Filter>リソース ファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\ParticleVertexShader.hlsl">
+      <Filter>リソース ファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BoxPrimitiveGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Box</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BoxPrimitivePixel.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Box</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BoxPrimitiveVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Box</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GraphPrimitiveGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Graph</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GraphPrimitivePixel.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Graph</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GraphPrimitiveVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Graph</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\CubePrimitiveGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Cube3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\CubePrimitivePixel.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Cube3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\CubePrimitiveVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Cube3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\IcosahedronGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Icosahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\IcosahedronPixel.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Icosahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\IcosahedronVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Icosahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitiveGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Line3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitivePixel.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Line3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitiveVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Line3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OctahedronGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Octahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OctahedronPixel.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Octahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OctahedronVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Octahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\TetrahedronGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Tetrahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\TetrahedronPixel.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Tetrahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\TetrahedronVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\3D\Tetrahedron</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\SpritePixelShader.hlsl">
+      <Filter>リソース ファイル\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\SpriteVertexShader.hlsl">
+      <Filter>リソース ファイル\sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\ColorPixelShader.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXBumpPS.hlsl">
+      <Filter>リソース ファイル\FBX\バンプマッピング</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXHeightPS.hlsl">
+      <Filter>リソース ファイル\FBX\視差マッピング</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\PostEffectGS.hlsl">
+      <Filter>リソース ファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\PostEffectPS.hlsl">
+      <Filter>リソース ファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\PostEffectVS.hlsl">
+      <Filter>リソース ファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXOutLinePS.hlsl">
+      <Filter>リソース ファイル\FBX\アウトライン</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXLineGS.hlsl">
+      <Filter>リソース ファイル\FBX\ライン描画</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXLinePS.hlsl">
+      <Filter>リソース ファイル\FBX\ライン描画</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\PostMosaicPS.hlsl">
+      <Filter>リソース ファイル\PostEffect\モザイク</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\PostGray.hlsl">
+      <Filter>リソース ファイル\PostEffect\グレースケール</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\SeaPS.hlsl">
+      <Filter>リソース ファイル\FBX\海</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GaussianGS.hlsl">
+      <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GaussianPS.hlsl">
+      <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\shader\FBX.hlsli">
+      <Filter>リソース ファイル\FBX</Filter>
+    </None>
+    <None Include="Resource\shader\OBJShaderHeader.hlsli">
+      <Filter>リソース ファイル\mat</Filter>
+    </None>
+    <None Include="Resource\shader\BasicShaderHeader.hlsli">
+      <Filter>リソース ファイル\object</Filter>
+    </None>
+    <None Include="Resource\shader\ParticleShaderHeader.hlsli">
+      <Filter>リソース ファイル\Particle</Filter>
+    </None>
+    <None Include="Resource\shader\BoxPrimitive.hlsli">
+      <Filter>リソース ファイル\Primitive\2D\Box</Filter>
+    </None>
+    <None Include="Resource\shader\GraphPrimitive.hlsli">
+      <Filter>リソース ファイル\Primitive\2D\Graph</Filter>
+    </None>
+    <None Include="Resource\shader\CubePrimitive.hlsli">
+      <Filter>リソース ファイル\Primitive\3D\Cube3D</Filter>
+    </None>
+    <None Include="Resource\shader\Icosahedron.hlsli">
+      <Filter>リソース ファイル\Primitive\3D\Icosahedron</Filter>
+    </None>
+    <None Include="Resource\shader\LinePrimitive.hlsli">
+      <Filter>リソース ファイル\Primitive\3D\Line3D</Filter>
+    </None>
+    <None Include="Resource\shader\Octahedron.hlsli">
+      <Filter>リソース ファイル\Primitive\3D\Octahedron</Filter>
+    </None>
+    <None Include="Resource\shader\Tetrahedron.hlsli">
+      <Filter>リソース ファイル\Primitive\3D\Tetrahedron</Filter>
+    </None>
+    <None Include="Resource\shader\SpriteShaderHeader.hlsli">
+      <Filter>リソース ファイル\sprite</Filter>
+    </None>
+    <None Include="Resource\shader\PostEffect.hlsli">
+      <Filter>リソース ファイル\PostEffect</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX12.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resource\ICON.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

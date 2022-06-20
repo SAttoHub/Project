@@ -1,0 +1,17 @@
+色設定            R     G     B      A
+ゲーム中背景色
+BackColor          39    31    55    255
+床の色
+FloorColor        235   235   209    255
+外周の色
+PerimeterColor    135   125   109    255
+
+
+
+aaa色設定            R     G     B      A
+aaaゲーム中背景色
+aaaBackColor          39    31    55    255
+aaa床の色
+aaaFloorColor        183   212    93    255
+aaa外周の色
+aaaPerimeterColor    128   255     0    255

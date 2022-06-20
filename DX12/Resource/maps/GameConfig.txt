@@ -1,0 +1,22 @@
+ゲーム設定
+
+ゲーム時間(秒)
+EndGame 183
+回復アイテム出現率(%)
+HealItemPercentage 75
+長押し移動クールタイム
+MoveCoolTimer 20
+プレイヤーのスタン(フレーム)
+PlayerStunTimer 150
+スタンのクールタイム
+StunCoolTime 400
+吸い込みのクールタイム
+SuikomiCoolTime 400
+プレイヤーのHP
+PlayerHP 3
+四股の画面揺れ強さ
+ShakePower 20
+四股の画面揺れ時間(フレーム)
+ShakeTimer 75
+敵の爆発までの時間(フレーム)
+EnemyBombTime 400

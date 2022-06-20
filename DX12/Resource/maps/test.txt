@@ -1,0 +1,73 @@
+0 : 何もない　1 : 破壊不可ブロック
+// 配列の大きさ
+size 15 15
+map 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+map 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+ステータス関連
+dir : 向いてる方向　0 FRONT 1 BACK 2 LEFT 3 RIGHT
+
+// 敵ステータス
+// Rikisi1
+体力
+Rikisi1HP 2
+体幹
+Rikisi1Trunk 0
+パワー
+Rikisi1Power 5
+スタミナ
+Rikisi1Stamina 2
+
+// Rikisi2
+Rikisi2HP 3
+Rikisi2Trunk 0
+Rikisi2Power 1
+Rikisi2Stamina 3
+
+// 敵
+// X Y dir
+aRikisi1 3 1 1
+aaRikisi1 3 2 1
+aRikisi1 3 3 1
+aRikisi1 3 4 1
+aRikisi1 3 5 1
+
+// 破壊できる障害物
+// X Y
+aaaaBlock_Chess_Pawn 2 2
+aaaaBlock_Chess_Knight 3 2
+aaaaBlock_Chess_Bishop 4 2
+aaaaBlock_Chess_Rook 5 2
+
+// プレイヤーステータス
+体力
+playerHP 3
+体幹
+playerTrunk 2
+パワー　（ノックバックする距離の計算にも使ってるので大きめにしないと端まで飛びません）
+playerPower 15
+初期スタミナ
+playerStamina 50
+ターン毎に加算されるスタミナ
+playerAddStaminaValue 50
+
+
+// プレイヤー
+// X Y dir
+pl 7 7 0
+
+
+
