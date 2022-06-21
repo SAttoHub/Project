@@ -49,13 +49,13 @@ void Game::Update()
 
 	postEffect->PostDrawScene();
 
-	GaussianEffect->PreDrawScene();
+	//GaussianEffect->PreDrawScene();
 
 	postEffect->Draw();
 
 	
-	GaussianEffect->PostDrawScene();
-	GaussianEffect->Draw(postEffect->descHeapSRV.Get());
+	//GaussianEffect->PostDrawScene();
+	//GaussianEffect->Draw(postEffect->descHeapSRV.Get());
 	
 
 	//スプライト関連描画
@@ -73,7 +73,6 @@ void Game::Update()
 void Game::Finalize()
 {
 	delete postEffect;
-	delete GaussianEffect;
 	Framework::Finalize();
 }
 
