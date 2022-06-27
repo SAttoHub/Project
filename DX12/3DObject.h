@@ -14,6 +14,7 @@ struct ConstBufferData {
 };
 
 struct ConstBufferDataB0 {
+	XMMATRIX view;
 	XMMATRIX viewproj; //ビュープロジェクション行列
 	XMMATRIX world; //ワールド行列
 	XMFLOAT3 cameraPos; //カメラ座標（ワールド座標）
@@ -218,6 +219,7 @@ void InitalizeObject3d(Object3d *object, int index);
 /// <param name="object">使用するオブジェクトデータ</param>
 /// <returns></returns>
 void Drawobject3d(Object3d *object);
+void DepthDrawobject3d(Object3d *object);
 
 /// <summary>
 /// オブジェクトの描画

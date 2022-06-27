@@ -86,5 +86,11 @@ public:
 		ID3DBlob *vsBlob, ID3DBlob *psBlob
 	);
 
+	void createFBXDepthPipeline(int PIPELINE_NUM,
+		UINT inputLayoutCount,
+		D3D12_INPUT_ELEMENT_DESC *inputLayout,
+		ID3DBlob *vsBlob, ID3DBlob *psBlob
+	);
+
 	//int CreatePipeline(D3D12_INPUT_ELEMENT_DESC *InputLayout, ID3DBlob *vs, ID3DBlob *ps, ID3DBlob *gs, ID3DBlob *ds, ID3DBlob *hs);
 };

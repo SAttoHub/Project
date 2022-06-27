@@ -50,7 +50,7 @@ float4 main(GSOutput input) : SV_TARGET
 	//	uv += col * distortion;
 	//	return tex.Sample(smp, uv) + col * brightness;
 	//}
-
+	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	float4 c = tex.Sample(smp, input.uv);
 	c.r = c.r * 0.3f;

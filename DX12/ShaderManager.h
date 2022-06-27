@@ -32,6 +32,8 @@ public:
 
 	ComPtr<ID3DBlob> FBX_Sea_psBlob; // äCÇ¡Ç€Ç¢
 
+	ComPtr<ID3DBlob> FBX_Depth_psBlob; // ê[ìxílóp
+
 	ShaderManager();
 	~ShaderManager() {};
 

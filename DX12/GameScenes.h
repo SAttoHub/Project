@@ -36,6 +36,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void DepthDraw();
 	void BackDraw();
 
 	void ChangeScene(NowScene s);

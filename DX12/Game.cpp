@@ -19,8 +19,18 @@ void Game::Initialize()
 	postEffect = new PostEffect;
 	postEffect->Initialize();
 
-	GaussianEffect = new Gaussian;
-	GaussianEffect->Initialize();
+	GaussianEffectX = new Gaussian;
+	GaussianEffectX->Initialize(0, 0.03f);
+	GaussianEffectY = new Gaussian;
+	GaussianEffectY->Initialize(1, 0.03f);
+	GaussianEffectX2 = new Gaussian;
+	GaussianEffectX2->Initialize(0, 0.1f);
+	GaussianEffectY2 = new Gaussian;
+	GaussianEffectY2->Initialize(1, 0.1f);
+	DOF = new DepthOfField;
+	DOF->Initialize();
+	depth = new Depth;
+	depth->Initialize();
 }
 
 void Game::Update()
@@ -40,23 +50,53 @@ void Game::Update()
 
 	Primitive2D::Instance()->BackDraw();
 
-	postEffect->PreDrawScene();
-    //Drawobject3d(skydome);
-    game->Draw();
+	
+	//postEffect->PreDrawScene(1);
+ //   //Drawobject3d(skydome);
+ //   game->Draw();
 
-    //デバッグテキストのDraw
-    DXBase.ClearDepthBuffer();
+ //   //デバッグテキストのDraw
+ //   DXBase.ClearDepthBuffer();
 
+	//postEffect->PostDrawScene();
+
+
+	//GaussianEffectX->PreDrawScene(1);
+	//postEffect->Draw(DirectXBase::rtvHeaps.Get());
+
+	//DXBase.ClearDepthBuffer();
+	//GaussianEffectX->PostDrawScene();
+	//GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
+	
+
+	postEffect->PreDrawScene(1);
+	game->Draw();
 	postEffect->PostDrawScene();
 
-	GaussianEffect->PreDrawScene();
+	GaussianEffectX->PreDrawScene(1);
+	GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
+	GaussianEffectX->PostDrawScene();
 
-	postEffect->Draw();
+	GaussianEffectY->PreDrawScene(1);
+	GaussianEffectY->Draw(GaussianEffectX->descHeapSRV.Get());
+	GaussianEffectY->PostDrawScene();
 
-	
-	GaussianEffect->PostDrawScene();
-	GaussianEffect->Draw(postEffect->descHeapSRV.Get());
-	
+	GaussianEffectX2->PreDrawScene(1);
+	GaussianEffectX2->Draw(postEffect->descHeapSRV.Get());
+	GaussianEffectX2->PostDrawScene();
+
+	GaussianEffectY2->PreDrawScene(1);
+	GaussianEffectY2->Draw(GaussianEffectX2->descHeapSRV.Get());
+	GaussianEffectY2->PostDrawScene();
+
+	//深度値保存描画
+	depth->PreDrawScene(1);
+	game->DepthDraw();
+	depth->PostDrawScene();
+
+	DXBase.ClearDepthBuffer();
+	DOF->Draw(postEffect->descHeapSRV.Get(), GaussianEffectY2->descHeapSRV.Get(), GaussianEffectY->descHeapSRV.Get(), depth->descHeapSRV.Get());
+
 
 	//スプライト関連描画
 	Primitive2D::Instance()->Draw();
@@ -73,7 +113,10 @@ void Game::Update()
 void Game::Finalize()
 {
 	delete postEffect;
-	delete GaussianEffect;
+	delete GaussianEffectX;
+	delete GaussianEffectY;
+	delete DOF;
+	delete depth;
 	Framework::Finalize();
 }
 

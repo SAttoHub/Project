@@ -46,6 +46,7 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+	void DepthDraw();
 
 	double InCubic(double t) {
 		return t * t * t;

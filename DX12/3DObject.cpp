@@ -280,6 +280,7 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 		ConstBufferDataB0 *constMap0 = nullptr;
 		if (SUCCEEDED(object->constBuffB0->Map(0, nullptr, (void **)&constMap0))) {
 			//constMap0->mat = object->matWorld * matView * matProjection;
+			constMap0->view = Camera::matView;
 			constMap0->viewproj = Camera::matViewProjection;
 			constMap0->world = object->matWorld;
 			constMap0->cameraPos = Camera::eye;
@@ -338,6 +339,76 @@ void Drawobject3d(Object3d *object) {
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
 	//パイプラインステートの設定コマンド
 	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap *ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+
+	if (object->shaderNumber == FBX_Bump_SHADER) {
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.BumpTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	}
+	else if (object->shaderNumber == FBX_height_SHADER) {
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.BumpTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(6, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.HeightTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	}
+
+	if (object->shaderNumber == Sea_SHADER) {
+		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
+	}
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, 1, 0, 0, 0);
+
+	for (int i = 0; i < (int)DirectX3dObject::object3ds.size(); i++) {
+		if (DirectX3dObject::object3ds[i]->parent == object) {
+			Drawobject3d(DirectX3dObject::object3ds[i]);
+		}
+	}
+}
+
+void DepthDrawobject3d(Object3d *object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Depth_SHEADER].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Depth_SHEADER].Get());
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

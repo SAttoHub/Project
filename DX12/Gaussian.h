@@ -60,21 +60,24 @@ private:
 
 private:
 	ComPtr<ID3D12Resource> depthBuff;
-	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 
 	ComPtr<ID3D12Resource> TextureBuff;
-	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 public:
-	void Initialize();
+	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
+	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+	int GaussNum = 0; // 0 : â°Å@1 : èc
+	float Dispersion = 0.03f; // ÉKÉEÉXÇÃã≠Ç≥
 
-	const float clearColor[4] = { 0.9f, 0.9f, 0.9f, 0.0f };
+	void Initialize(int GaussNumber, float Power);
+
+	const float clearColor[4] = { 0.9f, 0.9f, 0.9f, 1.0f };
 
 	void Draw(ID3D12DescriptorHeap *Descriptor);
 
 	void ClearDepth();
 
-	void PreDrawScene();
+	void PreDrawScene(int Num);
 	void PostDrawScene();
 };
 

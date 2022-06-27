@@ -3,6 +3,8 @@
 #include "PostEffect.h"
 
 #include "Gaussian.h"
+#include "DepthOfField.h"
+#include "Depth.h"
 
 class Game : public Framework
 {
@@ -13,7 +15,12 @@ private:
 	Object3d *skydome = nullptr;
 
 	PostEffect *postEffect = nullptr;
-	Gaussian *GaussianEffect = nullptr;
+	Gaussian *GaussianEffectX = nullptr;
+	Gaussian *GaussianEffectY = nullptr;
+	Gaussian *GaussianEffectX2 = nullptr;
+	Gaussian *GaussianEffectY2 = nullptr;
+	DepthOfField *DOF = nullptr;
+	Depth *depth = nullptr; // ê[ìxâÊëúóp
 public:
 	void Initialize() override;
 	void Update();

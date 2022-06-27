@@ -29,6 +29,7 @@ enum SHADER {
 	FBX_OutLine_SHADER,
 	FBX_Line_SHADER, // 辺のみ
 	Sea_SHADER, // 海テスト
+	Depth_SHEADER, // 深度値用
 	Particle
 };
 

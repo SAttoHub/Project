@@ -99,6 +99,7 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 	createFBXOutLinePipeline(FBX_OutLine_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_OutLine_psBlob.Get());
 	createFBXLinePipeline(FBX_Line_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Line_gsBlob.Get(), Shader->FBX_Line_psBlob.Get());
 	createFBXSeaPipeline(Sea_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Sea_psBlob.Get());
+	createFBXDepthPipeline(Depth_SHEADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Depth_psBlob.Get());
 }
 
 void PipelineManager::createPipeline(int PIPELINE_NUM, UINT inputLayoutCount, D3D12_INPUT_ELEMENT_DESC *inputLayout, ID3DBlob *vsBlob, ID3DBlob *psBlob)
@@ -886,6 +887,94 @@ void PipelineManager::createFBXLinePipeline(int PIPELINE_NUM, UINT inputLayoutCo
 }
 
 void PipelineManager::createFBXSeaPipeline(int PIPELINE_NUM, UINT inputLayoutCount, D3D12_INPUT_ELEMENT_DESC *inputLayout, ID3DBlob *vsBlob, ID3DBlob *psBlob)
+{
+	HRESULT result;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	gpipeline.BlendState.AlphaToCoverageEnable = true;
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	if (PIPELINE_NUM == ObjMaterial2) {
+		blenddesc.BlendEnable = true;
+		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	}
+	else {
+		blenddesc.BlendEnable = false;
+	}
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//gpipeline.BlendState.IndependentBlendEnable = true;
+	//gpipeline.BlendState.AlphaToCoverageEnable = true;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = inputLayout;
+	gpipeline.InputLayout.NumElements = inputLayoutCount;//_countof(nputLayout)
+	//図形の形状を三角形に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//デスクリプタテーブルの設定
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[6] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+	rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
+
+
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+
+
+
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature[PIPELINE_NUM]));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = rootsignature[PIPELINE_NUM].Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate[PIPELINE_NUM]));
+}
+
+void PipelineManager::createFBXDepthPipeline(int PIPELINE_NUM, UINT inputLayoutCount, D3D12_INPUT_ELEMENT_DESC *inputLayout, ID3DBlob *vsBlob, ID3DBlob *psBlob)
 {
 	HRESULT result;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体

@@ -190,8 +190,29 @@
     <Filter Include="リソース ファイル\PostEffect\ガウシアン">
       <UniqueIdentifier>{68b84d8b-4896-4e2a-9e22-41b1c6061fb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\PostEffect\Gaussian">
+    <Filter Include="リソース ファイル\FBX\深度値描画用">
+      <UniqueIdentifier>{24df0455-e0f0-4dcc-8fd9-5773fefc934d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\GaussianXY兼用">
       <UniqueIdentifier>{31c46a98-1a1d-45ca-818c-84befbbbfd66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\DOF">
+      <UniqueIdentifier>{db8c4cfa-2bab-44fc-bafe-433abbf3e57b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\DOF">
+      <UniqueIdentifier>{49586a3e-85cc-4ff5-a8d8-0241c1441d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\DOF">
+      <UniqueIdentifier>{65a03bab-fb40-4702-961b-b2ad5396cd68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\Vignette">
+      <UniqueIdentifier>{2fdaed9b-7561-47d1-9f67-8abc0a5d332b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\Depth">
+      <UniqueIdentifier>{34ab94ff-38db-477e-92be-50adda760b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\Depth">
+      <UniqueIdentifier>{d0b9ff82-6c14-42e6-bbb1-0e316ad30e28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -347,6 +368,12 @@
     </ClCompile>
     <ClCompile Include="Gaussian.cpp">
       <Filter>ソース ファイル\Base\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthOfField.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\DOF</Filter>
+    </ClCompile>
+    <ClCompile Include="Depth.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\Depth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -609,10 +636,16 @@
       <Filter>ヘッダー ファイル\Common\Math</Filter>
     </ClInclude>
     <ClInclude Include="Gaussian.h">
-      <Filter>ヘッダー ファイル\PostEffect\Gaussian</Filter>
+      <Filter>ヘッダー ファイル\PostEffect\GaussianXY兼用</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
       <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthOfField.h">
+      <Filter>ヘッダー ファイル\PostEffect\DOF</Filter>
+    </ClInclude>
+    <ClInclude Include="Depth.h">
+      <Filter>ヘッダー ファイル\PostEffect\Depth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -748,11 +781,29 @@
     <FxCompile Include="Resource\shader\SeaPS.hlsl">
       <Filter>リソース ファイル\FBX\海</Filter>
     </FxCompile>
-    <FxCompile Include="Resource\shader\GaussianGS.hlsl">
+    <FxCompile Include="Resource\shader\DepthPS.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GaussianXGS.hlsl">
       <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
     </FxCompile>
-    <FxCompile Include="Resource\shader\GaussianPS.hlsl">
+    <FxCompile Include="Resource\shader\GaussianXPS.hlsl">
       <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GaussianYGS.hlsl">
+      <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\GaussianYPS.hlsl">
+      <Filter>リソース ファイル\PostEffect\ガウシアン</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\DepthOfFieldGS.hlsl">
+      <Filter>リソース ファイル\PostEffect\DOF</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\DepthOfFieldPS.hlsl">
+      <Filter>リソース ファイル\PostEffect\DOF</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\VignettePS.hlsl">
+      <Filter>リソース ファイル\PostEffect\Vignette</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

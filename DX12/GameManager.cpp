@@ -135,3 +135,8 @@ void GameManager::Draw() {
 	//debugText->Print("Score : " + to_string(Score::GetScore()), 0, 0, 2);
 	DirectXBase::ClearDepthBuffer();
 }
+
+void GameManager::DepthDraw()
+{
+	game.DepthDraw();
+}

@@ -26,21 +26,21 @@ void GameCamera::Initialize()
 		break;
 	}
 
-	ShakeValue = XMFLOAT3(0, 0, 0);
-	Mode = CM_Game;
-	Camera::isCameraStop = true;
+	//ShakeValue = XMFLOAT3(0, 0, 0);
+	//Mode = CM_Game;
+	//Camera::isCameraStop = true;
 }
 
 void GameCamera::Update()
 {
-		//if (Input::isKeyTrigger(DIK_Q)) {
-		//	//Mode = CM_Debug;
-		//	//Camera::isCameraStop = false;
-		//}
-		//else if(Input::isKeyTrigger(DIK_E)) {
-		//	Mode = CM_Game;
-		//	Camera::isCameraStop = true;
-		//}
+		if (Input::isKeyTrigger(DIK_Q)) {
+			Mode = CM_Debug;
+			Camera::isCameraStop = false;
+		}
+		else if(Input::isKeyTrigger(DIK_E)) {
+			Mode = CM_Game;
+			Camera::isCameraStop = true;
+		}
 
 		switch (Mode)
 		{
@@ -121,8 +121,8 @@ void GameCamera::GameCameraUpdate()
 	}
 
 	DebugCamPos = StaticCameraPos::Instance()->position + ShakeValue;
-	Camera::Targeting(StaticCameraPos::Instance()->target + ShakeValue);
-	Camera::SetCameraPos3(DebugCamPos);
+	//Camera::Targeting(StaticCameraPos::Instance()->target + ShakeValue);
+	//Camera::SetCameraPos3(DebugCamPos);
 }
 
 void GameCamera::Shake(float Power, int Time)
