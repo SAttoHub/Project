@@ -71,7 +71,7 @@ public:
 
 	void Initialize(int GaussNumber, float Power);
 
-	const float clearColor[4] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	void Draw(ID3D12DescriptorHeap *Descriptor);
 

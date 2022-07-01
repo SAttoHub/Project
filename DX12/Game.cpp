@@ -31,6 +31,21 @@ void Game::Initialize()
 	DOF->Initialize();
 	depth = new Depth;
 	depth->Initialize();
+
+	bloom = new Bloom;
+	bloom->Initialize();
+	GaussianEffectXBloom = new Gaussian;
+	GaussianEffectXBloom->Initialize(0, 0.2f);
+	GaussianEffectYBloom = new Gaussian;
+	GaussianEffectYBloom->Initialize(1, 0.2f);
+
+
+
+	//シャドウ
+	Shadow_Map_Light = new ShadowMapLight;
+	ShadowMapLight::SetLightPos(XMFLOAT3(1.0f, 300.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	shadowMapping = new ShadowMapping;
+	shadowMapping->Initialize();
 }
 
 void Game::Update()
@@ -68,13 +83,42 @@ void Game::Update()
 	//GaussianEffectX->PostDrawScene();
 	//GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
 	
-
+	/*
 	postEffect->PreDrawScene(1);
 	game->Draw();
 	postEffect->PostDrawScene();
+	//深度値保存描画
+	depth->PreDrawScene(1);
+	game->DepthDraw();
+	depth->PostDrawScene();
+
+
+	//ブルーム用
+	bloom->PreDrawScene();
+	game->Draw();
+	bloom->PostDrawScene();
+	GaussianEffectXBloom->PreDrawScene(1);
+	GaussianEffectXBloom->Draw(bloom->descHeapSRV.Get());
+	GaussianEffectXBloom->PostDrawScene();
+	GaussianEffectYBloom->PreDrawScene(1);
+	GaussianEffectYBloom->Draw(GaussianEffectXBloom->descHeapSRV.Get());
+	GaussianEffectYBloom->PostDrawScene();
+
+	postEffect->PreDrawScene(1);
+	bloom->Draw(bloom->descHeapSRV.Get(), GaussianEffectYBloom->descHeapSRV.Get());
+	postEffect->PostDrawScene();
+
+	//シャドウ
+	shadowMapping->PreDrawScene();
+	game->ShadowDraw();
+	shadowMapping->PostDrawScene();
+
+	shadowMapping->PreDrawScene();
+	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get());
+	shadowMapping->PostDrawScene();
 
 	GaussianEffectX->PreDrawScene(1);
-	GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
+	GaussianEffectX->Draw(shadowMapping->descHeapSRV.Get());
 	GaussianEffectX->PostDrawScene();
 
 	GaussianEffectY->PreDrawScene(1);
@@ -82,25 +126,43 @@ void Game::Update()
 	GaussianEffectY->PostDrawScene();
 
 	GaussianEffectX2->PreDrawScene(1);
-	GaussianEffectX2->Draw(postEffect->descHeapSRV.Get());
+	GaussianEffectX2->Draw(shadowMapping->descHeapSRV.Get());
 	GaussianEffectX2->PostDrawScene();
 
 	GaussianEffectY2->PreDrawScene(1);
 	GaussianEffectY2->Draw(GaussianEffectX2->descHeapSRV.Get());
 	GaussianEffectY2->PostDrawScene();
 
-	//深度値保存描画
+
+	DXBase.ClearDepthBuffer();
+	DOF->Draw(shadowMapping->descHeapSRV.Get(), GaussianEffectY2->descHeapSRV.Get(), GaussianEffectY->descHeapSRV.Get(), depth->descHeapSRV.Get());
+	*/
+
+
+	//カメラ視点の深度描画
 	depth->PreDrawScene(1);
 	game->DepthDraw();
 	depth->PostDrawScene();
 
-	DXBase.ClearDepthBuffer();
-	DOF->Draw(postEffect->descHeapSRV.Get(), GaussianEffectY2->descHeapSRV.Get(), GaussianEffectY->descHeapSRV.Get(), depth->descHeapSRV.Get());
+	 
 
+	//ライト視点の深度描画
+	shadowMapping->PreDrawScene();
+	game->ShadowDraw();
+	shadowMapping->PostDrawScene();
+
+	postEffect->PreDrawScene(1);
+	game->Draw();
+	postEffect->PostDrawScene();
+
+	DXBase.ClearDepthBuffer();
+	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth->descHeapSRV.Get());
+
+	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 0), 32, XMFLOAT4(0, 0, 0, 1), "E : マウス拘束解除");
+	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 34), 32, XMFLOAT4(0, 0, 0, 1), "Q : マウス拘束開始");
 
 	//スプライト関連描画
 	Primitive2D::Instance()->Draw();
-	//SP.SpriteDraw(&CenterDot);
 
     //-----------------ここまでプログラム記入-----------------//
 
@@ -117,6 +179,7 @@ void Game::Finalize()
 	delete GaussianEffectY;
 	delete DOF;
 	delete depth;
+	delete shadowMapping;
 	Framework::Finalize();
 }
 

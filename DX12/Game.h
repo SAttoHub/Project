@@ -5,6 +5,9 @@
 #include "Gaussian.h"
 #include "DepthOfField.h"
 #include "Depth.h"
+#include "Bloom.h"
+#include "ShadowMapLight.h"
+#include "ShadowMapping.h"
 
 class Game : public Framework
 {
@@ -21,6 +24,15 @@ private:
 	Gaussian *GaussianEffectY2 = nullptr;
 	DepthOfField *DOF = nullptr;
 	Depth *depth = nullptr; // 深度画像用
+
+	//ブルーム
+	Bloom *bloom = nullptr;
+	Gaussian *GaussianEffectXBloom = nullptr;
+	Gaussian *GaussianEffectYBloom = nullptr;
+
+	//シャドウ
+	ShadowMapLight *Shadow_Map_Light;
+	ShadowMapping *shadowMapping = nullptr;
 public:
 	void Initialize() override;
 	void Update();

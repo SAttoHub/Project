@@ -208,11 +208,32 @@
     <Filter Include="リソース ファイル\PostEffect\Vignette">
       <UniqueIdentifier>{2fdaed9b-7561-47d1-9f67-8abc0a5d332b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Base\PostEffect\Depth">
+    <Filter Include="ソース ファイル\Base\PostEffect\深度値描画用RT">
       <UniqueIdentifier>{34ab94ff-38db-477e-92be-50adda760b9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\PostEffect\Depth">
+    <Filter Include="ヘッダー ファイル\PostEffect\深度値描画用RT">
       <UniqueIdentifier>{d0b9ff82-6c14-42e6-bbb1-0e316ad30e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\ブルームテクスチャ用RT">
+      <UniqueIdentifier>{c8d9784c-c4ef-4d6d-8531-4200b6b62708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\ブルームテクスチャ用RT">
+      <UniqueIdentifier>{791c733e-0c46-4922-b43b-72d8dd652fd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\Bloom">
+      <UniqueIdentifier>{7824f1d7-1070-40c1-9c88-d46e51b602dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\shadowMap">
+      <UniqueIdentifier>{952be0b9-840e-4054-892c-01fe3a10fb37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\shadowMap">
+      <UniqueIdentifier>{e79e183a-5868-46ee-a0c3-fc64bfecae5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\shadowMap">
+      <UniqueIdentifier>{23e180af-6bc1-4ec2-b887-e4790c354627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\FBX\深度値描画用\shadowMap用">
+      <UniqueIdentifier>{01822165-ec9d-42a6-955e-47c3cea81a2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,7 +394,16 @@
       <Filter>ソース ファイル\Base\PostEffect\DOF</Filter>
     </ClCompile>
     <ClCompile Include="Depth.cpp">
-      <Filter>ソース ファイル\Base\PostEffect\Depth</Filter>
+      <Filter>ソース ファイル\Base\PostEffect\深度値描画用RT</Filter>
+    </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\ブルームテクスチャ用RT</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapLight.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\shadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapping.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\shadowMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -645,7 +675,16 @@
       <Filter>ヘッダー ファイル\PostEffect\DOF</Filter>
     </ClInclude>
     <ClInclude Include="Depth.h">
-      <Filter>ヘッダー ファイル\PostEffect\Depth</Filter>
+      <Filter>ヘッダー ファイル\PostEffect\深度値描画用RT</Filter>
+    </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>ヘッダー ファイル\PostEffect\ブルームテクスチャ用RT</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapLight.h">
+      <Filter>ヘッダー ファイル\PostEffect\shadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapping.h">
+      <Filter>ヘッダー ファイル\PostEffect\shadowMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -804,6 +843,21 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\VignettePS.hlsl">
       <Filter>リソース ファイル\PostEffect\Vignette</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BloomGS.hlsl">
+      <Filter>リソース ファイル\PostEffect\Bloom</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\BloomPS.hlsl">
+      <Filter>リソース ファイル\PostEffect\Bloom</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\ShadowMap.hlsl">
+      <Filter>リソース ファイル\PostEffect\shadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Shadow_FBX_VS.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Shadow_FBX_PS.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

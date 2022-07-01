@@ -37,6 +37,12 @@ struct ConstBufferDataTime {
 	UINT time; //色(RGBA)
 };
 
+struct ConstBufferDataShadow {
+	XMMATRIX Light_view; // ビュー行列
+	XMMATRIX Light_viewproj;
+	XMFLOAT3 Light_Pos;
+};
+
 //3Dオブジェクト型
 struct Object3d {
 	ComPtr<ID3D12Resource> constBuffB0;
@@ -142,6 +148,8 @@ public:
 	//定数バッファ(スキン)
 	ComPtr<ID3D12Resource> constBuffTime;
 	UINT Timer = 0;
+
+	ComPtr<ID3D12Resource> constBuffShadow;
 };
 
 class DirectX3dObject {
@@ -220,6 +228,7 @@ void InitalizeObject3d(Object3d *object, int index);
 /// <returns></returns>
 void Drawobject3d(Object3d *object);
 void DepthDrawobject3d(Object3d *object);
+void ShadowDepthDrawobject3d(Object3d *object);
 
 /// <summary>
 /// オブジェクトの描画

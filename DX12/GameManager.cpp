@@ -140,3 +140,8 @@ void GameManager::DepthDraw()
 {
 	game.DepthDraw();
 }
+
+void GameManager::ShadowDraw()
+{
+	game.ShadowDraw();
+}

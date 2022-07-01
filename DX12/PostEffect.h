@@ -56,7 +56,7 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 	void Initialize();
 
-	const float clearColor[4] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	const float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	void Draw(ID3D12DescriptorHeap *Descriptor);
 

@@ -91,12 +91,12 @@ void Depth::SetupGraphPrimitive()
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
 	//その他の設定
 	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT; //0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-	gpipeline.DepthStencilState.DepthEnable = false;
+	//gpipeline.DepthStencilState.DepthEnable = false;
 	//深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	////デスクリプタテーブルの設定
@@ -164,7 +164,7 @@ void Depth::Initialize() {
 	HRESULT result;
 	//テクスチャリソース設定
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_R32_FLOAT,
 		WINDOW_WIDTH,
 		(UINT)WINDOW_HEIGHT,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
@@ -176,7 +176,7 @@ void Depth::Initialize() {
 		D3D12_HEAP_FLAG_NONE,
 		&texresDesc,
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
+		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R32_FLOAT, clearColor),
 		IID_PPV_ARGS(&TextureBuff)
 	);
 	assert(SUCCEEDED(result));
@@ -202,7 +202,7 @@ void Depth::Initialize() {
 	assert(SUCCEEDED(result));
 	//シェーダーリソースビュー設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
-	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
@@ -222,7 +222,7 @@ void Depth::Initialize() {
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	rtvDesc.Format = DXGI_FORMAT_R32_FLOAT;
 
 	//デスクリプタヒープにRTV作成
 	DirectXBase::dev->CreateRenderTargetView(TextureBuff.Get(),
@@ -376,8 +376,8 @@ void Depth::PreDrawScene(int Num)
 	//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
 	//D3D12_CPU_DESCRIPTOR_HANDLE dsvH = descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 	//レンダーターゲットをセット
-	//DirectXBase::cmdList->OMSetRenderTargets(1, &rtvH, false, &DirectXBase::dsvHeap->GetCPUDescriptorHandleForHeapStart());
-	DirectXBase::cmdList->OMSetRenderTargets(1, &rtvH, false, nullptr);
+	DirectXBase::cmdList->OMSetRenderTargets(1, &rtvH, false, &DirectXBase::dsvHeap->GetCPUDescriptorHandleForHeapStart());
+	//DirectXBase::cmdList->OMSetRenderTargets(1, &rtvH, false, nullptr);
 	//ビューポートの設定
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f,
 		WINDOW_WIDTH, WINDOW_HEIGHT));
