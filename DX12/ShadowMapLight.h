@@ -15,6 +15,7 @@ public:
 	static XMMATRIX matView;
 	static XMMATRIX matViewProjection;
 	static XMMATRIX matViewProjectionInverse;
+	static XMMATRIX matViewProjectionInverseCamera;
 
 	static void SetLightPos(XMFLOAT3 pos, XMFLOAT3 target, XMFLOAT3 up);
 };

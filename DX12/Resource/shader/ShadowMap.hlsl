@@ -8,10 +8,9 @@ cbuffer cbBuffer1 : register(b4)
 {
 	matrix view; // ビュー行列
 	matrix viewproj; // ビュープロジェクション行列
-	float3 cameraPos; // カメラ座標（ワールド座標）
     matrix Light_view; // ビュー行列
-    matrix Light_viewproj_inv;
-    float3 Light_Pos;
+    matrix Light_viewproj;
+    matrix Camera_viewproj_inv;
 };
 
 //float3 ReconstructWorldPositionFromDepth(
@@ -90,7 +89,7 @@ float4 main(GSOutput input) : SV_TARGET
 	// カメラからの深度
 	float DepthCamera = DepthTex2.r;
 
-    float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Light_viewproj_inv);
+    float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Camera_viewproj_inv);
 
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
 
@@ -101,7 +100,7 @@ float4 main(GSOutput input) : SV_TARGET
         0.5, 0.5, 0.5, 1.0
     );
 
-	float4 obj_shadow = mul(Wpos, mul(mat, Light_view)); //ビュー変換
+	float4 obj_shadow = mul(Wpos, mul(mat, Light_viewproj)); //ビュー変換
 
     float shade = 1.0f;
     if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z) {

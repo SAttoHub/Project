@@ -308,10 +308,9 @@ void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap 
 	if (SUCCEEDED(ConstBuffCamera->Map(0, nullptr, (void **)&constMap1))) {
 		constMap1->view = Camera::matView;
 		constMap1->viewproj = Camera::matViewProjection;
-		constMap1->cameraPos = Camera::eye;
 		constMap1->Light_view = ShadowMapLight::matView;
-		constMap1->Light_viewproj_inv = ShadowMapLight::matViewProjectionInverse;
-		constMap1->Light_Pos = ShadowMapLight::Pos;
+		constMap1->Light_viewproj = ShadowMapLight::matViewProjection;
+		constMap1->Camera_viewproj_inv = ShadowMapLight::matViewProjectionInverseCamera;
 		ConstBuffCamera->Unmap(0, nullptr);
 	}
 

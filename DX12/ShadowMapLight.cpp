@@ -6,6 +6,7 @@ DirectX::XMFLOAT3 ShadowMapLight::Up{ 0,0,0 };
 DirectX::XMMATRIX ShadowMapLight::matView;
 DirectX::XMMATRIX ShadowMapLight::matViewProjection;
 DirectX::XMMATRIX ShadowMapLight::matViewProjectionInverse;
+DirectX::XMMATRIX ShadowMapLight::matViewProjectionInverseCamera;
 
 void ShadowMapLight::SetLightPos(XMFLOAT3 pos, XMFLOAT3 target, XMFLOAT3 up)
 {
@@ -24,8 +25,6 @@ void ShadowMapLight::SetLightPos(XMFLOAT3 pos, XMFLOAT3 target, XMFLOAT3 up)
 
 	matViewProjection = matView * matProj;
 
-	matView = matViewProjection;
-
 	//
-	matViewProjectionInverse = XMMatrixInverse(nullptr, Camera::matViewProjection);
+	matViewProjectionInverseCamera = XMMatrixInverse(nullptr, Camera::matViewProjection);
 }

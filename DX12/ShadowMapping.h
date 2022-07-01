@@ -15,11 +15,9 @@ private:
 	struct ConstBufferDataCamera {
 		XMMATRIX view;
 		XMMATRIX viewproj; //ビュープロジェクション行列
-		XMFLOAT3 cameraPos; //カメラ座標（ワールド座標）
-		float pad1; // パディング
 		XMMATRIX Light_view; // ビュー行列
-		XMMATRIX Light_viewproj_inv; // ビュー行列
-		XMFLOAT3 Light_Pos;
+		XMMATRIX Light_viewproj; // ビュー行列
+		XMMATRIX Camera_viewproj_inv; // カメラビュープロジェクション行列の逆行列
 	};
 	//定数バッファ
 	ComPtr<ID3D12Resource> ConstBuffCamera;
@@ -61,7 +59,7 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 	void Initialize();
 
-	const float clearColor[4] = { 1.0f, 1.0f,1.0f, 1.0f };
+	const float clearColor[4] = { 0.0f, 1.0f,1.0f, 1.0f };
 
 	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3);
 
