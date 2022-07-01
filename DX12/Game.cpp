@@ -43,7 +43,7 @@ void Game::Initialize()
 
 	//ƒVƒƒƒhƒE
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(1.0f, 300.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 200.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize();
 }
@@ -64,7 +64,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 200.0f, 10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	
 	//postEffect->PreDrawScene(1);
  //   //Drawobject3d(skydome);

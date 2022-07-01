@@ -111,7 +111,7 @@ void ShadowMapping::SetupGraphPrimitive()
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[3].InitAsDescriptorTable(1, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[4].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	rootparams[4].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
 	//テクスチャサンプラーの設定[
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
 	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -306,7 +306,7 @@ void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap 
 
 	ConstBufferDataCamera *constMap1 = nullptr;
 	if (SUCCEEDED(ConstBuffCamera->Map(0, nullptr, (void **)&constMap1))) {
-		constMap1->view = Camera::matView;
+		//constMap1->view = Camera::matView;
 		constMap1->viewproj = Camera::matViewProjection;
 		constMap1->Light_view = ShadowMapLight::matView;
 		constMap1->Light_viewproj = ShadowMapLight::matViewProjection;
@@ -351,6 +351,7 @@ void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap 
 		//ID3D12DescriptorHeap *ppHeaps[] = { descHeapSRV.Get() };
 		//定数バッファビューをセット
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
+		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, ConstBuffCamera->GetGPUVirtualAddress());
 		//シェーダーリソースビュー
 		//DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
 		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor);
@@ -359,8 +360,6 @@ void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap 
 		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, Descriptor2->GetGPUDescriptorHandleForHeapStart());
 		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor3);
 		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(3, Descriptor3->GetGPUDescriptorHandleForHeapStart());
-
-		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, ConstBuffCamera->GetGPUVirtualAddress());
 		//描画コマンド
 		DirectXBase::cmdList->DrawInstanced(1, 1, 0, 0);
 	}

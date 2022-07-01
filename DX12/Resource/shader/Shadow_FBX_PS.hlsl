@@ -3,7 +3,7 @@
 Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
-cbuffer shadow : register(b5)
+cbuffer shadow : register(b4)
 {
 	matrix Light_view; // ビュー行列
 	matrix Light_viewproj;

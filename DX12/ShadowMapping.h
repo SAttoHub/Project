@@ -13,7 +13,7 @@ class ShadowMapping
 private:
 	//定数バッファ用構造体
 	struct ConstBufferDataCamera {
-		XMMATRIX view;
+		//XMMATRIX view;
 		XMMATRIX viewproj; //ビュープロジェクション行列
 		XMMATRIX Light_view; // ビュー行列
 		XMMATRIX Light_viewproj; // ビュー行列
