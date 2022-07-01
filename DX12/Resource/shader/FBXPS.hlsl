@@ -216,18 +216,6 @@ float4 main(VSOutput input) : SV_TARGET
 
 	if (texcolor.a == 0) discard;
 
-	//範囲内
-	//if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-	//	&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
-	//{
-		/*shadowMap = tex2.Sample(smp, shadowMapUV);
-		if (shadowMap.r < obj_shadow.z) {
-			texcolor.r *= 0.1f;
-			texcolor.g *= 0.1f;
-			texcolor.b *= 0.1f;
-		}*/
-	//}
-	//return InColor;
 
 	// シェーディングによる色で描画
 	return /*shadecolor * */texcolor/* * InColor*/;
