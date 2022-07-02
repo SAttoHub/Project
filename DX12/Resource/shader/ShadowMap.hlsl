@@ -84,36 +84,17 @@ float4 main(GSOutput input) : SV_TARGET
 
     float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Camera_viewproj_inv);
 
-    // 何故かマイナスで出るのでマイナス掛けてる
+
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
 
-    matrix matA = matrix(
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.5, 0.5, 0.5, 1.0
-    );
 
 	float4 obj_shadow = mul(Wpos, Light_viewproj); //射影変換
-    float4 obj_shadow2 = mul(Wpos, Light_view); //ビュー変換
-    float shade = 1.0f;
-
-    float2 uvv = float2(obj_shadow.x, obj_shadow.y);
-    uvv.x = (uvv.x + 1.0f) / 2.0f;
-    uvv.y = 1.0f - (uvv.y + 1.0f) / 2.0f;
-
-    if (tex2.Sample(smp, uvv) < (obj_shadow2.z / obj_shadow2.w)) {
+    obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
+    obj_shadow.xy *= 0.5f;
+    obj_shadow.xy += 0.5f;
+    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z) {
         Color.rgb *= 0.5f;
     }
-    /*if (Wpos.y < -20) {
-        Color.rgb *= 0.5f;
-    }*/
-
-    //float4 tes = mul(Wpos, viewproj);
 
 	return Color;
-
-	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
-
-	//return tex.Sample(smp, input.uv) * input.color;
 }
