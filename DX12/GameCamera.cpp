@@ -33,14 +33,14 @@ void GameCamera::Initialize()
 
 void GameCamera::Update()
 {
-		if (Input::isKeyTrigger(DIK_Q)) {
+		/*if (Input::isKeyTrigger(DIK_Q)) {
 			Mode = CM_Debug;
 			Camera::isCameraStop = false;
 		}
 		else if(Input::isKeyTrigger(DIK_E)) {
 			Mode = CM_Game;
 			Camera::isCameraStop = true;
-		}
+		}*/
 
 		switch (Mode)
 		{
