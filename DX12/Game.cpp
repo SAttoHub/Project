@@ -67,7 +67,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(1.0f, 10.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(10.0f, 100.0f, 10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	
 	//postEffect->PreDrawScene(1);
  //   //Drawobject3d(skydome);

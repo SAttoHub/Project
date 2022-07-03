@@ -5,7 +5,7 @@ void GameScenes::Initialize()
 	Scene = NowScene::Title;
 	int modelData = LoadModelOBJ("Hako", "hako");
 	model = DirectX3dObject::CreateObject(GetModelData(modelData), XMFLOAT3(0, 0, 0), FBXSHADER);
-	model->scale = XMFLOAT3(0.5f, 0.5f, 0.5f);
+	model->scale = XMFLOAT3(5.0f, 5.0f, 5.0f);
 
 	int modelData2 = LoadModelOBJ("Hako", "flo");
 	Sea = DirectX3dObject::CreateObject(GetModelData(modelData2), XMFLOAT3(0, 0, 0), FBXSHADER);
@@ -13,7 +13,7 @@ void GameScenes::Initialize()
 
 	int modelData3 = LoadModelOBJ("soko", "floa");
 	soko = DirectX3dObject::CreateObject(GetModelData(modelData3), XMFLOAT3(0, 0, 0), FBXSHADER);
-	//soko->scale = XMFLOAT3(100.0f, 100.0f, 100.0f);
+	soko->scale = XMFLOAT3(10.0f, 10.0f, 10.0f);
 
 	Sea->position = XMFLOAT3(0, 0, 0);
 
@@ -21,10 +21,10 @@ void GameScenes::Initialize()
 
 	int skydomeDataNum = LoadModelOBJ("skydome", "skydome");
 	skydome = DirectX3dObject::CreateObject(GetModelData(skydomeDataNum), XMFLOAT3(0, 0, 0), FBXSHADER);
-	skydome->scale = XMFLOAT3(3.0f, 3.0f, 3.0f);
+	skydome->scale = XMFLOAT3(30.0f, 30.0f, 30.0f);
 
 	squere = DirectX3dObject::CreateObject(GetModelData(skydomeDataNum), XMFLOAT3(0, 1, 0), FBXSHADER);
-	squere->scale = XMFLOAT3(0.001f, 0.001f, 0.001f);
+	squere->scale = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	squere->material.texNumber = TexManager::GetColor(XMFLOAT4(255, 255, 255, 255));
 	//skydome->color.x = -1.0f;
 }
@@ -34,7 +34,7 @@ void GameScenes::Update()
 	StaticCameraPos::Instance()->position = DirectX::XMFLOAT3(0, 0, 0);
 	StaticCameraPos::Instance()->target = DirectX::XMFLOAT3(0.01f, 0.01f, 1);
 
-	model->position = XMFLOAT3(0, 1, 0);
+	model->position = XMFLOAT3(0, 10, 0);
 	//Sea->position = XMFLOAT3(100, -2, 0);
 	soko->position = XMFLOAT3(0, 0, 0);
 }
