@@ -33,8 +33,12 @@ struct ConstBufferDataB1
 };
 
 //定数バッファ用構造体
-struct ConstBufferDataTime {
+struct ConstBufferDataOther {
 	UINT time; //色(RGBA)
+	float InterpSize;
+	float Focus;
+	float FocusSize;
+	float Flag;
 };
 
 struct ConstBufferDataShadow {
@@ -229,6 +233,7 @@ void InitalizeObject3d(Object3d *object, int index);
 void Drawobject3d(Object3d *object);
 void DepthDrawobject3d(Object3d *object);
 void ShadowDepthDrawobject3d(Object3d *object);
+void DOFDepthDrawobject3d(Object3d *object);
 
 /// <summary>
 /// オブジェクトの描画

@@ -13,6 +13,10 @@ class DepthOfField
 private:
 	struct ConstBufferData {
 		XMMATRIX mat; //変換行列
+		float InterpSize; // 最もぼかしが強いところとぼかし無しのところの補間距離
+		float Focus; // ぼかし無しの範囲の中心位置
+		float FocusSize; // ぼかし無しの範囲
+		float Flag;
 	};
 	ID3DBlob *errorBlob = nullptr;
 	//定数バッファ
@@ -47,7 +51,13 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
-	void Initialize();
+	static float InterpSize;
+	static float Focus;
+	static float FocusSize;
+	static float UseFlag;
+
+	void Initialize(float _InterpSize, float _Focus, float _FocusSize, bool _UseFlag);
+	void SetState(float _InterpSize, float _Focus, float _FocusSize, bool _UseFlag);
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 

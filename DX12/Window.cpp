@@ -35,7 +35,7 @@ void Window::MakeWindow(void) {
     //ウィンドウの生成
     WinHandle = CreateWindow(
         WindowData.lpszClassName,
-        TEXT("HA-RI-TE"),
+        TEXT("MyProject"),
         Style,
         X,
         Y,

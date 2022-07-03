@@ -2,6 +2,11 @@
 Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+};
+
 cbuffer cbBuffer2 : register(b2)
 {
 	float  g_Weight0;    // èdÇ›
@@ -24,14 +29,14 @@ float4 main(GaussianGSOutput input) : SV_TARGET
 
 	float4 Out = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	Out += (tex.Sample(smp, input.texel0) + tex.Sample(smp, float2(input.texel7.x + g_OffsetX, input.texel7.y))) * g_Weight0;
-	Out += (tex.Sample(smp, input.texel1) + tex.Sample(smp, float2(input.texel6.x + g_OffsetX, input.texel6.y))) * g_Weight1;
-	Out += (tex.Sample(smp, input.texel2) + tex.Sample(smp, float2(input.texel5.x + g_OffsetX, input.texel5.y))) * g_Weight2;
-	Out += (tex.Sample(smp, input.texel3) + tex.Sample(smp, float2(input.texel4.x + g_OffsetX, input.texel4.y))) * g_Weight3;
-	Out += (tex.Sample(smp, input.texel4) + tex.Sample(smp, float2(input.texel3.x + g_OffsetX, input.texel3.y))) * g_Weight4;
-	Out += (tex.Sample(smp, input.texel5) + tex.Sample(smp, float2(input.texel2.x + g_OffsetX, input.texel2.y))) * g_Weight5;
-	Out += (tex.Sample(smp, input.texel6) + tex.Sample(smp, float2(input.texel1.x + g_OffsetX, input.texel1.y))) * g_Weight6;
-	Out += (tex.Sample(smp, input.texel7) + tex.Sample(smp, float2(input.texel0.x + g_OffsetX, input.texel0.y))) * g_Weight7;
+	Out += (tex.Sample(smp, saturate(input.texel0)) + tex.Sample(smp, saturate(float2(input.texel7.x + g_OffsetX, input.texel7.y)))) * g_Weight0;
+	Out += (tex.Sample(smp, saturate(input.texel1)) + tex.Sample(smp, saturate(float2(input.texel6.x + g_OffsetX, input.texel6.y)))) * g_Weight1;
+	Out += (tex.Sample(smp, saturate(input.texel2)) + tex.Sample(smp, saturate(float2(input.texel5.x + g_OffsetX, input.texel5.y)))) * g_Weight2;
+	Out += (tex.Sample(smp, saturate(input.texel3)) + tex.Sample(smp, saturate(float2(input.texel4.x + g_OffsetX, input.texel4.y)))) * g_Weight3;
+	Out += (tex.Sample(smp, saturate(input.texel4)) + tex.Sample(smp, saturate(float2(input.texel3.x + g_OffsetX, input.texel3.y)))) * g_Weight4;
+	Out += (tex.Sample(smp, saturate(input.texel5)) + tex.Sample(smp, saturate(float2(input.texel2.x + g_OffsetX, input.texel2.y)))) * g_Weight5;
+	Out += (tex.Sample(smp, saturate(input.texel6)) + tex.Sample(smp, saturate(float2(input.texel1.x + g_OffsetX, input.texel1.y)))) * g_Weight6;
+	Out += (tex.Sample(smp, saturate(input.texel7)) + tex.Sample(smp, saturate(float2(input.texel0.x + g_OffsetX, input.texel0.y)))) * g_Weight7;
 
 
 	/*float4 output = float4(0.0f, 0.0f, 0.0f, 0.0f);

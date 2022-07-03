@@ -168,7 +168,13 @@ void ShadowMapping::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPo
 	}
 }
 
-void ShadowMapping::Initialize() {
+void ShadowMapping::Initialize(bool _UseFlag) {
+	if (_UseFlag) {
+		UseFlag = 1.0f;
+	}
+	else {
+		UseFlag = 0.0f;
+	}
 	SetupGraphPrimitive();
 
 	HRESULT result;
@@ -270,6 +276,16 @@ void ShadowMapping::Initialize() {
 	//	descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 }
 
+void ShadowMapping::SetUse(bool isUse)
+{
+	if (isUse) {
+		UseFlag = 1.0f;
+	}
+	else {
+		UseFlag = 0.0f;
+	}
+}
+
 void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3)
 {
 	int Num = 0;
@@ -306,6 +322,7 @@ void ShadowMapping::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap 
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
 		constMap0->mat = Camera::matView * Camera::matProjection;
+		constMap0->UseFlag = UseFlag;
 		ConstBuff0->Unmap(0, nullptr);
 	}
 

@@ -2,6 +2,11 @@
 Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+};
+
 float4 main(GSOutput input) : SV_TARGET
 {
 	float2 uv = input.uv * float2(1280, 720);

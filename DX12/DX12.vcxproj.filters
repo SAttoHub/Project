@@ -235,6 +235,12 @@
     <Filter Include="リソース ファイル\FBX\深度値描画用\shadowMap用">
       <UniqueIdentifier>{01822165-ec9d-42a6-955e-47c3cea81a2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\Vignette">
+      <UniqueIdentifier>{d76d3a5b-20c1-40ca-87b1-1ae256a4b6f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\Vignette">
+      <UniqueIdentifier>{3fc89b79-ccfd-4300-b632-f30d58bbcbd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -407,6 +413,12 @@
     </ClCompile>
     <ClCompile Include="Depth2.cpp">
       <Filter>ソース ファイル\Base\PostEffect\深度値描画用RT</Filter>
+    </ClCompile>
+    <ClCompile Include="Vignette.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\Vignette</Filter>
+    </ClCompile>
+    <ClCompile Include="imguiUse.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -692,6 +704,12 @@
     <ClInclude Include="Depth2.h">
       <Filter>ヘッダー ファイル\PostEffect\深度値描画用RT</Filter>
     </ClInclude>
+    <ClInclude Include="Vignette.h">
+      <Filter>ヘッダー ファイル\PostEffect\Vignette</Filter>
+    </ClInclude>
+    <ClInclude Include="imguiUse.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\FBXPS.hlsl">
@@ -864,6 +882,9 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\Shadow_FBX_PS.hlsl">
       <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Depth2.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

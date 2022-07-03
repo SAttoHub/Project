@@ -1,5 +1,14 @@
 #include "PostEffect.hlsli"
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+	float InterpSize;
+	float Focus;
+	float FocusSize;
+	float Flag;
+};
+
 [maxvertexcount(4)]
 void main(
 	point VSOutput input[1],

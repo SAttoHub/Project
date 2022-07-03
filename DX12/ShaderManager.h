@@ -34,6 +34,8 @@ public:
 
 	ComPtr<ID3DBlob> FBX_Depth_psBlob; // 深度値用
 
+	ComPtr<ID3DBlob> FBX_DOF_psBlob; // 深度値用
+
 	ComPtr<ID3DBlob> FBX_Shadow_Depth_vsBlob; // 深度値用
 	ComPtr<ID3DBlob> FBX_Shadow_Depth_psBlob; // 深度値用
 

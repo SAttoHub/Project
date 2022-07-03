@@ -1,8 +1,3 @@
-cbuffer cbuff0 : register(b0)
-{
-	matrix mat;
-};
-
 struct VSInput
 {
 	float4 pos1	: POSITION;//ˆÊ’u   

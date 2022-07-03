@@ -1,5 +1,10 @@
 #include "PostEffect.hlsli"
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+};
+
 VSOutput main(VSInput input)
 {
 	VSOutput output;

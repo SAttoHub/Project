@@ -5,7 +5,7 @@
 #include "CollisionManager.h"
 #include "FbxLoader.h"
 #include "ShadowMapLight.h"
-
+#include "DepthOfField.h"
 My_F_List<Object3d> DirectX3dObject::object3ds;
 int DirectX3dObject::OldShaderLoad = -1;
 LightGroup *DirectX3dObject::lightGroup = nullptr;
@@ -151,7 +151,7 @@ void InitalizeObject3d(Object3d *object, int index) {
 		result = DirectXBase::dev->CreateCommittedResource(
 			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer((sizeof(object->material.constBuffB1) + 0xff) & ~0xff),
+			&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(&object->material.constBuffB1));
@@ -180,7 +180,7 @@ void InitalizeObject3d(Object3d *object, int index) {
 	result = DirectXBase::dev->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataTime) + 0xff) & ~0xff),
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataOther) + 0xff) & ~0xff),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&object->constBuffTime)
@@ -331,9 +331,13 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 	object->constBuffSkin->Unmap(0, nullptr);
 
 	object->Timer = object->Timer + 1;
-	ConstBufferDataTime *constMap2 = nullptr;
+	ConstBufferDataOther *constMap2 = nullptr;
 	result = object->constBuffTime->Map(0, nullptr, (void **)&constMap2);
 	constMap2->time = object->Timer;
+	constMap2->InterpSize = DepthOfField::InterpSize;
+	constMap2->Focus = DepthOfField::Focus;
+	constMap2->FocusSize = DepthOfField::FocusSize;
+	constMap2->Flag = DepthOfField::UseFlag;
 	object->constBuffTime->Unmap(0, nullptr);
 
 
@@ -468,9 +472,9 @@ void DepthDrawobject3d(Object3d *object)
 			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 	}
 
-	if (object->shaderNumber == Sea_SHADER) {
+	//if (object->shaderNumber == Sea_SHADER) {
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
-	}
+	//}
 	//DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
 
 	// ライトの描画
@@ -520,6 +524,75 @@ void ShadowDepthDrawobject3d(Object3d *object)
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
 
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, 1, 0, 0, 0);
+
+	/*for (int i = 0; i < (int)DirectX3dObject::object3ds.size(); i++) {
+		if (DirectX3dObject::object3ds[i]->parent == object) {
+			Drawobject3d(DirectX3dObject::object3ds[i]);
+		}
+	}*/
+}
+
+void DOFDepthDrawobject3d(Object3d *object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[DOF_SHEADER].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[DOF_SHEADER].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap *ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+
+	if (object->shaderNumber == FBX_Bump_SHADER) {
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.BumpTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	}
+	else if (object->shaderNumber == FBX_height_SHADER) {
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.BumpTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+		//シェーダーリソースビュー
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(6, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			object->material.HeightTexNumber,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	}
+
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
+	//DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
 
 	// ライトの描画
 	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);

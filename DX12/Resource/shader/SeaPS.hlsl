@@ -6,6 +6,10 @@ SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 cbuffer time : register(b4)
 {
 	uint Time;
+	float InterpSize;
+	float Focus;
+	float FocusSize;
+	float Flag;
 };
 
 #define  Iterations  24
@@ -24,7 +28,7 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float2 uv = input.uv;
 	float time = float(frameCount) * 0.01f;
-	float2 pos = ((input.worldpos.xz + float2(10,10)) * 50) / windowSize * 12.0 - 20.0;
+	float2 pos = (((input.worldpos.xz / 10.0f) + float2(10,10)) * 50) / windowSize * 12.0 - 20.0;
 	float2 tmp = pos;
 	float speed2 = speed * 2.0;
 	float inten = 0.015;

@@ -4,6 +4,12 @@ Texture2D<float> tex2 : register(t1); //ライトから
 Texture2D<float> tex3 : register(t2); //カメラから
 SamplerState smp : register(s0);
 
+cbuffer cbuff0 : register(b0)
+{
+    matrix mat;
+    float flag;
+};
+
 cbuffer cbBuffer1 : register(b1)
 {
 	//matrix view; // ビュー行列
@@ -80,19 +86,22 @@ float4x4 inverse(float4x4 m) {
 float4 main(GSOutput input) : SV_TARGET
 {
     float4 Color = tex.Sample(smp, input.uv);
+    if (flag == 0.0f) {
+        return Color;
+    }
     float DepthCamera = tex3.Sample(smp, input.uv);
 
     float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Camera_viewproj_inv);
 
 
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
-
+    //Wpos.y += 5;
 
 	float4 obj_shadow = mul(Light_viewproj, Wpos);
     obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
     obj_shadow.xy *= float2(0.5f, -0.5f);
     obj_shadow.xy += 0.5f;
-    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z - 0.028f) {
+    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z - 0.001 && obj_shadow.z < 1.0f) {
         Color.rgb *= 0.5f;
     }
 

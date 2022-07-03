@@ -57,8 +57,11 @@ void ShaderManager::LoadShaderAll()
 	LoadShader(&FBX_Line_psBlob, L"Resource/shader/FBXLinePS.hlsl", "main", "ps_5_0");
 	LoadShader(&FBX_Sea_psBlob, L"Resource/shader/SeaPS.hlsl", "main", "ps_5_0");
 
-	LoadShader(&FBX_Depth_psBlob, L"Resource/shader/DepthPS.hlsl", "main", "ps_5_0");
+	LoadShader(&FBX_Depth_psBlob, L"Resource/shader/Depth2.hlsl", "main", "ps_5_0");
 
 	LoadShader(&FBX_Shadow_Depth_vsBlob, L"Resource/shader/Shadow_FBX_VS.hlsl", "main", "vs_5_0");
 	LoadShader(&FBX_Shadow_Depth_psBlob, L"Resource/shader/Shadow_FBX_PS.hlsl", "main", "ps_5_0");
+
+	LoadShader(&FBX_DOF_psBlob, L"Resource/shader/DepthPS.hlsl", "main", "ps_5_0");
+
 }

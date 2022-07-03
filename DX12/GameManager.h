@@ -35,20 +35,23 @@ class GameManager {
 	Model BoxModel[3];
 	Object3d *TesObj[3];
 
-	//Ç∞Å[Çﬁ
-	GameScenes game;
+	
 public:
 	GameManager(DirectX3dObject *OBJECT, Sprite *SP, TexManager *TEX, Window *Win, PipelineManager *Pileline, Camera *Cam);
 	~GameManager() {
 	};
 
+	//Ç∞Å[Çﬁ
+	GameScenes game;
 
 	void Init();
 	void Update();
 	void Draw();
 	void DepthDraw();
+	void DOFDepthDraw();
 	void ShadowDraw();
 	void BloomDraw();
+	void BloomDepthDraw();
 
 	double InCubic(double t) {
 		return t * t * t;

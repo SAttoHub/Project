@@ -24,6 +24,7 @@ private:
 
 	struct ConstBufferData {
 		XMMATRIX mat; //変換行列
+		float UseFlag;
 	};
 	ID3DBlob *errorBlob = nullptr;
 	//定数バッファ
@@ -57,9 +58,11 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
-	void Initialize();
+	void Initialize(bool _UseFlag);
 
 	const float clearColor[4] = { 0.0f, 1.0f,1.0f, 1.0f };
+	float UseFlag;
+	void SetUse(bool isUse);
 
 	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3);
 

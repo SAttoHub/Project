@@ -2,7 +2,7 @@
 #include "FbxLoader.h"
 #include "DebugText.h"
 #include <string>
-#include "imguiCommon.h"
+#include "imguiUse.h"
 #include "Funcs.h"
 
 GameManager::GameManager(DirectX3dObject *OBJECT, Sprite *SP, TexManager *TEX, Window *Win, PipelineManager *Pipeline, Camera *Cam) {
@@ -129,7 +129,6 @@ void GameManager::Draw() {
 
 	DirectXBase::ClearDepthBuffer();
 
-	//imguiCommon::Instance()->CommandExcute(true);
 	//デバッグテキスト
 	DebugText *debugText = DebugText::GetInstance();
 	//debugText->Print("Score : " + to_string(Score::GetScore()), 0, 0, 2);
@@ -141,6 +140,11 @@ void GameManager::DepthDraw()
 	game.DepthDraw();
 }
 
+void GameManager::DOFDepthDraw()
+{
+	game.DOFDepthDraw();
+}
+
 void GameManager::ShadowDraw()
 {
 	game.ShadowDraw();
@@ -149,4 +153,9 @@ void GameManager::ShadowDraw()
 void GameManager::BloomDraw()
 {
 	game.BloomDraw();
+}
+
+void GameManager::BloomDepthDraw()
+{
+	game.BloomDepthDraw();
 }

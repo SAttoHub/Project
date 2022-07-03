@@ -26,9 +26,9 @@ void GameCamera::Initialize()
 		break;
 	}
 
-	//ShakeValue = XMFLOAT3(0, 0, 0);
-	//Mode = CM_Game;
-	//Camera::isCameraStop = true;
+	ShakeValue = XMFLOAT3(0, 0, 0);
+	Mode = CM_Game;
+	Camera::isCameraStop = true;
 }
 
 void GameCamera::Update()
@@ -95,12 +95,13 @@ void GameCamera::Finalize()
 
 void GameCamera::GameCameraUpdate()
 {
-	/*DebugCamPos = GetTargetPos();
-	Camera::Targeting(XMFLOAT3(CHIP_SIZE * 5.5,0, CHIP_SIZE * 7.5 + 10));
-	DebugCamPos.x = CHIP_SIZE * 5.5;
-	DebugCamPos.y = CHIP_SIZE * 15;
-	DebugCamPos.z = CHIP_SIZE * 7.5 - 30;
-	Camera::SetCameraPos3(DebugCamPos);*/
+
+	//{x=43.1580887 y=18.1999950 z=43.9830246 }
+	//{x=16.9675980 y=17.2343636 z=29.3841972 }
+
+	DebugCamPos = XMFLOAT3(43.1580887f, 18.1999950f, 43.9830246f);
+	Camera::Targeting(XMFLOAT3(16.9675980f, 17.2343636f, 29.3841972f));
+	Camera::SetCameraPos3(DebugCamPos);
 
 	if (ShakeTimer != 0) {
 		ShakeTimer += 5;
@@ -121,6 +122,7 @@ void GameCamera::GameCameraUpdate()
 	}
 
 	DebugCamPos = StaticCameraPos::Instance()->position + ShakeValue;
+
 	//Camera::Targeting(StaticCameraPos::Instance()->target + ShakeValue);
 	//Camera::SetCameraPos3(DebugCamPos);
 }

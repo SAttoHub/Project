@@ -1,5 +1,10 @@
 #include "PostEffect.hlsli"
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+};
+
 [maxvertexcount(4)]
 void main(
 	point VSOutput input[1],

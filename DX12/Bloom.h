@@ -51,7 +51,7 @@ public:
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2);
+	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3, ID3D12DescriptorHeap *Descriptor4);
 
 	void ClearDepth();
 

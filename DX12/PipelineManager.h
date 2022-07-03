@@ -2,7 +2,7 @@
 #include "DirectXBase.h"
 #include "ShaderManager.h"
 
-const int MAX_PIPELINE = 16;
+const int MAX_PIPELINE = 20;
 
 enum class BlendType {
 	None,
@@ -93,6 +93,12 @@ public:
 	);
 
 	void createFBXShadowDepthPipeline(int PIPELINE_NUM,
+		UINT inputLayoutCount,
+		D3D12_INPUT_ELEMENT_DESC *inputLayout,
+		ID3DBlob *vsBlob, ID3DBlob *psBlob
+	);
+
+	void createFBXDOFPipeline(int PIPELINE_NUM,
 		UINT inputLayoutCount,
 		D3D12_INPUT_ELEMENT_DESC *inputLayout,
 		ID3DBlob *vsBlob, ID3DBlob *psBlob

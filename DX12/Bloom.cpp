@@ -94,11 +94,17 @@ void Bloom::SetupGraphPrimitive()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV2; //テクスチャ用
 	descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV3; //テクスチャ用
+	descRangeSRV3.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV4; //テクスチャ用
+	descRangeSRV4.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 3);
 	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[3] = {};
+	CD3DX12_ROOT_PARAMETER rootparams[5] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[3].InitAsDescriptorTable(1, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[4].InitAsDescriptorTable(1, &descRangeSRV4, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャサンプラーの設定[
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
 	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -252,7 +258,7 @@ void Bloom::Initialize() {
 	//	descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 }
 
-void Bloom::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2)
+void Bloom::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3, ID3D12DescriptorHeap *Descriptor4)
 {
 	int Num = 0;
 	assert(Num <= MaxGraphPrimitives);
@@ -334,6 +340,10 @@ void Bloom::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descrip
 		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, Descriptor->GetGPUDescriptorHandleForHeapStart());
 		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor2);
 		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, Descriptor2->GetGPUDescriptorHandleForHeapStart());
+		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor3);
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(3, Descriptor3->GetGPUDescriptorHandleForHeapStart());
+		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor4);
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(4, Descriptor4->GetGPUDescriptorHandleForHeapStart());
 		//描画コマンド
 		DirectXBase::cmdList->DrawInstanced(1, 1, 0, 0);
 	}

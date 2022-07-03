@@ -1,6 +1,11 @@
 #include "DepthOfField.h"
 #include "Camera.h"
 
+float DepthOfField::InterpSize = 20.0f;
+float DepthOfField::Focus = 30.0f;
+float DepthOfField::FocusSize = 20.0f;
+float DepthOfField::UseFlag = 1.0f;
+
 void DepthOfField::SetupGraphPrimitive()
 {
 	HRESULT result;
@@ -157,7 +162,18 @@ void DepthOfField::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPoi
 	}
 }
 
-void DepthOfField::Initialize() {
+void DepthOfField::Initialize(float _InterpSize, float _Focus, float _FocusSize, bool _UseFlag) {
+	
+	DepthOfField::InterpSize = _InterpSize;
+	DepthOfField::Focus = _Focus;
+	DepthOfField::FocusSize = _FocusSize;
+	if (_UseFlag == false) {
+		DepthOfField::UseFlag = 0.0f;
+	}
+	else {
+		DepthOfField::UseFlag = 1.0f;
+	}
+	
 	SetupGraphPrimitive();
 
 	HRESULT result;
@@ -259,6 +275,19 @@ void DepthOfField::Initialize() {
 	//	descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 }
 
+void DepthOfField::SetState(float _InterpSize, float _Focus, float _FocusSize, bool _UseFlag)
+{
+	DepthOfField::InterpSize = _InterpSize;
+	DepthOfField::Focus = _Focus;
+	DepthOfField::FocusSize = _FocusSize;
+	if (_UseFlag == false) {
+		DepthOfField::UseFlag = 0.0f;
+	}
+	else {
+		DepthOfField::UseFlag = 1.0f;
+	}
+}
+
 void DepthOfField::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3, ID3D12DescriptorHeap *Descriptor4)
 {
 	int Num = 0;
@@ -295,6 +324,10 @@ void DepthOfField::Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
 		constMap0->mat = Camera::matView * Camera::matProjection;
+		constMap0->InterpSize = DepthOfField::InterpSize;
+		constMap0->Focus = DepthOfField::Focus;
+		constMap0->FocusSize = DepthOfField::FocusSize;
+		constMap0->Flag = DepthOfField::UseFlag;
 		ConstBuff0->Unmap(0, nullptr);
 	}
 

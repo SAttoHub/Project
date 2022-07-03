@@ -1,5 +1,10 @@
 #include "PostEffect.hlsli"
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+};
+
 cbuffer cbBuffer2 : register(b2)
 {
 	float  g_Weight0;    // èdÇ›

@@ -8,6 +8,7 @@
 #include "ColorDefines.h"
 #include "3DObject.h"
 #include "ModelManager.h"
+#include "ExtendedRandom.h"
 
 enum class NowScene {
 	Title,
@@ -27,20 +28,23 @@ private:
 public:
 	NowScene Scene;
 
-	Object3d *model;
-	Object3d *Sea;
+	Object3d *model1; bool BloomFlag1;
+	Object3d *model2; bool BloomFlag2;
+	Object3d *model3; bool BloomFlag3;
 	Object3d *soko;
-	Object3d *skydome;
 	Object3d *squere;
+	Object3d *skydome;
 
 public:
 	void Initialize();
 	void Update();
 	void Draw();
 	void DepthDraw();
+	void DOFDepthDraw();
 	void BackDraw();
 	void ShadowDraw();
 	void BloomDraw();
+	void BloomDepthDraw();
 
 	void ChangeScene(NowScene s);
 };

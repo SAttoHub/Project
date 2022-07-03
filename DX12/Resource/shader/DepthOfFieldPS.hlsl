@@ -5,6 +5,15 @@ Texture2D<float4> tex3 : register(t2);
 Texture2D<float4> DepthTexture : register(t3);
 SamplerState smp : register(s0);
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix mat;
+	float InterpSize;
+	float Focus;
+	float FocusSize;
+	float Flag;
+};
+
 float4 main(GSOutput input) : SV_TARGET
 {
 	//仮ヴィネット
@@ -12,9 +21,14 @@ float4 main(GSOutput input) : SV_TARGET
 	uv = 2.0f * uv - 1.0f;
 	c2 *= 1.0 - dot(uv, uv) * 0.2f;*/
 
+	if (Flag == 0.0f) {
+		return tex.Sample(smp, input.uv);
+	}
+
 	//return c2;
 	//float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
-	float3 hisyakaiArea = float3(1.0f, 1.5f, 1.0f);
+	float3 hisyakaiArea = float3(InterpSize, Focus, FocusSize);
+	//float3 hisyakaiArea = float3(20.0f, 30.0f, 30.0f);
 	float DepthOfField_TotalSize = hisyakaiArea.x * 2.0f + hisyakaiArea.z;
 	float2 ParamF = float2(0.0f, 0.0f);
 	// 被写界深度のぼかし無しの開始位置を計算
@@ -59,10 +73,6 @@ float4 main(GSOutput input) : SV_TARGET
 
 	// 合成した色の値を算出
 	float4 Color = lerp(Color1, Color2, BlendRate);
-
-	float2 uv = input.uv;
-	uv = 2.0f * uv - 1.0f;
-	Color *= 1.0 - dot(uv, uv) * 0.2f;
 
 	return Color;
 

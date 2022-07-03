@@ -31,6 +31,7 @@ enum SHADER {
 	Sea_SHADER, // 海テスト
 	Depth_SHEADER, // 深度値用
 	Shadow_Depth_SHEADER,
+	DOF_SHEADER, // 深度値用
 	Particle
 };
 

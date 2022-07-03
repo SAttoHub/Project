@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "ExtraTypeFunc.h"
+#include "imguiUse.h"
 
 void Game::Initialize()
 {
@@ -18,7 +19,14 @@ void Game::Initialize()
 
 	postEffect = new PostEffect;
 	postEffect->Initialize();
+	postEffect2 = new PostEffect;
+	postEffect2->Initialize();
 
+	//被写界深度
+	InterpSize = 20.0f;
+	Focus = 30.0f;
+	FocusSize = 20.0f;
+	UseFlag = true;
 	GaussianEffectX = new Gaussian;
 	GaussianEffectX->Initialize(0, 0.03f);
 	GaussianEffectY = new Gaussian;
@@ -28,33 +36,46 @@ void Game::Initialize()
 	GaussianEffectY2 = new Gaussian;
 	GaussianEffectY2->Initialize(1, 0.1f);
 	DOF = new DepthOfField;
-	DOF->Initialize();
+	DOF->Initialize(InterpSize, Focus, FocusSize, UseFlag);
 	depth = new Depth;
 	depth->Initialize();
 
+	//ブルーム
 	bloom = new Bloom;
 	bloom->Initialize();
 	GaussianEffectXBloom = new Gaussian;
 	GaussianEffectXBloom->Initialize(0, 0.005f);
 	GaussianEffectYBloom = new Gaussian;
 	GaussianEffectYBloom->Initialize(1, 0.005f);
+	depth3 = new Depth2;
+	depth3->Initialize();
 
 	BloomFlag = true;
 	DOFFlag = true;
-	DOF_State = XMFLOAT3(1.0f, 1.5f, 1.0f);
 	//シャドウ
+	ShadowMapUse = true;
 	depth2 = new Depth2;
 	depth2->Initialize();
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(10.0f, 1000.0f, 10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,500.0f, 0.01f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
-	shadowMapping->Initialize();
+	shadowMapping->Initialize(ShadowMapUse);
+
+	//ビネット
+	VignetteInfluence = 0.2f;
+	UseVignette = true;
+	vignette = new Vignette;
+	vignette->Initialize(VignetteInfluence, UseVignette);
 }
 
 void Game::Update()
 {
     //-----------------画面のクリア-----------------//
     DXBase.ClearScreen();
+	imguiUse *im = imguiUse::Instance();
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
     //-----------------キーボードの入力状態の更新-----------------//
     Input::Update();
@@ -67,7 +88,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(10.0f, 1000.0f, 10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 500.0f, 0.01f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	
 	//postEffect->PreDrawScene(1);
  //   //Drawobject3d(skydome);
@@ -86,20 +107,36 @@ void Game::Update()
 	//GaussianEffectX->PostDrawScene();
 	//GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
 	
-	/*
+	
+	//深度値保存描画
+	depth->PreDrawScene(1);
+	game->DOFDepthDraw();
+	depth->PostDrawScene();
+	//カメラ視点の深度描画
+	depth2->PreDrawScene(1);
+	game->DepthDraw();
+	depth2->PostDrawScene();
+	//ライト視点の深度描画
+	shadowMapping->PreDrawScene();
+	game->ShadowDraw();
+	shadowMapping->PostDrawScene();
+
 	postEffect->PreDrawScene(1);
 	game->Draw();
 	postEffect->PostDrawScene();
-	//深度値保存描画
-	depth->PreDrawScene(1);
-	game->DepthDraw();
-	depth->PostDrawScene();
+
+	postEffect2->PreDrawScene(1);
+	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth2->descHeapSRV.Get());
+	postEffect2->PostDrawScene();
 
 
 	//ブルーム用
 	bloom->PreDrawScene();
 	game->BloomDraw();
 	bloom->PostDrawScene();
+	depth3->PreDrawScene(1);
+	game->BloomDepthDraw();
+	depth3->PostDrawScene();
 	GaussianEffectXBloom->PreDrawScene(1);
 	GaussianEffectXBloom->Draw(bloom->descHeapSRV.Get());
 	GaussianEffectXBloom->PostDrawScene();
@@ -108,7 +145,7 @@ void Game::Update()
 	GaussianEffectYBloom->PostDrawScene();
 
 	bloom->PreDrawScene();
-	bloom->Draw(postEffect->descHeapSRV.Get(), GaussianEffectYBloom->descHeapSRV.Get());
+	bloom->Draw(postEffect2->descHeapSRV.Get(), GaussianEffectYBloom->descHeapSRV.Get(), depth2->descHeapSRV.Get(), depth3->descHeapSRV.Get());
 	bloom->PostDrawScene();
 
 
@@ -129,25 +166,75 @@ void Game::Update()
 	GaussianEffectY2->PostDrawScene();
 
 
-	DXBase.ClearDepthBuffer();
+	DOF->PreDrawScene();
 	DOF->Draw(bloom->descHeapSRV.Get(), GaussianEffectY2->descHeapSRV.Get(), GaussianEffectY->descHeapSRV.Get(), depth->descHeapSRV.Get());
-	*/
-	
-	//カメラ視点の深度描画
-	depth2->PreDrawScene(1);
-	game->DepthDraw();
-	depth2->PostDrawScene();
-	//ライト視点の深度描画
-	shadowMapping->PreDrawScene();
-	game->ShadowDraw();
-	shadowMapping->PostDrawScene();
+	DOF->PostDrawScene();
 
-	postEffect->PreDrawScene(1);
+	DXBase.ClearDepthBuffer();
+	vignette->Draw(DOF->descHeapSRV.Get());
+
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 20), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
+	ImGui::Begin("Buri_1");
+	ImGui::Checkbox("Bloom", &game->game.BloomFlag1);
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 90), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
+	ImGui::Begin("Buri_2");
+	ImGui::Checkbox("Bloom", &game->game.BloomFlag2);
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 160), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
+	ImGui::Begin("Buri_3");
+	ImGui::Checkbox("Bloom", &game->game.BloomFlag3);
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 260), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 200), 1);
+	ImGui::Begin("DOF");
+	ImGui::SliderFloat("InterpSize", &InterpSize, 1.0f, 1000.0f);
+	ImGui::SliderFloat("Focus", &Focus, 1.0f, 1000.0f);
+	ImGui::SliderFloat("FocusSize", &FocusSize, 1.0f, 1000.0f);
+	ImGui::Checkbox("isUse", &UseFlag);
+	if (ImGui::Button("Reset")) {
+		InterpSize = 20.0f;
+		Focus = 30.0f;
+		FocusSize = 20.0f;
+		UseFlag = true;
+	}
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 470), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
+	ImGui::Begin("ShadowMap");
+	ImGui::Checkbox("isUse", &ShadowMapUse);
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(1000, 540), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 120), 1);
+	ImGui::Begin("Vignette");
+	ImGui::SliderFloat("Influence", &VignetteInfluence, 0.0f, 10.0f);
+	ImGui::Checkbox("isUse", &UseVignette);
+	if (ImGui::Button("Reset")) {
+		VignetteInfluence = 0.2f;
+		UseVignette = true;
+	}
+	ImGui::End();
+
+	imguiUse::Instance()->CommandExcute(true);
+
+	shadowMapping->SetUse(ShadowMapUse);
+	vignette->SetState(VignetteInfluence, UseVignette);
+	DOF->SetState(InterpSize, Focus, FocusSize, UseFlag);
+	/*postEffect->PreDrawScene(1);
 	game->Draw();
 	postEffect->PostDrawScene();
 
 	DXBase.ClearDepthBuffer();
-	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth2->descHeapSRV.Get());
+	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth2->descHeapSRV.Get());*/
 	
 	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 0), 32, XMFLOAT4(0, 0, 0, 1), "E : マウス拘束解除");
 	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 34), 32, XMFLOAT4(0, 0, 0, 1), "Q : マウス拘束開始");
