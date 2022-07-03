@@ -8,7 +8,7 @@ using namespace DirectX;
 
 #include "PostGraphPrimitive.h"
 
-class Depth
+class Depth2
 {
 private:
 	//定数バッファ用構造体

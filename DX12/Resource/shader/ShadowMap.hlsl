@@ -88,7 +88,7 @@ float4 main(GSOutput input) : SV_TARGET
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
 
 
-	float4 obj_shadow = mul(Wpos, Light_viewproj); //ŽË‰e•ÏŠ·
+	float4 obj_shadow = mul(Light_viewproj, Wpos);
     obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
     obj_shadow.xy *= float2(0.5f, -0.5f);
     obj_shadow.xy += 0.5f;

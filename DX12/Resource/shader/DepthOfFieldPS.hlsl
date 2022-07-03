@@ -13,7 +13,8 @@ float4 main(GSOutput input) : SV_TARGET
 	c2 *= 1.0 - dot(uv, uv) * 0.2f;*/
 
 	//return c2;
-	float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
+	//float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
+	float3 hisyakaiArea = float3(1.0f, 1.5f, 1.0f);
 	float DepthOfField_TotalSize = hisyakaiArea.x * 2.0f + hisyakaiArea.z;
 	float2 ParamF = float2(0.0f, 0.0f);
 	// ”íÊŠE[“x‚Ì‚Ú‚©‚µ–³‚µ‚ÌŠJnˆÊ’u‚ğŒvZ

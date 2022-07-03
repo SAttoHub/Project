@@ -115,6 +115,11 @@ void ShadowMapping::SetupGraphPrimitive()
 	//テクスチャサンプラーの設定[
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
 	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
 	//ルートシグネチャの生成
 	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	//ルートシグネチャの生成

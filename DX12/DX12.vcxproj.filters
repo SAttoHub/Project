@@ -405,6 +405,9 @@
     <ClCompile Include="ShadowMapping.cpp">
       <Filter>ソース ファイル\Base\PostEffect\shadowMap</Filter>
     </ClCompile>
+    <ClCompile Include="Depth2.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\深度値描画用RT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -685,6 +688,9 @@
     </ClInclude>
     <ClInclude Include="ShadowMapping.h">
       <Filter>ヘッダー ファイル\PostEffect\shadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Depth2.h">
+      <Filter>ヘッダー ファイル\PostEffect\深度値描画用RT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

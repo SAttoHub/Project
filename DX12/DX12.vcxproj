@@ -182,6 +182,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="Depth.cpp" />
+    <ClCompile Include="Depth2.cpp" />
     <ClCompile Include="DepthOfField.cpp" />
     <ClCompile Include="DirectXBase.cpp" />
     <ClCompile Include="3DObject.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="Depth.h" />
+    <ClInclude Include="Depth2.h" />
     <ClInclude Include="DepthOfField.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectXMathExpansion.h" />

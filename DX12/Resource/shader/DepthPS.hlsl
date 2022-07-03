@@ -5,12 +5,16 @@ SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
 float4 main(VSOutput input) : SV_TARGET
 {
-	////---------------被写界深度用
+	//if (tex.Sample(smp, input.uv).a == 0.0f) {
+	//	return float4(0.0f, 0.0f, 0.0f, 0.0f);
+	//}
+	//////---------------被写界深度用
 	//float4 obj = mul(input.worldpos, view); //ビュー変換
 	//float4 cp = float4(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f);
 	//float4 cam = mul(cp, view); //ビュー変換
 
-	//float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
+	////float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
+	//float3 hisyakaiArea = float3(1.0f, 1.5f, 1.0f);
 	//float3 ParamF = float3(0.0f, 0.0f, 0.0f);
 
 	//// 被写界深度の開始位置を計算

@@ -30,7 +30,8 @@ public:
 	Object3d *model;
 	Object3d *Sea;
 	Object3d *soko;
-
+	Object3d *skydome;
+	Object3d *squere;
 
 public:
 	void Initialize();
@@ -39,6 +40,7 @@ public:
 	void DepthDraw();
 	void BackDraw();
 	void ShadowDraw();
+	void BloomDraw();
 
 	void ChangeScene(NowScene s);
 };

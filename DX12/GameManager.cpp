@@ -145,3 +145,8 @@ void GameManager::ShadowDraw()
 {
 	game.ShadowDraw();
 }
+
+void GameManager::BloomDraw()
+{
+	game.BloomDraw();
+}
