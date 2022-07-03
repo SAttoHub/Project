@@ -61,7 +61,7 @@ void GameCamera::Finalize()
 
 	void GameCamera::DebugCameraUpdate()
 {
-	float MovePower = 0.013f;
+	float MovePower = 1.3f;
 	if (Camera::isCameraStop == false) {
 		if (Input::keys[DIK_LCONTROL]) {
 			MovePower = MovePower / 2;

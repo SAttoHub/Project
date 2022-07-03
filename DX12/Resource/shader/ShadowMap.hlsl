@@ -92,7 +92,7 @@ float4 main(GSOutput input) : SV_TARGET
     obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
     obj_shadow.xy *= float2(0.5f, -0.5f);
     obj_shadow.xy += 0.5f;
-    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z - 0.005f) {
+    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z - 0.028f) {
         Color.rgb *= 0.5f;
     }
 
