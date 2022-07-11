@@ -171,54 +171,55 @@ void Gaussian::Initialize(int GaussNumber, float Power) {
 
 	HRESULT result;
 	//テクスチャリソース設定
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		DXGI_FORMAT_R8G8B8A8_UNORM,
-		WINDOW_WIDTH,
-		(UINT)WINDOW_HEIGHT,
-		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
-	);
-	//テクスチャバッファの生成
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
-			D3D12_MEMORY_POOL_L0),
-		D3D12_HEAP_FLAG_NONE,
-		&texresDesc,
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
-		IID_PPV_ARGS(&TextureBuff)
-	);
-	assert(SUCCEEDED(result));
-	{//テクスチャを白クリア
-		const UINT pixelCount = WINDOW_WIDTH * WINDOW_HEIGHT;
-		const UINT rowPitch = sizeof(UINT) * WINDOW_WIDTH;
-		const UINT depthPitch = rowPitch * WINDOW_HEIGHT;
-		UINT *img = new UINT[pixelCount];
-		for (int i = 0; i < pixelCount; i++) {
-			img[i] = 0xffffffff;
-		}
-		result = TextureBuff->WriteToSubresource(0, nullptr,
-			img, rowPitch, depthPitch);
-		assert(SUCCEEDED(result));
-		delete[] img;
-	}
-	//SRV用デスクリプタヒープ設定
-	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	descHeapDesc.NumDescriptors = 1;
-	DirectXBase::dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeapSRV));
-	assert(SUCCEEDED(result));
-	//シェーダーリソースビュー設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
-	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
-	srvDesc.Texture2D.MipLevels = 1;
-	//シェーダーリソースビュー作成
-	DirectXBase::dev->CreateShaderResourceView(TextureBuff.Get(), //ビューと関連付けるバッファ
-		&srvDesc, //テクスチャ設定情報
-		descHeapSRV->GetCPUDescriptorHandleForHeapStart()
-	);
+	//CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+	//	DXGI_FORMAT_R8G8B8A8_UNORM,
+	//	WINDOW_WIDTH,
+	//	(UINT)WINDOW_HEIGHT,
+	//	1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
+	//);
+	////テクスチャバッファの生成
+	//result = DirectXBase::dev->CreateCommittedResource(
+	//	&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
+	//		D3D12_MEMORY_POOL_L0),
+	//	D3D12_HEAP_FLAG_NONE,
+	//	&texresDesc,
+	//	D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+	//	&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
+	//	IID_PPV_ARGS(&TextureBuff)
+	//);
+	//assert(SUCCEEDED(result));
+	//{//テクスチャを白クリア
+	//	const UINT pixelCount = WINDOW_WIDTH * WINDOW_HEIGHT;
+	//	const UINT rowPitch = sizeof(UINT) * WINDOW_WIDTH;
+	//	const UINT depthPitch = rowPitch * WINDOW_HEIGHT;
+	//	UINT *img = new UINT[pixelCount];
+	//	for (int i = 0; i < pixelCount; i++) {
+	//		img[i] = 0xffffffff;
+	//	}
+	//	result = TextureBuff->WriteToSubresource(0, nullptr,
+	//		img, rowPitch, depthPitch);
+	//	assert(SUCCEEDED(result));
+	//	delete[] img;
+	//}
+	////SRV用デスクリプタヒープ設定
+	//D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+	//descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	//descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	//descHeapDesc.NumDescriptors = 1;
+	//DirectXBase::dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeapSRV));
+	//assert(SUCCEEDED(result));
+	////シェーダーリソースビュー設定
+	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
+	//srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
+	//srvDesc.Texture2D.MipLevels = 1;
+	////シェーダーリソースビュー作成
+	//DirectXBase::dev->CreateShaderResourceView(TextureBuff.Get(), //ビューと関連付けるバッファ
+	//	&srvDesc, //テクスチャ設定情報
+	//	descHeapSRV->GetCPUDescriptorHandleForHeapStart()
+	//);
+	TexNum = TexManager::GetPostTexture(WINDOW_WIDTH, WINDOW_HEIGHT, XMFLOAT4(255.0f, 255.0f, 255.0f, 255.0f), DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	//RTV用デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc{};
@@ -232,7 +233,7 @@ void Gaussian::Initialize(int GaussNumber, float Power) {
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	DirectXBase::dev->CreateRenderTargetView(TextureBuff.Get(),
+	DirectXBase::dev->CreateRenderTargetView(TexManager::TextureData[TexNum].TextureBuff.Get(),
 		&rtvDesc,
 		descHeapRTV->GetCPUDescriptorHandleForHeapStart());
 	//深度バッファリソース設定
@@ -268,7 +269,7 @@ void Gaussian::Initialize(int GaussNumber, float Power) {
 	//	descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 }
 
-void Gaussian::Draw(ID3D12DescriptorHeap *Descriptor)
+void Gaussian::Draw(int TexNum1)
 {
 	int Num = 0;
 	assert(Num <= MaxGraphPrimitives);
@@ -382,13 +383,17 @@ void Gaussian::Draw(ID3D12DescriptorHeap *Descriptor)
 		//頂点バッファの設定
 		DirectXBase::cmdList->IASetVertexBuffers(0, 1, &GraphvbView[i]);
 		//デスクリプタヒープをセット
-		//ID3D12DescriptorHeap *ppHeaps[] = { descHeapSRV.Get() };
-		DirectXBase::cmdList->SetDescriptorHeaps(1, &Descriptor);
+		ID3D12DescriptorHeap *ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+		DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 		//定数バッファビューをセット
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 		//シェーダーリソースビュー
 		//DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, Descriptor->GetGPUDescriptorHandleForHeapStart());
+		//DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, Descriptor->GetGPUDescriptorHandleForHeapStart());
+		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+			TexNum1,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 		
 		//定数バッファビューをセット
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(2, ConstBuffGaussian->GetGPUVirtualAddress());
@@ -405,7 +410,7 @@ void Gaussian::PreDrawScene(int Num)
 {
 	//リソースバリアを変更
 	DirectXBase::cmdList->ResourceBarrier(1,
-		&CD3DX12_RESOURCE_BARRIER::Transition(TextureBuff.Get(),
+		&CD3DX12_RESOURCE_BARRIER::Transition(TexManager::TextureData[TexNum].TextureBuff.Get(),
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
 			D3D12_RESOURCE_STATE_RENDER_TARGET));
 	//レンダーターゲットビュー用デスクリプタヒープのハンドルを取得
@@ -431,6 +436,6 @@ void Gaussian::PreDrawScene(int Num)
 
 void Gaussian::PostDrawScene()
 {
-	DirectXBase::cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(TextureBuff.Get(),
+	DirectXBase::cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(TexManager::TextureData[TexNum].TextureBuff.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 }

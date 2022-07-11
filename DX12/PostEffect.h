@@ -39,7 +39,7 @@ private:
 	ComPtr<ID3D12Resource> GraphVertBuff[MaxGraphPrimitives];
 	D3D12_VERTEX_BUFFER_VIEW GraphvbView[MaxGraphPrimitives]{};
 	// 画像付き箱プリミティブ専用セットアップ
-	void SetupGraphPrimitive();
+	void SetupGraphPrimitive(DXGI_FORMAT format);
 	// 画像付き箱プリミティブデータ
 	PostGraphPrimitive GraphData[MaxGraphPrimitives];
 
@@ -54,11 +54,14 @@ private:
 public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
-	void Initialize();
+
+	int TexNum;
+
+	void Initialize(DXGI_FORMAT format);
 
 	const float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	void Draw(ID3D12DescriptorHeap *Descriptor);
+	void Draw(int TexNum1);
 
 	void ClearDepth();
 

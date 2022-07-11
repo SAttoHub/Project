@@ -15,7 +15,9 @@ XMFLOAT3 Camera::target{ 0, 0, 0 }; //注視点座標
 XMFLOAT3 Camera::up{ 0, 1, 0 }; //上方向ベクトル
 XMMATRIX Camera::matView; //ビュー変換行列
 XMMATRIX Camera::matProjection;
+XMMATRIX Camera::matProjection2;
 XMMATRIX Camera::matViewProjection;
+XMMATRIX Camera::matViewProjection2;
 bool Camera::CursorResetFlag = true;
 bool Camera::isCameraStop = true;
 
@@ -25,6 +27,15 @@ Camera::Camera(Window *Win) {
 		XMConvertToRadians(60.0f), //画角60度
 		(float)WINDOW_WIDTH / WINDOW_HEIGHT, //アスペクト比
 		0.1f, 1000.0f //前端、奥端
+	);
+	//matProjection = XMMatrixOrthographicLH(
+	//	(float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, //アスペクト比
+	//	0.1f, 2000.0f //前端、奥端
+	//);
+
+	matProjection2 = XMMatrixOrthographicLH(
+		(float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, //アスペクト比
+		0.1f, 2000.0f //前端、奥端
 	);
 
 	//マウスをウィンドウの中心に
@@ -114,6 +125,7 @@ void Camera::SetTargetPointToAngle() {
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
+	matViewProjection2 = matView * matProjection2;
 }
 
 void Camera::Update(){
@@ -162,6 +174,7 @@ void Camera::Targeting(XMFLOAT3 Target) {
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
+	matViewProjection2 = matView * matProjection2;
 }
 
 void Camera::SetCameraPos(XMFLOAT3 pos) {
@@ -231,6 +244,7 @@ void Camera::SetCameraPos3(XMFLOAT3 pos)
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
+	matViewProjection2 = matView * matProjection2;
 }
 ;
 

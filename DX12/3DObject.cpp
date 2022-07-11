@@ -132,7 +132,7 @@ void InitalizeObject3d(Object3d *object, int index) {
 	//定数バッファのリソース設定
 	D3D12_RESOURCE_DESC resdesc{};
 	resdesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resdesc.Width = (sizeof(ConstBufferData) + 0xff) & ~0xff;
+	resdesc.Width = (sizeof(ConstBufferDataB0) + 0xff) & ~0xff;
 	resdesc.Height = 1;
 	resdesc.DepthOrArraySize = 1;
 	resdesc.MipLevels = 1;
@@ -291,6 +291,7 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 			//constMap0->mat = object->matWorld * matView * matProjection;
 			constMap0->view = Camera::matView;
 			constMap0->viewproj = Camera::matViewProjection;
+			constMap0->viewproj2 = Camera::matViewProjection2;
 			constMap0->world = object->matWorld;
 			constMap0->cameraPos = Camera::eye;
 			constMap0->color = object->color; //RGBA

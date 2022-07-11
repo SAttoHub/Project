@@ -513,6 +513,8 @@ void PipelineManager::createFBXPipeline(int PIPELINE_NUM, UINT inputLayoutCount,
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -593,6 +595,8 @@ void PipelineManager::createFBXBumpPipeline(int PIPELINE_NUM, UINT inputLayoutCo
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
@@ -683,6 +687,8 @@ void PipelineManager::createFBXheightPipeline(int PIPELINE_NUM, UINT inputLayout
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
@@ -770,6 +776,8 @@ void PipelineManager::createFBXOutLinePipeline(int PIPELINE_NUM, UINT inputLayou
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -850,6 +858,9 @@ void PipelineManager::createFBXLinePipeline(int PIPELINE_NUM, UINT inputLayoutCo
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -937,6 +948,8 @@ void PipelineManager::createFBXSeaPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -1021,10 +1034,12 @@ void PipelineManager::createFBXDepthPipeline(int PIPELINE_NUM, UINT inputLayoutC
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	//その他の設定
 	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT; //0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -1109,10 +1124,12 @@ void PipelineManager::createFBXShadowDepthPipeline(int PIPELINE_NUM, UINT inputL
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	//その他の設定
 	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT; //0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
@@ -1201,6 +1218,8 @@ void PipelineManager::createFBXDOFPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
 	//デプスステンシルステートの設定
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);

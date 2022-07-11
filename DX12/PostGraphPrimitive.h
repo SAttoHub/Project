@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "TexManager.h"
 
 // 画像付き箱プリミティブ
 class PostGraphPrimitive {

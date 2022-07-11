@@ -2,6 +2,7 @@ cbuffer cbuff0 : register(b0)
 {
 	matrix view; // ビュー行列
 	matrix viewproj; // ビュープロジェクション行列
+	matrix viewproj2; // ビュープロジェクション行列2
 	matrix world; // ワールド行列
 	float3 cameraPos; // カメラ座標（ワールド座標）
 	float4 InColor;
@@ -87,6 +88,7 @@ struct VSInput
 struct VSOutput
 {
 	float4 svpos : SV_POSITION;
+	float4 svpos2 : TEXCOORD1;
 	float4 worldpos : POSITION; // ワールド座標
 	float3 normal :NORMAL;
 	float2 uv  :TEXCOORD;

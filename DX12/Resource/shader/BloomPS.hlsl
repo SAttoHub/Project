@@ -18,7 +18,7 @@ float4 main(GSOutput input) : SV_TARGET
 	float depth1 = tex3.Sample(smp, input.uv);
 	float depth2 = tex4.Sample(smp, input.uv);
 
-	if (depth2 > depth1) {
+	if (depth2 < depth1) {
 		return Color1;
 	}
 

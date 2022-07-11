@@ -48,7 +48,9 @@ public:
 	static XMFLOAT3 up; //上方向ベクトル
 	static XMMATRIX matView; //ビュー変換行列
 	static XMMATRIX matProjection; //
+	static XMMATRIX matProjection2; //
 	static XMMATRIX matViewProjection;
+	static XMMATRIX matViewProjection2;
 
 	void Update();
 	void NormalModeMove();

@@ -16,25 +16,17 @@ cbuffer cbuff0 : register(b0)
 
 float4 main(GSOutput input) : SV_TARGET
 {
-	//仮ヴィネット
-	/*float2 uv = input.uv;
-	uv = 2.0f * uv - 1.0f;
-	c2 *= 1.0 - dot(uv, uv) * 0.2f;*/
-
 	if (Flag == 0.0f) {
 		return tex.Sample(smp, input.uv);
 	}
 
-	//return c2;
-	//float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
-	float3 hisyakaiArea = float3(InterpSize, Focus, FocusSize);
-	//float3 hisyakaiArea = float3(20.0f, 30.0f, 30.0f);
-	float DepthOfField_TotalSize = hisyakaiArea.x * 2.0f + hisyakaiArea.z;
+	float3 DOFArea = float3(InterpSize, Focus, FocusSize);
+	float DepthOfField_TotalSize = DOFArea.x * 2.0f + DOFArea.z;
 	float2 ParamF = float2(0.0f, 0.0f);
 	// 被写界深度のぼかし無しの開始位置を計算
-	ParamF.x = hisyakaiArea.x / DepthOfField_TotalSize;
+	ParamF.x = DOFArea.x / DepthOfField_TotalSize;
 	// 被写界深度のぼかし無しの終了位置を計算
-	ParamF.y = (hisyakaiArea.x + hisyakaiArea.z) / DepthOfField_TotalSize;
+	ParamF.y = (DOFArea.x + DOFArea.z) / DepthOfField_TotalSize;
 
 	float4 Color1 = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	float4 Color2 = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -75,8 +67,4 @@ float4 main(GSOutput input) : SV_TARGET
 	float4 Color = lerp(Color1, Color2, BlendRate);
 
 	return Color;
-
-	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
-
-	//return tex.Sample(smp, input.uv) * input.color;
 }

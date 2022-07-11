@@ -25,9 +25,6 @@ void ShadowMapLight::SetLightPos(XMFLOAT3 pos, XMFLOAT3 target, XMFLOAT3 up)
 
 	matViewProjection = matView * matProj;
 
-	//
+	// ÉJÉÅÉâÇÃ
 	matViewProjectionInverseCamera = XMMatrixInverse(nullptr, Camera::matViewProjection);
-
-	int aaa = 0;
-	aaa = 1;
 }

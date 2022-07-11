@@ -18,9 +18,9 @@ void Game::Initialize()
 	CursorShow(true);
 
 	postEffect = new PostEffect;
-	postEffect->Initialize();
+	postEffect->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
 	postEffect2 = new PostEffect;
-	postEffect2->Initialize();
+	postEffect2->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	//”íŽÊŠE[“x
 	InterpSize = 20.0f;
@@ -126,7 +126,7 @@ void Game::Update()
 	postEffect->PostDrawScene();
 
 	postEffect2->PreDrawScene(1);
-	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth2->descHeapSRV.Get());
+	shadowMapping->Draw(postEffect->TexNum, shadowMapping->TexNum, depth2->TexNum2);
 	postEffect2->PostDrawScene();
 
 
@@ -138,40 +138,40 @@ void Game::Update()
 	game->BloomDepthDraw();
 	depth3->PostDrawScene();
 	GaussianEffectXBloom->PreDrawScene(1);
-	GaussianEffectXBloom->Draw(bloom->descHeapSRV.Get());
+	GaussianEffectXBloom->Draw(bloom->TexNum);
 	GaussianEffectXBloom->PostDrawScene();
 	GaussianEffectYBloom->PreDrawScene(1);
-	GaussianEffectYBloom->Draw(GaussianEffectXBloom->descHeapSRV.Get());
+	GaussianEffectYBloom->Draw(GaussianEffectXBloom->TexNum);
 	GaussianEffectYBloom->PostDrawScene();
 
 	bloom->PreDrawScene();
-	bloom->Draw(postEffect2->descHeapSRV.Get(), GaussianEffectYBloom->descHeapSRV.Get(), depth2->descHeapSRV.Get(), depth3->descHeapSRV.Get());
+	bloom->Draw(postEffect2->TexNum, GaussianEffectYBloom->TexNum, depth2->TexNum, depth3->TexNum);
 	bloom->PostDrawScene();
 
 
 	GaussianEffectX->PreDrawScene(1);
-	GaussianEffectX->Draw(bloom->descHeapSRV.Get());
+	GaussianEffectX->Draw(bloom->TexNum);
 	GaussianEffectX->PostDrawScene();
 
 	GaussianEffectY->PreDrawScene(1);
-	GaussianEffectY->Draw(GaussianEffectX->descHeapSRV.Get());
+	GaussianEffectY->Draw(GaussianEffectX->TexNum);
 	GaussianEffectY->PostDrawScene();
 
 	GaussianEffectX2->PreDrawScene(1);
-	GaussianEffectX2->Draw(bloom->descHeapSRV.Get());
+	GaussianEffectX2->Draw(bloom->TexNum);
 	GaussianEffectX2->PostDrawScene();
 
 	GaussianEffectY2->PreDrawScene(1);
-	GaussianEffectY2->Draw(GaussianEffectX2->descHeapSRV.Get());
+	GaussianEffectY2->Draw(GaussianEffectX2->TexNum);
 	GaussianEffectY2->PostDrawScene();
 
 
 	DOF->PreDrawScene();
-	DOF->Draw(bloom->descHeapSRV.Get(), GaussianEffectY2->descHeapSRV.Get(), GaussianEffectY->descHeapSRV.Get(), depth->descHeapSRV.Get());
+	DOF->Draw(bloom->TexNum, GaussianEffectY2->TexNum, GaussianEffectY->TexNum, depth->TexNum);
 	DOF->PostDrawScene();
 
 	DXBase.ClearDepthBuffer();
-	vignette->Draw(DOF->descHeapSRV.Get());
+	vignette->Draw(DOF->TexNum);
 
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 20), 1);

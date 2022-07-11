@@ -23,16 +23,14 @@ float4 main(VSOutput input) : SV_TARGET
 	float4 cp = float4(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f);
 	float4 cam = mul(cp, view); //ƒrƒ…[•ÏŠ·
 
-	//float3 hisyakaiArea = float3(100.0f, 150.0f, 100.0f);
-	//float3 hisyakaiArea = float3(20.0f, 30.0f, 30.0f);
-	float3 hisyakaiArea = float3(InterpSize, Focus, FocusSize);
+	float3 DOFArea = float3(InterpSize, Focus, FocusSize);
 	float3 ParamF = float3(0.0f, 0.0f, 0.0f);
 
 	// ”íÊŠE[“x‚ÌŠJnˆÊ’u‚ğŒvZ
-	ParamF.x = hisyakaiArea.y - hisyakaiArea.z / 2.0f - hisyakaiArea.x;
+	ParamF.x = DOFArea.y - DOFArea.z / 2.0f - DOFArea.x;
 
 	// ”íÊŠE[“x‚ÌI—¹ˆÊ’u‚ğŒvZ
-	ParamF.y = hisyakaiArea.y + hisyakaiArea.z / 2.0f + hisyakaiArea.x;
+	ParamF.y = DOFArea.y + DOFArea.z / 2.0f + DOFArea.x;
 
 	// ”íÊŠE[“x‚Ì”ÍˆÍ‚Ì‹t”‚ğŒvZ
 	ParamF.z = 1.0f / (ParamF.y - ParamF.x);

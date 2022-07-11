@@ -58,13 +58,16 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
+
+	int TexNum;
+
 	void Initialize(bool _UseFlag);
 
 	const float clearColor[4] = { 0.0f, 1.0f,1.0f, 1.0f };
 	float UseFlag;
 	void SetUse(bool isUse);
 
-	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3);
+	void Draw(int TexNum1, int TexNum2, int TexNum3);
 
 	void ClearDepth();
 

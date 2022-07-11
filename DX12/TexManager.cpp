@@ -303,6 +303,215 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	return TexNum;
 }
 
+int TexManager::GetPostTexture(float width, float height, XMFLOAT4 color, DXGI_FORMAT format)
+{
+	//colorを0～1に丸める
+	color.x < 0 ? color.x = 0 : color.x > 255 ? color.x = 255 : 0;
+	color.y < 0 ? color.y = 0 : color.y > 255 ? color.y = 255 : 0;
+	color.z < 0 ? color.z = 0 : color.z > 255 ? color.z = 255 : 0;
+	color.w < 0 ? color.w = 0 : color.w > 255 ? color.w = 255 : 0;
+
+	color.x = color.x / 255.0f;
+	color.y = color.y / 255.0f;
+	color.z = color.z / 255.0f;
+	color.w = color.w / 255.0f;
+
+	////生成済みかどうか
+	//for (int i = 0; i < 2048; ++i) {
+	//	if (TextureData[i].colorData.x == color.x && TextureData[i].colorData.y == color.y &&
+	//		TextureData[i].colorData.z == color.z && TextureData[i].colorData.w == color.w &&
+	//		TextureData[i].FileName == "ColorTexture") {
+	//		return TextureData[i].TexNum;
+	//	}
+	//}
+	TexNum < TextureSRVCount ? TexNum++ : 0;
+	TextureData[TexNum].TexNum = TexNum;
+	TextureData[TexNum].colorData.x = -1.0f;
+	TextureData[TexNum].colorData.y = -1.0f;
+	TextureData[TexNum].colorData.z = -1.0f;
+	TextureData[TexNum].colorData.w = -1.0f;
+	TextureData[TexNum].FileName = "PostTexture";
+	//テクスチャデータの生成
+	const UINT ImageDataSize = width * height;
+	const UINT rowPitch = sizeof(UINT) * width;
+	const UINT depthPitch = rowPitch * height;
+	UINT *imageData = new UINT[ImageDataSize];
+	//ピクセルの色をセット
+	for (int i = 0; i < ImageDataSize; i++) {
+		imageData[i] = 0xffffffff;
+	}
+	//テクスチャバッファの生成
+	HRESULT result;
+	//CD3DX12_RESOURCE_DESC texresDesc{}; //リソース設定
+	//texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+	//	DXGI_FORMAT_R32G32B32A32_FLOAT,
+	//	TextureWidth,
+	//	(UINT)TextureWidth,
+	//	(UINT16)1,
+	//	(UINT16)1);
+	//result = DirectXBase::dev->CreateCommittedResource(
+	//	&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
+	//	D3D12_HEAP_FLAG_NONE,
+	//	&texresDesc,
+	//	D3D12_RESOURCE_STATE_GENERIC_READ, //テクスチャ用指定
+	//	nullptr,
+	//	IID_PPV_ARGS(&TextureData[TexNum].TextureBuff)
+	//);
+	//テクスチャリソース設定
+	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+		format,
+		width,
+		(UINT)height,
+		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
+	);
+	float col[4] = { color.x, color.y, color.z, color.w };
+	//テクスチャバッファの生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
+			D3D12_MEMORY_POOL_L0),
+		D3D12_HEAP_FLAG_NONE,
+		&texresDesc,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+		&CD3DX12_CLEAR_VALUE(format, col),
+		IID_PPV_ARGS(&TextureData[TexNum].TextureBuff)
+	);
+	assert(SUCCEEDED(result));
+	//result = TextureData[TexNum].TextureBuff->WriteToSubresource(
+	//	0,
+	//	nullptr, //全領域へコピー
+	//	imageData, //元データアドレス
+	//	sizeof(XMFLOAT4) * TextureWidth, //1ラインサイズ
+	//	sizeof(XMFLOAT4) * ImageDataSize //全サイズ
+	//);
+	result = TextureData[TexNum].TextureBuff->WriteToSubresource(0, nullptr,
+		imageData, rowPitch, depthPitch);
+
+	//シェーダーリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
+	srvDesc.Format = format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
+	srvDesc.Texture2D.MipLevels = 1;
+	//シェーダーリソースビュー作成
+	DirectXBase::dev->CreateShaderResourceView(TextureData[TexNum].TextureBuff.Get(), //ビューと関連付けるバッファ
+		&srvDesc, //テクスチャ設定情報
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(
+			TextureDescHeap->GetCPUDescriptorHandleForHeapStart(),
+			TexNum,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+		)
+	);
+
+
+	delete[] imageData;
+
+	return TexNum;
+}
+
+int TexManager::GetPostDepthTexture(float width, float height, XMFLOAT4 color)
+{
+	//colorを0～1に丸める
+	color.x < 0 ? color.x = 0 : color.x > 255 ? color.x = 255 : 0;
+	color.y < 0 ? color.y = 0 : color.y > 255 ? color.y = 255 : 0;
+	color.z < 0 ? color.z = 0 : color.z > 255 ? color.z = 255 : 0;
+	color.w < 0 ? color.w = 0 : color.w > 255 ? color.w = 255 : 0;
+
+	color.x = color.x / 255.0f;
+	color.y = color.y / 255.0f;
+	color.z = color.z / 255.0f;
+	color.w = color.w / 255.0f;
+
+	////生成済みかどうか
+	//for (int i = 0; i < 2048; ++i) {
+	//	if (TextureData[i].colorData.x == color.x && TextureData[i].colorData.y == color.y &&
+	//		TextureData[i].colorData.z == color.z && TextureData[i].colorData.w == color.w &&
+	//		TextureData[i].FileName == "ColorTexture") {
+	//		return TextureData[i].TexNum;
+	//	}
+	//}
+	TexNum < TextureSRVCount ? TexNum++ : 0;
+	TextureData[TexNum].TexNum = TexNum;
+	TextureData[TexNum].colorData.x = -1.0f;
+	TextureData[TexNum].colorData.y = -1.0f;
+	TextureData[TexNum].colorData.z = -1.0f;
+	TextureData[TexNum].colorData.w = -1.0f;
+	TextureData[TexNum].FileName = "PostTexture";
+	//テクスチャデータの生成
+	const UINT ImageDataSize = width * height;
+	const UINT rowPitch = sizeof(UINT) * width;
+	const UINT depthPitch = rowPitch * height;
+	UINT *imageData = new UINT[ImageDataSize];
+	//ピクセルの色をセット
+	for (int i = 0; i < ImageDataSize; i++) {
+		imageData[i] = 0xffffffff;
+	}
+	//テクスチャバッファの生成
+	HRESULT result;
+	//CD3DX12_RESOURCE_DESC texresDesc{}; //リソース設定
+	//texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+	//	DXGI_FORMAT_R32G32B32A32_FLOAT,
+	//	TextureWidth,
+	//	(UINT)TextureWidth,
+	//	(UINT16)1,
+	//	(UINT16)1);
+	//result = DirectXBase::dev->CreateCommittedResource(
+	//	&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
+	//	D3D12_HEAP_FLAG_NONE,
+	//	&texresDesc,
+	//	D3D12_RESOURCE_STATE_GENERIC_READ, //テクスチャ用指定
+	//	nullptr,
+	//	IID_PPV_ARGS(&TextureData[TexNum].TextureBuff)
+	//);
+	//テクスチャリソース設定
+	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+		DXGI_FORMAT_D32_FLOAT,
+		width,
+		(UINT)height,
+		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
+	);
+	float col[4] = { color.x, color.y, color.z, color.w };
+	//テクスチャバッファの生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&texresDesc,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0),
+		IID_PPV_ARGS(&TextureData[TexNum].TextureBuff)
+	);
+	assert(SUCCEEDED(result));
+	//result = TextureData[TexNum].TextureBuff->WriteToSubresource(
+	//	0,
+	//	nullptr, //全領域へコピー
+	//	imageData, //元データアドレス
+	//	sizeof(XMFLOAT4) * TextureWidth, //1ラインサイズ
+	//	sizeof(XMFLOAT4) * ImageDataSize //全サイズ
+	//);
+	result = TextureData[TexNum].TextureBuff->WriteToSubresource(0, nullptr,
+		imageData, rowPitch, depthPitch);
+
+	//シェーダーリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
+	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
+	srvDesc.Texture2D.MipLevels = 1;
+	//シェーダーリソースビュー作成
+	DirectXBase::dev->CreateShaderResourceView(TextureData[TexNum].TextureBuff.Get(), //ビューと関連付けるバッファ
+		&srvDesc, //テクスチャ設定情報
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(
+			TextureDescHeap->GetCPUDescriptorHandleForHeapStart(),
+			TexNum,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+		)
+	);
+
+
+	delete[] imageData;
+
+	return TexNum;
+}
+
 TexManager::TexManager() {
 	TexNum = 0;
 }

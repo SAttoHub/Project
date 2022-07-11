@@ -66,6 +66,9 @@ private:
 public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+
+	int TexNum;
+
 	int GaussNum = 0; // 0 : â°Å@1 : èc
 	float Dispersion = 0.03f; // ÉKÉEÉXÇÃã≠Ç≥
 
@@ -73,7 +76,7 @@ public:
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	void Draw(ID3D12DescriptorHeap *Descriptor);
+	void Draw(int TexNum1);
 
 	void ClearDepth();
 

@@ -105,6 +105,7 @@ VSOutput main(VSInput input)
 	VSOutput output;
 	//行列による座標変換
 	output.svpos = mul(mul(Light_viewproj, world), skinned.pos);
+	output.svpos2 = mul(mul(viewproj2, world), skinned.pos);
 	output.worldpos = wpos;
 	//ワールド法線を次のステージに渡す
 	output.normal = wnormal.xyz;

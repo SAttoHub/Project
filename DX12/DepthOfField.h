@@ -51,6 +51,8 @@ public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
+	int TexNum;
+
 	static float InterpSize;
 	static float Focus;
 	static float FocusSize;
@@ -61,7 +63,7 @@ public:
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	void Draw(ID3D12DescriptorHeap *Descriptor, ID3D12DescriptorHeap *Descriptor2, ID3D12DescriptorHeap *Descriptor3, ID3D12DescriptorHeap *Descriptor4);
+	void Draw(int TexNum1, int TexNum2, int TexNum3, int TexNum4);
 
 	void ClearDepth();
 

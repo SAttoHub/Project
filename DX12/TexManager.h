@@ -43,6 +43,9 @@ public:
 	static int GetColor(XMFLOAT4 color);
 	//文字テクスチャ
 	static int GetStringTexture(TCHAR *moji);
+	//ポストエフェクト用テクスチャ
+	static int GetPostTexture(float width, float height, XMFLOAT4 color, DXGI_FORMAT format);
+	static int GetPostDepthTexture(float width, float height, XMFLOAT4 color);
 };
 
 static int LoadTexture(const char *filename) {

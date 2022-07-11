@@ -16,6 +16,7 @@ struct ConstBufferData {
 struct ConstBufferDataB0 {
 	XMMATRIX view;
 	XMMATRIX viewproj; //ビュープロジェクション行列
+	XMMATRIX viewproj2; //ビュープロジェクション行列2
 	XMMATRIX world; //ワールド行列
 	XMFLOAT3 cameraPos; //カメラ座標（ワールド座標）
 	float pad1; // パディング
