@@ -47,20 +47,10 @@ private:
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
 public:
-	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
-	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
-
-	int TexNum;
-
 	void Initialize();
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	void Draw(int TexNum1);
-
-	void ClearDepth();
-
-	void PreDrawScene(int Num);
-	void PostDrawScene();
 };
 

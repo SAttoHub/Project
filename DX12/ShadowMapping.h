@@ -51,10 +51,6 @@ private:
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
 public:
-	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
-	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
-
-	int TexNum;
 
 	void Initialize(bool _UseFlag);
 
@@ -63,10 +59,5 @@ public:
 	void SetUse(bool isUse);
 
 	void Draw(int TexNum1, int TexNum2, int TexNum3);
-
-	void ClearDepth();
-
-	void PreDrawScene();
-	void PostDrawScene();
 };
 

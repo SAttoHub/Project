@@ -70,6 +70,22 @@ void Game::Initialize()
 	UseVignette = true;
 	vignette = new Vignette;
 	vignette->Initialize(VignetteInfluence, UseVignette);
+
+	CreateRenderTarget("DOF_Depth", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("Camera_Depth", DXGI_FORMAT_R32_FLOAT, true);
+	CreateRenderTarget("Light_Depth", DXGI_FORMAT_R32_FLOAT, true);
+	CreateRenderTarget("BaseGameScene", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("ShadowMap_Shadow", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("Bloom_Base_Color", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("Bloom_Depth", DXGI_FORMAT_R32_FLOAT, true);
+	CreateRenderTarget("Bloom_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("Bloom_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("Bloom_Result", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("DOF_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("DOF_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("DOF_Gauss_X2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("DOF_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 }
 
 void Game::Update()
@@ -93,92 +109,81 @@ void Game::Update()
 
 	Primitive2D::Instance()->BackDraw();
 	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f, 500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
-	
-	//postEffect->PreDrawScene(1);
- //   //Drawobject3d(skydome);
- //   game->Draw();
 
- //   //デバッグテキストのDraw
- //   DXBase.ClearDepthBuffer();
-
-	//postEffect->PostDrawScene();
-
-
-	//GaussianEffectX->PreDrawScene(1);
-	//postEffect->Draw(DirectXBase::rtvHeaps.Get());
-
-	//DXBase.ClearDepthBuffer();
-	//GaussianEffectX->PostDrawScene();
-	//GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
-	
-	
+#pragma region 各深度値保存用の描画
 	//DOF用深度
-	depth->PreDrawScene(1);
+	PreDraw("DOF_Depth");
 	game->DOFDepthDraw();
-	depth->PostDrawScene();
+	PostDraw("DOF_Depth");
 	//カメラ視点の深度描画
-	depth2->PreDrawScene(1);
+	PreDraw("Camera_Depth");
 	game->DepthDraw();
-	depth2->PostDrawScene();
+	PostDraw("Camera_Depth");
 	//ライト視点の深度描画
-	shadowMapping->PreDrawScene();
+	PreDraw("Light_Depth");
 	game->ShadowDraw();
-	shadowMapping->PostDrawScene();
+	PostDraw("Light_Depth");
+	// Bloom 合成時に使用する深度値の保存
+	PreDraw("Bloom_Depth");
+	game->BloomDepthDraw();
+	PostDraw("Bloom_Depth");
+#pragma endregion
+
 	//ポストエフェクト無しのゲーム画面
-	postEffect->PreDrawScene(1);
+	PreDraw("BaseGameScene");
 	game->Draw();
-	postEffect->PostDrawScene();
+	PostDraw("BaseGameScene");
 
 	//シャドウマップ
-	ShadowMap_Shadow->PreDrawScene(1);
-	shadowMapping->Draw(postEffect->TexNum, shadowMapping->TexNum, depth2->TexNum2);
-	ShadowMap_Shadow->PostDrawScene();
+	PreDraw("ShadowMap_Shadow");
+	shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
+	PostDraw("ShadowMap_Shadow");
 
-
-	//ブルーム用
-	bloom->PreDrawScene();
+#pragma region Bloom
+	// Bloom する色のみの描画
+	PreDraw("Bloom_Base_Color");
 	game->BloomDraw();
-	bloom->PostDrawScene();
-	depth3->PreDrawScene(1);
-	game->BloomDepthDraw();
-	depth3->PostDrawScene();
-	GaussianEffectXBloom->PreDrawScene(1);
-	GaussianEffectXBloom->Draw(bloom->TexNum);
-	GaussianEffectXBloom->PostDrawScene();
-	GaussianEffectYBloom->PreDrawScene(1);
-	GaussianEffectYBloom->Draw(GaussianEffectXBloom->TexNum);
-	GaussianEffectYBloom->PostDrawScene();
-
-	bloom->PreDrawScene();
-	bloom->Draw(ShadowMap_Shadow->TexNum, GaussianEffectYBloom->TexNum, depth2->TexNum, depth3->TexNum);
-	bloom->PostDrawScene();
-
-
-	GaussianEffectX->PreDrawScene(1);
-	GaussianEffectX->Draw(bloom->TexNum);
-	GaussianEffectX->PostDrawScene();
-
-	GaussianEffectY->PreDrawScene(1);
-	GaussianEffectY->Draw(GaussianEffectX->TexNum);
-	GaussianEffectY->PostDrawScene();
-
-	GaussianEffectX2->PreDrawScene(1);
-	GaussianEffectX2->Draw(bloom->TexNum);
-	GaussianEffectX2->PostDrawScene();
-
-	GaussianEffectY2->PreDrawScene(1);
-	GaussianEffectY2->Draw(GaussianEffectX2->TexNum);
-	GaussianEffectY2->PostDrawScene();
-
-
-	DOF->PreDrawScene();
-	DOF->Draw(bloom->TexNum, GaussianEffectY2->TexNum, GaussianEffectY->TexNum, depth->TexNum);
-	DOF->PostDrawScene();
+	PostDraw("Bloom_Base_Color");
+	// Bloom 色テクスチャの X 方向にブラーをかける
+	PreDraw("Bloom_Gauss_X");
+	GaussianEffectXBloom->Draw(GetRenderTexture("Bloom_Base_Color"));
+	PostDraw("Bloom_Gauss_X");
+	// Bloom 色テクスチャの Y 方向にブラーをかける
+	PreDraw("Bloom_Gauss_Y");
+	GaussianEffectYBloom->Draw(GetRenderTexture("Bloom_Gauss_X"));
+	PostDraw("Bloom_Gauss_Y");
+	// 最終結果を描画
+	PreDraw("Bloom_Result");
+	bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetRenderTexture("Camera_Depth"), GetRenderTexture("Bloom_Depth"));
+	PostDraw("Bloom_Result");
+#pragma endregion
+#pragma region 被写界深度
+	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける１
+	PreDraw("DOF_Gauss_X");
+	GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"));
+	PostDraw("DOF_Gauss_X");
+	// 上で描画したものの Y 方向にガウスをかける１
+	PreDraw("DOF_Gauss_Y");
+	GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X"));
+	PostDraw("DOF_Gauss_Y");
+	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける２
+	PreDraw("DOF_Gauss_X2");
+	GaussianEffectX2->Draw(GetRenderTexture("Bloom_Result"));
+	PostDraw("DOF_Gauss_X2");
+	// 上で描画したものの Y 方向にガウスをかける２
+	PreDraw("DOF_Gauss_Y2");
+	GaussianEffectY2->Draw(GetRenderTexture("DOF_Gauss_X2"));
+	PostDraw("DOF_Gauss_Y2");
+	// 被写界深度を適応する
+	PreDraw("DOF_Result");
+	DOF->Draw(GetRenderTexture("Bloom_Result"), GetRenderTexture("DOF_Gauss_Y2"), GetRenderTexture("DOF_Gauss_Y"), GetRenderTexture("DOF_Depth"));
+	PostDraw("DOF_Result");
+#pragma endregion
 
 	DXBase.ClearDepthBuffer();
-	vignette->Draw(DOF->TexNum);
+	vignette->Draw(GetRenderTexture("DOF_Result"));
 
-
+#pragma region ImGui
 	ImGui::SetNextWindowPos(ImVec2(1000, 260), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200), 1);
 	ImGui::Begin("DOF");
@@ -212,19 +217,11 @@ void Game::Update()
 	ImGui::End();
 
 	imguiUse::Instance()->CommandExcute(true);
+#pragma endregion
 
 	shadowMapping->SetUse(ShadowMapUse);
 	vignette->SetState(VignetteInfluence, UseVignette);
 	DOF->SetState(InterpSize, Focus, FocusSize, UseFlag);
-	/*postEffect->PreDrawScene(1);
-	game->Draw();
-	postEffect->PostDrawScene();
-
-	DXBase.ClearDepthBuffer();
-	shadowMapping->Draw(postEffect->descHeapSRV.Get(), shadowMapping->descHeapSRV.Get(), depth2->descHeapSRV.Get());*/
-	
-	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 0), 32, XMFLOAT4(0, 0, 0, 1), "E : マウス拘束解除");
-	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 34), 32, XMFLOAT4(0, 0, 0, 1), "Q : マウス拘束開始");
 
 	//スプライト関連描画
 	Primitive2D::Instance()->Draw();

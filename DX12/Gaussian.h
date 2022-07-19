@@ -58,11 +58,8 @@ private:
 	//シェーダーの読み込み
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
-	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 public:
-	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 
-	int TexNum;
 
 	int GaussNum = 0; // 0 : 横　1 : 縦
 	float Dispersion = 0.03f; // ガウスの強さ
@@ -73,9 +70,5 @@ public:
 
 	void Draw(int TexNum1);
 
-	void ClearDepth();
-
-	void PreDrawScene(int Num);
-	void PostDrawScene();
 };
 

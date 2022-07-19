@@ -33,7 +33,7 @@ void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth)
 	assert(SUCCEEDED(result));
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	rtvDesc.Format = RTV_Format;
 	// デスクリプタヒープにRTV作成
 	DirectXBase::dev->CreateRenderTargetView(TexManager::TextureData[m_RTV_Texture].TextureBuff.Get(),
 		&rtvDesc,
@@ -69,11 +69,11 @@ void RenderTarget::PreDraw()
 
 	//レンダーターゲットビュー用デスクリプタヒープのハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvH = m_descHeapRTV->GetCPUDescriptorHandleForHeapStart();
-	//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE dsvH = m_descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 	//レンダーターゲットをセット
 	// Depthを使用する場合
 	if (m_IsUseDepth) {
+		//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvH = m_descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 		DirectXBase::cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 	}
 	// Depthを使用しない場合
@@ -89,6 +89,8 @@ void RenderTarget::PreDraw()
 	DirectXBase::cmdList->ClearRenderTargetView(rtvH, m_ClearColor, 0, nullptr);
 	//深度バッファのクリア
 	if (m_IsUseDepth) {
+		//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvH = m_descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 		DirectXBase::cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	}
 }

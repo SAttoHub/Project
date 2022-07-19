@@ -46,26 +46,12 @@ private:
 	//シェーダーの読み込み
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
-private:
-	//ComPtr<ID3D12Resource> depthBuff;
-	//ComPtr<ID3D12DescriptorHeap> descHeapDSV;
-
-	ComPtr<ID3D12Resource> TextureBuff;
 public:
-	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
-	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
-
-	int TexNum;
 
 	void Initialize(DXGI_FORMAT format);
 
 	const float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	void Draw(int TexNum1);
-
-	void ClearDepth();
-
-	void PreDrawScene(int Num);
-	void PostDrawScene();
 };
 
