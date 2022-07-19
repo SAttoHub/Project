@@ -23,5 +23,8 @@ public:
 	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth);
 	void PreDraw();
 	void PostDraw();
+
+	int GetRenderTexture() { return m_RTV_Texture; }
+	int GetDepthTexture();
 };
 

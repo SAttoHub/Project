@@ -1,4 +1,5 @@
 #include "RenderTarget.h"
+#include <cassert>
 
 RenderTarget::RenderTarget()
 {
@@ -96,6 +97,14 @@ void RenderTarget::PostDraw()
 {
 	DirectXBase::cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(TexManager::TextureData[m_RTV_Texture].TextureBuff.Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+}
+
+int RenderTarget::GetDepthTexture()
+{
+	if (!m_IsUseDepth) {
+		assert(("Message: This render target does not use depth", 0));
+	}
+	return m_DSV_Texture;
 }
 
 

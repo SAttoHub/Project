@@ -211,6 +211,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LightGroup.cpp" />
     <ClCompile Include="LinePrimitive3D.h" />
+    <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="ShadowMapLight.cpp" />
     <ClCompile Include="ShadowMapping.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="Lissajous.h" />
+    <ClInclude Include="RenderManager.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="ShadowMapLight.h" />
     <ClInclude Include="ShadowMapping.h" />

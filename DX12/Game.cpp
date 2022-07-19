@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "ExtraTypeFunc.h"
 #include "imguiUse.h"
+#include "RenderManager.h"
 
 void Game::Initialize()
 {
