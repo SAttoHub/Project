@@ -9,19 +9,11 @@ void Game::Initialize()
 
 	RDot = Tex.LoadTexture("Resource/image/redDot.png");
 	CenterDot = SP.ExtendSpriteCreate(WINDOW_WIDTH / 2 - 4, WINDOW_HEIGHT / 2 - 4, WINDOW_WIDTH / 2 + 4, WINDOW_HEIGHT / 2 + 4, RDot, SpriteNormal);
-	//int skydomeDataNum = LoadModelOBJ("skydome", "skydome");
-	//skydome = DX.CreateObject(GetModelData(skydomeDataNum), XMFLOAT3{ Cam->target.x, Cam->target.y, Cam->target.z }, ObjectNormal);
-	//DX.object3ds[DX.object3ds.size() - 1].scale = { 5,5,5 };
 
 	game = new GameManager(&DX, &SP, &Tex, win, Pipeline, Cam);
 	game->Init();
 	//マウスカーソルを表示しない
 	CursorShow(true);
-
-	postEffect = new PostEffect;
-	postEffect->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
-	ShadowMap_Shadow = new PostEffect;
-	ShadowMap_Shadow->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	//被写界深度
 	InterpSize = 20.0f;
@@ -29,23 +21,15 @@ void Game::Initialize()
 	FocusSize = 20.0f;
 	UseFlag = true;
 	GaussianEffectX = new Gaussian;
-	GaussianEffectX->Initialize(0, 0.03f);
+	GaussianEffectX->Initialize(0);
 	GaussianEffectY = new Gaussian;
-	GaussianEffectY->Initialize(1, 0.03f);
-	GaussianEffectX2 = new Gaussian;
-	GaussianEffectX2->Initialize(0, 0.1f);
-	GaussianEffectY2 = new Gaussian;
-	GaussianEffectY2->Initialize(1, 0.1f);
+	GaussianEffectY->Initialize(1);
 	DOF = new DepthOfField;
 	DOF->Initialize(InterpSize, Focus, FocusSize, UseFlag);
 
 	//ブルーム
 	bloom = new Bloom;
 	bloom->Initialize();
-	GaussianEffectXBloom = new Gaussian;
-	GaussianEffectXBloom->Initialize(0, 0.005f);
-	GaussianEffectYBloom = new Gaussian;
-	GaussianEffectYBloom->Initialize(1, 0.005f);
 	
 
 	BloomFlag = true;
@@ -56,14 +40,6 @@ void Game::Initialize()
 	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f,500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize(ShadowMapUse);
-
-	// 深度値用
-	depth = new Depth;
-	depth->Initialize();
-	depth2 = new Depth2;
-	depth2->Initialize();
-	depth3 = new Depth2;
-	depth3->Initialize();
 
 	//ビネット
 	VignetteInfluence = 0.2f;
@@ -146,11 +122,11 @@ void Game::Update()
 	PostDraw("Bloom_Base_Color");
 	// Bloom 色テクスチャの X 方向にブラーをかける
 	PreDraw("Bloom_Gauss_X");
-	GaussianEffectXBloom->Draw(GetRenderTexture("Bloom_Base_Color"));
+	GaussianEffectX->Draw(GetRenderTexture("Bloom_Base_Color"), 0.005f);
 	PostDraw("Bloom_Gauss_X");
 	// Bloom 色テクスチャの Y 方向にブラーをかける
 	PreDraw("Bloom_Gauss_Y");
-	GaussianEffectYBloom->Draw(GetRenderTexture("Bloom_Gauss_X"));
+	GaussianEffectY->Draw(GetRenderTexture("Bloom_Gauss_X"), 0.005f);
 	PostDraw("Bloom_Gauss_Y");
 	// 最終結果を描画
 	PreDraw("Bloom_Result");
@@ -160,19 +136,19 @@ void Game::Update()
 #pragma region 被写界深度
 	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける１
 	PreDraw("DOF_Gauss_X");
-	GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"));
+	GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"), 0.03f);
 	PostDraw("DOF_Gauss_X");
 	// 上で描画したものの Y 方向にガウスをかける１
 	PreDraw("DOF_Gauss_Y");
-	GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X"));
+	GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X"), 0.03f);
 	PostDraw("DOF_Gauss_Y");
 	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける２
 	PreDraw("DOF_Gauss_X2");
-	GaussianEffectX2->Draw(GetRenderTexture("Bloom_Result"));
+	GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"), 0.1f);
 	PostDraw("DOF_Gauss_X2");
 	// 上で描画したものの Y 方向にガウスをかける２
 	PreDraw("DOF_Gauss_Y2");
-	GaussianEffectY2->Draw(GetRenderTexture("DOF_Gauss_X2"));
+	GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X2"), 0.1f);
 	PostDraw("DOF_Gauss_Y2");
 	// 被写界深度を適応する
 	PreDraw("DOF_Result");
@@ -236,12 +212,11 @@ void Game::Update()
 
 void Game::Finalize()
 {
-	delete postEffect;
 	delete GaussianEffectX;
 	delete GaussianEffectY;
 	delete DOF;
-	delete depth;
 	delete shadowMapping;
+	delete bloom;
 	Framework::Finalize();
 }
 

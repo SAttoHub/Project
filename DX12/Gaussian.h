@@ -64,11 +64,11 @@ public:
 	int GaussNum = 0; // 0 : â°Å@1 : èc
 	float Dispersion = 0.03f; // ÉKÉEÉXÇÃã≠Ç≥
 
-	void Initialize(int GaussNumber, float Power);
+	void Initialize(int GaussNumber);
 
 	const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	void Draw(int TexNum1);
+	void Draw(int TexNum1, float Power);
 
 };
 

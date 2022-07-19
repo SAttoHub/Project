@@ -164,14 +164,14 @@ void Gaussian::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointNa
 	}
 }
 
-void Gaussian::Initialize(int GaussNumber, float Power) {
+void Gaussian::Initialize(int GaussNumber) {
 	GaussNum = GaussNumber;
-	Dispersion = Power;
 	SetupGraphPrimitive();
 }
 
-void Gaussian::Draw(int TexNum1)
+void Gaussian::Draw(int TexNum1, float Power)
 {
+	Dispersion = Power;
 	int Num = 0;
 	assert(Num <= MaxGraphPrimitives);
 

@@ -16,30 +16,15 @@ class Game : public Framework
 private:
 	int RDot;
 	SpriteData CenterDot;
-	Model skydomeData;
-	Object3d *skydome = nullptr;
 
-	PostEffect *postEffect = nullptr;
-	//シャドウマップ
-	PostEffect *ShadowMap_Shadow = nullptr;
-	Gaussian *ShadowMap_GaussianX = nullptr;
-	Gaussian *ShadowMap_GaussianY = nullptr;
-
-
+	// ガウスぼかし用
 	Gaussian *GaussianEffectX = nullptr;
 	Gaussian *GaussianEffectY = nullptr;
-	Gaussian *GaussianEffectX2 = nullptr;
-	Gaussian *GaussianEffectY2 = nullptr;
 	DepthOfField *DOF = nullptr;
-	Depth *depth = nullptr; // 深度画像用(DOF)
-	Depth2 *depth2 = nullptr; // 深度画像用
-	Depth2 *depth3 = nullptr; // 深度画像用(Bloom)
 
 	bool DOFFlag;
 	//ブルーム
 	Bloom *bloom = nullptr;
-	Gaussian *GaussianEffectXBloom = nullptr;
-	Gaussian *GaussianEffectYBloom = nullptr;
 	bool BloomFlag;
 	//シャドウ
 	ShadowMapLight *Shadow_Map_Light;
