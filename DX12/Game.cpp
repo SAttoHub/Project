@@ -19,8 +19,8 @@ void Game::Initialize()
 
 	postEffect = new PostEffect;
 	postEffect->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
-	postEffect2 = new PostEffect;
-	postEffect2->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
+	ShadowMap_Shadow = new PostEffect;
+	ShadowMap_Shadow->Initialize(DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	//被写界深度
 	InterpSize = 20.0f;
@@ -37,8 +37,6 @@ void Game::Initialize()
 	GaussianEffectY2->Initialize(1, 0.1f);
 	DOF = new DepthOfField;
 	DOF->Initialize(InterpSize, Focus, FocusSize, UseFlag);
-	depth = new Depth;
-	depth->Initialize();
 
 	//ブルーム
 	bloom = new Bloom;
@@ -47,19 +45,24 @@ void Game::Initialize()
 	GaussianEffectXBloom->Initialize(0, 0.005f);
 	GaussianEffectYBloom = new Gaussian;
 	GaussianEffectYBloom->Initialize(1, 0.005f);
-	depth3 = new Depth2;
-	depth3->Initialize();
+	
 
 	BloomFlag = true;
 	DOFFlag = true;
 	//シャドウ
 	ShadowMapUse = true;
-	depth2 = new Depth2;
-	depth2->Initialize();
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,500.0f, 0.01f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f,500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize(ShadowMapUse);
+
+	// 深度値用
+	depth = new Depth;
+	depth->Initialize();
+	depth2 = new Depth2;
+	depth2->Initialize();
+	depth3 = new Depth2;
+	depth3->Initialize();
 
 	//ビネット
 	VignetteInfluence = 0.2f;
@@ -88,7 +91,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 500.0f, 0.01f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f, 500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	
 	//postEffect->PreDrawScene(1);
  //   //Drawobject3d(skydome);
@@ -108,7 +111,7 @@ void Game::Update()
 	//GaussianEffectX->Draw(postEffect->descHeapSRV.Get());
 	
 	
-	//深度値保存描画
+	//DOF用深度
 	depth->PreDrawScene(1);
 	game->DOFDepthDraw();
 	depth->PostDrawScene();
@@ -120,14 +123,15 @@ void Game::Update()
 	shadowMapping->PreDrawScene();
 	game->ShadowDraw();
 	shadowMapping->PostDrawScene();
-
+	//ポストエフェクト無しのゲーム画面
 	postEffect->PreDrawScene(1);
 	game->Draw();
 	postEffect->PostDrawScene();
 
-	postEffect2->PreDrawScene(1);
+	//シャドウマップ
+	ShadowMap_Shadow->PreDrawScene(1);
 	shadowMapping->Draw(postEffect->TexNum, shadowMapping->TexNum, depth2->TexNum2);
-	postEffect2->PostDrawScene();
+	ShadowMap_Shadow->PostDrawScene();
 
 
 	//ブルーム用
@@ -145,7 +149,7 @@ void Game::Update()
 	GaussianEffectYBloom->PostDrawScene();
 
 	bloom->PreDrawScene();
-	bloom->Draw(postEffect2->TexNum, GaussianEffectYBloom->TexNum, depth2->TexNum, depth3->TexNum);
+	bloom->Draw(ShadowMap_Shadow->TexNum, GaussianEffectYBloom->TexNum, depth2->TexNum, depth3->TexNum);
 	bloom->PostDrawScene();
 
 
@@ -173,24 +177,6 @@ void Game::Update()
 	DXBase.ClearDepthBuffer();
 	vignette->Draw(DOF->TexNum);
 
-
-	ImGui::SetNextWindowPos(ImVec2(1000, 20), 1);
-	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
-	ImGui::Begin("Buri_1");
-	ImGui::Checkbox("Bloom", &game->game.BloomFlag1);
-	ImGui::End();
-
-	ImGui::SetNextWindowPos(ImVec2(1000, 90), 1);
-	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
-	ImGui::Begin("Buri_2");
-	ImGui::Checkbox("Bloom", &game->game.BloomFlag2);
-	ImGui::End();
-
-	ImGui::SetNextWindowPos(ImVec2(1000, 160), 1);
-	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
-	ImGui::Begin("Buri_3");
-	ImGui::Checkbox("Bloom", &game->game.BloomFlag3);
-	ImGui::End();
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 260), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200), 1);

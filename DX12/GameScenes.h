@@ -28,12 +28,12 @@ private:
 public:
 	NowScene Scene;
 
-	Object3d *model1; bool BloomFlag1;
-	Object3d *model2; bool BloomFlag2;
-	Object3d *model3; bool BloomFlag3;
 	Object3d *soko;
 	Object3d *squere;
 	Object3d *skydome;
+
+	Object3d *testStage;
+	Object3d *saku;
 
 public:
 	void Initialize();

@@ -12,8 +12,8 @@ void ShadowMapLight::SetLightPos(XMFLOAT3 pos, XMFLOAT3 target, XMFLOAT3 up)
 {
 
 	XMMATRIX matProj = XMMatrixOrthographicLH(
-		(float)WINDOW_WIDTH , (float)WINDOW_HEIGHT, //アスペクト比
-		0.1f, 2000.0f //前端、奥端
+		(float)WINDOW_WIDTH / 4.0f , (float)WINDOW_HEIGHT / 4.0f, //アスペクト比
+		0.1f, 1000.0f //前端、奥端
 	);
 
 	Pos = pos;

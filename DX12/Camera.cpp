@@ -35,7 +35,7 @@ Camera::Camera(Window *Win) {
 
 	matProjection2 = XMMatrixOrthographicLH(
 		(float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, //アスペクト比
-		0.1f, 2000.0f //前端、奥端
+		0.1f, 1000.0f //前端、奥端
 	);
 
 	//マウスをウィンドウの中心に

@@ -101,7 +101,32 @@ float4 main(GSOutput input) : SV_TARGET
     obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
     obj_shadow.xy *= float2(0.5f, -0.5f);
     obj_shadow.xy += 0.5f;
-    if (tex2.Sample(smp, obj_shadow.xy) < obj_shadow.z - 0.001 && obj_shadow.z < 1.0f) {
+
+    float shad_center = tex2.Sample(smp, obj_shadow.xy);
+    //float shad_up = tex2.Sample(smp, obj_shadow.xy + float2(0,1.0f / 720.0f));
+    //float shad_down = tex2.Sample(smp, obj_shadow.xy + float2(0, -1.0f / 720.0f));
+    //float shad_left = tex2.Sample(smp, obj_shadow.xy + float2(1.0f / 1280.0f, 0));
+    //float shad_right = tex2.Sample(smp, obj_shadow.xy + float2(-1 / 1280.0f, 0));
+
+    //shad_center = (shad_center + shad_up + shad_down + shad_left + shad_right) / 5.0f;
+
+   /* if (shad_center > shad_up) {
+        shad_center = shad_up;
+    }
+    if(shad_center > shad_down) {
+        shad_center = shad_down;
+    }
+    if (shad_center > shad_left) {
+        shad_center = shad_left;
+    }
+    if (shad_center > shad_right) {
+        shad_center = shad_right;
+    }*/
+
+   /* if (shad_center < obj_shadow.z - 0.00018f && obj_shadow.z < 1.0f) {
+        Color.rgb *= 0.5f;
+    }*/
+    if (shad_center < obj_shadow.z - (0.00081f * 2.0f) && obj_shadow.z < 1.0f) {
         Color.rgb *= 0.5f;
     }
 

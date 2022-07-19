@@ -50,20 +50,15 @@ private:
 	//シェーダーの読み込み
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
-private:
-	ComPtr<ID3D12Resource> depthBuff;
-
-	ComPtr<ID3D12Resource> TextureBuff;
 public:
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
-	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 
 	int TexNum;
 
 	void Initialize(bool _UseFlag);
 
-	const float clearColor[4] = { 0.0f, 1.0f,1.0f, 1.0f };
+	const float clearColor[4] = { 0.0f, 0.0f,0.0f, 1.0f };
 	float UseFlag;
 	void SetUse(bool isUse);
 

@@ -211,6 +211,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LightGroup.cpp" />
     <ClCompile Include="LinePrimitive3D.h" />
+    <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="ShadowMapLight.cpp" />
     <ClCompile Include="ShadowMapping.cpp" />
     <ClCompile Include="StaticCameraPos.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="Lissajous.h" />
+    <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="ShadowMapLight.h" />
     <ClInclude Include="ShadowMapping.h" />
     <ClInclude Include="StaticCameraPos.h" />

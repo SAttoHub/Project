@@ -20,7 +20,12 @@ private:
 	Object3d *skydome = nullptr;
 
 	PostEffect *postEffect = nullptr;
-	PostEffect *postEffect2 = nullptr;
+	//シャドウマップ
+	PostEffect *ShadowMap_Shadow = nullptr;
+	Gaussian *ShadowMap_GaussianX = nullptr;
+	Gaussian *ShadowMap_GaussianY = nullptr;
+
+
 	Gaussian *GaussianEffectX = nullptr;
 	Gaussian *GaussianEffectY = nullptr;
 	Gaussian *GaussianEffectX2 = nullptr;

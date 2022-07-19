@@ -253,14 +253,14 @@ void ShadowMapping::Initialize(bool _UseFlag) {
 		D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
 	);
 	//深度バッファの生成
-	result = DirectXBase::dev->CreateCommittedResource(
+	/*result = DirectXBase::dev->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&depthResDesc,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
 		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0),
 		IID_PPV_ARGS(&depthBuff));
-	assert(SUCCEEDED(result));
+	assert(SUCCEEDED(result));*/
 	//DSV用デスクリプタヒープ設定
 	//D3D12_DESCRIPTOR_HEAP_DESC DescHeapDesc{};
 	//DescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;

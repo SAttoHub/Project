@@ -1,5 +1,6 @@
 #pragma once
 #include <forward_list>
+#include <cassert>
 
 template <class T>
 class My_F_List : public std::forward_list<T> {
@@ -24,5 +25,8 @@ public:
 			}
 			i++;
 		}
+		//範囲外参照しようとした場合にエラー
+		assert(("Message: Attempted to reference a value out of range", 0));
+		return nullptr;
 	};
 };

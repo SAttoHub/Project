@@ -191,6 +191,15 @@ void DirectXBase::DirectXReset(Window *Win) {
 	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))){
 	//		debugController->EnableDebugLayer();
 	//}
+
+	//デバッグレイヤーをオンに
+	//ComPtr<ID3D12Debug1> debugController;
+	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
+	//{
+	//	debugController->EnableDebugLayer();
+	//	debugController->SetEnableGPUBasedValidation(TRUE);
+	//}
+
 	ADDAdapters();
 	CreateDeviceInAdapter();
 	Create_Cmd_Allocator_And_List();

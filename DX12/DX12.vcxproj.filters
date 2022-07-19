@@ -241,6 +241,12 @@
     <Filter Include="ソース ファイル\Base\PostEffect\Vignette">
       <UniqueIdentifier>{3fc89b79-ccfd-4300-b632-f30d58bbcbd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Base\RenderTarget">
+      <UniqueIdentifier>{35068f5e-d559-4b4d-9f5d-1530ba87dd3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\RenderTarget">
+      <UniqueIdentifier>{95a7409c-28cf-4e0c-9665-60d986139ee9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -419,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="imguiUse.cpp">
       <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -709,6 +718,9 @@
     </ClInclude>
     <ClInclude Include="imguiUse.h">
       <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>ヘッダー ファイル\Base\RenderTarget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
