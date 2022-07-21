@@ -15,14 +15,6 @@ using namespace Microsoft::WRL;
 
 //使用するシェーダーの指定用
 enum SHADER {
-	ConstantColor, //単色												※多分使えない
-	ConstantColorNoRighting, //単色(ライティングなし)					※多分使えない
-	SpriteNormal, //スプライト用シェーダー
-	SpriteNormal2, //スプライト用シェーダー(アルファ非対応)
-	ObjectNormal, //オブジェクト用シェーダー							※多分使えない
-	OBjectNoRighting, //オブジェクト用シェーダー(ライティングなし)		※多分使えない
-	ObjMaterial, //マテリアル
-	ObjMaterial2, //マテリアル アルファ対応
 	FBXSHADER,
 	FBX_Bump_SHADER,
 	FBX_height_SHADER,
@@ -32,7 +24,6 @@ enum SHADER {
 	Depth_SHEADER, // 深度値用
 	Shadow_Depth_SHEADER,
 	DOF_SHEADER, // 深度値用
-	Particle
 };
 
 

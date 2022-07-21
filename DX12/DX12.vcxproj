@@ -180,7 +180,6 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="Depth.cpp" />
     <ClCompile Include="Depth2.cpp" />
     <ClCompile Include="DepthOfField.cpp" />
@@ -211,6 +210,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LightGroup.cpp" />
     <ClCompile Include="LinePrimitive3D.h" />
+    <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="ShadowMapLight.cpp" />
@@ -221,8 +221,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="NumsDraw.cpp" />
-    <ClCompile Include="ParticleEmitter.cpp" />
-    <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PipelineManager.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Primitive2D.cpp" />
@@ -230,7 +228,6 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TargetPoint.cpp" />
     <ClCompile Include="TexManager.cpp" />
     <ClCompile Include="Vignette.cpp" />
@@ -252,7 +249,6 @@
     <ClInclude Include="ColorDefines.h" />
     <ClInclude Include="ColorFuncs.h" />
     <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="DebugText.h" />
     <ClInclude Include="Depth.h" />
     <ClInclude Include="Depth2.h" />
     <ClInclude Include="DepthOfField.h" />
@@ -295,6 +291,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="Lissajous.h" />
+    <ClInclude Include="Pipeline.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="ShadowMapLight.h" />
@@ -307,8 +304,6 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="NumsDraw.h" />
     <ClInclude Include="OctahedronPrimitive.h" />
-    <ClInclude Include="ParticleEmitter.h" />
-    <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PipelineManager.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
@@ -327,7 +322,6 @@
     <ClInclude Include="Smath_vector.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="TargetPoint.h" />
     <ClInclude Include="TetrahedronPrimitive.h" />
     <ClInclude Include="TexManager.h" />

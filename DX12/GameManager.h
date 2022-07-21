@@ -1,10 +1,7 @@
 #pragma once
-#include "ParticleManager.h"
-#include "Sprite.h"
 #include "FPS.h"
 #include "DXAudio.h"
 #include "3DObject.h"
-#include "ParticleEmitter.h"
 #include "ease.h"
 using namespace Ease;
 #include <string.h>
@@ -17,17 +14,8 @@ using namespace Ease;
 
 class GameManager {
 	DirectX3dObject *OBJECT;
-	Sprite *SP;
-	ParticleManager *PARTICLE;
 	TexManager *TEX;
 	Camera *Cam;
-
-
-	ParticleManager Par;
-	ParticleEmitter Emit;
-
-
-	XMFLOAT3 DebugCamPos;
 
 	//ライトのテスト
 	LightGroup *lightGroup = nullptr;
@@ -37,7 +25,7 @@ class GameManager {
 
 	
 public:
-	GameManager(DirectX3dObject *OBJECT, Sprite *SP, TexManager *TEX, Window *Win, PipelineManager *Pileline, Camera *Cam);
+	GameManager(DirectX3dObject *OBJECT, TexManager *TEX, Window *Win, PipelineManager *Pileline, Camera *Cam);
 	~GameManager() {
 	};
 
@@ -52,12 +40,5 @@ public:
 	void ShadowDraw();
 	void BloomDraw();
 	void BloomDepthDraw();
-
-	double InCubic(double t) {
-		return t * t * t;
-	}
-	double InSine(double t) {
-		return 1.0 - cos((t * M_PI) / 2.0);
-	}
 };
 

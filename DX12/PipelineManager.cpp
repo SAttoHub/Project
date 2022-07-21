@@ -86,13 +86,7 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 		ObjectNormal, //オブジェクト用シェーダー
 		ObjectNoRighting //オブジェクト用シェーダー(ライティングなし)
 	*/
-	createSpritePipeline(SpriteNormal, _countof(SpriteInputLayout), SpriteInputLayout, Shader->Sprite_vsBlob.Get(), Shader->Sprite_psBlob.Get());
-	createSpritePipeline(SpriteNormal2, _countof(SpriteInputLayout), SpriteInputLayout, Shader->Sprite_vsBlob.Get(), Shader->Sprite_psBlob.Get());
-	createPipeline(ObjectNormal, _countof(InputLayout), InputLayout, Shader->Basic_vsBlob.Get(), Shader->Basic_psBlob.Get());
-	createPipeline(OBjectNoRighting, _countof(InputLayout), InputLayout, Shader->Sprite_vsBlob.Get(), Shader->Sprite_psBlob.Get());
-	createPipeline(ObjMaterial, _countof(InputLayout), InputLayout, Shader->Material_vsBlob.Get(), Shader->Material_psBlob.Get());
-	createPipeline(ObjMaterial2, _countof(InputLayout), InputLayout, Shader->Material_vsBlob.Get(), Shader->Material_psBlob.Get());
-	createParticlePipeline(Particle, _countof(GeometryInputLayout), GeometryInputLayout, Shader->Particle_vsBlob.Get(), Shader->Particle_gsBlob.Get(), Shader->Particle_psBlob.Get());
+	
 	createFBXPipeline(FBXSHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_psBlob.Get());
 	createFBXBumpPipeline(FBX_Bump_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Bump_psBlob.Get());
 	createFBXheightPipeline(FBX_height_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_height_psBlob.Get());
@@ -196,18 +190,9 @@ void PipelineManager::createPipeline(int PIPELINE_NUM, UINT inputLayoutCount, D3
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
+	blenddesc.BlendEnable = false;
+
 
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
@@ -479,18 +464,7 @@ void PipelineManager::createFBXPipeline(int PIPELINE_NUM, UINT inputLayoutCount,
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -568,18 +542,8 @@ void PipelineManager::createFBXBumpPipeline(int PIPELINE_NUM, UINT inputLayoutCo
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
+	blenddesc.BlendEnable = false;
 
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
@@ -653,18 +617,6 @@ void PipelineManager::createFBXheightPipeline(int PIPELINE_NUM, UINT inputLayout
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -749,19 +701,8 @@ void PipelineManager::createFBXOutLinePipeline(int PIPELINE_NUM, UINT inputLayou
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
 
+	blenddesc.BlendEnable = false;
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
 	//gpipeline.BlendState.AlphaToCoverageEnable = true;
@@ -831,18 +772,8 @@ void PipelineManager::createFBXLinePipeline(int PIPELINE_NUM, UINT inputLayoutCo
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
+	blenddesc.BlendEnable = false;
 
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
@@ -914,18 +845,7 @@ void PipelineManager::createFBXSeaPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -1004,18 +924,7 @@ void PipelineManager::createFBXDepthPipeline(int PIPELINE_NUM, UINT inputLayoutC
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -1094,18 +1003,7 @@ void PipelineManager::createFBXShadowDepthPipeline(int PIPELINE_NUM, UINT inputL
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -1184,18 +1082,7 @@ void PipelineManager::createFBXDOFPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	if (PIPELINE_NUM == ObjMaterial2) {
-		blenddesc.BlendEnable = true;
-		blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-		blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-		blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-		blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	}
-	else {
-		blenddesc.BlendEnable = false;
-	}
+
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;

@@ -7,10 +7,7 @@ void Game::Initialize()
 {
 	Framework::Initialize();
 
-	RDot = Tex.LoadTexture("Resource/image/redDot.png");
-	CenterDot = SP.ExtendSpriteCreate(WINDOW_WIDTH / 2 - 4, WINDOW_HEIGHT / 2 - 4, WINDOW_WIDTH / 2 + 4, WINDOW_HEIGHT / 2 + 4, RDot, SpriteNormal);
-
-	game = new GameManager(&DX, &SP, &Tex, win, Pipeline, Cam);
+	game = new GameManager(&DX, &Tex, win, Pipeline, Cam);
 	game->Init();
 	//マウスカーソルを表示しない
 	CursorShow(true);
@@ -199,7 +196,7 @@ void Game::Update()
 	vignette->SetState(VignetteInfluence, UseVignette);
 	DOF->SetState(InterpSize, Focus, FocusSize, UseFlag);
 
-	//スプライト関連描画
+	// 2Dプリミティブ描画
 	Primitive2D::Instance()->Draw();
 
     //-----------------ここまでプログラム記入-----------------//

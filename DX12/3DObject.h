@@ -162,7 +162,7 @@ private:
 	ComPtr<ID3DBlob> errorBlob; //エラーオブジェクト
 
 	//定数バッファビューの生成
-	const int constantBufferNum = 2048; //定数バッファの最大数
+	const int constantBufferNum = 1024; //定数バッファの最大数
 
 	//定数バッファへのデータの転送
 	void TransConstBuffer();

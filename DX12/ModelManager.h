@@ -9,7 +9,7 @@ private:
 
 public:
 	ModelManager() {
-		models.reserve(1024);
+		models.reserve(516);
 	}
 	~ModelManager() {}
 	vector<Model> models;

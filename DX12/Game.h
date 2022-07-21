@@ -14,8 +14,6 @@
 class Game : public Framework
 {
 private:
-	int RDot;
-	SpriteData CenterDot;
 
 	// ƒKƒEƒX‚Ú‚©‚µ—p
 	Gaussian *GaussianEffectX = nullptr;

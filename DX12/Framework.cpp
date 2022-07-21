@@ -17,16 +17,11 @@ void Framework::Initialize()
     Cam = new Camera(win);
 
     DX.DirectX3DObjectReset(win);
-    SP.DxSpriteBaceReset(win);
     Tex.TextureDescHeapCreate();
     LightGroup::StaticInitialize();
     //プリミティブ
     Primitive2D::Instance()->Initialize();
     Primitive3D::Instance()->Initialize();
-
-    debugText = DebugText::GetInstance();
-    int font = Tex.LoadTexture("Resource/image/debugfont.png");
-    debugText->Initialize(font, &SP);
 
     //DirectInupt初期化---------------
     Input input;

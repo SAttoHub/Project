@@ -52,12 +52,6 @@
     <Filter Include="リソース ファイル\FBX">
       <UniqueIdentifier>{73c5a946-763c-4589-9783-07b6798355b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Base\Particle">
-      <UniqueIdentifier>{21344d5e-09c6-4b06-8f68-81bf5532abb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Base\Particle">
-      <UniqueIdentifier>{6005c3c9-ee79-4692-b54d-cf3a37cddbc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base\Light">
       <UniqueIdentifier>{7bfcaa1a-7cb2-4f6b-af1a-4c5e440f593f}</UniqueIdentifier>
     </Filter>
@@ -247,6 +241,12 @@
     <Filter Include="ソース ファイル\Base\RenderTarget">
       <UniqueIdentifier>{95a7409c-28cf-4e0c-9665-60d986139ee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Base\Pipeline">
+      <UniqueIdentifier>{99386539-a5bd-4254-9c73-a95231868d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\Pipeline">
+      <UniqueIdentifier>{c70fb4cc-09cd-4786-95e7-f29138026b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -271,9 +271,6 @@
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
-      <Filter>ソース ファイル\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="TexManager.cpp">
@@ -302,15 +299,6 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>ソース ファイル\Base\3DObject</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleManager.cpp">
-      <Filter>ソース ファイル\Base\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleEmitter.cpp">
-      <Filter>ソース ファイル\Base\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugText.cpp">
-      <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="MeshCollider.cpp">
       <Filter>ソース ファイル\Collider</Filter>
@@ -369,12 +357,6 @@
     <ClCompile Include="GameCollisionManager.cpp">
       <Filter>ソース ファイル\Game\GameCollider</Filter>
     </ClCompile>
-    <ClCompile Include="GameCircleCollider.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameBoxCollider.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ModelManager.cpp">
       <Filter>ソース ファイル\Base\3DObject</Filter>
     </ClCompile>
@@ -432,6 +414,15 @@
     <ClCompile Include="RenderTarget.cpp">
       <Filter>ソース ファイル\Base\RenderTarget</Filter>
     </ClCompile>
+    <ClCompile Include="GameBoxCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCircleCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline.cpp">
+      <Filter>ソース ファイル\Base\Pipeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -453,9 +444,6 @@
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>ヘッダー ファイル\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="TexManager.h">
@@ -500,17 +488,8 @@
     <ClInclude Include="Model.h">
       <Filter>ヘッダー ファイル\Base\3DObject</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleManager.h">
-      <Filter>ヘッダー ファイル\Base\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleEmitter.h">
-      <Filter>ヘッダー ファイル\Base\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Smath.h">
       <Filter>ヘッダー ファイル\Common\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugText.h">
-      <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="MeshCollider.h">
       <Filter>ヘッダー ファイル\Collider</Filter>
@@ -727,6 +706,9 @@
     </ClInclude>
     <ClInclude Include="RenderManager.h">
       <Filter>ヘッダー ファイル\Base\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline.h">
+      <Filter>ヘッダー ファイル\Base\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
