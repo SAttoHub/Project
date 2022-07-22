@@ -3,7 +3,7 @@
 
 RenderManager::RenderManager()
 {
-	m_Renders.reserve(M_MAX_RENDER_COUNT);
+	m_Renders.reserve(MAX_RENDER_COUNT);
 }
 
 RenderManager::~RenderManager()
@@ -13,7 +13,7 @@ RenderManager::~RenderManager()
 void RenderManager::CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth)
 {
 	// 最大数以上に作ろうとするとエラー
-	if (m_Renders.size() >= M_MAX_RENDER_COUNT - size_t(1)) {
+	if (m_Renders.size() >= MAX_RENDER_COUNT - size_t(1)) {
 		assert(("Message: Cannot generate render targets that exceed M_MAX_RENDER_COUNT", 0));
 	}
 	m_Renders[RenderName] = RenderPtr(new RenderTarget);
@@ -26,6 +26,7 @@ void RenderManager::PreDraw(const char *RenderName)
 	if (m_Renders.find(RenderName) != m_Renders.end()) {
 		// 存在した場合に実行
 		m_Renders[RenderName]->PreDraw();
+		return;
 	}
 	// 存在しなかった場合エラー
 	assert(("Message: A non-existent render target name was specified", 0));
@@ -37,6 +38,7 @@ void RenderManager::PostDraw(const char *RenderName)
 	if (m_Renders.find(RenderName) != m_Renders.end()) {
 		// 存在した場合に実行
 		m_Renders[RenderName]->PostDraw();
+		return;
 	}
 	// 存在しなかった場合エラー
 	assert(("Message: A non-existent render target name was specified", 0));

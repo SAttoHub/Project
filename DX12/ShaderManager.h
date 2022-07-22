@@ -5,35 +5,33 @@ using namespace DirectX;
 #include <d3dcompiler.h>
 #pragma comment(lib,"d3dcompiler.lib")
 #include <DirectXTex.h>
+#include <unordered_map>
+
+struct Shader {
+	ComPtr<ID3DBlob> ShaderPtr;
+	LPCWSTR ShaderFileName;
+	LPCSTR EntryPointName;
+};
 
 class ShaderManager {
-public:
-
+private:
+	const std::size_t MAX_SHADER_COUNT = 64;
+	typedef std::unique_ptr<Shader> ShaderPtr;
+	std::unordered_map<std::string, ShaderPtr> m_Shaders;
+	
 	ComPtr<ID3DBlob> errorBlob; //エラーオブジェクト
-
-	ComPtr<ID3DBlob> FBX_vsBlob; //FBX頂点シェーダー
-	ComPtr<ID3DBlob> FBX_psBlob; //FBXピクセルシェーダー
-	ComPtr<ID3DBlob> FBX_Bump_psBlob; //FBXピクセルシェーダー
-	ComPtr<ID3DBlob> FBX_height_psBlob; //FBXピクセルシェーダー
-	ComPtr<ID3DBlob> FBX_OutLine_psBlob; // アウトラインシェーダー
-
-	ComPtr<ID3DBlob> FBX_Line_gsBlob; // 辺のみ
-	ComPtr<ID3DBlob> FBX_Line_psBlob; // 辺のみ
-
-	ComPtr<ID3DBlob> FBX_Sea_psBlob; // 海っぽい
-
-	ComPtr<ID3DBlob> FBX_Depth_psBlob; // 深度値用
-
-	ComPtr<ID3DBlob> FBX_DOF_psBlob; // 深度値用
-
-	ComPtr<ID3DBlob> FBX_Shadow_Depth_vsBlob; // 深度値用
-	ComPtr<ID3DBlob> FBX_Shadow_Depth_psBlob; // 深度値用
+	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
+public:
+	// シェーダーをコンパイルする
+	const char *LoadShader(const char*ShaderName, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
+	// ShaderNameキーの付いているシェーダーを取得する
+	ID3DBlob *GetShader(const char *ShaderName);
+	// FileNameからシェーダーを取得して渡す。存在しない場合はエラー
+	ID3DBlob *GetShaderFromFileName(LPCWSTR ShaderFileName);
+	// FileNameからシェーダーを取得して渡す。存在しない場合はコンパイルして渡す。
+	ID3DBlob *GetShaderAndCompile(LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 
 	ShaderManager();
 	~ShaderManager() {};
-
-	void LoadShaderAll();
-
-	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
 };
 

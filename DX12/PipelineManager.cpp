@@ -5,22 +5,7 @@ ComPtr<ID3D12PipelineState> PipelineManager::pipelinestate[MAX_PIPELINE];
 
 PipelineManager::PipelineManager(ShaderManager *Shader) {
 	this->Shader = Shader;
-	Shader->LoadShaderAll();
 
-
-	//頂点シェーダーに渡すための頂点データを整える
-	D3D12_INPUT_ELEMENT_DESC SpriteInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		}
-	};
 	//頂点シェーダーに渡すための頂点データを整える
 	D3D12_INPUT_ELEMENT_DESC InputLayout[] = {
 		{
@@ -59,25 +44,6 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		}
 	};
-	//頂点シェーダーに渡すための頂点データを整える
-	D3D12_INPUT_ELEMENT_DESC GeometryInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"SCALE", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-
 
 	/*
 		ConstantColor, //単色
@@ -86,16 +52,50 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 		ObjectNormal, //オブジェクト用シェーダー
 		ObjectNoRighting //オブジェクト用シェーダー(ライティングなし)
 	*/
+
+	/*Shader->LoadShader("FBXVS", L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");
+	Shader->LoadShader("FBXPS", L"Resource/shader/FBXPS.hlsl", "main", "ps_5_0");
+
+	Shader->LoadShader("FBXBumpPS", L"Resource/shader/FBXBumpPS.hlsl", "main", "ps_5_0");
+	Shader->LoadShader("FBXHeightPS", L"Resource/shader/FBXHeightPS.hlsl", "main", "ps_5_0");
+
+	Shader->LoadShader("FBX_VS", L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");
+	Shader->LoadShader("FBX_VS", L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");
+	Shader->LoadShader("FBX_VS", L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");
+	Shader->LoadShader("FBX_VS", L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");*/
 	
-	createFBXPipeline(FBXSHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_psBlob.Get());
-	createFBXBumpPipeline(FBX_Bump_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Bump_psBlob.Get());
-	createFBXheightPipeline(FBX_height_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_height_psBlob.Get());
-	createFBXOutLinePipeline(FBX_OutLine_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_OutLine_psBlob.Get());
-	createFBXLinePipeline(FBX_Line_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Line_gsBlob.Get(), Shader->FBX_Line_psBlob.Get());
-	createFBXSeaPipeline(Sea_SHADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Sea_psBlob.Get());
-	createFBXDepthPipeline(Depth_SHEADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_Depth_psBlob.Get());
-	createFBXShadowDepthPipeline(Shadow_Depth_SHEADER, _countof(InputLayout), InputLayout, Shader->FBX_Shadow_Depth_vsBlob.Get(), Shader->FBX_Shadow_Depth_psBlob.Get());
-	createFBXDOFPipeline(DOF_SHEADER, _countof(InputLayout), InputLayout, Shader->FBX_vsBlob.Get(), Shader->FBX_DOF_psBlob.Get());
+	createFBXPipeline(FBXSHADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"), 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXPS.hlsl", "main", "ps_5_0"));
+
+	createFBXBumpPipeline(FBX_Bump_SHADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXBumpPS.hlsl", "main", "ps_5_0"));
+
+	createFBXheightPipeline(FBX_height_SHADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXHeightPS.hlsl", "main", "ps_5_0"));
+
+	createFBXLinePipeline(FBX_Line_SHADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXLineGS.hlsl", "main", "gs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXLinePS.hlsl", "main", "ps_5_0"));
+
+	createFBXSeaPipeline(Sea_SHADER, _countof(InputLayout), InputLayout,
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/SeaPS.hlsl", "main", "ps_5_0"));
+
+	createFBXDepthPipeline(Depth_SHEADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/Depth2.hlsl", "main", "ps_5_0"));
+
+	createFBXShadowDepthPipeline(Shadow_Depth_SHEADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_VS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_PS.hlsl", "main", "ps_5_0"));
+
+	createFBXDOFPipeline(DOF_SHEADER, _countof(InputLayout), InputLayout, 
+		Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		Shader->GetShaderAndCompile(L"Resource/shader/DepthPS.hlsl", "main", "ps_5_0"));
 }
 
 void PipelineManager::createPipeline(int PIPELINE_NUM, UINT inputLayoutCount, D3D12_INPUT_ELEMENT_DESC *inputLayout, ID3DBlob *vsBlob, ID3DBlob *psBlob)

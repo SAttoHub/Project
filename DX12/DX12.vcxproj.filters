@@ -247,6 +247,15 @@
     <Filter Include="ソース ファイル\Base\Pipeline">
       <UniqueIdentifier>{c70fb4cc-09cd-4786-95e7-f29138026b52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Base\PostEffect\OutLine">
+      <UniqueIdentifier>{7453af1d-e761-47e3-963b-5080cc1c3f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\OutLine">
+      <UniqueIdentifier>{9b6816b7-cbdb-419a-bad9-b3cf4c18bf47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PostEffect\OutLine">
+      <UniqueIdentifier>{fc4eb3a1-558a-418e-9cd4-ba37b7bd48b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -422,6 +431,9 @@
     </ClCompile>
     <ClCompile Include="Pipeline.cpp">
       <Filter>ソース ファイル\Base\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="OutLine.cpp">
+      <Filter>ソース ファイル\Base\PostEffect\OutLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -710,6 +722,9 @@
     <ClInclude Include="Pipeline.h">
       <Filter>ヘッダー ファイル\Base\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="OutLine.h">
+      <Filter>ヘッダー ファイル\PostEffect\OutLine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\FBXPS.hlsl">
@@ -885,6 +900,9 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\Depth2.hlsl">
       <Filter>リソース ファイル\FBX\深度値描画用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\OutLinePS.hlsl">
+      <Filter>リソース ファイル\PostEffect\OutLine</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,13 @@ public:
 
 	Object3d *testStage;
 	Object3d *saku;
+	Object3d *saku2;
+	Object3d *saku3;
+
+	Object3d *saku4;
+	bool bloomFlag1;
+	Object3d *saku5;
+	bool bloomFlag2;
 
 public:
 	void Initialize();

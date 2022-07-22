@@ -1,7 +1,86 @@
 #include "ShaderManager.h"
 
+const char *ShaderManager::LoadShader(const char *ShaderName, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName)
+{
+	// 最大数以上に作ろうとするとエラー
+	if (m_Shaders.size() >= MAX_SHADER_COUNT - size_t(1)) {
+		assert(("Message: Cannot generate shader that exceed MAX_SHADER_COUNT", 0));
+	}
+
+	// すでに同じシェーダーファイルを同じエントリポイントでコンパイルしていた場合はエラー
+	std::unordered_map<std::string, ShaderPtr>::iterator itr = m_Shaders.begin();
+	for (itr; itr != m_Shaders.end(); itr++) {
+		if (itr->second.get()->ShaderFileName == FileName && itr->second.get()->EntryPointName == EntryPointName) {
+			assert(("Message: That shader already exists", 0));
+			exit(1);
+		}
+	}
+
+	// 同じ名前のものを作ろうとするとエラー
+	if (m_Shaders.find(ShaderName) != m_Shaders.end()) {
+		// 存在した場合に生成失敗
+		assert(("Message: A shader by that name already exists", 0));
+		exit(1);
+	}
+
+	m_Shaders[ShaderName] = ShaderPtr(new Shader);
+	LoadShader(&m_Shaders[ShaderName].get()->ShaderPtr, FileName, EntryPointName, ModelName);
+	m_Shaders[ShaderName].get()->ShaderFileName = FileName;
+	m_Shaders[ShaderName].get()->EntryPointName = EntryPointName;
+
+	return ShaderName;
+}
+
+ID3DBlob *ShaderManager::GetShader(const char *ShaderName)
+{
+	if (m_Shaders.find(ShaderName) != m_Shaders.end()) {
+		// 存在した場合にreturn
+		return m_Shaders[ShaderName].get()->ShaderPtr.Get();
+	}
+	// 存在しなかった場合エラー
+	assert(("Message: A non-existent shader name was specified", 0));
+	return nullptr;
+}
+
+ID3DBlob *ShaderManager::GetShaderFromFileName(LPCWSTR ShaderFileName)
+{
+	std::unordered_map<std::string, ShaderPtr>::iterator itr = m_Shaders.begin();
+	for (itr; itr != m_Shaders.end(); itr++) {
+		if (itr->second.get()->ShaderFileName == ShaderFileName) {
+			return itr->second.get()->ShaderPtr.Get();
+		}
+	}
+	// 存在しなかった場合エラー
+	assert(("Message: A non-existent shader name was specified", 0));
+	return nullptr;
+}
+
+ID3DBlob *ShaderManager::GetShaderAndCompile(LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName)
+{
+	// すでに存在する場合はそれを返す
+	std::unordered_map<std::string, ShaderPtr>::iterator itr = m_Shaders.begin();
+	for (itr; itr != m_Shaders.end(); itr++) {
+		if (itr->second.get()->ShaderFileName == FileName && itr->second.get()->EntryPointName == EntryPointName) {
+			return itr->second.get()->ShaderPtr.Get();
+		}
+	}
+
+
+	std::wstring ws(FileName);
+	std::string Name(ws.begin(), ws.end());
+
+	// 存在しなかった場合はコンパイルしてそれを返す
+	m_Shaders[Name] = ShaderPtr(new Shader);
+	LoadShader(&m_Shaders[Name].get()->ShaderPtr, FileName, EntryPointName, ModelName);
+	m_Shaders[Name].get()->ShaderFileName = FileName;
+	m_Shaders[Name].get()->EntryPointName = EntryPointName;
+
+	return m_Shaders[Name].get()->ShaderPtr.Get();
+}
+
 ShaderManager::ShaderManager()
 {
+	m_Shaders.reserve(MAX_SHADER_COUNT);
 }
 
 void ShaderManager::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName) {
@@ -31,28 +110,5 @@ void ShaderManager::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPo
 		OutputDebugStringA(errstr.c_str());
 		exit(1);
 	}
-	//*blob = _blob;
 }
 
-void ShaderManager::LoadShaderAll()
-{
-
-
-	LoadShader(&FBX_vsBlob, L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0");
-	LoadShader(&FBX_psBlob, L"Resource/shader/FBXPS.hlsl", "main", "ps_5_0");
-	LoadShader(&FBX_Bump_psBlob, L"Resource/shader/FBXBumpPS.hlsl", "main", "ps_5_0");
-	LoadShader(&FBX_height_psBlob, L"Resource/shader/FBXHeightPS.hlsl", "main", "ps_5_0");
-	LoadShader(&FBX_OutLine_psBlob, L"Resource/shader/FBXOutLinePS.hlsl", "main", "ps_5_0");
-
-	LoadShader(&FBX_Line_gsBlob, L"Resource/shader/FBXLineGS.hlsl", "main", "gs_5_0");
-	LoadShader(&FBX_Line_psBlob, L"Resource/shader/FBXLinePS.hlsl", "main", "ps_5_0");
-	LoadShader(&FBX_Sea_psBlob, L"Resource/shader/SeaPS.hlsl", "main", "ps_5_0");
-
-	LoadShader(&FBX_Depth_psBlob, L"Resource/shader/Depth2.hlsl", "main", "ps_5_0");
-
-	LoadShader(&FBX_Shadow_Depth_vsBlob, L"Resource/shader/Shadow_FBX_VS.hlsl", "main", "vs_5_0");
-	LoadShader(&FBX_Shadow_Depth_psBlob, L"Resource/shader/Shadow_FBX_PS.hlsl", "main", "ps_5_0");
-
-	LoadShader(&FBX_DOF_psBlob, L"Resource/shader/DepthPS.hlsl", "main", "ps_5_0");
-
-}

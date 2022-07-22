@@ -18,7 +18,6 @@ enum SHADER {
 	FBXSHADER,
 	FBX_Bump_SHADER,
 	FBX_height_SHADER,
-	FBX_OutLine_SHADER,
 	FBX_Line_SHADER, // 辺のみ
 	Sea_SHADER, // 海テスト
 	Depth_SHEADER, // 深度値用

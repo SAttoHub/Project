@@ -10,6 +10,7 @@
 #include "ShadowMapLight.h"
 #include "ShadowMapping.h"
 #include "Vignette.h"
+#include "OutLine.h"
 
 class Game : public Framework
 {
@@ -18,6 +19,10 @@ private:
 	// ガウスぼかし用
 	Gaussian *GaussianEffectX = nullptr;
 	Gaussian *GaussianEffectY = nullptr;
+	Gaussian *GaussianEffectX2 = nullptr;
+	Gaussian *GaussianEffectY2 = nullptr;
+	Gaussian *GaussianEffectX_b = nullptr;
+	Gaussian *GaussianEffectY_b = nullptr;
 	DepthOfField *DOF = nullptr;
 
 	bool DOFFlag;
@@ -30,6 +35,10 @@ private:
 
 	//ビネット
 	Vignette *vignette = nullptr;
+
+	//アウトライン
+	/*bool UseOutLine;
+	OutLine *outLine = nullptr;*/
 
 
 

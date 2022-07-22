@@ -99,9 +99,9 @@ void GameCamera::GameCameraUpdate()
 	//{x=43.1580887 y=18.1999950 z=43.9830246 }
 	//{x=16.9675980 y=17.2343636 z=29.3841972 }
 
-	//DebugCamPos = XMFLOAT3(43.1580887f, 18.1999950f, 43.9830246f);
-	//Camera::Targeting(XMFLOAT3(16.9675980f, 17.2343636f, 29.3841972f));
-	//Camera::SetCameraPos3(DebugCamPos);
+	DebugCamPos = XMFLOAT3(96.6596222f, 31.1999893f, -27.1576939f);
+	Camera::Targeting(XMFLOAT3(69.7704926f, 19.5142612f, -20.8001499f));
+	Camera::SetCameraPos3(DebugCamPos);
 
 	if (ShakeTimer != 0) {
 		ShakeTimer += 5;

@@ -5,6 +5,8 @@ SamplerState smp : register(s0);
 cbuffer cbuff0 : register(b0)
 {
 	matrix mat;
+	float isUse;
+	float Power;
 };
 
 float4 main(GSOutput input) : SV_TARGET

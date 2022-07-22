@@ -8,7 +8,7 @@ class RenderManager : public Singleton<RenderManager>
 {
 	friend class Singleton<RenderManager>;
 private:
-	const std::size_t M_MAX_RENDER_COUNT = 32;
+	const std::size_t MAX_RENDER_COUNT = 32;
 	// レンダーターゲット格納用
 	typedef std::unique_ptr<RenderTarget> RenderPtr;
 	std::unordered_map<std::string , RenderPtr> m_Renders;

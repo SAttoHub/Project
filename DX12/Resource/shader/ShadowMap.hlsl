@@ -1,7 +1,7 @@
 #include "PostEffect.hlsli"
 Texture2D<float4> tex : register(t0);
-Texture2D<float> tex2 : register(t1); //ライトから
-Texture2D<float> tex3 : register(t2); //カメラから
+Texture2D<float> LightDepth : register(t1); //ライトから
+Texture2D<float> CameraDepth : register(t2); //カメラから
 SamplerState smp : register(s0);
 
 cbuffer cbuff0 : register(b0)
@@ -89,44 +89,21 @@ float4 main(GSOutput input) : SV_TARGET
     if (flag == 0.0f) {
         return Color;
     }
-    float DepthCamera = tex3.Sample(smp, input.uv);
+    float DepthCamera = CameraDepth.Sample(smp, input.uv);
 
+    // 深度値からワールド座標を復元
     float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Camera_viewproj_inv);
-
-
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
-    //Wpos.y += 5;
-
+    
+    // UVを (-1, 1)(1, -1) から (0, 0)(1, 1) に変更
 	float4 obj_shadow = mul(Light_viewproj, Wpos);
     obj_shadow.xyz = obj_shadow.xyz / obj_shadow.w;
     obj_shadow.xy *= float2(0.5f, -0.5f);
     obj_shadow.xy += 0.5f;
 
-    float shad_center = tex2.Sample(smp, obj_shadow.xy);
-    //float shad_up = tex2.Sample(smp, obj_shadow.xy + float2(0,1.0f / 720.0f));
-    //float shad_down = tex2.Sample(smp, obj_shadow.xy + float2(0, -1.0f / 720.0f));
-    //float shad_left = tex2.Sample(smp, obj_shadow.xy + float2(1.0f / 1280.0f, 0));
-    //float shad_right = tex2.Sample(smp, obj_shadow.xy + float2(-1 / 1280.0f, 0));
-
-    //shad_center = (shad_center + shad_up + shad_down + shad_left + shad_right) / 5.0f;
-
-   /* if (shad_center > shad_up) {
-        shad_center = shad_up;
-    }
-    if(shad_center > shad_down) {
-        shad_center = shad_down;
-    }
-    if (shad_center > shad_left) {
-        shad_center = shad_left;
-    }
-    if (shad_center > shad_right) {
-        shad_center = shad_right;
-    }*/
-
-   /* if (shad_center < obj_shadow.z - 0.00018f && obj_shadow.z < 1.0f) {
-        Color.rgb *= 0.5f;
-    }*/
-    if (shad_center < obj_shadow.z - (0.00081f * 2.0f) && obj_shadow.z < 1.0f) {
+    float shad_center = LightDepth.Sample(smp, obj_shadow.xy);
+    // 深度の差から影かどうかを判定・アクネを軽減
+    if (shad_center < obj_shadow.z - 0.00162 && obj_shadow.z < 1.0f) {
         Color.rgb *= 0.5f;
     }
 
