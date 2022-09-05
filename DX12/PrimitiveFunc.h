@@ -34,6 +34,16 @@ static void DrawBox3D(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color) {
 	Primitive2D::Instance()->DrawBox(pos1, pos2, color, true);
 }
 
+/// <summary>
+/// スクリーン上に線を描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="color">色</param>
+static void DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color) {
+	Primitive2D::Instance()->DrawLine(pos1, pos2, color);
+}
+
 #pragma region DrawGraph
 
 /// <summary>

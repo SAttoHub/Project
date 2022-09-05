@@ -2,6 +2,11 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+struct Point
+{
+	DirectX::XMFLOAT2 pos = {};
+};
+
 struct Box
 {
 	//ç¿ïW

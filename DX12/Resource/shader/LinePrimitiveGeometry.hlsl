@@ -38,12 +38,14 @@ void main(
 	//float genY = (input[0].pos1.y + input[0].pos2.y) / 2;
 	//float genZ = (input[0].pos1.z + input[0].pos2.z) / 2;
 
-	input[0].pos1.x = input[0].pos1.x + 1;
-	input[0].pos1.y = input[0].pos1.y + 1;
-	input[0].pos1.z = input[0].pos1.z + 1;
-	input[0].pos2.x = input[0].pos2.x - 1;
-	input[0].pos2.y = input[0].pos2.y - 1;
-	input[0].pos2.z = input[0].pos2.z - 1;
+	input[0].pos1.x = input[0].pos1.x + 0.15;
+	input[0].pos1.y = input[0].pos1.y + 0.01;
+	input[0].pos1.z = input[0].pos1.z + 0.15;
+	input[0].pos2.x = input[0].pos2.x - 0.15;
+	input[0].pos2.y = input[0].pos2.y - 0.01;
+	input[0].pos2.z = input[0].pos2.z - 0.15;
+
+	float hoge = 5.25f;
 
 	element[0].svpos = float4(input[0].pos1.x, input[0].pos2.y, input[0].pos1.z, 1);
 	element[1].svpos = float4(input[0].pos2.x, input[0].pos2.y, input[0].pos1.z, 1);

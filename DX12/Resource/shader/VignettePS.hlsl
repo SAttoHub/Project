@@ -16,6 +16,7 @@ float4 main(GSOutput input) : SV_TARGET
 		return Color;
 	}
 	float2 uv = input.uv;
+	// UV‚ð(0,0)(1,1)‚©‚ç(-1,-1),(1,1)‚É
 	uv = 2.0f * uv - 1.0f;
 	Color *= 1.0 - dot(uv, uv) * Power;
 	return Color;

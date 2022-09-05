@@ -16,7 +16,7 @@ void Game::Initialize()
 	InterpSize = 20.0f;
 	Focus = 30.0f;
 	FocusSize = 20.0f;
-	UseFlag = true;
+	UseFlag = false;
 	GaussianEffectX = new Gaussian;
 	GaussianEffectX->Initialize(0);
 	GaussianEffectY = new Gaussian;
@@ -38,11 +38,11 @@ void Game::Initialize()
 	
 
 	BloomFlag = true;
-	DOFFlag = true;
+	DOFFlag = false;
 	//シャドウ
 	ShadowMapUse = true;
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f,500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,500.0f, -500.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize(ShadowMapUse);
 
@@ -72,6 +72,7 @@ void Game::Initialize()
 	CreateRenderTarget("DOF_Gauss_X2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+
 }
 
 void Game::Update()
@@ -94,7 +95,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(500.0f, 500.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 500.0f, -500.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 
 #pragma region 各深度値保存用の描画
 	//DOF用深度
@@ -177,7 +178,7 @@ void Game::Update()
 	vignette->Draw(GetRenderTexture("DOF_Result"));
 
 #pragma region ImGui
-	DirectX::XMFLOAT2 p1 = Camera::ConvertWorldToScreen(XMFLOAT3(game->game.saku4->position.x, game->game.saku4->position.y, game->game.saku4->position.z));
+	/*DirectX::XMFLOAT2 p1 = Camera::ConvertWorldToScreen(XMFLOAT3(game->game.saku4->position.x, game->game.saku4->position.y, game->game.saku4->position.z));
 	ImGui::SetNextWindowPos(ImVec2(p1.x - 200, p1.y - 160), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 60), 1);
 	ImGui::Begin("saku1");
@@ -189,6 +190,7 @@ void Game::Update()
 	ImGui::Begin("saku2");
 	ImGui::Checkbox("Bloom", &game->game.bloomFlag2);
 	ImGui::End();
+	*/
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 260), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200), 1);
@@ -221,7 +223,7 @@ void Game::Update()
 		UseVignette = true;
 	}
 	ImGui::End();
-
+	
 	imguiUse::Instance()->CommandExcute(true);
 #pragma endregion
 
@@ -234,8 +236,9 @@ void Game::Update()
 
     //-----------------ここまでプログラム記入-----------------//
 
-    //-----------------命令の実行とバッファのフリップ-----------------//
-    DXBase.DoScreen();
+   //-----------------命令の実行とバッファのフリップ-----------------//
+	DXBase.DoScreen();
+
     //FPS
     fps->FPS_Update();
 }

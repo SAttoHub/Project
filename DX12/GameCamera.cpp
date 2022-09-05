@@ -91,6 +91,10 @@ void GameCamera::Finalize()
 		}
 	}
 	Camera::SetCameraPos(DebugCamPos);
+
+	/*if (Input::isKeyTrigger(DIK_L)) {
+		int a = 0;
+	}*/
 }
 
 void GameCamera::GameCameraUpdate()
@@ -98,9 +102,11 @@ void GameCamera::GameCameraUpdate()
 
 	//{x=43.1580887 y=18.1999950 z=43.9830246 }
 	//{x=16.9675980 y=17.2343636 z=29.3841972 }
+	//{x = 38.0959435 y = 49.4000282 z = -39.3253136 }
+	//{x = 38.1601181 y = 31.1714096 z = -15.4985771 }
 
-	DebugCamPos = XMFLOAT3(96.6596222f, 31.1999893f, -27.1576939f);
-	Camera::Targeting(XMFLOAT3(69.7704926f, 19.5142612f, -20.8001499f));
+	DebugCamPos = XMFLOAT3(38.0959435, 49.4000282, -39.3253136);
+	Camera::Targeting(XMFLOAT3(38.1601181, 31.1714096, -15.4985771));
 	Camera::SetCameraPos3(DebugCamPos);
 
 	if (ShakeTimer != 0) {

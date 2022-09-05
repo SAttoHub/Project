@@ -7,6 +7,8 @@ public:
 	static bool CheckCircleCircle(const Circle &circleA, const Circle &circleB);
 	static bool CheckCircleBox(const Circle &circle, const Box &box);
 	static bool CheckBoxBox(const Box &boxA, const Box &boxB);
+	static bool CheckBoxPoint(const Box &box, const Point &point);
+	static bool CheckCirclePoint(const Circle &circle, const Point &point);
 	//3D
 	static void ClosestPtPoint2Triangle(const DirectX::XMVECTOR &point, const Triangle &triangle, DirectX::XMVECTOR *closest);
 	static bool CheckSphere2Sphere(const Sphere &sphereA, const Sphere &sphereB, DirectX::XMVECTOR *inter = nullptr);

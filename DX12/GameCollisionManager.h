@@ -8,6 +8,7 @@
 #include "Singleton.h"
 #include "GameCircleCollider.h"
 #include "GameBoxCollider.h"
+#include "GamePointCollider.h"
 
 //-------------------------------------------------------------------------------------------------------------
 // Collider Žg‚¢•û

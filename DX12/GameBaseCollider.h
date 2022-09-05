@@ -9,6 +9,7 @@ enum GameCollisionShapeType
 	COL_SHAPE_UNKNOWN = -1,		// 未設定
 	COL_SHAPE_CIRCLE,			// 円
 	COL_SHAPE_BOX,				// 箱
+	COL_SHAPE_POINT,			// 点
 };
 
 // 衝突判定拡張用 Class　これを継承したオブジェクトに対して衝突した時にコライダーを取得できる

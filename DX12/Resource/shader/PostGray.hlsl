@@ -20,5 +20,6 @@ float4 main(GSOutput input) : SV_TARGET
 
 	float4 gray4 = float4(gray, gray, gray, 1);
 
+
 	return gray4 * input.color;
 }

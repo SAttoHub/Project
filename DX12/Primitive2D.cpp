@@ -210,6 +210,93 @@ void Primitive2D::SetupGraphPrimitive()
 	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&GraphPipelinestate));
 }
 
+void Primitive2D::SetupLinePrimitive()
+{
+	LoadShader(&Line_vsBlob, L"Resource/shader/LinePrimitive2DVertex.hlsl", "main", "vs_5_0");
+	LoadShader(&Line_gsBlob, L"Resource/shader/LinePrimitive2DGeometry.hlsl", "main", "gs_5_0");
+	LoadShader(&Line_psBlob, L"Resource/shader/LinePrimitive2DPixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC LinePrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		}
+	};
+	HRESULT result;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Line_vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Line_gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Line_psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = LinePrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(LinePrimitiveInputLayout);
+	//図形の形状を三角形に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&LineRootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = LineRootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&LinePipelinestate));
+}
+
 void Primitive2D::Initialize()
 {
 	//頂点バッファの生成
@@ -257,7 +344,19 @@ void Primitive2D::Initialize()
 		BackGraphvbView[i].StrideInBytes = sizeof(GraphPrimitive::Graph);
 	}
 #pragma endregion
-
+#pragma region 線プリミティブ
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(LinePrimitive::Line) * MaxLinePrimitives),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&LineVertBuff)
+	);
+	LinevbView.BufferLocation = LineVertBuff->GetGPUVirtualAddress();
+	LinevbView.SizeInBytes = sizeof(LinePrimitive::Line) * MaxLinePrimitives;
+	LinevbView.StrideInBytes = sizeof(LinePrimitive::Line);
+#pragma endregion
 	//定数バッファの生成
 	result = DirectXBase::dev->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	//アップロード可能
@@ -274,6 +373,7 @@ void Primitive2D::Initialize()
 
 	SetupBoxPrimitive();
 	SetupGraphPrimitive();
+	SetupLinePrimitive();
 }
 
 void Primitive2D::Update()
@@ -293,6 +393,12 @@ void Primitive2D::Update()
 		GraphData[i].Active = false;
 		GraphData[i].TextureNumber = 0;
 		GraphData[i].isBack = false;
+	}
+	for (int i = 0; i < MaxLinePrimitives; i++) {
+		LineData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
+		LineData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
+		LineData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+		LineData[i].Active = false;
 	}
 }
 
@@ -366,6 +472,62 @@ void Primitive2D::BoxDrawAll()
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
 	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &BoxvbView);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
+	//描画コマンド
+	DirectXBase::cmdList->DrawInstanced(activeCount, 1, 0, 0);
+}
+
+void Primitive2D::LineDrawAll()
+{
+	HRESULT result;
+	int activeCount = 0;
+	for (int i = 0; i < MaxLinePrimitives; i++) {
+		if (LineData[i].Active) {
+
+			activeCount++;
+		}
+	}
+	if (activeCount == 0) {
+		return;
+	}
+	LinePrimitive::Line *vertMap = nullptr;
+	result = LineVertBuff->Map(0, nullptr, (void **)&vertMap);
+	XMFLOAT3 pos1, pos2;
+	if (SUCCEEDED(result)) {
+		for (int i = 0; i < MaxLinePrimitives; i++) {
+			if (LineData[i].Active) {
+				pos1 = XMFLOAT3{ LineData[i].Data.pos1.x / DirectXBase::Win_Width * 2 , LineData[i].Data.pos1.y / DirectXBase::Win_Height * 2, 0.0f };
+				pos2 = XMFLOAT3{ LineData[i].Data.pos2.x / DirectXBase::Win_Width * 2, LineData[i].Data.pos2.y / DirectXBase::Win_Height * 2, 0.0f };
+
+				vertMap->pos1 = pos1;
+				vertMap->pos2 = pos2;
+				vertMap->color = LineData[i].Data.color;
+				vertMap++;
+			}
+		}
+	}
+	LineVertBuff->Unmap(0, nullptr);
+
+	XMMATRIX matP = XMMatrixOrthographicOffCenterLH(0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height, 0.0f, 0.0f, 1.0f);
+
+	//定数バッファへデータ転送
+	ConstBufferData *constMap0 = nullptr;
+	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
+		constMap0->mat = Camera::matView * Camera::matProjection;
+		ConstBuff0->Unmap(0, nullptr);
+	}
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//ルートシグネチャ
+	DirectXBase::cmdList->SetGraphicsRootSignature(LineRootsignature.Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(LinePipelinestate.Get());
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &LinevbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 	//描画コマンド
@@ -520,6 +682,7 @@ void Primitive2D::Draw()
 {
 	BoxDrawAll();
 	GraphDrawAll();
+	LineDrawAll();
 }
 
 void Primitive2D::BackDraw()
@@ -756,6 +919,38 @@ void Primitive2D::DrawGraphBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber,
 	GraphData[Num].Active = true;
 	GraphData[Num].TextureNumber = TextureNumber;
 	GraphData[Num].isBack = true;
+}
+
+void Primitive2D::DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color)
+{
+	int Num = 0;
+	for (int i = 0; i < MaxLinePrimitives; i++) {
+		if (LineData[i].Active == false) break;
+		Num++;
+	}
+	assert(Num <= MaxLinePrimitives);
+
+	//左上頂点を右下頂点を算出
+	float x1 = pos1.x;
+	float x2 = pos2.x;
+	if (x1 < x2) {
+		x1 = pos2.x;
+		x2 = pos1.x;
+	}
+	float y1 = pos1.y;
+	float y2 = pos2.y;
+	if (y1 < y2) {
+		y1 = pos2.y;
+		y2 = pos1.y;
+	}
+	XMFLOAT3 p1 = { pos1.x, pos1.y, 0 };
+	XMFLOAT3 p2 = { pos2.x, pos2.y, 0 };
+
+
+	this->LineData[Num].Data.pos1 = p1;
+	this->LineData[Num].Data.pos2 = p2;
+	this->LineData[Num].Data.color = color;
+	LineData[Num].Active = true;
 }
 
 void Primitive2D::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName)

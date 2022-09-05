@@ -10,6 +10,12 @@
 #include "ModelManager.h"
 #include "ExtendedRandom.h"
 
+#include "Player.h"
+#include "Enemys.h"
+#include "Map.h"
+#include "Cursor.h"
+#include "Cards.h"
+
 enum class NowScene {
 	Title,
 	StageCelect,
@@ -28,20 +34,12 @@ private:
 public:
 	NowScene Scene;
 
-	Object3d *soko;
-	Object3d *squere;
-	Object3d *skydome;
+	Player	m_player;
+	Enemys	m_enemys;
+	Map		m_map;
+	Cards	m_cards;
 
-	Object3d *testStage;
-	Object3d *saku;
-	Object3d *saku2;
-	Object3d *saku3;
-
-	Object3d *saku4;
-	bool bloomFlag1;
-	Object3d *saku5;
-	bool bloomFlag2;
-
+	int Turn; // 0 : なし　1 : 敵　2 : プレイヤー
 public:
 	void Initialize();
 	void Update();

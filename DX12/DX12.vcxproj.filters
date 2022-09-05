@@ -256,6 +256,51 @@
     <Filter Include="ヘッダー ファイル\PostEffect\OutLine">
       <UniqueIdentifier>{fc4eb3a1-558a-418e-9cd4-ba37b7bd48b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Primitive\2D\Line">
+      <UniqueIdentifier>{b24d2bd3-2ae8-4ffa-8c40-6411e9f84720}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Camera">
+      <UniqueIdentifier>{db2282a1-d9eb-440c-9acc-fdf05628a925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Camera">
+      <UniqueIdentifier>{70ea5372-a914-4e64-8164-bfbb90dd1659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Player">
+      <UniqueIdentifier>{9df60187-cbb1-4066-91ec-208c9588499f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\DrawText">
+      <UniqueIdentifier>{001dfa1d-2c4c-4e05-b6eb-8b3568994558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Player">
+      <UniqueIdentifier>{fae55ca3-e94f-446b-835f-73b92f5baf1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\Drawtext">
+      <UniqueIdentifier>{9aaf7042-3b27-480b-a6b5-ff9af45fc4ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Map">
+      <UniqueIdentifier>{b5385904-6476-4fe7-8f9d-b596832bcb66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Map">
+      <UniqueIdentifier>{7c4289dd-43e0-4625-ae00-924be0587519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Enemy">
+      <UniqueIdentifier>{915e52fd-3a9e-4a93-9a47-2fd831f43b06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Enemy">
+      <UniqueIdentifier>{ecd48565-6940-4bf5-8048-9c44f5df8fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Card">
+      <UniqueIdentifier>{6faaec1b-2816-4d4b-a9a9-323c19052f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Card">
+      <UniqueIdentifier>{778a65d3-94df-4bbc-a300-677161671ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Cursor">
+      <UniqueIdentifier>{d2ed863a-0474-4403-a12d-0c1e0827bdbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Cursor">
+      <UniqueIdentifier>{d8527c60-c471-4082-84f7-95bf8ede6d80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -369,26 +414,14 @@
     <ClCompile Include="ModelManager.cpp">
       <Filter>ソース ファイル\Base\3DObject</Filter>
     </ClCompile>
-    <ClCompile Include="NumsDraw.cpp">
-      <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Astar.cpp">
       <Filter>ソース ファイル\Game\AStar</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="DrawStrings.cpp">
-      <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="GameBaseCollider.cpp">
       <Filter>ソース ファイル\Game\GameCollider</Filter>
     </ClCompile>
     <ClCompile Include="GameScenes.cpp">
       <Filter>ソース ファイル\Game\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticCameraPos.cpp">
-      <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="Gaussian.cpp">
       <Filter>ソース ファイル\Base\PostEffect</Filter>
@@ -434,6 +467,48 @@
     </ClCompile>
     <ClCompile Include="OutLine.cpp">
       <Filter>ソース ファイル\Base\PostEffect\OutLine</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawStrings.cpp">
+      <Filter>ソース ファイル\Base\Drawtext</Filter>
+    </ClCompile>
+    <ClCompile Include="NumsDraw.cpp">
+      <Filter>ソース ファイル\Base\Drawtext</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>ソース ファイル\Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticCameraPos.cpp">
+      <Filter>ソース ファイル\Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor.cpp">
+      <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="ChipData.cpp">
+      <Filter>ソース ファイル\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemys.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>ソース ファイル\Game\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="Cards.cpp">
+      <Filter>ソース ファイル\Game\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePointCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>ソース ファイル\Game\Cursor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -659,23 +734,11 @@
     <ClInclude Include="AstarNode.h">
       <Filter>ヘッダー ファイル\Game\AStar</Filter>
     </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawStrings.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="NumsDraw.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
     <ClInclude Include="MyFList.h">
       <Filter>ヘッダー ファイル\Common\Containers</Filter>
     </ClInclude>
     <ClInclude Include="GameScenes.h">
       <Filter>ヘッダー ファイル\Game\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticCameraPos.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
     <ClInclude Include="Lissajous.h">
       <Filter>ヘッダー ファイル\Common\Math</Filter>
@@ -724,6 +787,51 @@
     </ClInclude>
     <ClInclude Include="OutLine.h">
       <Filter>ヘッダー ファイル\PostEffect\OutLine</Filter>
+    </ClInclude>
+    <ClInclude Include="LinePrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>ヘッダー ファイル\Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCameraPos.h">
+      <Filter>ヘッダー ファイル\Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawStrings.h">
+      <Filter>ヘッダー ファイル\DrawText</Filter>
+    </ClInclude>
+    <ClInclude Include="NumsDraw.h">
+      <Filter>ヘッダー ファイル\DrawText</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ヘッダー ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ChipData.h">
+      <Filter>ヘッダー ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemys.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>ヘッダー ファイル\Game\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="Cards.h">
+      <Filter>ヘッダー ファイル\Game\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePointCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>ヘッダー ファイル\Game\Cursor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -904,6 +1012,15 @@
     <FxCompile Include="Resource\shader\OutLinePS.hlsl">
       <Filter>リソース ファイル\PostEffect\OutLine</Filter>
     </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitive2DVertex.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Line</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitive2DGeometry.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Line</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\LinePrimitive2DPixel.hlsl">
+      <Filter>リソース ファイル\Primitive\2D\Line</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\FBX.hlsli">
@@ -944,6 +1061,9 @@
     </None>
     <None Include="Resource\shader\PostEffect.hlsli">
       <Filter>リソース ファイル\PostEffect</Filter>
+    </None>
+    <None Include="Resource\shader\LinePrimitive2D.hlsli">
+      <Filter>リソース ファイル\Primitive\2D\Line</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

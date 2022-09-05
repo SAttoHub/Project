@@ -18,6 +18,10 @@ struct Cell
 
 	int x;		// óÒ
 	int y;		// çs
+
+	Cell operator= (const DirectX::XMINT2 value) {
+		return Cell(value.x, value.y);
+	}
 };
 
 // ÉmÅ[Éh

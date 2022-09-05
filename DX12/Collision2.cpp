@@ -62,6 +62,27 @@ bool Collision2::CheckBoxBox(const Box &boxA, const Box &boxB)
 	return false;
 }
 
+bool Collision2::CheckBoxPoint(const Box &box, const Point &point)
+{
+	if (point.pos.x >= box.pos1.x && point.pos.x <= box.pos2.x &&
+		point.pos.y >= box.pos1.y && point.pos.y <= box.pos2.y)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Collision2::CheckCirclePoint(const Circle &circle, const Point &point)
+{
+	float a = point.pos.x - circle.center.x;
+	float b = point.pos.y - circle.center.y;
+	float r = circle.radius;
+	if ((a * a) + (b * b) <= (r * r)) {
+		return true;
+	}
+	return false;
+}
+
 void Collision2::ClosestPtPoint2Triangle(const DirectX::XMVECTOR &point, const Triangle &triangle, DirectX::XMVECTOR *closest)
 {
 	// pointがp0の外側の頂点領域の中にあるかどうかチェック

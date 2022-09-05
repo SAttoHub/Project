@@ -15,7 +15,6 @@
 class Game : public Framework
 {
 private:
-
 	// ƒKƒEƒX‚Ú‚©‚µ—p
 	Gaussian *GaussianEffectX = nullptr;
 	Gaussian *GaussianEffectY = nullptr;
