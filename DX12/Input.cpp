@@ -178,6 +178,7 @@ void Input::Update() {
     }
     devkeyborad->Acquire();
     devkeyborad->GetDeviceState(sizeof(keys), keys);
+
     //ƒ}ƒEƒX
     oldmouse = mouse;
     devmouse->Acquire();

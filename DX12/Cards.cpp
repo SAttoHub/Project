@@ -76,14 +76,14 @@ void Cards::Draw()
 	}
 	else if(isMyTurn) {
 		DrawGraph(LT,
-			XMFLOAT2(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100),
+			LT + XMFLOAT2(160, 64) * 1.5f,
 			TurnEndButton);
 		XMFLOAT2 point = Input::GetMousePos();
 
-		if (point.x >= LT.x && point.x <= LT.x + 200 &&
-			point.y >= LT.y && point.y <= LT.y + 200) {
+		if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
+			point.y >= LT.y && point.y <= LT.y + 64 * 1.5f) {
 			DrawGraph(LT - XMFLOAT2(2, 2),
-				XMFLOAT2(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100) + XMFLOAT2(2, 2),
+				LT + XMFLOAT2(160, 64) * 1.5f + XMFLOAT2(2, 2),
 				TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));
 		}
 	}
