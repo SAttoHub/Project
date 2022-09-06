@@ -39,5 +39,8 @@ public:
 
 	XMFLOAT3 ChangePos(XMINT2 MapPos);
 	bool InMap(XMINT2 MapPos);
+
+	void SetCostTableOnUnitPos(XMINT2 MapPos, int Cost);
+	void ResetCostTable();
 };
 

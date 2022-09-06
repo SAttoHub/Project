@@ -103,7 +103,8 @@ float4 main(GSOutput input) : SV_TARGET
 
     float shad_center = LightDepth.Sample(smp, obj_shadow.xy);
     // 深度の差から影かどうかを判定・アクネを軽減
-    if (shad_center < obj_shadow.z - 0.00162 && obj_shadow.z < 1.0f) {
+    if (shad_center < obj_shadow.z - 0.000462 && obj_shadow.z < 1.0f) {
+    //if (shad_center < obj_shadow.z && obj_shadow.z < 1.0f) {
         Color.rgb *= 0.5f;
     }
 

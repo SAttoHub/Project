@@ -36,5 +36,8 @@ public:
 	void ShadowDraw();
 	void DepthDraw();
 	void DOFDepthDraw();
+
+	void AllEnemyClear();
+	void RandamEnemyGenerate(int Count);
 };
 

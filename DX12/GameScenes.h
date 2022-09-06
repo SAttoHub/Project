@@ -40,6 +40,8 @@ public:
 	Cards	m_cards;
 
 	int Turn; // 0 : なし　1 : 敵　2 : プレイヤー
+
+	int GenerateEnemyCount;
 public:
 	void Initialize();
 	void Update();

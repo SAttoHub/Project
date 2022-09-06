@@ -142,3 +142,17 @@ bool Map::InMap(XMINT2 MapPos)
 	}
 	return false;
 }
+
+void Map::SetCostTableOnUnitPos(XMINT2 MapPos, int Cost)
+{
+	CostTable[MapPos.x][MapPos.y] = Cost;
+}
+
+void Map::ResetCostTable()
+{
+	for (int x = 0; x < CostTable.size(); x++) {
+		for (int z = 0; z < CostTable[x].size(); z++) {
+			CostTable[x][z] = 1;
+		}
+	}
+}

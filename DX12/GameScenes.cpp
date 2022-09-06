@@ -17,6 +17,7 @@ void GameScenes::Initialize()
 	m_cards.StartTurn();
 
 	Turn = 2;
+	GenerateEnemyCount = 2;
 }
 
 void GameScenes::Update()
@@ -26,6 +27,19 @@ void GameScenes::Update()
 
 	/*soko->position = XMFLOAT3(0, -10, 0);*/
 	Cursor::Instance()->Update();
+
+	// ランダムに敵を配置してリセット
+	ImGui::SetNextWindowPos(ImVec2(10, 60), 1);
+	ImGui::SetNextWindowSize(ImVec2(300, 100), 1);
+	ImGui::Begin("Config");
+	ImGui::SliderInt("GenerateEnemyCount", &GenerateEnemyCount, 1, 4);
+	if (ImGui::Button("Reset")) {
+		m_enemys.AllEnemyClear();
+		m_enemys.RandamEnemyGenerate(GenerateEnemyCount);
+		Turn = 2;
+		m_cards.StartTurn();
+	}
+	ImGui::End();
 
 	m_player.Update();
 	m_enemys.Update();

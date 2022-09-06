@@ -19,6 +19,8 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	//DirectX3dObject::DeleteObject(model);
+	//delete model;
 }
 
 void Enemy::StartTurn()
@@ -28,6 +30,7 @@ void Enemy::StartTurn()
 	m_Next = false;
 	coolTime = 30;
 	Count = 3;
+	pMap->ResetCostTable();
 }
 
 void Enemy::SetMap(Map *Map)
@@ -79,6 +82,8 @@ void Enemy::Update()
 		}
 	}
 
+	XMFLOAT3 aaa = pMap->ChangePos(m_MapPos);
+
 	model->position = pMap->ChangePos(m_MapPos);
 }
 
@@ -91,4 +96,9 @@ void Enemy::Draw()
 		model->material.texNumber = TexManager::GetColor(XMFLOAT4(125, 0, 0, 255));
 	}
 	Drawobject3d(model);
+}
+
+void Enemy::Death()
+{
+	DirectX3dObject::DeleteObject(model);
 }

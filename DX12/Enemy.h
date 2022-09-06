@@ -30,5 +30,7 @@ public:
 
 	void Update() override;
 	void Draw() override;
+
+	void Death();
 };
 

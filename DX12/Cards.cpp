@@ -17,7 +17,7 @@ Cards::Cards()
 
 	TurnEndButton = TexManager::LoadTexture("Resource/image/TurnEnd.png");
 
-	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 300);
+	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 200);
 
 	isMyTurn = false;
 }
@@ -182,8 +182,8 @@ void Cards::CardPhaseUpdate()
 	}
 
 	XMFLOAT2 point = Input::GetMousePos();
-	if (point.x >= LT.x && point.x <= LT.x + 200 &&
-		point.y >= LT.y && point.y <= LT.y + 200) {
+	if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
+		point.y >= LT.y && point.y <= LT.y + 64 * 1.5f) {
 		if (Input::isMouseTrigger(M_LEFT)) {
 			TurnEnd = true;
 			isMyTurn = false;

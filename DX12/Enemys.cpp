@@ -1,5 +1,6 @@
 #include "Enemys.h"
 #include "Player.h"
+#include "ExtendedRandom.h"
 
 void Enemys::SetMap(Map *Map)
 {
@@ -34,6 +35,9 @@ void Enemys::StartTurn()
 {
 	//isEnemyTurn = true;
 	if (m_Enemy.size() > 0) {
+		for (int i = 0; i < m_Enemy.size(); i++) {
+			pMap->SetCostTableOnUnitPos(m_Enemy[i].GetMapPos(), 999);
+		}
 		m_Enemy[0].StartTurn();
 	}
 }
@@ -68,6 +72,7 @@ void Enemys::Update()
 
 	for (int i = 0; i < m_Enemy.size(); i++) {
 		if (m_Enemy[i].GetHP() <= 0) {
+			m_Enemy[i].Death();
 			m_Enemy.erase(m_Enemy.begin() + i);
 		}
 	}
@@ -79,6 +84,11 @@ void Enemys::EnemyTurnUpdate()
 		if (i < m_Enemy.size() - 1) {
 			if (m_Enemy[i].m_Next) {
 				m_Enemy[i].m_Next = false;
+				for (int j = 0; j < m_Enemy.size(); j++) {
+					if (j != i + 1) {
+						pMap->SetCostTableOnUnitPos(m_Enemy[j].GetMapPos(), 999);
+					}
+				}
 				m_Enemy[i + 1].StartTurn();
 				break;
 			}
@@ -118,5 +128,33 @@ void Enemys::DOFDepthDraw()
 {
 	for (auto &enemy : m_Enemy) {
 		enemy.DOFDepthDraw();
+	}
+}
+
+void Enemys::AllEnemyClear()
+{
+	for (int i = 0; i < m_Enemy.size(); i++) {
+		m_Enemy[i].Death();
+	}
+	m_Enemy.clear();
+}
+
+void Enemys::RandamEnemyGenerate(int Count)
+{
+	XMINT2 RandPos = XMINT2();
+	for (int i = 0; i < Count; i++) {
+		RandPos.x = GetRand(0, 9);
+		RandPos.y = GetRand(0, 9);
+		while (1) {
+			if (RandPos != pPlayer->GetMapPos() && GetEnemy(RandPos) == nullptr) {
+				GenerateEnemy(RandPos);
+				break;
+			}
+			else {
+				RandPos.x = GetRand(0, 9);
+				RandPos.y = GetRand(0, 9);
+			}
+		}
+		//if(GetEnemy())
 	}
 }
