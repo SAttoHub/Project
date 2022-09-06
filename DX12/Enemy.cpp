@@ -14,7 +14,7 @@ Enemy::Enemy()
 
 	m_MyTurn = false;
 	m_Next = false;
-	coolTime = 30;
+	coolTime = 15;
 }
 
 Enemy::~Enemy()
@@ -66,7 +66,7 @@ void Enemy::Update()
 		coolTime--;
 		if (coolTime == 0 && Count > 0) {
 			Count--;
-			coolTime = 30;
+			coolTime = 15;
 			std::vector<Cell> result(m_Route.route_list.begin(), m_Route.route_list.end());
 			Cell p = result[0];
 			SetMapPos(XMINT2(p.x, p.y));
