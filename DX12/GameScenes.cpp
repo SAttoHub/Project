@@ -87,6 +87,7 @@ void GameScenes::Draw()
 		m_enemys.Draw();
 		m_cards.Draw();
 	}
+
 	m_map.Draw();
 	Cursor::Instance()->Draw();
 
