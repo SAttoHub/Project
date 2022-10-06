@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "Collision2.h"
 
 Map::Map()
 {
@@ -91,6 +92,7 @@ void Map::Initialize()
 
 void Map::Update()
 {
+	HitCheckMouseRayMapPosition();
 }
 
 void Map::Draw()
@@ -103,6 +105,12 @@ void Map::Draw()
 		for (auto &dataY : dataX) {
 			dataY.Draw();
 		}
+	}
+	if (NowHitChip.x != -1) {
+		XMINT3 pp = m_Data[NowHitChip.x][NowHitChip.y].m_Pos;
+		DrawCube(XMFLOAT3(pp.x * ChipData::CHIP_SIZE, pp.y, pp.z * ChipData::CHIP_SIZE),
+			XMFLOAT3(pp.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, pp.y + 1.0f, pp.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
+			ColorConvert(255, 255, 0, 150));
 	}
 }
 
@@ -154,5 +162,59 @@ void Map::ResetCostTable()
 		for (int z = 0; z < CostTable[x].size(); z++) {
 			CostTable[x][z] = 1;
 		}
+	}
+}
+
+void Map::HitCheckMouseRayMapPosition()
+{
+	Ray mRay = Input::GetMouseRay();
+	XMFLOAT3 normal = XMFLOAT3(0, 1, 0);
+	DirectX::XMVECTOR Vnormal = XMLoadFloat3(&normal);
+	/*Plane plane;
+	plane.distance = 0.0f;
+	plane.normal = XMLoadFloat3(&normal);
+
+	float Dis;
+	DirectX::XMVECTOR interPlane;*/
+	
+	XMINT2 HitChipNum = { -1, -1 };
+	float NowDist = 9999.0f;
+
+	for (int x = 0; x < m_Data.size(); x++) {
+		for (int z = 0; z < m_Data[x].size(); z++) {
+			XMFLOAT3 point[4];
+			point[0] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE);
+			point[1] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE);
+			point[2] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE);
+			point[3] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE);
+
+			float Dist = 9999.9f;
+			Triangle t1;
+			t1.p0 = XMLoadFloat3(&point[0]);
+			t1.p1 = XMLoadFloat3(&point[1]);
+			t1.p2 = XMLoadFloat3(&point[2]);
+			t1.normal = Vnormal;
+			Triangle t2;
+			t2.p0 = XMLoadFloat3(&point[3]);
+			t2.p1 = XMLoadFloat3(&point[1]);
+			t2.p2 = XMLoadFloat3(&point[2]);
+			t2.normal = Vnormal;
+			if (Collision2::CheckRay2Triangle(mRay, t1, &Dist)) {
+				if (NowDist > Dist) {
+					HitChipNum = { x, z };
+					NowDist = Dist;
+				}
+			}
+			else if (Collision2::CheckRay2Triangle(mRay, t2, &Dist)) {
+				if (NowDist > Dist) {
+					HitChipNum = { x, z };
+					NowDist = Dist;
+				}
+			}
+		}
+	}
+
+	if (HitChipNum.x != -1) {
+		NowHitChip = HitChipNum;
 	}
 }

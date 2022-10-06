@@ -40,17 +40,17 @@ imguiUse::~imguiUse()
 void imguiUse::CommandExcute(bool Flag)
 {
 	if (Flag) {
-		if (!commandlist.empty()) {
+		/*if (!commandlist.empty()) {
 			for (auto command : commandlist) {
 				command();
 			}
 			commandlist.clear();
-		}
+		}*/
 		ImGui::Render();
 		DirectXBase::cmdList->SetDescriptorHeaps(1, heap.GetAddressOf());
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXBase::cmdList.Get());
 	}
 	else {
-		if (!commandlist.empty())commandlist.clear();
+		//if (!commandlist.empty())commandlist.clear();
 	}
 }

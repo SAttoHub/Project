@@ -42,6 +42,9 @@ public:
 	int Turn; // 0 : なし　1 : 敵　2 : プレイヤー
 
 	int GenerateEnemyCount;
+
+	int TitleTex;
+
 public:
 	void Initialize();
 	void Update();

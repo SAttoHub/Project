@@ -52,7 +52,7 @@
 // Collider 発展
 //	
 //	ColliderProp を継承することによってHit先のオブジェクトを取得できる
-//	class Class : public : ColliderProp {
+//	class Class : public ColliderProp {
 //	}
 //
 //	こんな感じで使う
@@ -129,3 +129,22 @@ template <class T>
 static T GetHitObjectPtr() {
 	return dynamic_cast<T>(GCM::Instance()->GetHitCollider()->Base);
 }
+
+	//class Object_1 : public ColliderProp {
+	//	GameBaseCollider *col_obj1; // "OBJ_1"タグを付けたcollider
+	//public:
+	//	Object_1();
+	//	void Death() {}
+	//};
+
+	//class Object_2 {
+	//	GameBaseCollider *col_obj2; // 自分のcollider
+	//	Object_2();
+	//	void Test(){
+	//		if (CheckCollision(col_obj2, "OBJ_1")) {
+	//			// 衝突したcolliderの付いている Object_1クラスを取得する
+	//			Object_1 *obj1 = GetHitObjectPtr<Object_1 *>();
+	//			obj1->Death();
+	//		}
+	//	}
+	//};

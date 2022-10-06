@@ -20,6 +20,8 @@ private:
 	Object3d *m_StageModel;
 	Object3d *m_StageModel_saku;
 	Object3d *m_StageModel_tree;
+
+	XMINT2 NowHitChip;
 public:
 	Map();
 	~Map();
@@ -42,5 +44,7 @@ public:
 
 	void SetCostTableOnUnitPos(XMINT2 MapPos, int Cost);
 	void ResetCostTable();
+
+	void HitCheckMouseRayMapPosition();
 };
 

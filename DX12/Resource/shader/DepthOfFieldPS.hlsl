@@ -63,6 +63,8 @@ float4 main(GSOutput input) : SV_TARGET
 		BlendRate = (Fade - 0.5f) / 0.5f;
 	}
 
+	//return float4(1.0f * BlendRate, 0.0f, 1.0f * (1.0f - BlendRate), 1.0f);
+
 	// ‡¬‚µ‚½F‚Ì’l‚ğZo
 	float4 Color = lerp(Color1, Color2, BlendRate);
 

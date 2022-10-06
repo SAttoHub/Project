@@ -20,7 +20,7 @@ private:
 
 	friend Singleton<imguiUse>;
 	imguiUse();
-	vector<void(*)()>commandlist;
+	//vector<void(*)()>commandlist;
 	ComPtr<ID3D12DescriptorHeap>heap;
 
 public:

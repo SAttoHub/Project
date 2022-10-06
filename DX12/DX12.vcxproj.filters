@@ -510,6 +510,9 @@
     <ClCompile Include="Cursor.cpp">
       <Filter>ソース ファイル\Game\Cursor</Filter>
     </ClCompile>
+    <ClCompile Include="GameRayCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -832,6 +835,9 @@
     </ClInclude>
     <ClInclude Include="Cursor.h">
       <Filter>ヘッダー ファイル\Game\Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRayCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

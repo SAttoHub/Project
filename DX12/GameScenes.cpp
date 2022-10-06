@@ -18,6 +18,8 @@ void GameScenes::Initialize()
 
 	Turn = 2;
 	GenerateEnemyCount = 2;
+
+	TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
 }
 
 void GameScenes::Update()
@@ -41,24 +43,32 @@ void GameScenes::Update()
 	}
 	ImGui::End();
 
-	m_player.Update();
-	m_enemys.Update();
-	m_map.Update();
-	m_cards.Update();
-
-	if (Turn == 2) {
-		m_cards.PlayerTurnUpdate();
-		if (m_cards.TurnEnd) {
-			Turn = 1;
-			m_enemys.StartTurn();
+	if (Scene == NowScene::Title) {
+		if (Input::isKeyTrigger(DIK_SPACE)) {
+			Scene = NowScene::Game;
 		}
 	}
-	else if (Turn == 1) {
-		m_enemys.EnemyTurnUpdate();
-		if (m_enemys.NextTurn()) {
-			m_enemys.m_Enemy[m_enemys.m_Enemy.size() - 1].m_Next = false;
-			Turn = 2;
-			m_cards.StartTurn();
+
+	if (Scene == NowScene::Game) {
+		m_player.Update();
+		m_enemys.Update();
+		m_map.Update();
+		m_cards.Update();
+
+		if (Turn == 2) {
+			m_cards.PlayerTurnUpdate();
+			if (m_cards.TurnEnd) {
+				Turn = 1;
+				m_enemys.StartTurn();
+			}
+		}
+		else if (Turn == 1) {
+			m_enemys.EnemyTurnUpdate();
+			if (m_enemys.NextTurn()) {
+				m_enemys.m_Enemy[m_enemys.m_Enemy.size() - 1].m_Next = false;
+				Turn = 2;
+				m_cards.StartTurn();
+			}
 		}
 	}
 
@@ -69,25 +79,41 @@ void GameScenes::Update()
 
 void GameScenes::Draw()
 {
-	m_player.Draw();
-	m_enemys.Draw();
+	if (Scene == NowScene::Title) {
+		//DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), TitleTex);
+	}
+	if (Scene == NowScene::Game) {
+		m_player.Draw();
+		m_enemys.Draw();
+		m_cards.Draw();
+	}
 	m_map.Draw();
-	m_cards.Draw();
-
 	Cursor::Instance()->Draw();
+
+	if (Input::isKey(DIK_SPACE) && Input::isKeyTrigger(DIK_R)) {
+		m_enemys.AllEnemyClear();
+		m_enemys.RandamEnemyGenerate(GenerateEnemyCount);
+		Turn = 2;
+		m_cards.StartTurn();
+		Scene = NowScene::Title;
+	}
 }
 
 void GameScenes::DepthDraw()
 {
-	m_player.DepthDraw();
-	m_enemys.DepthDraw();
+	if (Scene == NowScene::Game) {
+		m_player.DepthDraw();
+		m_enemys.DepthDraw();
+	}
 	m_map.DepthDraw();
 }
 
 void GameScenes::DOFDepthDraw()
 {
-	m_player.DOFDepthDraw();
-	m_enemys.DOFDepthDraw();
+	if (Scene == NowScene::Game) {
+		m_player.DOFDepthDraw();
+		m_enemys.DOFDepthDraw();
+	}
 	m_map.DOFDepthDraw();
 }
 
@@ -99,8 +125,10 @@ void GameScenes::BackDraw()
 
 void GameScenes::ShadowDraw()
 {
-	m_player.ShadowDraw();
-	m_enemys.ShadowDraw();
+	if (Scene == NowScene::Game) {
+		m_player.ShadowDraw();
+		m_enemys.ShadowDraw();
+	}
 	m_map.ShadowDraw();
 }
 

@@ -3,6 +3,7 @@
 #include "PrimitiveFunc.h"
 #include "TexManager.h"
 #include "3DObject.h"
+#include "DrawStrings.h"
 
 class Charactor
 {

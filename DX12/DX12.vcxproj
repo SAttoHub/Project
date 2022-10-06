@@ -204,6 +204,7 @@
     <ClCompile Include="GameCircleCollider.cpp" />
     <ClCompile Include="GameCollisionManager.cpp" />
     <ClCompile Include="GamePointCollider.cpp" />
+    <ClCompile Include="GameRayCollider.cpp" />
     <ClCompile Include="GameScenes.cpp" />
     <ClCompile Include="Gaussian.cpp" />
     <ClCompile Include="imguiUse.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="GameCircleCollider.h" />
     <ClInclude Include="GameCollisionManager.h" />
     <ClInclude Include="GamePointCollider.h" />
+    <ClInclude Include="GameRayCollider.h" />
     <ClInclude Include="GameScenes.h" />
     <ClInclude Include="Gaussian.h" />
     <ClInclude Include="GraphPrimitive.h" />

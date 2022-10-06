@@ -7,6 +7,12 @@
 class Enemys;
 class Player;
 
+enum ActPattern {
+	AC_Wait,
+	AC_Move,
+	AC_Attack
+};
+
 class Enemy : public Charactor
 {
 	Map *pMap = nullptr;
@@ -15,6 +21,7 @@ class Enemy : public Charactor
 
 	int coolTime;
 	int Count;
+	ActPattern Act;
 public:
 	bool m_MyTurn;
 	bool m_Next;

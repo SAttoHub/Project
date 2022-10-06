@@ -240,4 +240,12 @@ void Cards::CardEffectPhaseUpdate()
 			}
 		}
 	}
+
+	//GameBaseCollider *collider;
+	//
+	//// collider -> ©•ª‚ÌCollider
+	//if (GCM::Instance()->CheckCollision(collider, "TargetTag")) {
+	//	// TargetTag‚Ì•t‚¢‚Ä‚¢‚éCollider‚ÆÕ“Ë‚µ‚½
+	//}
+
 }

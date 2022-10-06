@@ -194,7 +194,7 @@ void Game::Update()
 
 	float AddY = -200;
 
-	ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
+	/*ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200 + AddY), 1);
 	ImGui::Begin("DOF");
 	ImGui::SliderFloat("InterpSize", &InterpSize, 1.0f, 1000.0f);
@@ -208,14 +208,14 @@ void Game::Update()
 		UseFlag = true;
 	}
 	ImGui::End();
-
+	
 	ImGui::SetNextWindowPos(ImVec2(1000, 470 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 60 + AddY), 1);
 	ImGui::Begin("ShadowMap");
 	ImGui::Checkbox("isUse", &ShadowMapUse);
 	ImGui::End();
-
-	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	*/
+	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Vignette");
 	ImGui::SliderFloat("Influence", &VignetteInfluence, 0.0f, 10.0f);
@@ -224,7 +224,7 @@ void Game::Update()
 		VignetteInfluence = 0.2f;
 		UseVignette = true;
 	}
-	ImGui::End();
+	ImGui::End();*/
 	
 	imguiUse::Instance()->CommandExcute(true);
 #pragma endregion

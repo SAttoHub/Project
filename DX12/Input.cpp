@@ -371,9 +371,9 @@ void Input::UpdateGamePad() {
 
 Ray Input::GetMouseRay() {
     XMFLOAT3 start = Camera::ConvertScreenToWorld(mousePos, 0.0f);
-    mouseRay.start = { start.x,start.y - 0.2f,start.z,1 };
+    mouseRay.start = { start.x,start.y,start.z,1 };
     XMFLOAT3 to = Camera::ConvertScreenToWorld(mousePos, 1.0f);
-    XMFLOAT3 vec(to.x - start.x, to.y - start.y - 0.2f, to.z - start.z);
+    XMFLOAT3 vec(to.x - start.x, to.y - start.y, to.z - start.z);
     mouseRay.dir = XMLoadFloat3(&vec);
     mouseRay.dir = XMVector3Normalize(mouseRay.dir);
     return mouseRay;

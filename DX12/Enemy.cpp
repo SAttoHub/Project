@@ -15,6 +15,8 @@ Enemy::Enemy()
 	m_MyTurn = false;
 	m_Next = false;
 	coolTime = 15;
+
+	Act = AC_Wait;
 }
 
 Enemy::~Enemy()
@@ -31,6 +33,12 @@ void Enemy::StartTurn()
 	coolTime = 30;
 	Count = 3;
 	pMap->ResetCostTable();
+	if (m_Route.route_list.size() > 2) {
+		Act = AC_Move;
+	}
+	else {
+		Act = AC_Attack;
+	}
 }
 
 void Enemy::SetMap(Map *Map)
@@ -63,22 +71,43 @@ void Enemy::Update()
 		m_Route.route_list.pop_front();
 	}*/
 	if (m_MyTurn) {
-		coolTime--;
-		if (coolTime == 0 && Count > 0) {
-			Count--;
-			coolTime = 15;
-			std::vector<Cell> result(m_Route.route_list.begin(), m_Route.route_list.end());
-			Cell p = result[0];
-			SetMapPos(XMINT2(p.x, p.y));
-			m_Route.route_list.pop_front();
-			if (m_Route.route_list.size() <= 1) {
+		if (Act == AC_Move) {
+			coolTime--;
+			if (coolTime == 0 && Count > 0) {
+				Count--;
+				coolTime = 15;
+				std::vector<Cell> result(m_Route.route_list.begin(), m_Route.route_list.end());
+				Cell p = result[0];
+				SetMapPos(XMINT2(p.x, p.y));
+				m_Route.route_list.pop_front();
+				if (m_Route.route_list.size() <= 1) {
+					if (Count != 0) {
+						m_MyTurn = false;
+						m_Next = true;
+						Act = AC_Attack;
+					}
+					else {
+						m_MyTurn = false;
+						m_Next = true;
+						Act = AC_Wait;
+					}
+				}
+			}
+			else if (Count == 0) {
 				m_MyTurn = false;
 				m_Next = true;
+				Act = AC_Wait;
 			}
 		}
-		else if (Count == 0) {
-			m_MyTurn = false;
-			m_Next = true;
+		if (Act == AC_Attack) {
+			coolTime--;
+			if (coolTime == 0) {
+				coolTime = 15;
+				pPlayer->Damage(1);
+				m_MyTurn = false;
+				m_Next = true;
+				Act = AC_Wait;
+			}
 		}
 	}
 
