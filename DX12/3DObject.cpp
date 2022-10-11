@@ -218,7 +218,7 @@ void InitalizeObject3d(Object3d *object, int index) {
 void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATRIX &matProjection) {
 	if (object->isPlay) {
 		//1 * Speedフレーム進める
-		object->currentTime += object->frameTime * object->flameSpeed;
+		object->currentTime += object->frameTime * int(object->flameSpeed);
 		//最後まで再生したら先頭に戻す
 		if (object->currentTime > object->endTime) {
 			if (!object->isLoop && object->isEndStop == false) {
@@ -357,7 +357,7 @@ void Drawobject3d(Object3d *object) {
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
 	//パイプラインステートの設定コマンド
@@ -427,7 +427,7 @@ void DepthDrawobject3d(Object3d *object)
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Depth_SHEADER].Get());
 	//パイプラインステートの設定コマンド
@@ -498,7 +498,7 @@ void ShadowDepthDrawobject3d(Object3d *object)
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Shadow_Depth_SHEADER].Get());
 	//パイプラインステートの設定コマンド
@@ -546,7 +546,7 @@ void DOFDepthDrawobject3d(Object3d *object)
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[DOF_SHEADER].Get());
 	//パイプラインステートの設定コマンド
@@ -613,7 +613,7 @@ void Drawobject3dOfDefaultLight(Object3d *object)
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
 	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
 	//パイプラインステートの設定コマンド

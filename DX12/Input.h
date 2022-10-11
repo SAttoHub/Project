@@ -496,6 +496,8 @@ public:
 		LONG IX;
 		LONG IY;
 		LONG IZ;
+		MouseMove() : IX(0), IY(0), IZ(0) {};
+		MouseMove(LONG x, LONG y, LONG z) : IX(x), IY(y), IZ(z) {};
 	};
 	static ButtonState g_ButtonStates[ButtonKind::ButtonKindMax];
 
@@ -860,8 +862,18 @@ public:
 			vibration.wRightMotorSpeed = right;
 		}
 		if (vibrationFlame < Flame) {
-			vibrationFlame = Flame;
+			vibrationFlame = int(Flame);
 		}
 	}
 #pragma endregion
 };
+
+static constexpr bool operator== (Input::MouseMove &v1, Input::MouseMove &v2)
+{
+	return ((v1.IX == v2.IX) && (v1.IY == v2.IY) && (v1.IZ == v2.IZ));
+}
+
+static constexpr bool operator!= (Input::MouseMove &v1, Input::MouseMove &v2)
+{
+	return !((v1.IX == v2.IX) && (v1.IY == v2.IY) && (v1.IZ == v2.IZ));
+}

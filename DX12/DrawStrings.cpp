@@ -245,11 +245,11 @@ int DrawStrings::lfout(double num, char *buf, int size, format_argdesc *desc)
         }
 
         strcpy(buf, inf);
-        ret += strlen(inf);
+        ret += int(strlen(inf));
     }
     else if (isnan(num)) {
         strcpy(buf, nan);
-        ret = strlen(nan);
+        ret = int(strlen(nan));
     }
     else {
         if (sign) {
@@ -260,7 +260,7 @@ int DrawStrings::lfout(double num, char *buf, int size, format_argdesc *desc)
         int_begin = ret;
         ulpart = (unsigned long)num;
         /* round off to @float_digit decimal places */
-        dpart = (num - ulpart) * lpow(10, desc->float_digit) + 0.5;
+        dpart = (num - ulpart) * lpow(10, desc->float_digit) + unsigned long(0.5);
 
         if (float_digit == INIT_FLOAT_DIGIT) {
             desc->digit = INIT_FLOAT_DIGIT;
@@ -364,7 +364,7 @@ int DrawStrings::myvsnprintf(char *str, int size, const char *fmt, va_list args)
                 s = "<*NULL*>";
             }
 
-            len = strlen(s);
+            len = int(strlen(s));
             len = MIN(size, len);
             strncpy(p, s, len);
             break;
@@ -389,7 +389,7 @@ int DrawStrings::myvsnprintf(char *str, int size, const char *fmt, va_list args)
     }
 
     assert(p >= str);
-    return p - str;
+    return int(p - str);
 }
 
 int DrawStrings::myprintf(const char *fmt, va_list args)
@@ -449,7 +449,7 @@ std::wstring DrawStrings::multi_to_wide_winapi(std::string const &src)
 {
     auto const dest_size = ::MultiByteToWideChar(CP_ACP, 0U, src.data(), -1, nullptr, 0U);
     std::vector<wchar_t> dest(dest_size, L'\0');
-    if (::MultiByteToWideChar(CP_ACP, 0U, src.data(), -1, dest.data(), dest.size()) == 0) {
+    if (::MultiByteToWideChar(CP_ACP, 0U, src.data(), -1, dest.data(), int(dest.size())) == 0) {
         throw std::system_error{ static_cast<int>(::GetLastError()), std::system_category() };
     }
     dest.resize(std::char_traits<wchar_t>::length(dest.data()));
@@ -470,7 +470,7 @@ void DrawStrings::DrawFormatString(XMFLOAT2 pos1, float height, XMFLOAT4 color, 
     myprintf(FormatString, args);
     va_end(args);
 
-    int n = strlen(pbuf);
+    int n = int(strlen(pbuf));
 
     TCHAR buf[256];
     ZeroMemory(buf, 256);

@@ -61,7 +61,7 @@ private: // Lineプリミティブ専用
 	// 線プリミティブ専用セットアップ
 	void SetupLinePrimitive();
 	// 線プリミティブデータ
-	static const int MaxLinePrimitives = 1024; // 線プリミティブ最大数
+	static const int MaxLinePrimitives = 512; // 線プリミティブ最大数
 	LinePrimitive3D LineData[MaxLinePrimitives];
 
 private: // 正四面体プリミティブ専用

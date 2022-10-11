@@ -513,6 +513,9 @@
     <ClCompile Include="GameRayCollider.cpp">
       <Filter>ソース ファイル\Game\GameCollider</Filter>
     </ClCompile>
+    <ClCompile Include="ActionManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -838,6 +841,9 @@
     </ClInclude>
     <ClInclude Include="GameRayCollider.h">
       <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionManager.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

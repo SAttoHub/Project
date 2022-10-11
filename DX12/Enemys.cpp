@@ -31,6 +31,18 @@ Enemy *Enemys::GetEnemy(XMINT2 MapPos)
     return nullptr;
 }
 
+int Enemys::GetEnemyIndex(XMINT2 MapPos)
+{
+	if (m_Enemy.size() > 0) {
+		for (int i = 0; i < m_Enemy.size(); i++) {
+			if (m_Enemy[i].GetMapPos() == MapPos) {
+				return i;
+			}
+		}
+	}
+	return 0;
+}
+
 void Enemys::StartTurn()
 {
 	//isEnemyTurn = true;

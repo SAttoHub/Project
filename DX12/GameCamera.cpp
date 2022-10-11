@@ -105,17 +105,17 @@ void GameCamera::GameCameraUpdate()
 	//{x = 38.0959435 y = 49.4000282 z = -39.3253136 }
 	//{x = 38.1601181 y = 31.1714096 z = -15.4985771 }
 
-	DebugCamPos = XMFLOAT3(38.0959435, 49.4000282, -39.3253136);
-	Camera::Targeting(XMFLOAT3(38.1601181, 31.1714096, -15.4985771));
+	DebugCamPos = XMFLOAT3(38.0959435f, 49.4000282f, -39.3253136f);
+	Camera::Targeting(XMFLOAT3(38.1601181f, 31.1714096f, -15.4985771f));
 	Camera::SetCameraPos3(DebugCamPos);
 
 	if (ShakeTimer != 0) {
 		ShakeTimer += 5;
 
 		float Power = ShakePower * (float(ShakeTimer) / float(ShakeEnd * 5));
-		ShakeValue.x = Power * sinf(ShakeTimer * 3 + M_PI / 2.0f);
+		ShakeValue.x = Power * sinf(float(ShakeTimer) * 3.0f + float(M_PI) / 2.0f);
 		ShakeValue.y = 0.0f;
-		ShakeValue.z = Power * sinf(ShakeTimer * 4);
+		ShakeValue.z = Power * sinf(float(ShakeTimer) * 4.0f);
 
 		if (ShakeTimer >= ShakeEnd) {
 			ShakeTimer = 0;

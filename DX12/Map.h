@@ -21,13 +21,14 @@ private:
 	Object3d *m_StageModel_saku;
 	Object3d *m_StageModel_tree;
 
-	XMINT2 NowHitChip;
 public:
 	Map();
 	~Map();
 
 	std::vector<std::vector<ChipData>> m_Data;
 	std::vector<std::vector<int>> CostTable;
+	XMINT2 NowHitChip;
+	bool isHitChip;
 
 	ChipData* Get(XMINT2 Pos);
 	void Initialize();

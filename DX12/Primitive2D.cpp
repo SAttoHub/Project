@@ -464,7 +464,7 @@ void Primitive2D::BoxDrawAll()
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
 	DirectXBase::cmdList->SetGraphicsRootSignature(BoxRootsignature.Get());
 	//パイプラインステートの設定コマンド
@@ -520,7 +520,7 @@ void Primitive2D::LineDrawAll()
 	//ビューポートの設定コマンド
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 	//シザー矩形の設定コマンド
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
 	DirectXBase::cmdList->SetGraphicsRootSignature(LineRootsignature.Get());
 	//パイプラインステートの設定コマンド
@@ -581,7 +581,7 @@ void Primitive2D::GraphDrawAll()
 			//ビューポートの設定コマンド
 			DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 			//シザー矩形の設定コマンド
-			DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+			DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 			//ルートシグネチャ
 			DirectXBase::cmdList->SetGraphicsRootSignature(GraphRootsignature.Get());
 			//パイプラインステートの設定コマンド
@@ -653,7 +653,7 @@ void Primitive2D::BackGraphDrawAll()
 			//ビューポートの設定コマンド
 			DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
 			//シザー矩形の設定コマンド
-			DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, DirectXBase::Win_Width, DirectXBase::Win_Height));
+			DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 			//ルートシグネチャ
 			DirectXBase::cmdList->SetGraphicsRootSignature(GraphRootsignature.Get());
 			//パイプラインステートの設定コマンド

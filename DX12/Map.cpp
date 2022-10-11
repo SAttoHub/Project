@@ -50,6 +50,8 @@ Map::Map()
 	m_StageModel_tree->scale.z = 8.0f;
 	m_StageModel_tree->position.x = 32.0f * 10.0f / 4.0f;
 
+	isHitChip = false;
+
 }
 
 Map::~Map()
@@ -88,6 +90,7 @@ void Map::Initialize()
 			CostTable[x][z] = 1;
 		}
 	}
+	isHitChip = false;
 }
 
 void Map::Update()
@@ -108,8 +111,8 @@ void Map::Draw()
 	}
 	if (NowHitChip.x != -1) {
 		XMINT3 pp = m_Data[NowHitChip.x][NowHitChip.y].m_Pos;
-		DrawCube(XMFLOAT3(pp.x * ChipData::CHIP_SIZE, pp.y, pp.z * ChipData::CHIP_SIZE),
-			XMFLOAT3(pp.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, pp.y + 1.0f, pp.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
+		DrawCube(XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE), float(pp.y), float(pp.z * ChipData::CHIP_SIZE)),
+			XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE), float(pp.y) + 1.0f, float(pp.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE)),
 			ColorConvert(255, 255, 0, 150));
 	}
 }
@@ -167,6 +170,9 @@ void Map::ResetCostTable()
 
 void Map::HitCheckMouseRayMapPosition()
 {
+	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
+		return;
+	}
 	Ray mRay = Input::GetMouseRay();
 	XMFLOAT3 normal = XMFLOAT3(0, 1, 0);
 	DirectX::XMVECTOR Vnormal = XMLoadFloat3(&normal);
@@ -183,10 +189,10 @@ void Map::HitCheckMouseRayMapPosition()
 	for (int x = 0; x < m_Data.size(); x++) {
 		for (int z = 0; z < m_Data[x].size(); z++) {
 			XMFLOAT3 point[4];
-			point[0] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE);
-			point[1] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE);
-			point[2] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE);
-			point[3] = XMFLOAT3(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, m_Data[x][z].m_Pos.y, m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE);
+			point[0] = XMFLOAT3(float(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE), float(m_Data[x][z].m_Pos.y), float(m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE));
+			point[1] = XMFLOAT3(float(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE), float(m_Data[x][z].m_Pos.y), float(m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE));
+			point[2] = XMFLOAT3(float(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE), float(m_Data[x][z].m_Pos.y), float(m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE));
+			point[3] = XMFLOAT3(float(m_Data[x][z].m_Pos.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE), float(m_Data[x][z].m_Pos.y), float(m_Data[x][z].m_Pos.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE));
 
 			float Dist = 9999.9f;
 			Triangle t1;
@@ -216,5 +222,9 @@ void Map::HitCheckMouseRayMapPosition()
 
 	if (HitChipNum.x != -1) {
 		NowHitChip = HitChipNum;
+		isHitChip = true;
+	}
+	else {
+		isHitChip = false;
 	}
 }

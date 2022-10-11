@@ -32,15 +32,15 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	pPlayer = _Player;
 	pEnemys = _Enemys;
 	pMap = _Map;
-	for (int i = 0; i < m_Cards.size(); i++) {
-		m_Cards[i]->Initialize(i, m_Cards.size());
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		m_Cards[i]->Initialize(i, int(m_Cards.size()));
 	}
 }
 
 void Cards::Update()
 {
-	for (int i = 0; i < m_Cards.size(); i++) {
-		m_Cards[i]->Update(i, m_Cards.size());
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		m_Cards[i]->Update(i, int(m_Cards.size()));
 	}
 	for (int i = 0; i < m_Cards.size(); i++) {
 		if (GCM::Instance()->CheckCollision(m_Cards[i]->collider, "Mouse")) {
@@ -58,8 +58,8 @@ void Cards::Update()
 
 void Cards::Draw()
 {
-	for (int i = 0; i < m_Cards.size(); i++) {
-		m_Cards[i]->Draw(i, m_Cards.size());
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		m_Cards[i]->Draw(i, int(m_Cards.size()));
 	}
 
 	if (m_UseCardType != CardType::NONE) {
@@ -100,8 +100,8 @@ void Cards::StartTurn()
 
 	m_UseCardType = CardType::NONE;
 	NowPhase = 0;
-	for (int i = 0; i < m_Cards.size(); i++) {
-		m_Cards[i]->Initialize(i, m_Cards.size());
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		m_Cards[i]->Initialize(i, int(m_Cards.size()));
 	}
 	TurnEnd = false;
 
@@ -202,22 +202,25 @@ void Cards::CardEffectPhaseUpdate()
 		NowPhase = 0;
 		CanSelectChips.clear();
 	}
-
-	if (Input::isKeyTrigger(DIK_UP)) {
-		m_NowSelectChip.y++;
+	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
+		if (Input::isKeyTrigger(DIK_UP)) {
+			m_NowSelectChip.y++;
+		}
+		if (Input::isKeyTrigger(DIK_DOWN)) {
+			m_NowSelectChip.y--;
+		}
+		if (Input::isKeyTrigger(DIK_LEFT)) {
+			m_NowSelectChip.x--;
+		}
+		if (Input::isKeyTrigger(DIK_RIGHT)) {
+			m_NowSelectChip.x++;
+		}
 	}
-	if (Input::isKeyTrigger(DIK_DOWN)) {
-		m_NowSelectChip.y--;
+	else {
+		m_NowSelectChip = pMap->NowHitChip;
 	}
-	if (Input::isKeyTrigger(DIK_LEFT)) {
-		m_NowSelectChip.x--;
-	}
-	if (Input::isKeyTrigger(DIK_RIGHT)) {
-		m_NowSelectChip.x++;
-	}
-
 	if (m_UseCardType == CardType::DEFAULT_ATTACK) {
-		if (Input::isKeyTrigger(DIK_RETURN)) {
+		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
 			Enemy *en = pEnemys->GetEnemy(m_NowSelectChip);
 			if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
 				en->Damage(1);
@@ -230,7 +233,7 @@ void Cards::CardEffectPhaseUpdate()
 		}
 	}
 	else if (m_UseCardType == CardType::DEFAULT_MOVE) {
-		if (Input::isKeyTrigger(DIK_RETURN)) {
+		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
 			if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
 				m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
 				pPlayer->SetMapPos(m_NowSelectChip);

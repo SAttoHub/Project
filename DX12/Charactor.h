@@ -5,6 +5,13 @@
 #include "3DObject.h"
 #include "DrawStrings.h"
 
+// ó‘ÔˆÙí
+enum class Abnormality {
+	None,
+	Poison,
+	Stun
+};
+
 class Charactor
 {
 public:
@@ -17,6 +24,8 @@ public:
 protected:
 	XMINT2 m_MapPos;
 	int m_HP;
+	int m_Def;
+	Abnormality m_Abn;
 
 	Object3d *model;
 public:
@@ -29,6 +38,11 @@ public:
 	void Damage(int value) { m_HP -= value; }
 	// ¶‘¶‚µ‚Ä‚¢‚é‚©”»’è
 	bool isAlive() { return m_HP > 0 ? true : false; }
+	// –hŒä—Í
+	int GetDef() { return m_Def; }
+	// ó‘ÔˆÙí
+	Abnormality GetAbn() { return m_Abn; }
+	void SetAbn(Abnormality Abn) { m_Abn = Abn; }
 
 	virtual void Update() = 0;
 	virtual void Draw() = 0;

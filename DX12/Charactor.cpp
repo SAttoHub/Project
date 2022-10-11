@@ -8,6 +8,7 @@ Charactor::Charactor()
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(0, 0, 0), FBXSHADER);*/
+	m_Def = 0;
 }
 
 Charactor::~Charactor()

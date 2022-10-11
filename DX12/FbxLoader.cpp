@@ -722,7 +722,7 @@ void FbxLoader::ParseMeshFaces(Model *model, FbxMesh *fbxMesh) {
         vertices[i].uv.y = (1.0f - (float)uvBuffers[i][1]);
     }
 
-    model->_indices = indices.size();
+    model->_indices = int(indices.size());
 }
 
 void FbxLoader::ParseMaterial(Model *model, FbxNode *fbxNode) {

@@ -18,6 +18,7 @@ public:
 
 	void GenerateEnemy(XMINT2 MapPos);
 	Enemy *GetEnemy(XMINT2 MapPos);
+	int GetEnemyIndex(XMINT2 MapPos);
 
 	
 	void StartTurn();

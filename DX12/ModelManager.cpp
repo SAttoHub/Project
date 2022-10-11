@@ -15,7 +15,7 @@ int ModelManager::LoadModelOBJ(const std::string &modelname, std::string tag, bo
 	models.emplace_back(model);
 	models[models.size() - 1].fileName = modelname;
 
-	HRESULT result;
+	//HRESULT result;
 	models[models.size() - 1].tag = tag;
 
 	const string filename = modelname + ".obj";
@@ -109,7 +109,7 @@ int ModelManager::LoadModelOBJ(const std::string &modelname, std::string tag, bo
 		models[models.size() - 1].CalculateSmoothedVertexNormals();
 	}
 
-	models[models.size() - 1]._indices = models[models.size() - 1].indices.size();
+	models[models.size() - 1]._indices = int(models[models.size() - 1].indices.size());
 	//各頂点について処理
 	for (int i = 0; i < models[models.size() - 1].vertices.size(); i++) {
 		//最初のボーン(単位行列)の影響100%にする
@@ -141,7 +141,7 @@ int ModelManager::LoadModelFBX(const string &modelName)
 
 	Model model;
 	models.emplace_back(model);
-	int Num = models.size() - 1;
+	int Num = int(models.size()) - 1;
 	models[Num] = FbxLoader::GetInstance()->LoadModelFromFile(modelName);
 	models[Num].fileName = modelName;
 
