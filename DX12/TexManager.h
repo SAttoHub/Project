@@ -7,7 +7,7 @@ using namespace DirectX;
 #include <DirectXTex.h>
 #include <string>
 
-#include "ColorFuncs.h"
+#include "Engine\Common\Colors\ColorFuncs.h"
 
 using namespace std;
 

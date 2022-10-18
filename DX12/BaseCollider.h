@@ -1,5 +1,5 @@
 #pragma once
-#include "3DObject.h"
+#include "Engine\Objects\3DObject.h"
 #include "CollisionInfo.h"
 
 enum CollisionShapeType

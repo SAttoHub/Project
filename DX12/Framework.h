@@ -2,7 +2,7 @@
 #include "window.h"
 #include "FPS.h"
 #pragma comment (lib, "winmm.lib")
-#include "3DObject.h"
+#include "Engine\Objects\3DObject.h"
 #include "DXAudio.h"
 #include "ShaderManager.h"
 #define WIN32_LEAN_AND_MEAN
@@ -11,10 +11,10 @@
 #include <cstdlib>      // srand,rand
 #include "GameManager.h"
 #include "fbxsdk.h"
-#include "FbxLoader.h"
+#include "Engine\Objects\Loader\FbxLoader.h"
 #include "Input.h"
-#include "LightGroup.h"
-#include "Funcs.h"
+#include "Engine\Light\LightGroup.h"
+#include "Engine\Common\Funcs.h"
 
 class Framework
 {

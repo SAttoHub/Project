@@ -3,14 +3,13 @@
 
 class FPS {
 	double MIN_FREAM_TIME;
-	double FrameTime;
 	LARGE_INTEGER NowTime; //¡‚ÌŠÔ
 	LARGE_INTEGER OldTime; //‘O‚ÌŠÔ
 	LARGE_INTEGER TimeFreq; //ü”g”
 public:
 	FPS(float MAX_FPS_Value);
 	~FPS();
-
+	double FrameTime;
 	static float fps;
 	static float Maxfps;
 

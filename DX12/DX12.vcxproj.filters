@@ -277,9 +277,6 @@
     <Filter Include="ソース ファイル\Base\Drawtext">
       <UniqueIdentifier>{9aaf7042-3b27-480b-a6b5-ff9af45fc4ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Map">
-      <UniqueIdentifier>{b5385904-6476-4fe7-8f9d-b596832bcb66}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Game\Map">
       <UniqueIdentifier>{7c4289dd-43e0-4625-ae00-924be0587519}</UniqueIdentifier>
     </Filter>
@@ -300,6 +297,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Game\Cursor">
       <UniqueIdentifier>{d8527c60-c471-4082-84f7-95bf8ede6d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Map">
+      <UniqueIdentifier>{b5385904-6476-4fe7-8f9d-b596832bcb66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -345,29 +345,8 @@
     <ClCompile Include="Collision2.cpp">
       <Filter>ソース ファイル\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="FbxLoader.cpp">
-      <Filter>ソース ファイル\Base\3DObject\FBX</Filter>
-    </ClCompile>
-    <ClCompile Include="3DObject.cpp">
-      <Filter>ソース ファイル\Base\3DObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>ソース ファイル\Base\3DObject</Filter>
-    </ClCompile>
     <ClCompile Include="MeshCollider.cpp">
       <Filter>ソース ファイル\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="LightGroup.cpp">
-      <Filter>ソース ファイル\Base\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="LinePrimitive3D.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive3D.cpp">
-      <Filter>ソース ファイル\Base\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive2D.cpp">
-      <Filter>ソース ファイル\Base\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>ソース ファイル</Filter>
@@ -405,24 +384,6 @@
     <ClCompile Include="PostEffect.cpp">
       <Filter>ソース ファイル\Base\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="TargetPoint.cpp">
-      <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCollisionManager.cpp">
-      <Filter>ソース ファイル\Game\GameCollider</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>ソース ファイル\Base\3DObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Astar.cpp">
-      <Filter>ソース ファイル\Game\AStar</Filter>
-    </ClCompile>
-    <ClCompile Include="GameBaseCollider.cpp">
-      <Filter>ソース ファイル\Game\GameCollider</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScenes.cpp">
-      <Filter>ソース ファイル\Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Gaussian.cpp">
       <Filter>ソース ファイル\Base\PostEffect</Filter>
     </ClCompile>
@@ -456,12 +417,6 @@
     <ClCompile Include="RenderTarget.cpp">
       <Filter>ソース ファイル\Base\RenderTarget</Filter>
     </ClCompile>
-    <ClCompile Include="GameBoxCollider.cpp">
-      <Filter>ソース ファイル\Game\GameCollider</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCircleCollider.cpp">
-      <Filter>ソース ファイル\Game\GameCollider</Filter>
-    </ClCompile>
     <ClCompile Include="Pipeline.cpp">
       <Filter>ソース ファイル\Base\Pipeline</Filter>
     </ClCompile>
@@ -474,47 +429,89 @@
     <ClCompile Include="NumsDraw.cpp">
       <Filter>ソース ファイル\Base\Drawtext</Filter>
     </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>ソース ファイル\Game\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticCameraPos.cpp">
-      <Filter>ソース ファイル\Game\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Charactor.cpp">
+    <ClCompile Include="Game\ActionManager.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\Game\Player</Filter>
+    <ClCompile Include="Game\Charactor.cpp">
+      <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>ソース ファイル\Game\Map</Filter>
+    <ClCompile Include="Game\TargetPoint.cpp">
+      <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="ChipData.cpp">
-      <Filter>ソース ファイル\Game\Map</Filter>
+    <ClCompile Include="Game\Astar.cpp">
+      <Filter>ソース ファイル\Game\AStar</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\Game\Enemy</Filter>
+    <ClCompile Include="Game\StaticCameraPos.cpp">
+      <Filter>ソース ファイル\Game\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Enemys.cpp">
-      <Filter>ソース ファイル\Game\Enemy</Filter>
+    <ClCompile Include="Game\GameCamera.cpp">
+      <Filter>ソース ファイル\Game\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Card.cpp">
+    <ClCompile Include="Game\Card.cpp">
       <Filter>ソース ファイル\Game\Card</Filter>
     </ClCompile>
-    <ClCompile Include="Cards.cpp">
+    <ClCompile Include="Game\Cards.cpp">
       <Filter>ソース ファイル\Game\Card</Filter>
     </ClCompile>
-    <ClCompile Include="GamePointCollider.cpp">
-      <Filter>ソース ファイル\Game\GameCollider</Filter>
-    </ClCompile>
-    <ClCompile Include="Cursor.cpp">
+    <ClCompile Include="Game\Cursor.cpp">
       <Filter>ソース ファイル\Game\Cursor</Filter>
     </ClCompile>
-    <ClCompile Include="GameRayCollider.cpp">
+    <ClCompile Include="Game\Enemy.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemys.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collider\GameBaseCollider.cpp">
       <Filter>ソース ファイル\Game\GameCollider</Filter>
     </ClCompile>
-    <ClCompile Include="ActionManager.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Game\Collider\GameBoxCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collider\GameCircleCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collider\GameCollisionManager.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collider\GamePointCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collider\GameRayCollider.cpp">
+      <Filter>ソース ファイル\Game\GameCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>ソース ファイル\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameScenes.cpp">
+      <Filter>ソース ファイル\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Map.cpp">
+      <Filter>ソース ファイル\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ChipData.cpp">
+      <Filter>ソース ファイル\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\Primitive2D.cpp">
+      <Filter>ソース ファイル\Base\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\Primitive3D.cpp">
+      <Filter>ソース ファイル\Base\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Objects\3DObject.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Objects\Model.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Objects\ModelManager.cpp">
+      <Filter>ソース ファイル\Base\3DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Objects\Loader\FbxLoader.cpp">
+      <Filter>ソース ファイル\Base\3DObject\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\LightGroup.cpp">
+      <Filter>ソース ファイル\Base\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -548,9 +545,6 @@
     <ClInclude Include="Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ease.h">
-      <Filter>ヘッダー ファイル\Common\Math</Filter>
-    </ClInclude>
     <ClInclude Include="BaseCollider.h">
       <Filter>ヘッダー ファイル\Collider</Filter>
     </ClInclude>
@@ -572,71 +566,8 @@
     <ClInclude Include="resource1.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="FbxLoader.h">
-      <Filter>ヘッダー ファイル\Base\3DObject\FBX</Filter>
-    </ClInclude>
-    <ClInclude Include="3DObject.h">
-      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Smath.h">
-      <Filter>ヘッダー ファイル\Common\Math</Filter>
-    </ClInclude>
     <ClInclude Include="MeshCollider.h">
       <Filter>ヘッダー ファイル\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>ヘッダー ファイル\Base\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>ヘッダー ファイル\Base\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>ヘッダー ファイル\Base\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="LightGroup.h">
-      <Filter>ヘッダー ファイル\Base\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="CircleShadow.h">
-      <Filter>ヘッダー ファイル\Base\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorDefines.h">
-      <Filter>ヘッダー ファイル\Common\Colors</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorFuncs.h">
-      <Filter>ヘッダー ファイル\Common\Colors</Filter>
-    </ClInclude>
-    <ClInclude Include="PrimitiveFunc.h">
-      <Filter>ヘッダー ファイル\Base\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="IcosahedronPrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="OctahedronPrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="TetrahedronPrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive3D.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="CubePrimitive3D.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="BoxPrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive2D.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphPrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Funcs.h">
-      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -674,39 +605,6 @@
     <ClInclude Include="Game.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ShiftStringCode.h">
-      <Filter>ヘッダー ファイル\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="ExtendedRandom.h">
-      <Filter>ヘッダー ファイル\Common\Random</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXMathExpansion.h">
-      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXMathOperators.h">
-      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4.h">
-      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
-    </ClInclude>
-    <ClInclude Include="Quaternion.h">
-      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
-    </ClInclude>
-    <ClInclude Include="Smath_vector.h">
-      <Filter>ヘッダー ファイル\Common\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="SDifines.h">
-      <Filter>ヘッダー ファイル\Common\基礎</Filter>
-    </ClInclude>
-    <ClInclude Include="CommonBaseFunc.h">
-      <Filter>ヘッダー ファイル\Common\基礎</Filter>
-    </ClInclude>
-    <ClInclude Include="ExtraTypeFunc.h">
-      <Filter>ヘッダー ファイル\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
@@ -715,42 +613,6 @@
     </ClInclude>
     <ClInclude Include="PostGraphPrimitive.h">
       <Filter>ヘッダー ファイル\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="TargetPoint.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCollisionManager.h">
-      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="GameBaseCollider.h">
-      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCircleCollider.h">
-      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="GameBoxCollider.h">
-      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Astar.h">
-      <Filter>ヘッダー ファイル\Game\AStar</Filter>
-    </ClInclude>
-    <ClInclude Include="AstarNode.h">
-      <Filter>ヘッダー ファイル\Game\AStar</Filter>
-    </ClInclude>
-    <ClInclude Include="MyFList.h">
-      <Filter>ヘッダー ファイル\Common\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScenes.h">
-      <Filter>ヘッダー ファイル\Game\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Lissajous.h">
-      <Filter>ヘッダー ファイル\Common\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Variadic_templates_Func.h">
-      <Filter>ヘッダー ファイル\Common\Math</Filter>
     </ClInclude>
     <ClInclude Include="Gaussian.h">
       <Filter>ヘッダー ファイル\PostEffect\GaussianXY兼用</Filter>
@@ -794,56 +656,197 @@
     <ClInclude Include="OutLine.h">
       <Filter>ヘッダー ファイル\PostEffect\OutLine</Filter>
     </ClInclude>
-    <ClInclude Include="LinePrimitive.h">
-      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>ヘッダー ファイル\Game\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticCameraPos.h">
-      <Filter>ヘッダー ファイル\Game\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="DrawStrings.h">
       <Filter>ヘッダー ファイル\DrawText</Filter>
     </ClInclude>
     <ClInclude Include="NumsDraw.h">
       <Filter>ヘッダー ファイル\DrawText</Filter>
     </ClInclude>
-    <ClInclude Include="Charactor.h">
+    <ClInclude Include="Game\Charactor.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル\Game\Player</Filter>
+    <ClInclude Include="Game\ActionManager.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>ヘッダー ファイル\Map</Filter>
+    <ClInclude Include="Game\TargetPoint.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ChipData.h">
-      <Filter>ヘッダー ファイル\Map</Filter>
+    <ClInclude Include="Game\Astar.h">
+      <Filter>ヘッダー ファイル\Game\AStar</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    <ClInclude Include="Game\AstarNode.h">
+      <Filter>ヘッダー ファイル\Game\AStar</Filter>
     </ClInclude>
-    <ClInclude Include="Enemys.h">
-      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    <ClInclude Include="Game\GameCamera.h">
+      <Filter>ヘッダー ファイル\Game\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Card.h">
+    <ClInclude Include="Game\StaticCameraPos.h">
+      <Filter>ヘッダー ファイル\Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Card.h">
       <Filter>ヘッダー ファイル\Game\Card</Filter>
     </ClInclude>
-    <ClInclude Include="Cards.h">
+    <ClInclude Include="Game\Cards.h">
       <Filter>ヘッダー ファイル\Game\Card</Filter>
     </ClInclude>
-    <ClInclude Include="GamePointCollider.h">
-      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
-    </ClInclude>
-    <ClInclude Include="Cursor.h">
+    <ClInclude Include="Game\Cursor.h">
       <Filter>ヘッダー ファイル\Game\Cursor</Filter>
     </ClInclude>
-    <ClInclude Include="GameRayCollider.h">
+    <ClInclude Include="Game\Enemy.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemys.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collider\GameBaseCollider.h">
       <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
     </ClInclude>
-    <ClInclude Include="ActionManager.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
+    <ClInclude Include="Game\Collider\GameBoxCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collider\GameCircleCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collider\GameCollisionManager.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collider\GameRayCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collider\GamePointCollider.h">
+      <Filter>ヘッダー ファイル\Game\GameCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>ヘッダー ファイル\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScenes.h">
+      <Filter>ヘッダー ファイル\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ChipData.h">
+      <Filter>ヘッダー ファイル\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Map.h">
+      <Filter>ヘッダー ファイル\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\BoxPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\GraphPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\LinePrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\CubePrimitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\IcosahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\LinePrimitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\OctahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveDatas\TetrahedronPrimitive.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\Primitive2D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\Primitive3D.h">
+      <Filter>ヘッダー ファイル\Base\Primitive\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveFunc.h">
+      <Filter>ヘッダー ファイル\Base\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Objects\Loader\FbxLoader.h">
+      <Filter>ヘッダー ファイル\Base\3DObject\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Objects\3DObject.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Objects\Model.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Objects\ModelManager.h">
+      <Filter>ヘッダー ファイル\Base\3DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\CircleShadow.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\LightGroup.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\PointLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\SpotLight.h">
+      <Filter>ヘッダー ファイル\Base\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\ease.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Lissajous.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Smath.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\DirectXMath\DirectXMathExpansion.h">
+      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\DirectXMath\DirectXMathOperators.h">
+      <Filter>ヘッダー ファイル\Common\Math\DirectXMath拡張</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\MathType\Matrix4.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\MathType\Quaternion.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\MathType\Vector3.h">
+      <Filter>ヘッダー ファイル\Common\Math\型</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Colors\ColorDefines.h">
+      <Filter>ヘッダー ファイル\Common\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Colors\ColorFuncs.h">
+      <Filter>ヘッダー ファイル\Common\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Variadic_templates_Func.h">
+      <Filter>ヘッダー ファイル\Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Containers\MyFList.h">
+      <Filter>ヘッダー ファイル\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Containers\Smath_vector.h">
+      <Filter>ヘッダー ファイル\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\ExtendedRandom.h">
+      <Filter>ヘッダー ファイル\Common\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\CommonBaseFunc.h">
+      <Filter>ヘッダー ファイル\Common\基礎</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\SDifines.h">
+      <Filter>ヘッダー ファイル\Common\基礎</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\ExtraTypeFunc.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\Funcs.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\ShiftStringCode.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CommonMathIncludes.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

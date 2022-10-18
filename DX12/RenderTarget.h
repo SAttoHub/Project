@@ -16,11 +16,13 @@ private:
 	int m_RTV_Texture;
 	int m_DSV_Texture;
 	float m_ClearColor[4];
+
+	DirectX::XMINT2 m_Resolution;
 public:
 	RenderTarget();
 	~RenderTarget();
 
-	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth);
+	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = {WINDOW_WIDTH, WINDOW_HEIGHT});
 	void PreDraw();
 	void PostDraw();
 

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "ExtraTypeFunc.h"
 #include "imguiUse.h"
 #include "RenderManager.h"
 
@@ -42,7 +41,7 @@ void Game::Initialize()
 	//シャドウ
 	ShadowMapUse = true;
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,500.0f, -500.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,250.0f, -175.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize(ShadowMapUse);
 
@@ -59,7 +58,7 @@ void Game::Initialize()
 
 	CreateRenderTarget("DOF_Depth", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("Camera_Depth", DXGI_FORMAT_R32_FLOAT, true);
-	CreateRenderTarget("Light_Depth", DXGI_FORMAT_R32_FLOAT, true);
+	CreateRenderTarget("Light_Depth", DXGI_FORMAT_R32_FLOAT, true, DirectX::XMINT2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
 	CreateRenderTarget("BaseGameScene", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("ShadowMap_Shadow", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("Bloom_Base_Color", DXGI_FORMAT_R8G8B8A8_UNORM, true);
@@ -95,7 +94,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 500.0f, -500.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 250.0f, -175.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 
 #pragma region 各深度値保存用の描画
 	//DOF用深度
@@ -124,6 +123,7 @@ void Game::Update()
 	//シャドウマップ
 	PreDraw("ShadowMap_Shadow");
 	shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
+	//shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetRenderTexture("Camera_Depth"));
 	PostDraw("ShadowMap_Shadow");
 
 #pragma region Bloom
@@ -225,6 +225,16 @@ void Game::Update()
 		UseVignette = true;
 	}
 	ImGui::End();*/
+	/*ImGui::SetNextWindowPos(ImVec2(1000, 0), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 400), 1);
+	ImGui::Begin("Camera");
+	ImGui::Text("CamX : %f", Camera::eye.x);
+	ImGui::Text("CamY : %f", Camera::eye.y);
+	ImGui::Text("CamZ : %f", Camera::eye.z);
+	ImGui::Text("targetX : %f", Camera::target.x);
+	ImGui::Text("targetY : %f", Camera::target.y);
+	ImGui::Text("targetZ : %f", Camera::target.z);
+	ImGui::End();*/
 	
 	imguiUse::Instance()->CommandExcute(true);
 #pragma endregion
@@ -242,7 +252,11 @@ void Game::Update()
 	DXBase.DoScreen();
 
     //FPS
-    fps->FPS_Update();
+      fps->FPS_Update();
+
+	if (Input::isKeyTrigger(DIK_O)) {
+		int i = 0;
+	}
 }
 
 void Game::Finalize()

@@ -1,16 +1,16 @@
 #pragma once
 #include "FPS.h"
 #include "DXAudio.h"
-#include "3DObject.h"
-#include "ease.h"
+#include "Engine\Objects\3DObject.h"
+#include "Engine\CommonMathIncludes.h"
 using namespace Ease;
 #include <string.h>
 //ÇƒÇ∑Ç∆
-#include "PrimitiveFunc.h"
+#include "Engine\Primitive\PrimitiveFunc.h"
 
 //Ç∞Å[ÇﬁÇƒÇ∑Ç∆
-#include "GameScenes.h"
-#include "GameCamera.h"
+#include "Game/GameScenes.h"
+#include "Game/GameCamera.h"
 
 class GameManager {
 	DirectX3dObject *OBJECT;

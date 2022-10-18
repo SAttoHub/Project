@@ -4,7 +4,7 @@
 using namespace DirectX;
 #include"Input.h"
 #define _USE_MATH_DEFINES
-#include "Smath.h"
+#include "Engine\CommonMathIncludes.h"
 using namespace Smath;
 
 #define PLAYER_HEIGHT 5.0f

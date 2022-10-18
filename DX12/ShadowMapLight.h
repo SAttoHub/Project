@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectXMathExpansion.h"
+#include "Engine\CommonMathIncludes.h"
 #include "Camera.h"
 
 class ShadowMapLight {

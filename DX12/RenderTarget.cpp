@@ -16,14 +16,15 @@ RenderTarget::~RenderTarget()
 {
 }
 
-void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth)
+void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution)
 {
+	m_Resolution = resolution;
 	m_IsUseDepth = IsUseDepth;
 	// 生成成功判定用
 	HRESULT result;
 
 	// RTV用テクスチャ生成
-	m_RTV_Texture = TexManager::GetPostTexture(WINDOW_WIDTH, WINDOW_HEIGHT, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f), RTV_Format);
+	m_RTV_Texture = TexManager::GetPostTexture(m_Resolution.x, m_Resolution.y, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f), RTV_Format);
 	// RTV用デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc{};
 	rtvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
@@ -41,7 +42,7 @@ void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth)
 
 	if (m_IsUseDepth) {
 		// DSV用テクスチャ生成
-		m_DSV_Texture = TexManager::GetPostDepthTexture(WINDOW_WIDTH, WINDOW_HEIGHT, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f));
+		m_DSV_Texture = TexManager::GetPostDepthTexture(m_Resolution.x, m_Resolution.y, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f));
 		// DSV用デスクリプタヒープ設定
 		D3D12_DESCRIPTOR_HEAP_DESC DescHeapDesc{};
 		DescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -82,9 +83,9 @@ void RenderTarget::PreDraw()
 	}
 	//ビューポートの設定
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f,
-		WINDOW_WIDTH, WINDOW_HEIGHT));
+		m_Resolution.x, m_Resolution.y));
 	//シザリング矩形の設定
-	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, m_Resolution.x, m_Resolution.y));
 	//全画面クリア
 	DirectXBase::cmdList->ClearRenderTargetView(rtvH, m_ClearColor, 0, nullptr);
 	//深度バッファのクリア

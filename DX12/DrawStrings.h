@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string>
-#include "DirectXMathExpansion.h"
+#include "Engine\CommonMathIncludes.h"
 #include "Singleton.h"
 #include "TexManager.h"
-#include "PrimitiveFunc.h"
+#include "Engine\Primitive\PrimitiveFunc.h"
 #include <tchar.h>
 
 #include <codecvt>

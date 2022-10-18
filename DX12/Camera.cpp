@@ -123,6 +123,20 @@ void Camera::SetTargetPointToAngle() {
 	matBillboard.r[2] = Camera::AxisZ;
 	matBillboard.r[3] = XMVectorSet(0, 0, 0, 1);
 
+	//matBillboard.r[0].m128_f32[0] = 1.0f;
+	//matBillboard.r[0].m128_f32[1] = 0.0f;
+	//matBillboard.r[0].m128_f32[2] = 0.0f;
+
+	matBillboard.r[1].m128_f32[0] = 0.0f;
+	matBillboard.r[1].m128_f32[1] = 1.0f;
+	matBillboard.r[1].m128_f32[2] = 0.0f;
+
+	matBillboard.r[2].m128_f32[0] = 0.0f;
+	matBillboard.r[2].m128_f32[1] = 0.0f;
+	matBillboard.r[2].m128_f32[2] = 1.0f;
+
+
+
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
 	matViewProjection2 = matView * matProjection2;
@@ -171,6 +185,18 @@ void Camera::Targeting(XMFLOAT3 Target) {
 	matBillboard.r[1] = Camera::AxisY;
 	matBillboard.r[2] = Camera::AxisZ;
 	matBillboard.r[3] = XMVectorSet(0, 0, 0, 1);
+
+	//matBillboard.r[0].m128_f32[0] = 1.0f;
+	//matBillboard.r[0].m128_f32[1] = 0.0f;
+	//matBillboard.r[0].m128_f32[2] = 0.0f;
+
+	matBillboard.r[1].m128_f32[0] = 0.0f;
+	matBillboard.r[1].m128_f32[1] = 1.0f;
+	matBillboard.r[1].m128_f32[2] = 0.0f;
+
+	matBillboard.r[2].m128_f32[0] = 0.0f;
+	matBillboard.r[2].m128_f32[1] = 0.0f;
+	matBillboard.r[2].m128_f32[2] = 1.0f;
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
@@ -224,23 +250,49 @@ void Camera::SetCameraPos3(XMFLOAT3 pos)
 	//ビュー変換
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 
-	XMVECTOR eyepos = XMLoadFloat3(&eye);
-	XMVECTOR targetpos = XMLoadFloat3(&target);
-	XMVECTOR upVec = XMLoadFloat3(&up);
-	AxisZ = XMVectorSubtract(targetpos, eyepos);
-	assert(!XMVector3Equal(AxisZ, XMVectorZero()));
-	assert(!XMVector3IsInfinite(AxisZ));
-	assert(!XMVector3Equal(upVec, XMVectorZero()));
-	assert(!XMVector3IsInfinite(upVec));
-	AxisZ = XMVector3Normalize(AxisZ);
-	AxisX = XMVector3Cross(upVec, AxisZ);
-	AxisX = XMVector3Normalize(AxisX);
-	AxisY = XMVector3Cross(AxisZ, AxisX);
-	//ビルボード行列
-	matBillboard.r[0] = Camera::AxisX;
-	matBillboard.r[1] = Camera::AxisY;
-	matBillboard.r[2] = Camera::AxisZ;
-	matBillboard.r[3] = XMVectorSet(0, 0, 0, 1);
+	XMMATRIX hoge = matView;
+	matBillboard = XMMatrixInverse(nullptr, hoge);
+	matBillboard.r[3].m128_f32[0] = 0.0f;
+	matBillboard.r[3].m128_f32[1] = 0.0f;
+	matBillboard.r[3].m128_f32[2] = 0.0f;
+
+	//matBillboard.r[0].m128_f32[0] = 1.0f;
+	//matBillboard.r[0].m128_f32[1] = 0.0f;
+	//matBillboard.r[0].m128_f32[2] = 0.0f;
+
+	matBillboard.r[1].m128_f32[0] = 0.0f;
+	matBillboard.r[1].m128_f32[1] = 1.0f;
+	matBillboard.r[1].m128_f32[2] = 0.0f;
+
+	matBillboard.r[2].m128_f32[0] = 0.0f;
+	matBillboard.r[2].m128_f32[1] = 0.0f;
+	matBillboard.r[2].m128_f32[2] = 1.0f;
+
+	//matBillboard.r[0] = g_XMIdentityR0.v;
+	//matBillboard.r[1] = g_XMIdentityR1.v;
+	//matBillboard.r[2] = g_XMIdentityR2.v;
+	matBillboard.r[3] = g_XMIdentityR3.v;
+
+	//matBillboard.r[0].
+
+	//matBillboard
+	//XMVECTOR eyepos = XMLoadFloat3(&eye);
+	//XMVECTOR targetpos = XMLoadFloat3(&target);
+	//XMVECTOR upVec = XMLoadFloat3(&up);
+	//AxisZ = XMVectorSubtract(targetpos, eyepos);
+	//assert(!XMVector3Equal(AxisZ, XMVectorZero()));
+	//assert(!XMVector3IsInfinite(AxisZ));
+	//assert(!XMVector3Equal(upVec, XMVectorZero()));
+	//assert(!XMVector3IsInfinite(upVec));
+	//AxisZ = XMVector3Normalize(AxisZ);
+	//AxisX = XMVector3Cross(upVec, AxisZ);
+	//AxisX = XMVector3Normalize(AxisX);
+	//AxisY = XMVector3Cross(AxisZ, AxisX);
+	////ビルボード行列
+	//matBillboard.r[0] = XMVECTOR{1,0,0};
+	//matBillboard.r[1] = Camera::AxisY;
+	//matBillboard.r[2] = XMVECTOR{ 0,0,1 };
+	//matBillboard.r[3] = XMVectorSet(0, 0, 0, 1);
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;

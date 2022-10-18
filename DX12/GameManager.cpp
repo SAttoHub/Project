@@ -1,8 +1,8 @@
 #include "GameManager.h"
-#include "FbxLoader.h"
+#include "Engine\Objects\Loader\FbxLoader.h"
 #include <string>
 #include "imguiUse.h"
-#include "Funcs.h"
+#include "Engine\Common\Funcs.h"
 
 GameManager::GameManager(DirectX3dObject *OBJECT, TexManager *TEX, Window *Win, PipelineManager *Pipeline, Camera *Cam) {
 	this->OBJECT = OBJECT;

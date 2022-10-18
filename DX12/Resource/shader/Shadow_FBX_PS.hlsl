@@ -19,5 +19,9 @@ float4 main(VSOutput input) : SV_TARGET
 
 	col.r = input.svpos.z / input.svpos.w;
 
+	if (col.a <= 0.001f) {
+		discard;
+	}
+
 	return col;
 }

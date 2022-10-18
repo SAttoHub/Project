@@ -7,7 +7,13 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	//-----------------シャドウマップ用
 	float4 col = float4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//float4 obj_shadow = mul(input.worldpos, Light_viewproj); //ビュー変換
+
 	col.r = input.svpos.z / input.svpos.w;
+	if (col.a <= 0.001f) {
+		discard;
+	}
 
 	return col;
 }

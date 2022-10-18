@@ -12,7 +12,7 @@
 #include <xinput.h>
 #pragma comment(lib, "Xinput.lib")
 
-#include "Smath.h"
+#include "Engine\CommonMathIncludes.h"
 using namespace Smath;
 #include "CollisionPrimitive.h"
 #include "Camera.h"

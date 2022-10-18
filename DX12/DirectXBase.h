@@ -11,7 +11,7 @@
 
 using namespace Microsoft::WRL;
 
-#include "ColorFuncs.h"
+#include "Engine\Common\Colors\ColorFuncs.h"
 
 //使用するシェーダーの指定用
 enum SHADER {

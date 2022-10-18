@@ -10,14 +10,14 @@ RenderManager::~RenderManager()
 {
 }
 
-void RenderManager::CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth)
+void RenderManager::CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution)
 {
 	// Å‘å”ˆÈã‚Éì‚ë‚¤‚Æ‚·‚é‚ÆƒGƒ‰[
 	if (m_Renders.size() >= MAX_RENDER_COUNT - size_t(1)) {
 		assert(("Message: Cannot generate render targets that exceed M_MAX_RENDER_COUNT", 0));
 	}
 	m_Renders[RenderName] = RenderPtr(new RenderTarget);
-	m_Renders[RenderName]->Initialize(RTV_Format, IsUseDepth);
+	m_Renders[RenderName]->Initialize(RTV_Format, IsUseDepth, resolution);
 }
 
 void RenderManager::PreDraw(const char *RenderName)

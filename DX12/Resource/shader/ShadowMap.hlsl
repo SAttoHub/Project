@@ -83,6 +83,45 @@ float4x4 inverse(float4x4 m) {
     return ret;
 }
 
+float GetRandomNumber(float2 texCoord, int Seed)
+{
+    return frac(sin(dot(texCoord.xy, float2(12.9898, 78.233)) + Seed) * 43758.5453);
+}
+
+float ShadowRandom(float DepthCamera, float2 uv, float4 Wpos) {
+    float result = 0.0f;
+    for (int i = 0; i < 20; i++) {
+        float2 RandPoint;
+        RandPoint.x = uv.x + GetRandomNumber(uv, Wpos.x + i) * 0.08f - 0.04f;
+        RandPoint.y = uv.y + GetRandomNumber(uv, Wpos.y + i) * 0.08f - 0.04f;
+        if (RandPoint.x < 0.0f) {
+            RandPoint.x = 0.0f;
+        }
+        if (RandPoint.x > 1.0f) {
+            RandPoint.x = 1.0f;
+        }
+        if (RandPoint.y < 0.0f) {
+            RandPoint.y = 0.0f;
+        }
+        if (RandPoint.y > 1.0f) {
+            RandPoint.y = 1.0f;
+        }
+        // 深度値からワールド座標を復元
+        float3 Wpos_hoge2 = CalcWorldPosFromUVZ(RandPoint, DepthCamera, Camera_viewproj_inv);
+        float4 Wpos2 = float4(Wpos_hoge2.x, Wpos_hoge2.y, Wpos_hoge2.z, 1.0f);
+        // UVを (-1, 1)(1, -1) から (0, 0)(1, 1) に変更
+        float4 obj_shadow2 = mul(Light_viewproj, Wpos2);
+        obj_shadow2.xyz = obj_shadow2.xyz / obj_shadow2.w;
+        obj_shadow2.xy *= float2(0.5f, -0.5f);
+        obj_shadow2.xy += 0.5f;
+        float shad_center2 = LightDepth.Sample(smp, obj_shadow2.xy);
+        if (shad_center2 < obj_shadow2.z - 0.000462 && obj_shadow2.z < 1.0f) {
+            result += 0.05f;
+        }
+    }
+    return result;
+}
+
 float4 main(GSOutput input) : SV_TARGET
 {
     float4 Color = tex.Sample(smp, input.uv);
@@ -105,7 +144,38 @@ float4 main(GSOutput input) : SV_TARGET
     // 深度の差から影かどうかを判定・アクネを軽減
     if (shad_center < obj_shadow.z - 0.000462 && obj_shadow.z < 1.0f) {
     //if (shad_center < obj_shadow.z && obj_shadow.z < 1.0f) {
+        
         Color.rgb *= 0.5f;
+        
+        // 影なら
+        /*float2 RandPoint;
+        RandPoint.x = input.uv.x + GetRandomNumber(input.uv, Wpos.x) * 0.08f - 0.04f;
+        RandPoint.y = input.uv.y + GetRandomNumber(input.uv, Wpos.y) * 0.08f - 0.04f;
+        if (RandPoint.x < 0.0f) {
+            RandPoint.x = 0.0f;
+        }
+        if (RandPoint.x > 1.0f) {
+            RandPoint.x = 1.0f;
+        }
+        if (RandPoint.y < 0.0f) {
+            RandPoint.y = 0.0f;
+        }
+        if (RandPoint.y > 1.0f) {
+            RandPoint.y = 1.0f;
+        }
+        // 深度値からワールド座標を復元
+        float3 Wpos_hoge2 = CalcWorldPosFromUVZ(RandPoint, DepthCamera, Camera_viewproj_inv);
+        float4 Wpos2 = float4(Wpos_hoge2.x, Wpos_hoge2.y, Wpos_hoge2.z, 1.0f);
+        // UVを (-1, 1)(1, -1) から (0, 0)(1, 1) に変更
+        float4 obj_shadow2 = mul(Light_viewproj, Wpos2);
+        obj_shadow2.xyz = obj_shadow2.xyz / obj_shadow2.w;
+        obj_shadow2.xy *= float2(0.5f, -0.5f);
+        obj_shadow2.xy += 0.5f;
+        float shad_center2 = LightDepth.Sample(smp, obj_shadow2.xy);
+        if (shad_center2 < obj_shadow2.z - 0.000462 && obj_shadow2.z < 1.0f) {
+            Color.rgb *= 0.5f;
+        }*/
+        //Color.rgb *= 1.0f - 0.5f * ShadowRandom(DepthCamera, input.uv, Wpos);
     }
 
 	return Color;
