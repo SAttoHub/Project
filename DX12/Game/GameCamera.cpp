@@ -144,7 +144,7 @@ void GameCamera::GameCameraUpdate()
 
 	XMFLOAT2 CamPosXZ = Smath::AngleToDirectionVector(m_PosData.Angle + 180.0f);
 	CamPosXZ = CamPosXZ * m_PosData.Range;
-
+	 
 	m_PosData.Position = m_TargetData.Target + XMFLOAT3{ CamPosXZ.x, m_PosData.Height, CamPosXZ.y };
 
 	/*--------- Shake ----------*/
