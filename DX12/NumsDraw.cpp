@@ -1,7 +1,7 @@
 #include "NumsDraw.h"
 #include "TexManager.h"
 #include "Engine\Primitive\PrimitiveFunc.h"
-#include "Smath.h"
+#include "Engine/Common/Smath.h"
 
 void NumsDraw::LoadNumderTexture()
 {

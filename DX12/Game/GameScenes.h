@@ -14,6 +14,7 @@
 #include "Map.h"
 #include "Cursor.h"
 #include "Cards.h"
+#include "Audiences.h"
 
 enum class NowScene {
 	Title,
@@ -37,6 +38,7 @@ public:
 	Enemys	m_enemys;
 	Map		m_map;
 	Cards	m_cards;
+	Audiences m_Audiences;
 
 	int Turn; // 0 : なし　1 : 敵　2 : プレイヤー
 
@@ -56,5 +58,22 @@ public:
 	void BloomDepthDraw();
 
 	void ChangeScene(NowScene s);
+
+	enum Camera_Dir {
+		C_FRONT,
+		C_FRONTLEFT,
+		C_LEFT,
+		C_BACKLEFT,
+		C_BACK,
+		C_BACKRINGHT,
+		C_RINGHT,
+		C_FRONTRINGHT,
+		C_MAX
+	};
+	float m_CameraAngle;
+	float m_CameraHeight;
+	float m_CameraRange;
+	Camera_Dir m_CamDir;
+	void MoveCamera();
 };
 

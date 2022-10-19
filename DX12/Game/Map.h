@@ -17,9 +17,9 @@ private:
 
 private:
 	
-	Object3d *m_StageModel;
-	Object3d *m_StageModel_saku;
-	Object3d *m_StageModel_tree;
+	Object3d *m_StageModel = nullptr;
+	Object3d *m_StageModel_saku = nullptr;
+	Object3d *m_StageModel_tree = nullptr;
 
 public:
 	Map();
@@ -27,8 +27,8 @@ public:
 
 	std::vector<std::vector<ChipData>> m_Data;
 	std::vector<std::vector<int>> CostTable;
-	XMINT2 NowHitChip;
-	bool isHitChip;
+	XMINT2 NowHitChip = XMINT2();
+	bool isHitChip = false;
 
 	ChipData* Get(XMINT2 Pos);
 	void Initialize();

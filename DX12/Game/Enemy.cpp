@@ -10,7 +10,7 @@ Enemy::Enemy()
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(0, 0, 0), FBXSHADER);
 	model->rotation.y = 90.0f;
-	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
+	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
 	model->isBillboard = true;
 
 	m_MyTurn = false;
@@ -36,6 +36,8 @@ Enemy::~Enemy()
 {
 	//DirectX3dObject::DeleteObject(model);
 	//delete model;
+	//delete pMap;
+	//delete pPlayer;
 }
 
 void Enemy::StartTurn()

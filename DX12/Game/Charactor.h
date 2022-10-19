@@ -22,12 +22,12 @@ public:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
-	XMINT2 m_MapPos;
-	int m_HP;
-	int m_Def;
-	Abnormality m_Abn;
+	XMINT2 m_MapPos = XMINT2();
+	int m_HP = 1;
+	int m_Def = 0;
+	Abnormality m_Abn = Abnormality::None;
 
-	Object3d *model;
+	Object3d *model = nullptr;
 
 	// Œü‚«ŠÖ˜A
 	/*------------------------------------------------
@@ -47,10 +47,10 @@ protected:
 		LEFT,
 		FRONTLEFT
 	};
-	Chara_Dir m_Dir;
-	void SetDir();
+	Chara_Dir m_Dir = Chara_Dir::FRONT;
+	virtual void SetDir();
 
-	int Image[8];
+	int Image[8] = {0};
 
 public:
 	Charactor();

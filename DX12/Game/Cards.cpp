@@ -1,5 +1,6 @@
 #include "Cards.h"
 #include "..\Input.h"
+#include "GameCamera.h"
 
 Cards::Cards()
 {
@@ -240,6 +241,7 @@ void Cards::CardEffectPhaseUpdate()
 				m_UseCardType = CardType::NONE;
 				NowPhase = 0;
 				CanSelectChips.clear();
+				GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			}
 		}
 	}

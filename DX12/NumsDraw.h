@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "DirectXMathExpansion.h"
+#include "Engine/Common/DirectXMath/DirectXMathExpansion.h"
 #include "Singleton.h"
 
 // 数字専用DrawGraph実行クラス

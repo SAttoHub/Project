@@ -41,10 +41,14 @@ void GameCamera::Update()
 		if (Input::isKeyTrigger(DIK_Q)) {
 			Mode = CM_Debug;
 			Camera::isCameraStop = false;
+			DebugCamPos = XMFLOAT3(0, 0, 0);
 		}
 		else if(Input::isKeyTrigger(DIK_E)) {
 			Mode = CM_Game;
 			Camera::isCameraStop = true;
+		}
+		if (Input::isKeyTrigger(DIK_R)) {
+			Camera::isCameraStop == true ? Camera::isCameraStop = false : Camera::isCameraStop = true;
 		}
 
 		switch (Mode)
@@ -95,7 +99,10 @@ void GameCamera::Finalize()
 			DebugCamPos.y -= MovePower / 2;
 		}
 	}
-	Camera::SetCameraPos(DebugCamPos);
+	Camera::SetCameraPos(m_PosData.Position + DebugCamPos);
+	if (Camera::isCameraStop == true) {
+		Camera::Targeting(XMFLOAT3(40, 0, 40));
+	}
 
 	/*if (Input::isKeyTrigger(DIK_L)) {
 		int a = 0;

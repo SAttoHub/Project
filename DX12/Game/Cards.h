@@ -20,31 +20,31 @@ private:
 	Enemys *pEnemys = nullptr;
 	Map *pMap = nullptr;
 
-	int TurnEndButton;
-	bool isMyTurn;
+	int TurnEndButton = 0;
+	bool isMyTurn = false;
 
 public:
 	//std::vector<Card> m_Cards;
 	My_F_List<Card> m_Cards;
 
-	int NowPhase;
-	CardType m_UseCardType;
-	int m_UseCardIndex;
-	XMINT2 m_NowSelectChip;
+	int NowPhase = 0;
+	CardType m_UseCardType = CardType::NONE;
+	int m_UseCardIndex = 0;
+	XMINT2 m_NowSelectChip = XMINT2();
 	std::vector<XMINT2> CanSelectChips;
 
 	Cards();
 	~Cards();
 
 	// ターンエンドボタン
-	XMFLOAT2 LT;
+	XMFLOAT2 LT = XMFLOAT2();
 	//~Cards();
 
 	void Initialize(Player *_Player, Enemys *_Enemys, Map *_Map);
 	void Update();
 	void Draw();
 
-	bool TurnEnd;
+	bool TurnEnd = false;
 	void StartTurn();
 
 	bool ExistInCanSelectChips(XMINT2 MapPos);

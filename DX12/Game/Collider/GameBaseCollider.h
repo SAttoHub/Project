@@ -74,7 +74,7 @@ public:
 
 	// 衝突判定拡張
 	// コライダーを持つオブジェクトの親クラスのポインタ
-	ColliderProp *Base;
+	ColliderProp *Base = nullptr;
 	// コライダーを持つオブジェクトの親クラスのポインタをセットする
 	void SetBaseProp(ColliderProp *Base) {
 		this->Base = Base;

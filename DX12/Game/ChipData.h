@@ -8,7 +8,7 @@ private:
 
 public:
 	static const float CHIP_SIZE;
-	XMINT3 m_Pos;
+	XMINT3 m_Pos = XMINT3();
 
 	void Draw();
 };

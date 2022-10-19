@@ -9,7 +9,7 @@ Player::Player()
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(0, 0, 0), FBXSHADER);
 	model->rotation.y = 90.0f;
-	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
+	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
 	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
 	model->isBillboard = true;
 

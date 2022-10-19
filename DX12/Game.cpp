@@ -41,7 +41,7 @@ void Game::Initialize()
 	//シャドウ
 	ShadowMapUse = true;
 	Shadow_Map_Light = new ShadowMapLight;
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,250.0f, -175.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,350.0f, -245.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 	shadowMapping = new ShadowMapping;
 	shadowMapping->Initialize(ShadowMapUse);
 
@@ -94,7 +94,7 @@ void Game::Update()
     DX.AllObjectUpdate();
 
 	Primitive2D::Instance()->BackDraw();
-	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 250.0f, -175.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
+	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 350.0f, -245.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 
 #pragma region 各深度値保存用の描画
 	//DOF用深度

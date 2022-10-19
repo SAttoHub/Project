@@ -17,15 +17,17 @@ struct KnockBack {
 };
 
 struct ActionResult {
-	int m_Damage;
-	KnockBack m_KnB;
-	Abnormality m_Abn;
-	int m_AbnTurn;
+	int m_Damage = 0;
+	KnockBack m_KnB = KnockBack();
+	Abnormality m_Abn = Abnormality();
+	int m_AbnTurn = 0;
+
+	ActionResult(){}
 };
 
 struct AllResult {
-	short int Index; // 敵 : 0 ~ 65534 / プレイヤー : 65535
-	ActionResult Result;
+	short int Index = 0; // 敵 : 0 ~ 65534 / プレイヤー : 65535
+	ActionResult Result = ActionResult();
 };
 
 class Enemys;
@@ -34,8 +36,8 @@ class Player;
 class ActionManager
 {
 	using XMINT2 = DirectX::XMINT2;
-	Enemys *pEnemys;
-	Player *pPlayer;
+	Enemys *pEnemys = nullptr;
+	Player *pPlayer = nullptr;
 
 public:
 	void Init(Enemys *pEn, Player *pPl);

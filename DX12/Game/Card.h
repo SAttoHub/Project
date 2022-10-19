@@ -21,12 +21,12 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 private:
-	CardType m_Type;
-	float width;
-	float height;
-	XMFLOAT2 LeftTop;
+	CardType m_Type = CardType::NONE;
+	float width = 0;
+	float height = 0;
+	XMFLOAT2 LeftTop = XMFLOAT2();
 
-	int Graph;
+	int Graph = 0;
 
 public:
 		GameBaseCollider *collider = nullptr;
@@ -35,8 +35,8 @@ public:
 		void ColliderUpdate();
 		GameBoxCollider *col = nullptr;
 public:
-	bool HitCursor;
-	bool Active;
+	bool HitCursor = false;
+	bool Active = false;
 	Card(CardType Type);
 
 	CardType GetType() { return m_Type; }

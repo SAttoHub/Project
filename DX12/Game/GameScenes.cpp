@@ -17,6 +17,8 @@ void GameScenes::Initialize()
 	m_cards.Initialize(&m_player, &m_enemys, &m_map);
 	m_cards.StartTurn();
 
+	m_Audiences.Init(&m_map);
+
 	Turn = 2;
 	GenerateEnemyCount = 2;
 
@@ -24,6 +26,12 @@ void GameScenes::Initialize()
 
 	GameCamera::Instance()->Positioning(90.0f, 45.0f, 50.0f, 1);
 	GameCamera::Instance()->Targeting(m_map.Center, 1);
+
+	m_CamDir = C_FRONTRINGHT;
+	m_CameraAngle = 45.0f;
+	m_CameraHeight = 30.0f;
+	m_CameraRange = 30.0f;
+
 }
 
 void GameScenes::Update()
@@ -52,6 +60,8 @@ void GameScenes::Update()
 			Scene = NowScene::Game;
 			GameCamera::Instance()->Positioning(30.0f, 45.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+
+			m_Audiences.SummonAudience(245);
 		}
 	}
 
@@ -60,6 +70,7 @@ void GameScenes::Update()
 		m_enemys.Update();
 		m_map.Update();
 		m_cards.Update();
+		m_Audiences.Update();
 
 		if (Turn == 2) {
 			m_cards.PlayerTurnUpdate();
@@ -74,10 +85,12 @@ void GameScenes::Update()
 				m_enemys.m_Enemy[m_enemys.m_Enemy.size() - 1].m_Next = false;
 				Turn = 2;
 				m_cards.StartTurn();
-				GameCamera::Instance()->Positioning(30.0f, 45.0f, 30.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				//GameCamera::Instance()->Positioning(30.0f, 45.0f, 30.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 				GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			}
 		}
+		MoveCamera();
 	}
 
 	/*if (1) {
@@ -94,6 +107,7 @@ void GameScenes::Draw()
 		m_player.Draw();
 		m_enemys.Draw();
 		m_cards.Draw();
+		m_Audiences.Draw();
 	}
 	m_map.Draw();
 	Cursor::Instance()->Draw();
@@ -112,6 +126,7 @@ void GameScenes::DepthDraw()
 	if (Scene == NowScene::Game) {
 		m_player.DepthDraw();
 		m_enemys.DepthDraw();
+		m_Audiences.DepthDraw();
 	}
 	m_map.DepthDraw();
 }
@@ -121,6 +136,7 @@ void GameScenes::DOFDepthDraw()
 	if (Scene == NowScene::Game) {
 		m_player.DOFDepthDraw();
 		m_enemys.DOFDepthDraw();
+		m_Audiences.DOFDepthDraw();
 	}
 	m_map.DOFDepthDraw();
 }
@@ -136,6 +152,7 @@ void GameScenes::ShadowDraw()
 	if (Scene == NowScene::Game) {
 		m_player.ShadowDraw();
 		m_enemys.ShadowDraw();
+		m_Audiences.ShadowDraw();
 	}
 	m_map.ShadowDraw();
 }
@@ -163,4 +180,40 @@ void GameScenes::BloomDepthDraw()
 void GameScenes::ChangeScene(NowScene s)
 {
 
+}
+
+void GameScenes::MoveCamera()
+{
+	if (!(Input::isKeyTrigger(DIK_D) || Input::isKeyTrigger(DIK_A) || Input::isKeyTrigger(DIK_W) || Input::isKeyTrigger(DIK_S))) {
+		return;
+	}
+	if (Input::isKeyTrigger(DIK_D)) {
+		int d_hoge = int(m_CamDir) + 1;
+		if (d_hoge >= int(C_MAX)) d_hoge = int(C_FRONT);
+		m_CamDir = Camera_Dir(d_hoge);
+		m_CameraAngle += 45.0f;
+	}
+	else if (Input::isKeyTrigger(DIK_A)) {
+		int d_hoge = int(m_CamDir) - 1;
+		if (d_hoge < int(C_FRONT)) d_hoge = int(C_FRONTRINGHT);
+		m_CamDir = Camera_Dir(d_hoge);
+		m_CameraAngle -= 45.0f;
+	}
+	
+
+	const float MIN_CAMERA_RANGE = 30.0f;
+	const float MAX_CAMERA_RANGE = 90.0f;
+	const float MIN_CAMERA_HEIGHT = 30.0f;
+	const float MAX_CAMERA_HEIGHT = 90.0f;
+	if (Input::isKeyTrigger(DIK_W)) {
+		if (m_CameraRange > MIN_CAMERA_RANGE) m_CameraRange -= 5.0f;
+		if (m_CameraHeight > MIN_CAMERA_HEIGHT) m_CameraHeight -= 5.0f;
+	}
+	else if (Input::isKeyTrigger(DIK_S)) {
+		if (m_CameraRange < MAX_CAMERA_RANGE) m_CameraRange += 5.0f;
+		if (m_CameraHeight < MAX_CAMERA_HEIGHT) m_CameraHeight += 5.0f;
+	}
+
+	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+	GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 }

@@ -17,14 +17,14 @@ class Enemy : public Charactor
 {
 	Map *pMap = nullptr;
 	Player *pPlayer = nullptr;
-	AstarResults m_Route; // ルート保存用
+	AstarResults m_Route = AstarResults(); // ルート保存用
 
-	int coolTime;
-	int Count;
-	ActPattern Act;
+	int coolTime = 0;
+	int Count = 0;
+	ActPattern Act = ActPattern::AC_Wait;
 public:
-	bool m_MyTurn;
-	bool m_Next;
+	bool m_MyTurn = false;
+	bool m_Next = false;
 	Enemy();
 	~Enemy();
 
