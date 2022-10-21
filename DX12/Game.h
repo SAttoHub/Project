@@ -16,24 +16,24 @@ class Game : public Framework
 {
 private:
 	// ガウスぼかし用
-	Gaussian *GaussianEffectX = nullptr;
-	Gaussian *GaussianEffectY = nullptr;
-	Gaussian *GaussianEffectX2 = nullptr;
-	Gaussian *GaussianEffectY2 = nullptr;
-	Gaussian *GaussianEffectX_b = nullptr;
-	Gaussian *GaussianEffectY_b = nullptr;
-	DepthOfField *DOF = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectX = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectY = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectX2 = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectY2 = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectX_b = nullptr;
+	std::unique_ptr<Gaussian> GaussianEffectY_b = nullptr;
+	std::unique_ptr<DepthOfField> DOF = nullptr;
 
 	bool DOFFlag;
 	//ブルーム
-	Bloom *bloom = nullptr;
+	std::unique_ptr<Bloom> bloom = nullptr;
 	bool BloomFlag;
 	//シャドウ
-	ShadowMapLight *Shadow_Map_Light;
-	ShadowMapping *shadowMapping = nullptr;
+	std::unique_ptr<ShadowMapLight> Shadow_Map_Light = nullptr;
+	std::unique_ptr<ShadowMapping> shadowMapping = nullptr;
 
 	//ビネット
-	Vignette *vignette = nullptr;
+	std::unique_ptr<Vignette> vignette = nullptr;
 
 	//アウトライン
 	/*bool UseOutLine;

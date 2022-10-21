@@ -11,6 +11,8 @@ private:
 	Player *pPlayer = nullptr;
 
 public:
+	Enemys();
+	~Enemys();
 	std::vector<Enemy> m_Enemy;
 
 	void SetMap(Map *Map);

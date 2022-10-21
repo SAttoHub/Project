@@ -16,23 +16,23 @@ void Game::Initialize()
 	Focus = 30.0f;
 	FocusSize = 20.0f;
 	UseFlag = true;
-	GaussianEffectX = new Gaussian;
+	GaussianEffectX = std::make_unique<Gaussian>();
 	GaussianEffectX->Initialize(0);
-	GaussianEffectY = new Gaussian;
+	GaussianEffectY = std::make_unique<Gaussian>();
 	GaussianEffectY->Initialize(1);
-	GaussianEffectX2 = new Gaussian;
+	GaussianEffectX2 = std::make_unique<Gaussian>();
 	GaussianEffectX2->Initialize(0);
-	GaussianEffectY2 = new Gaussian;
+	GaussianEffectY2 = std::make_unique<Gaussian>();
 	GaussianEffectY2->Initialize(1);
-	GaussianEffectX_b = new Gaussian;
+	GaussianEffectX_b = std::make_unique<Gaussian>();
 	GaussianEffectX_b->Initialize(0);
-	GaussianEffectY_b = new Gaussian;
+	GaussianEffectY_b = std::make_unique<Gaussian>();
 	GaussianEffectY_b->Initialize(1);
-	DOF = new DepthOfField;
+	DOF = std::make_unique<DepthOfField>();
 	DOF->Initialize(InterpSize, Focus, FocusSize, UseFlag);
 
 	//ブルーム
-	bloom = new Bloom;
+	bloom = std::make_unique<Bloom>();
 	bloom->Initialize();
 	
 
@@ -40,15 +40,15 @@ void Game::Initialize()
 	DOFFlag = false;
 	//シャドウ
 	ShadowMapUse = true;
-	Shadow_Map_Light = new ShadowMapLight;
+	Shadow_Map_Light = std::make_unique<ShadowMapLight>();
 	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f,350.0f, -245.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
-	shadowMapping = new ShadowMapping;
+	shadowMapping = std::make_unique<ShadowMapping>();
 	shadowMapping->Initialize(ShadowMapUse);
 
 	//ビネット
 	VignetteInfluence = 0.2f;
 	UseVignette = true;
-	vignette = new Vignette;
+	vignette = std::make_unique<Vignette>();
 	vignette->Initialize(VignetteInfluence, UseVignette);
 
 	//アウトライン
@@ -261,11 +261,6 @@ void Game::Update()
 
 void Game::Finalize()
 {
-	delete GaussianEffectX;
-	delete GaussianEffectY;
-	delete DOF;
-	delete shadowMapping;
-	delete bloom;
 	Framework::Finalize();
 }
 

@@ -2,6 +2,16 @@
 #include "Player.h"
 #include "..\Engine\CommonMathIncludes.h"
 
+Enemys::Enemys()
+{
+}
+
+Enemys::~Enemys()
+{
+	//delete pMap;
+	//delete pPlayer;
+}
+
 void Enemys::SetMap(Map *Map)
 {
 	pMap = Map;
