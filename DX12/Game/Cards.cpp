@@ -254,3 +254,24 @@ void Cards::CardEffectPhaseUpdate()
 	//}
 
 }
+
+void Cards::Reset()
+{
+	m_Cards.clear();
+	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		m_Cards[i]->Initialize(i, int(m_Cards.size()));
+	}
+
+	m_UseCardType = CardType::NONE;
+	NowPhase = 0;
+	TurnEnd = false;
+
+	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 200);
+
+	isMyTurn = false;
+}

@@ -47,3 +47,9 @@ void Player::Draw()
 	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
 		"PlayerHP : %d", m_HP);
 }
+
+void Player::Reset()
+{
+	m_MapPos = { 0,0 };
+	m_HP = 100;
+}

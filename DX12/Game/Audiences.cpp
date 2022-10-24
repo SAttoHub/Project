@@ -48,9 +48,11 @@ void Audiences::Update()
 	if (Input::isKeyTrigger(DIK_L)) {
 		m_Audience[5].ExitTrigger();
 	}
-	for (int i = 0; i < m_Audience.size() - 1; i++) {
-		if (m_Audience[i].GetDelete() == true) {
-			m_Audience.erase(m_Audience.begin() + i);
+	if (m_Audience.size() > 0) {
+		for (int i = 0; i < m_Audience.size() - 1; i++) {
+			if (m_Audience[i].GetDelete() == true) {
+				m_Audience.erase(m_Audience.begin() + i);
+			}
 		}
 	}
 
@@ -165,4 +167,11 @@ int Audiences::GetRandIndex()
 	int Index2 = GetRand(0, 3);
 	Index = 30 * Index2 + Index;
 	return Index;
+}
+
+void Audiences::DeleteAllAudience()
+{
+	m_Audience.clear();
+	Timer = 0;
+	Hoge = 0;
 }

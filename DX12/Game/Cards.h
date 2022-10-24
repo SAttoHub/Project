@@ -53,5 +53,7 @@ public:
 	void PlayerTurnUpdate();
 	void CardPhaseUpdate();
 	void CardEffectPhaseUpdate();
+
+	void Reset(); // ‰¼ƒŠƒZƒbƒg
 };
 

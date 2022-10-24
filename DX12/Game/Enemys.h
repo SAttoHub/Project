@@ -21,6 +21,7 @@ public:
 	void GenerateEnemy(XMINT2 MapPos);
 	Enemy *GetEnemy(XMINT2 MapPos);
 	int GetEnemyIndex(XMINT2 MapPos);
+	int GetEnemyCount() { return int(m_Enemy.size()); }
 
 	
 	void StartTurn();

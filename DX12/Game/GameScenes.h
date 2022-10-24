@@ -15,6 +15,7 @@
 #include "Cursor.h"
 #include "Cards.h"
 #include "Audiences.h"
+#include "BattleWave.h"
 
 enum class NowScene {
 	Title,
@@ -39,6 +40,9 @@ public:
 	Map		m_map;
 	Cards	m_cards;
 	Audiences m_Audiences;
+	std::unique_ptr<BattleWave> m_BattleWave;
+	int NowWave; // 仮Wave
+	int EndCount; // 仮ゲーム終了カウント
 
 	int Turn; // 0 : なし　1 : 敵　2 : プレイヤー
 
@@ -56,6 +60,8 @@ public:
 	void ShadowDraw();
 	void BloomDraw();
 	void BloomDepthDraw();
+
+	void Reset(); // 仮リセット
 
 	void ChangeScene(NowScene s);
 

@@ -10,14 +10,17 @@ void GameScenes::Initialize()
 	m_map.Initialize();
 	m_enemys.SetMap(&m_map);
 	m_enemys.SetPlayer(&m_player);
-	m_enemys.GenerateEnemy(XMINT2(2, 2));
-	m_enemys.GenerateEnemy(XMINT2(4, 6));
+
 	m_player.SetMap(&m_map);
 
 	m_cards.Initialize(&m_player, &m_enemys, &m_map);
 	m_cards.StartTurn();
 
 	m_Audiences.Init(&m_map);
+
+	m_BattleWave = std::make_unique<BattleWave>(&m_enemys, &m_player);
+	NowWave = 0;
+	EndCount = 0;
 
 	Turn = 2;
 	GenerateEnemyCount = 2;
@@ -43,7 +46,7 @@ void GameScenes::Update()
 	Cursor::Instance()->Update();
 
 	// ランダムに敵を配置してリセット
-	ImGui::SetNextWindowPos(ImVec2(10, 60), 1);
+	/*ImGui::SetNextWindowPos(ImVec2(10, 60), 1);
 	ImGui::SetNextWindowSize(ImVec2(300, 100), 1);
 	ImGui::Begin("Config");
 	ImGui::SliderInt("GenerateEnemyCount", &GenerateEnemyCount, 1, 4);
@@ -53,19 +56,41 @@ void GameScenes::Update()
 		Turn = 2;
 		m_cards.StartTurn();
 	}
-	ImGui::End();
+	ImGui::End();*/
 
 	if (Scene == NowScene::Title) {
 		if (Input::isKeyTrigger(DIK_SPACE)) {
 			Scene = NowScene::Game;
 			GameCamera::Instance()->Positioning(30.0f, 45.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
-
+			m_BattleWave->StartWave("Test1");
 			m_Audiences.SummonAudience(245);
 		}
 	}
-
-	if (Scene == NowScene::Game) {
+	else if (Scene == NowScene::Game) {
+		if (m_enemys.GetEnemyCount() == 0) {
+			NowWave++;
+			if (NowWave == 1) {
+				m_BattleWave->StartWave("Test2");
+			}
+			else if (NowWave == 2) {
+				m_BattleWave->StartWave("Test3");
+			}
+			else if (NowWave == 3) {
+				m_BattleWave->StartWave("Test4");
+			}
+			else {
+				EndCount++;
+				if (EndCount > 30) {
+					DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+						"R : タイトルへ");
+					if (Input::isKeyTrigger(DIK_R)) {
+						Reset();
+					}
+				}
+				NowWave--;
+			}
+		}
 		m_player.Update();
 		m_enemys.Update();
 		m_map.Update();
@@ -101,7 +126,9 @@ void GameScenes::Update()
 void GameScenes::Draw()
 {
 	if (Scene == NowScene::Title) {
-		//DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), TitleTex);
+		DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), TitleTex);
+		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 400), 64, XMFLOAT4(1, 1, 1, 1),
+			"SPACE : スタート");
 	}
 	if (Scene == NowScene::Game) {
 		m_player.Draw();
@@ -175,6 +202,26 @@ void GameScenes::BloomDepthDraw()
 	if (bloomFlag2) {
 		Drawobject3d(saku5);
 	}*/
+}
+
+void GameScenes::Reset()
+{
+	NowWave = 0; // 仮Wave
+	EndCount = 0;
+	m_player.Reset();
+	m_cards.Reset();
+	m_cards.StartTurn();
+	Scene = NowScene::Title;
+	m_Audiences.DeleteAllAudience();
+	Turn = 2;
+
+	GameCamera::Instance()->Positioning(90.0f, 45.0f, 50.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+	GameCamera::Instance()->Targeting(m_map.Center, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+
+	m_CamDir = C_FRONTRINGHT;
+	m_CameraAngle = 45.0f;
+	m_CameraHeight = 30.0f;
+	m_CameraRange = 30.0f;
 }
 
 void GameScenes::ChangeScene(NowScene s)

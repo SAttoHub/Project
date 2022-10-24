@@ -15,5 +15,7 @@ public:
 
 	void Update() override;
 	void Draw() override;
+
+	void Reset(); // ‰¼ƒŠƒZƒbƒg
 };
 

@@ -24,4 +24,5 @@ public:
 	void SummonAudience(int Count);
 	void SummonAudience2(int Count); // 入場演出あり
 	int GetRandIndex(); // SummonAudience関数内処理 地形にめり込まないインデックスを取得する
+	void DeleteAllAudience();
 };

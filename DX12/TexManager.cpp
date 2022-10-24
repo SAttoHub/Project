@@ -138,7 +138,7 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	// フォントを使えるようにする
 	DESIGNVECTOR design;
 	AddFontResourceEx(
-		TEXT("Resource/SoukouMincho.ttf"), //ttfファイルへのパス
+		TEXT("Resource/HANDGOTN.TTF"), //ttfファイルへのパス
 		FR_PRIVATE,
 		&design
 	);

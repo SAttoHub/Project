@@ -64,7 +64,7 @@ void Card::Draw(int index, int MaxIdx)
 	//XMFLOAT2 LeftTop;
 	float CenterIdx = MaxIdx / 2.0f;
 	//if (MaxIdx % 2 == 0) {
-		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f + 150.0f };
+		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f/* + 150.0f */};
 	/*}
 	if (MaxIdx % 2 != 0) {
 		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f };
