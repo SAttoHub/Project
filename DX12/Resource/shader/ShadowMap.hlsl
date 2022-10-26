@@ -143,8 +143,6 @@ float4 main(GSOutput input) : SV_TARGET
     float shad_center = LightDepth.Sample(smp, obj_shadow.xy);
     // [“x‚Ì·‚©‚ç‰e‚©‚Ç‚¤‚©‚ğ”»’èEƒAƒNƒl‚ğŒyŒ¸
     if (shad_center < obj_shadow.z - 0.000462 && obj_shadow.z < 1.0f) {
-    //if (shad_center < obj_shadow.z && obj_shadow.z < 1.0f) {
-        
         Color.rgb *= 0.5f;
         
         // ‰e‚È‚ç

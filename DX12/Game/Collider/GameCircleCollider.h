@@ -2,6 +2,9 @@
 #include "GameBaseCollider.h"
 #include "..\..\CollisionPrimitive.h"
 
+//-------------------------------------------------------------------------------------------------------------
+// 円コライダー
+//-------------------------------------------------------------------------------------------------------------
 class GameCircleCollider : public GameBaseCollider, public Circle
 {
 private:

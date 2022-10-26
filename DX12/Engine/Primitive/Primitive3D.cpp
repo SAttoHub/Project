@@ -1,545 +1,92 @@
 #include "Primitive3D.h"
 #include "..\..\Camera.h"
 
-void Primitive3D::SetupCubePrimitive()
-{
-	LoadShader(&Cube_vsBlob, L"Resource/shader/CubePrimitiveVertex.hlsl", "main", "vs_5_0");
-	LoadShader(&Cube_gsBlob, L"Resource/shader/CubePrimitiveGeometry.hlsl", "main", "gs_5_0");
-	LoadShader(&Cube_psBlob, L"Resource/shader/CubePrimitivePixel.hlsl", "main", "ps_5_0");
-
-	D3D12_INPUT_ELEMENT_DESC CubePrimitiveInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"SCALE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"ROTATE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-	HRESULT result;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
-	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Cube_vsBlob);
-	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Cube_gsBlob);
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Cube_psBlob);
-	//サンプルマスクとラスタライザステートの設定
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
-	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//ブレンドステートの設定
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	//頂点レイアウトの設定
-	gpipeline.InputLayout.pInputElementDescs = CubePrimitiveInputLayout;
-	gpipeline.InputLayout.NumElements = _countof(CubePrimitiveInputLayout);//_countof(nputLayout)
-	//図形の形状を点に設定
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//その他の設定
-	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
-	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
-	//デプスステンシルステートの設定
-	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//深度バッファのフォーマット
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//デスクリプタテーブルの設定
-	//CD3DX12_DESCRIPTOR_RANGE descRangeCBV; //定数用
-	//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
-	//descRangeCBV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
-	//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-	//rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-	//テクスチャサンプラーの設定[
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-	//ルートシグネチャの生成
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	//ルートシグネチャの生成
-	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
-		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-
-	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
-		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&CubeRootsignature));
-	//パイプラインにルートシグネチャをセット
-	gpipeline.pRootSignature = CubeRootsignature.Get();
-	//パイプラインステートの生成
-	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&CubePipelinestate));
-
-	if (FAILED(result)) {
-		assert(0);
-	}
-}
-
-void Primitive3D::SetupLinePrimitive()
-{
-	LoadShader(&Line_vsBlob, L"Resource/shader/LinePrimitiveVertex.hlsl", "main", "vs_5_0");
-	LoadShader(&Line_gsBlob, L"Resource/shader/LinePrimitiveGeometry.hlsl", "main", "gs_5_0");
-	LoadShader(&Line_psBlob, L"Resource/shader/LinePrimitivePixel.hlsl", "main", "ps_5_0");
-
-	D3D12_INPUT_ELEMENT_DESC LinePrimitiveInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-	HRESULT result;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
-	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Line_vsBlob);
-	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Line_gsBlob);
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Line_psBlob);
-	//サンプルマスクとラスタライザステートの設定
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
-	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//ブレンドステートの設定
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	//頂点レイアウトの設定
-	gpipeline.InputLayout.pInputElementDescs = LinePrimitiveInputLayout;
-	gpipeline.InputLayout.NumElements = _countof(LinePrimitiveInputLayout);//_countof(nputLayout)
-	//図形の形状を点に設定
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//その他の設定
-	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
-	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
-	//デプスステンシルステートの設定
-	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//深度バッファのフォーマット
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-	//テクスチャサンプラーの設定[
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-	//ルートシグネチャの生成
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	//ルートシグネチャの生成
-	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
-		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-
-	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
-		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&LineRootsignature));
-	//パイプラインにルートシグネチャをセット
-	gpipeline.pRootSignature = LineRootsignature.Get();
-	//パイプラインステートの生成
-	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&LinePipelinestate));
-
-	if (FAILED(result)) {
-		assert(0);
-	}
-}
-
-void Primitive3D::SetupTetrahedronPrimitive()
-{
-	LoadShader(&Tetrahedron_vsBlob, L"Resource/shader/TetrahedronVertex.hlsl", "main", "vs_5_0");
-	LoadShader(&Tetrahedron_gsBlob, L"Resource/shader/TetrahedronGeometry.hlsl", "main", "gs_5_0");
-	LoadShader(&Tetrahedron_psBlob, L"Resource/shader/TetrahedronPixel.hlsl", "main", "ps_5_0");
-
-	D3D12_INPUT_ELEMENT_DESC TetrahedronPrimitiveInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"POSITIONA", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"POSITIONB", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"POSITIONC", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-	HRESULT result;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
-	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Tetrahedron_vsBlob);
-	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Tetrahedron_gsBlob);
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Tetrahedron_psBlob);
-	//サンプルマスクとラスタライザステートの設定
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
-	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//ブレンドステートの設定
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	//頂点レイアウトの設定
-	gpipeline.InputLayout.pInputElementDescs = TetrahedronPrimitiveInputLayout;
-	gpipeline.InputLayout.NumElements = _countof(TetrahedronPrimitiveInputLayout);//_countof(nputLayout)
-	//図形の形状を点に設定
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//その他の設定
-	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
-	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
-	//デプスステンシルステートの設定
-	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//深度バッファのフォーマット
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-	//テクスチャサンプラーの設定[
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-	//ルートシグネチャの生成
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	//ルートシグネチャの生成
-	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
-		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-
-	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
-		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&TetrahedronRootsignature));
-	//パイプラインにルートシグネチャをセット
-	gpipeline.pRootSignature = TetrahedronRootsignature.Get();
-	//パイプラインステートの生成
-	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&TetrahedronPipelinestate));
-
-	if (FAILED(result)) {
-		assert(0);
-	}
-}
-
-void Primitive3D::SetupOctahedronPrimitive()
-{
-	LoadShader(&Octahedron_vsBlob, L"Resource/shader/OctahedronVertex.hlsl", "main", "vs_5_0");
-	LoadShader(&Octahedron_gsBlob, L"Resource/shader/OctahedronGeometry.hlsl", "main", "gs_5_0");
-	LoadShader(&Octahedron_psBlob, L"Resource/shader/OctahedronPixel.hlsl", "main", "ps_5_0");
-
-	D3D12_INPUT_ELEMENT_DESC OctahedronPrimitiveInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-	HRESULT result;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
-	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Octahedron_vsBlob);
-	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Octahedron_gsBlob);
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Octahedron_psBlob);
-	//サンプルマスクとラスタライザステートの設定
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
-	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//ブレンドステートの設定
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	//頂点レイアウトの設定
-	gpipeline.InputLayout.pInputElementDescs = OctahedronPrimitiveInputLayout;
-	gpipeline.InputLayout.NumElements = _countof(OctahedronPrimitiveInputLayout);//_countof(nputLayout)
-	//図形の形状を点に設定
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//その他の設定
-	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
-	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
-	//デプスステンシルステートの設定
-	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//深度バッファのフォーマット
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-	//テクスチャサンプラーの設定[
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-	//ルートシグネチャの生成
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	//ルートシグネチャの生成
-	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
-		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-
-	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
-		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&OctahedronRootsignature));
-	//パイプラインにルートシグネチャをセット
-	gpipeline.pRootSignature = OctahedronRootsignature.Get();
-	//パイプラインステートの生成
-	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&OctahedronPipelinestate));
-
-	if (FAILED(result)) {
-		assert(0);
-	}
-}
-
-void Primitive3D::SetupIcosahedronPrimitive()
-{
-	LoadShader(&Icosahedron_vsBlob, L"Resource/shader/IcosahedronVertex.hlsl", "main", "vs_5_0");
-	LoadShader(&Icosahedron_gsBlob, L"Resource/shader/IcosahedronGeometry.hlsl", "main", "gs_5_0");
-	LoadShader(&Icosahedron_psBlob, L"Resource/shader/IcosahedronPixel.hlsl", "main", "ps_5_0");
-
-	D3D12_INPUT_ELEMENT_DESC IcosahedronPrimitiveInputLayout[] = {
-		{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-		{
-			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
-	};
-	HRESULT result;
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
-	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(Icosahedron_vsBlob);
-	gpipeline.GS = CD3DX12_SHADER_BYTECODE(Icosahedron_gsBlob);
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(Icosahedron_psBlob);
-	//サンプルマスクとラスタライザステートの設定
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
-	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//ブレンドステートの設定
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	//頂点レイアウトの設定
-	gpipeline.InputLayout.pInputElementDescs = IcosahedronPrimitiveInputLayout;
-	gpipeline.InputLayout.NumElements = _countof(IcosahedronPrimitiveInputLayout);//_countof(nputLayout)
-	//図形の形状を点に設定
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-	//その他の設定
-	gpipeline.NumRenderTargets = 1; //描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
-	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
-	//デプスステンシルステートの設定
-	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//深度バッファのフォーマット
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-	//テクスチャサンプラーの設定[
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-	//ルートシグネチャの生成
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	//ルートシグネチャの生成
-	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
-		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-
-	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
-		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&IcosahedronRootsignature));
-	//パイプラインにルートシグネチャをセット
-	gpipeline.pRootSignature = IcosahedronRootsignature.Get();
-	//パイプラインステートの生成
-	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&IcosahedronPipelinestate));
-
-	if (FAILED(result)) {
-		assert(0);
-	}
-}
-
 void Primitive3D::Initialize()
 {
 	//頂点バッファの生成
 	HRESULT result;
+
+	// 各プリミティブの実体生成
+	if (CubeUse)	CubePrim = std::make_unique<CubePrimData>();
+	if (LineUse)	LinePrim = std::make_unique<LinePrimData>();
+	if (TetraUse)	TetraPrim = std::make_unique<TetrahedronPrimData>();
+	if (OctaUse)	OctaPrim = std::make_unique<OctahedronPrimData>();
+	if (IcosaUse)	IcosaPrim = std::make_unique<IcosahedronPrimData>();
+
 #pragma region 箱プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(CubePrimitive3D::Cube) * MaxCubePrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&CubeVertBuff)
-	);
-	CubevbView.BufferLocation = CubeVertBuff->GetGPUVirtualAddress();
-	CubevbView.SizeInBytes = sizeof(CubePrimitive3D::Cube) * MaxCubePrimitives;
-	CubevbView.StrideInBytes = sizeof(CubePrimitive3D::Cube);
+	if (CubeUse) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(CubePrimitive3D::Cube) * CubePrim->MaxPrimitives),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&CubePrim->VertBuff)
+		);
+		CubePrim->vbView.BufferLocation = CubePrim->VertBuff->GetGPUVirtualAddress();
+		CubePrim->vbView.SizeInBytes = sizeof(CubePrimitive3D::Cube) * CubePrim->MaxPrimitives;
+		CubePrim->vbView.StrideInBytes = sizeof(CubePrimitive3D::Cube);
+	}
 #pragma endregion
 #pragma region 線プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(LinePrimitive3D::Line) * MaxLinePrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&LineVertBuff)
-	);
-	LinevbView.BufferLocation = LineVertBuff->GetGPUVirtualAddress();
-	LinevbView.SizeInBytes = sizeof(LinePrimitive3D::Line) * MaxLinePrimitives;
-	LinevbView.StrideInBytes = sizeof(LinePrimitive3D::Line);
+	if (LineUse) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(LinePrimitive3D::Line) * LinePrim->MaxPrimitives),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&LinePrim->VertBuff)
+		);
+		LinePrim->vbView.BufferLocation = LinePrim->VertBuff->GetGPUVirtualAddress();
+		LinePrim->vbView.SizeInBytes = sizeof(LinePrimitive3D::Line) * LinePrim->MaxPrimitives;
+		LinePrim->vbView.StrideInBytes = sizeof(LinePrimitive3D::Line);
+	}
 #pragma endregion
 #pragma region 正四面体プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(TetrahedronPrimitive::Tetrahedron) * MaxTetrahedronPrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&TetrahedronVertBuff)
-	);
-	TetrahedronvbView.BufferLocation = TetrahedronVertBuff->GetGPUVirtualAddress();
-	TetrahedronvbView.SizeInBytes = sizeof(TetrahedronPrimitive::Tetrahedron) * MaxTetrahedronPrimitives;
-	TetrahedronvbView.StrideInBytes = sizeof(TetrahedronPrimitive::Tetrahedron);
+	if (TetraUse) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(TetrahedronPrimitive::Tetrahedron) * TetraPrim->MaxPrimitives),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&TetraPrim->VertBuff)
+		);
+		TetraPrim->vbView.BufferLocation = TetraPrim->VertBuff->GetGPUVirtualAddress();
+		TetraPrim->vbView.SizeInBytes = sizeof(TetrahedronPrimitive::Tetrahedron) * TetraPrim->MaxPrimitives;
+		TetraPrim->vbView.StrideInBytes = sizeof(TetrahedronPrimitive::Tetrahedron);
+	}
 #pragma endregion
 #pragma region 正八面体プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(OctahedronPrimitive::Octahedron) * MaxOctahedronPrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&OctahedronVertBuff)
-	);
-	OctahedronvbView.BufferLocation = OctahedronVertBuff->GetGPUVirtualAddress();
-	OctahedronvbView.SizeInBytes = sizeof(OctahedronPrimitive::Octahedron) * MaxOctahedronPrimitives;
-	OctahedronvbView.StrideInBytes = sizeof(OctahedronPrimitive::Octahedron);
+	if (OctaUse) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(OctahedronPrimitive::Octahedron) * OctaPrim->MaxPrimitives),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&OctaPrim->VertBuff)
+		);
+		OctaPrim->vbView.BufferLocation = OctaPrim->VertBuff->GetGPUVirtualAddress();
+		OctaPrim->vbView.SizeInBytes = sizeof(OctahedronPrimitive::Octahedron) * OctaPrim->MaxPrimitives;
+		OctaPrim->vbView.StrideInBytes = sizeof(OctahedronPrimitive::Octahedron);
+	}
 #pragma endregion
 #pragma region 正二十面体プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(IcosahedronPrimitive3D::Icosahedron) * MaxIcosahedronPrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&IcosahedronVertBuff)
-	);
-	IcosahedronvbView.BufferLocation = IcosahedronVertBuff->GetGPUVirtualAddress();
-	IcosahedronvbView.SizeInBytes = sizeof(IcosahedronPrimitive3D::Icosahedron) * MaxIcosahedronPrimitives;
-	IcosahedronvbView.StrideInBytes = sizeof(IcosahedronPrimitive3D::Icosahedron);
+	if (IcosaUse) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer(sizeof(IcosahedronPrimitive3D::Icosahedron) * IcosaPrim->MaxPrimitives),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&IcosaPrim->VertBuff)
+		);
+		IcosaPrim->vbView.BufferLocation = IcosaPrim->VertBuff->GetGPUVirtualAddress();
+		IcosaPrim->vbView.SizeInBytes = sizeof(IcosahedronPrimitive3D::Icosahedron) * IcosaPrim->MaxPrimitives;
+		IcosaPrim->vbView.StrideInBytes = sizeof(IcosahedronPrimitive3D::Icosahedron);
+	}
 #pragma endregion
 	//定数バッファの生成
 	result = DirectXBase::dev->CreateCommittedResource(
@@ -555,50 +102,60 @@ void Primitive3D::Initialize()
 		assert(0);
 	}
 
-	SetupCubePrimitive();
-	SetupLinePrimitive();
-	SetupTetrahedronPrimitive();
-	SetupOctahedronPrimitive();
-	SetupIcosahedronPrimitive();
+	if (CubeUse)	CubePrim->SetupCubePrimitive();
+	if (LineUse)	LinePrim->SetupLinePrimitive();
+	if (TetraUse)	TetraPrim->SetupTetrahedronPrimitive();
+	if (OctaUse)	OctaPrim->SetupOctahedronPrimitive();
+	if (IcosaUse)	IcosaPrim->SetupIcosahedronPrimitive();
 }
 
 void Primitive3D::Update()
 {
-	for (int i = 0; i < MaxCubePrimitives; i++) {
-		CubeData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-		CubeData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-		CubeData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		CubeData[i].Data.Lighting = false; // ライティングが有効か
-		CubeData[i].Active = false;
+	if (CubeUse) {
+		for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
+			CubePrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
+			CubePrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
+			CubePrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			CubePrim->Data[i].Data.Lighting = false; // ライティングが有効か
+			CubePrim->Data[i].Active = false;
+		}
 	}
-	for (int i = 0; i < MaxLinePrimitives; i++) {
-		LineData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-		LineData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-		LineData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		LineData[i].Active = false;
+	if (LineUse) {
+		for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
+			LinePrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
+			LinePrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
+			LinePrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			LinePrim->Data[i].Active = false;
+		}
 	}
-	for (int i = 0; i < MaxOctahedronPrimitives; i++) {
-		OctahedronData[i].Data.pos = XMFLOAT3{ 0,0,0 };
-		OctahedronData[i].Data.Radius = 0;
-		OctahedronData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		OctahedronData[i].Data.Lighting = false; // ライティングが有効か
-		OctahedronData[i].Active = false;
+	if (OctaUse) {
+		for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
+			OctaPrim->Data[i].Data.pos = XMFLOAT3{ 0,0,0 };
+			OctaPrim->Data[i].Data.Radius = 0;
+			OctaPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			OctaPrim->Data[i].Data.Lighting = false; // ライティングが有効か
+			OctaPrim->Data[i].Active = false;
+		}
 	}
-	for (int i = 0; i < MaxIcosahedronPrimitives; i++) {
-		IcosahedronData[i].Data.pos = XMFLOAT3{ 0,0,0 };
-		IcosahedronData[i].Data.Radius = 0;
-		IcosahedronData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		IcosahedronData[i].Data.Lighting = false; // ライティングが有効か
-		IcosahedronData[i].Active = false;
+	if (IcosaUse) {
+		for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
+			IcosaPrim->Data[i].Data.pos = XMFLOAT3{ 0,0,0 };
+			IcosaPrim->Data[i].Data.Radius = 0;
+			IcosaPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			IcosaPrim->Data[i].Data.Lighting = false; // ライティングが有効か
+			IcosaPrim->Data[i].Active = false;
+		}
 	}
-	for (int i = 0; i < MaxTetrahedronPrimitives; i++) {
-		TetrahedronData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-		TetrahedronData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-		TetrahedronData[i].Data.pos3 = XMFLOAT3{ 0,0,0 };
-		TetrahedronData[i].Data.pos4 = XMFLOAT3{ 0,0,0 };
-		TetrahedronData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		TetrahedronData[i].Data.Lighting = false; // ライティングが有効か
-		TetrahedronData[i].Active = false;
+	if (TetraUse) {
+		for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
+			TetraPrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
+			TetraPrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
+			TetraPrim->Data[i].Data.pos3 = XMFLOAT3{ 0,0,0 };
+			TetraPrim->Data[i].Data.pos4 = XMFLOAT3{ 0,0,0 };
+			TetraPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			TetraPrim->Data[i].Data.Lighting = false; // ライティングが有効か
+			TetraPrim->Data[i].Active = false;
+		}
 	}
 }
 
@@ -606,8 +163,8 @@ void Primitive3D::CubeDrawAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < MaxCubePrimitives; i++) {
-		if (CubeData[i].Active) {
+	for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
+		if (CubePrim->Data[i].Active) {
 			activeCount++;
 		}
 	}
@@ -615,21 +172,21 @@ void Primitive3D::CubeDrawAll()
 		return;
 	}
 	CubePrimitive3D::Cube *vertMap = nullptr;
-	result = CubeVertBuff->Map(0, nullptr, (void **)&vertMap);
+	result = CubePrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < MaxCubePrimitives; i++) {
-			if (CubeData[i].Active) {
-				vertMap->pos1 = CubeData[i].Data.pos1;
-				vertMap->pos2 = CubeData[i].Data.pos2;
-				vertMap->Scale = CubeData[i].Data.Scale;
-				vertMap->Rotate = CubeData[i].Data.Rotate;
-				vertMap->color = CubeData[i].Data.color;
-				vertMap->Lighting = CubeData[i].Data.Lighting;
+		for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
+			if (CubePrim->Data[i].Active) {
+				vertMap->pos1 =		 CubePrim->Data[i].Data.pos1;
+				vertMap->pos2 =		 CubePrim->Data[i].Data.pos2;
+				vertMap->Scale =	 CubePrim->Data[i].Data.Scale;
+				vertMap->Rotate =	 CubePrim->Data[i].Data.Rotate;
+				vertMap->color =	 CubePrim->Data[i].Data.color;
+				vertMap->Lighting =	 CubePrim->Data[i].Data.Lighting;
 				vertMap++;
 			}
 		}
 	}
-	CubeVertBuff->Unmap(0, nullptr);
+	CubePrim->VertBuff->Unmap(0, nullptr);
 
 	//定数バッファへデータ転送
 	ConstBufferData *constMap0 = nullptr;
@@ -643,12 +200,12 @@ void Primitive3D::CubeDrawAll()
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
-	DirectXBase::cmdList->SetGraphicsRootSignature(CubeRootsignature.Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(CubePrim->Rootsignature.Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(CubePipelinestate.Get());
+	DirectXBase::cmdList->SetPipelineState(CubePrim->Pipelinestate.Get());
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
-	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &CubevbView);
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &CubePrim->vbView);
 	//デスクリプタヒープをセット
 	//ID3D12DescriptorHeap *ppHeaps[] = { TexManager::TextureDescHeap.Get() };
 	//DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -670,8 +227,8 @@ void Primitive3D::LineDrawAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < MaxLinePrimitives; i++) {
-		if (LineData[i].Active) {
+	for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
+		if (LinePrim->Data[i].Active) {
 			activeCount++;
 		}
 	}
@@ -679,18 +236,18 @@ void Primitive3D::LineDrawAll()
 		return;
 	}
 	LinePrimitive3D::Line *vertMap = nullptr;
-	result = LineVertBuff->Map(0, nullptr, (void **)&vertMap);
+	result = LinePrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < MaxLinePrimitives; i++) {
-			if (LineData[i].Active) {
-				vertMap->pos1 = LineData[i].Data.pos1;
-				vertMap->pos2 = LineData[i].Data.pos2;
-				vertMap->color = LineData[i].Data.color;
+		for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
+			if (LinePrim->Data[i].Active) {
+				vertMap->pos1 = LinePrim->Data[i].Data.pos1;
+				vertMap->pos2 = LinePrim->Data[i].Data.pos2;
+				vertMap->color = LinePrim->Data[i].Data.color;
 				vertMap++;
 			}
 		}
 	}
-	LineVertBuff->Unmap(0, nullptr);
+	LinePrim->VertBuff->Unmap(0, nullptr);
 	//定数バッファへデータ転送
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
@@ -703,12 +260,12 @@ void Primitive3D::LineDrawAll()
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
-	DirectXBase::cmdList->SetGraphicsRootSignature(LineRootsignature.Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(LinePrim->Rootsignature.Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(LinePipelinestate.Get());
+	DirectXBase::cmdList->SetPipelineState(LinePrim->Pipelinestate.Get());
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
-	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &LinevbView);
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &LinePrim->vbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 	//描画コマンド
@@ -719,8 +276,8 @@ void Primitive3D::DrawTetrahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < MaxTetrahedronPrimitives; i++) {
-		if (TetrahedronData[i].Active) {
+	for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
+		if (TetraPrim->Data[i].Active) {
 			activeCount++;
 		}
 	}
@@ -728,21 +285,21 @@ void Primitive3D::DrawTetrahedronAll()
 		return;
 	}
 	TetrahedronPrimitive::Tetrahedron *vertMap = nullptr;
-	result = TetrahedronVertBuff->Map(0, nullptr, (void **)&vertMap);
+	result = TetraPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < MaxTetrahedronPrimitives; i++) {
-			if (TetrahedronData[i].Active) {
-				vertMap->pos1 = TetrahedronData[i].Data.pos1;
-				vertMap->pos2 = TetrahedronData[i].Data.pos2;
-				vertMap->pos3 = TetrahedronData[i].Data.pos3;
-				vertMap->pos4 = TetrahedronData[i].Data.pos4;
-				vertMap->color = TetrahedronData[i].Data.color;
-				vertMap->Lighting = TetrahedronData[i].Data.Lighting;
+		for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
+			if (TetraPrim->Data[i].Active) {
+				vertMap->pos1 = TetraPrim->Data[i].Data.pos1;
+				vertMap->pos2 = TetraPrim->Data[i].Data.pos2;
+				vertMap->pos3 = TetraPrim->Data[i].Data.pos3;
+				vertMap->pos4 = TetraPrim->Data[i].Data.pos4;
+				vertMap->color = TetraPrim->Data[i].Data.color;
+				vertMap->Lighting = TetraPrim->Data[i].Data.Lighting;
 				vertMap++;
 			}
 		}
 	}
-	TetrahedronVertBuff->Unmap(0, nullptr);
+	TetraPrim->VertBuff->Unmap(0, nullptr);
 	//定数バッファへデータ転送
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
@@ -755,12 +312,12 @@ void Primitive3D::DrawTetrahedronAll()
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
-	DirectXBase::cmdList->SetGraphicsRootSignature(TetrahedronRootsignature.Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(TetraPrim->Rootsignature.Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(TetrahedronPipelinestate.Get());
+	DirectXBase::cmdList->SetPipelineState(TetraPrim->Pipelinestate.Get());
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
-	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &TetrahedronvbView);
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &TetraPrim->vbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 	//描画コマンド
@@ -771,8 +328,8 @@ void Primitive3D::DrawOctahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < MaxOctahedronPrimitives; i++) {
-		if (OctahedronData[i].Active) {
+	for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
+		if (OctaPrim->Data[i].Active) {
 			activeCount++;
 		}
 	}
@@ -780,19 +337,19 @@ void Primitive3D::DrawOctahedronAll()
 		return;
 	}
 	OctahedronPrimitive::Octahedron *vertMap = nullptr;
-	result = OctahedronVertBuff->Map(0, nullptr, (void **)&vertMap);
+	result = OctaPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < MaxOctahedronPrimitives; i++) {
-			if (OctahedronData[i].Active) {
-				vertMap->pos = OctahedronData[i].Data.pos;
-				vertMap->Radius = OctahedronData[i].Data.Radius;
-				vertMap->color = OctahedronData[i].Data.color;
-				vertMap->Lighting = OctahedronData[i].Data.Lighting;
+		for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
+			if (OctaPrim->Data[i].Active) {
+				vertMap->pos =		OctaPrim->Data[i].Data.pos;
+				vertMap->Radius =	OctaPrim->Data[i].Data.Radius;
+				vertMap->color =	OctaPrim->Data[i].Data.color;
+				vertMap->Lighting = OctaPrim->Data[i].Data.Lighting;
 				vertMap++;
 			}
 		}
 	}
-	OctahedronVertBuff->Unmap(0, nullptr);
+	OctaPrim->VertBuff->Unmap(0, nullptr);
 	//定数バッファへデータ転送
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
@@ -805,12 +362,12 @@ void Primitive3D::DrawOctahedronAll()
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
-	DirectXBase::cmdList->SetGraphicsRootSignature(OctahedronRootsignature.Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(OctaPrim->Rootsignature.Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(OctahedronPipelinestate.Get());
+	DirectXBase::cmdList->SetPipelineState(OctaPrim->Pipelinestate.Get());
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
-	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &OctahedronvbView);
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &OctaPrim->vbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 	//描画コマンド
@@ -821,8 +378,8 @@ void Primitive3D::DrawIcosahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < MaxIcosahedronPrimitives; i++) {
-		if (IcosahedronData[i].Active) {
+	for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
+		if (IcosaPrim->Data[i].Active) {
 			activeCount++;
 		}
 	}
@@ -830,19 +387,19 @@ void Primitive3D::DrawIcosahedronAll()
 		return;
 	}
 	IcosahedronPrimitive3D::Icosahedron *vertMap = nullptr;
-	result = IcosahedronVertBuff->Map(0, nullptr, (void **)&vertMap);
+	result = IcosaPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < MaxIcosahedronPrimitives; i++) {
-			if (IcosahedronData[i].Active) {
-				vertMap->pos = IcosahedronData[i].Data.pos;
-				vertMap->Radius = IcosahedronData[i].Data.Radius;
-				vertMap->color = IcosahedronData[i].Data.color;
-				vertMap->Lighting = IcosahedronData[i].Data.Lighting;
+		for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
+			if (IcosaPrim->Data[i].Active) {
+				vertMap->pos =		IcosaPrim->Data[i].Data.pos;
+				vertMap->Radius =	IcosaPrim->Data[i].Data.Radius;
+				vertMap->color =	IcosaPrim->Data[i].Data.color;
+				vertMap->Lighting = IcosaPrim->Data[i].Data.Lighting;
 				vertMap++;
 			}
 		}
 	}
-	IcosahedronVertBuff->Unmap(0, nullptr);
+	IcosaPrim->VertBuff->Unmap(0, nullptr);
 	//定数バッファへデータ転送
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
@@ -855,12 +412,12 @@ void Primitive3D::DrawIcosahedronAll()
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 	//ルートシグネチャ
-	DirectXBase::cmdList->SetGraphicsRootSignature(IcosahedronRootsignature.Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(IcosaPrim->Rootsignature.Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(IcosahedronPipelinestate.Get());
+	DirectXBase::cmdList->SetPipelineState(IcosaPrim->Pipelinestate.Get());
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	//頂点バッファの設定
-	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &IcosahedronvbView);
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &IcosaPrim->vbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
 	//描画コマンド
@@ -869,92 +426,107 @@ void Primitive3D::DrawIcosahedronAll()
 
 void Primitive3D::Draw()
 {
-	DrawTetrahedronAll();
-	DrawOctahedronAll();
-	DrawIcosahedronAll();
-	CubeDrawAll();
-	LineDrawAll();
+	if (TetraUse)DrawTetrahedronAll();
+	if (OctaUse)DrawOctahedronAll();
+	if (IcosaUse)DrawIcosahedronAll();
+	if (CubeUse)CubeDrawAll();
+	if (LineUse)LineDrawAll();
 }
 
 void Primitive3D::DrawCube(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 scale, XMFLOAT3 rotate, XMFLOAT4 color, bool Lighting) {
+	if (!CubeUse) {
+		return;
+	}
 	int Num = 0;
-	for (int i = 0; i < MaxCubePrimitives; i++) {
-		if (CubeData[i].Active == false) break;
+	for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
+		if (CubePrim->Data[i].Active == false) break;
 		Num++;
 	}
 	assert(Num <= MaxCubePrimitives);
 
-	this->CubeData[Num].Data.pos1 = pos1;
-	this->CubeData[Num].Data.pos2 = pos2;
-	this->CubeData[Num].Data.Scale = scale;
-	this->CubeData[Num].Data.Rotate = rotate;
-	this->CubeData[Num].Data.color = color;
-	this->CubeData[Num].Data.Lighting = Lighting;
-	CubeData[Num].Active = true;
+	this->CubePrim->Data[Num].Data.pos1 = pos1;
+	this->CubePrim->Data[Num].Data.pos2 = pos2;
+	this->CubePrim->Data[Num].Data.Scale = scale;
+	this->CubePrim->Data[Num].Data.Rotate = rotate;
+	this->CubePrim->Data[Num].Data.color = color;
+	this->CubePrim->Data[Num].Data.Lighting = Lighting;
+	CubePrim->Data[Num].Active = true;
 }
 
 void Primitive3D::DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color) {
+	if (!LineUse) {
+		return;
+	}
 	int Num = 0;
-	for (int i = 0; i < MaxLinePrimitives; i++) {
-		if (LineData[i].Active == false) break;
+	for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
+		if (LinePrim->Data[i].Active == false) break;
 		Num++;
 	}
 	assert(Num <= MaxLinePrimitives);
 
-	this->LineData[Num].Data.pos1 = pos1;
-	this->LineData[Num].Data.pos2 = pos2;
-	this->LineData[Num].Data.color = color;
-	LineData[Num].Active = true;
+	this->LinePrim->Data[Num].Data.pos1 = pos1;
+	this->LinePrim->Data[Num].Data.pos2 = pos2;
+	this->LinePrim->Data[Num].Data.color = color;
+	LinePrim->Data[Num].Active = true;
 }
 
 void Primitive3D::DrawTetrahedron(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 pos3, XMFLOAT3 pos4, XMFLOAT4 color, bool Lighting)
 {
+	if (!TetraUse) {
+		return;
+	}
 	int Num = 0;
-	for (int i = 0; i < MaxTetrahedronPrimitives; i++) {
-		if (TetrahedronData[i].Active == false) break;
+	for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
+		if (TetraPrim->Data[i].Active == false) break;
 		Num++;
 	}
-	assert(Num <= MaxTetrahedronPrimitives);
+	assert(Num <= TetraPrim->MaxPrimitives);
 
-	this->TetrahedronData[Num].Data.pos1 = pos1;
-	this->TetrahedronData[Num].Data.pos2 = pos2;
-	this->TetrahedronData[Num].Data.pos3 = pos3;
-	this->TetrahedronData[Num].Data.pos4 = pos4;
-	this->TetrahedronData[Num].Data.color = color;
-	this->TetrahedronData[Num].Data.Lighting = Lighting;
-	TetrahedronData[Num].Active = true;
+	this->TetraPrim->Data[Num].Data.pos1 = pos1;
+	this->TetraPrim->Data[Num].Data.pos2 = pos2;
+	this->TetraPrim->Data[Num].Data.pos3 = pos3;
+	this->TetraPrim->Data[Num].Data.pos4 = pos4;
+	this->TetraPrim->Data[Num].Data.color = color;
+	this->TetraPrim->Data[Num].Data.Lighting = Lighting;
+	TetraPrim->Data[Num].Active = true;
 }
 
 void Primitive3D::DrawOctahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, bool Lighting)
 {
+	if (!OctaUse) {
+		return;
+	}
 	int Num = 0;
-	for (int i = 0; i < MaxOctahedronPrimitives; i++) {
-		if (OctahedronData[i].Active == false) break;
+	for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
+		if (OctaPrim->Data[i].Active == false) break;
 		Num++;
 	}
 	assert(Num <= MaxOctahedronPrimitives);
 
-	this->OctahedronData[Num].Data.pos = pos;
-	this->OctahedronData[Num].Data.Radius = Radius;
-	this->OctahedronData[Num].Data.color = color;
-	this->OctahedronData[Num].Data.Lighting = Lighting;
-	OctahedronData[Num].Active = true;
+	this->OctaPrim->Data[Num].Data.pos = pos;
+	this->OctaPrim->Data[Num].Data.Radius = Radius;
+	this->OctaPrim->Data[Num].Data.color = color;
+	this->OctaPrim->Data[Num].Data.Lighting = Lighting;
+	OctaPrim->Data[Num].Active = true;
 }
 
 void Primitive3D::DrawIcosahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, bool Lighting)
 {
+	if (!IcosaUse) {
+		return;
+	}
 	int Num = 0;
-	for (int i = 0; i < MaxIcosahedronPrimitives; i++) {
-		if (IcosahedronData[i].Active == false) break;
+	for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
+		if (IcosaPrim->Data[i].Active == false) break;
 		Num++;
 	}
 	assert(Num <= MaxIcosahedronPrimitives);
 
-	this->IcosahedronData[Num].Data.pos = pos;
-	this->IcosahedronData[Num].Data.Radius = Radius;
-	this->IcosahedronData[Num].Data.color = color;
-	this->IcosahedronData[Num].Data.Lighting = Lighting;
-	IcosahedronData[Num].Active = true;
+	this->IcosaPrim->Data[Num].Data.pos = pos;
+	this->IcosaPrim->Data[Num].Data.Radius = Radius;
+	this->IcosaPrim->Data[Num].Data.color = color;
+	this->IcosaPrim->Data[Num].Data.Lighting = Lighting;
+	IcosaPrim->Data[Num].Active = true;
 }
 
 void Primitive3D::DrawGrid(XMFLOAT3 pos1, XMFLOAT3 pos2, float interval,XMFLOAT4 color)
@@ -1021,5 +593,481 @@ void Primitive3D::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPoin
 		//エラー内容を出力ウィンドウに表示
 		OutputDebugStringA(errstr.c_str());
 		exit(1);
+	}
+}
+
+void TetrahedronPrimData::SetupTetrahedronPrimitive()
+{
+	PrimitiveLoadShader::LoadShader(&vsBlob, L"Resource/shader/TetrahedronVertex.hlsl", "main", "vs_5_0");
+	PrimitiveLoadShader::LoadShader(&gsBlob, L"Resource/shader/TetrahedronGeometry.hlsl", "main", "gs_5_0");
+	PrimitiveLoadShader::LoadShader(&psBlob, L"Resource/shader/TetrahedronPixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC TetrahedronPrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"POSITIONA", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"POSITIONB", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"POSITIONC", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+	};
+	HRESULT result;
+	ID3DBlob* errorBlob = nullptr;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = TetrahedronPrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(TetrahedronPrimitiveInputLayout);//_countof(nputLayout)
+	//図形の形状を点に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&Rootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = Rootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&Pipelinestate));
+
+	if (FAILED(result)) {
+		assert(0);
+	}
+}
+
+void CubePrimData::SetupCubePrimitive()
+{
+	PrimitiveLoadShader::LoadShader(&vsBlob, L"Resource/shader/CubePrimitiveVertex.hlsl", "main", "vs_5_0");
+	PrimitiveLoadShader::LoadShader(&gsBlob, L"Resource/shader/CubePrimitiveGeometry.hlsl", "main", "gs_5_0");
+	PrimitiveLoadShader::LoadShader(&psBlob, L"Resource/shader/CubePrimitivePixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC CubePrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"SCALE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"ROTATE", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+	};
+	HRESULT result;
+	ID3DBlob* errorBlob = nullptr;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = CubePrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(CubePrimitiveInputLayout);//_countof(nputLayout)
+	//図形の形状を点に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	//デスクリプタテーブルの設定
+	//CD3DX12_DESCRIPTOR_RANGE descRangeCBV; //定数用
+	//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+	//descRangeCBV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
+	//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	//rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&Rootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = Rootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&Pipelinestate));
+
+	if (FAILED(result)) {
+		assert(0);
+	}
+}
+
+void LinePrimData::SetupLinePrimitive()
+{
+	PrimitiveLoadShader::LoadShader(&vsBlob, L"Resource/shader/LinePrimitiveVertex.hlsl", "main", "vs_5_0");
+	PrimitiveLoadShader::LoadShader(&gsBlob, L"Resource/shader/LinePrimitiveGeometry.hlsl", "main", "gs_5_0");
+	PrimitiveLoadShader::LoadShader(&psBlob, L"Resource/shader/LinePrimitivePixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC LinePrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+	};
+	HRESULT result;
+	ID3DBlob* errorBlob = nullptr;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = LinePrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(LinePrimitiveInputLayout);//_countof(nputLayout)
+	//図形の形状を点に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&Rootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = Rootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&Pipelinestate));
+
+	if (FAILED(result)) {
+		assert(0);
+	}
+}
+
+void OctahedronPrimData::SetupOctahedronPrimitive()
+{
+	PrimitiveLoadShader::LoadShader(&vsBlob, L"Resource/shader/OctahedronVertex.hlsl", "main", "vs_5_0");
+	PrimitiveLoadShader::LoadShader(&gsBlob, L"Resource/shader/OctahedronGeometry.hlsl", "main", "gs_5_0");
+	PrimitiveLoadShader::LoadShader(&psBlob, L"Resource/shader/OctahedronPixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC OctahedronPrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+	};
+	HRESULT result;
+	ID3DBlob* errorBlob = nullptr;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = OctahedronPrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(OctahedronPrimitiveInputLayout);//_countof(nputLayout)
+	//図形の形状を点に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&Rootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = Rootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&Pipelinestate));
+
+	if (FAILED(result)) {
+		assert(0);
+	}
+}
+
+void IcosahedronPrimData::SetupIcosahedronPrimitive()
+{
+	PrimitiveLoadShader::LoadShader(&vsBlob, L"Resource/shader/IcosahedronVertex.hlsl", "main", "vs_5_0");
+	PrimitiveLoadShader::LoadShader(&gsBlob, L"Resource/shader/IcosahedronGeometry.hlsl", "main", "gs_5_0");
+	PrimitiveLoadShader::LoadShader(&psBlob, L"Resource/shader/IcosahedronPixel.hlsl", "main", "ps_5_0");
+
+	D3D12_INPUT_ELEMENT_DESC IcosahedronPrimitiveInputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+		{
+			"LIGHTING", 0, DXGI_FORMAT_R32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		},
+	};
+	HRESULT result;
+	ID3DBlob* errorBlob = nullptr;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{}; //グラフィックスパイプラインの各ステージを設定する構造体
+	//頂点シェーダ、ピクセルシェーダをパイプラインに設定
+	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob);
+	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob);
+	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob);
+	//サンプルマスクとラスタライザステートの設定
+	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
+	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//ブレンドステートの設定
+	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.BlendEnable = true;
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	//頂点レイアウトの設定
+	gpipeline.InputLayout.pInputElementDescs = IcosahedronPrimitiveInputLayout;
+	gpipeline.InputLayout.NumElements = _countof(IcosahedronPrimitiveInputLayout);//_countof(nputLayout)
+	//図形の形状を点に設定
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//その他の設定
+	gpipeline.NumRenderTargets = 1; //描画対象は1つ
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; //0～255指定のRGBA
+	gpipeline.SampleDesc.Count = 1; //1ピクセルにつき1回サンプリング
+	//デプスステンシルステートの設定
+	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//深度バッファのフォーマット
+	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	//ルートパラメータの設定
+	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	//テクスチャサンプラーの設定[
+	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
+	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	//ルートシグネチャの生成
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	//ルートシグネチャの生成
+	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc,
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	ComPtr<ID3DBlob> rootSigBlob;
+	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc,
+		D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+
+	result = DirectXBase::dev->CreateRootSignature(0, rootSigBlob->GetBufferPointer(),
+		rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&Rootsignature));
+	//パイプラインにルートシグネチャをセット
+	gpipeline.pRootSignature = Rootsignature.Get();
+	//パイプラインステートの生成
+	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&Pipelinestate));
+
+	if (FAILED(result)) {
+		assert(0);
 	}
 }

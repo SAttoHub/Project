@@ -1,5 +1,26 @@
 #include "Audiences.h"
 
+void Audiences::AudienceSummonAndDelete()
+{
+	if (Hoge == 1) {
+		if (m_Audience.size() > 0) {
+			while (1) {
+				int Index = GetRand(0, int(m_Audience.size()) - 1);
+				if (!(m_Audience[Index].GetAction() != AUD_ActionType::EXIT && m_Audience[Index].GetAction() != AUD_ActionType::ADMISSION)) continue;
+				m_Audience[Index].ExitTrigger();
+				Hoge *= -1;
+				break;
+			}
+		}
+		Timer = 0;
+	}
+	else {
+		SummonAudience2(1);
+		Timer = 0;
+		Hoge *= -1;
+	}
+}
+
 Audiences::Audiences()
 {
 	m_Audience.reserve(MAX_AUDIENCE);
@@ -21,24 +42,7 @@ void Audiences::Update()
 
 	Timer++;
 	if (Timer == 30) {
-		if (Hoge == 1) {
-			if (m_Audience.size() > 0) {
-				while (1) {
-					int Index = GetRand(0, int(m_Audience.size()) - 1);
-					if (m_Audience[Index].GetAction() != AUD_ActionType::EXIT && m_Audience[Index].GetAction() != AUD_ActionType::ADMISSION) {
-						m_Audience[Index].ExitTrigger();
-						Hoge *= -1;
-						break;
-					}
-				}
-			}
-			Timer = 0;
-		}
-		else {
-			SummonAudience2(1);
-			Timer = 0;
-			Hoge *= -1;
-		}
+		AudienceSummonAndDelete();
 	}
 
 
@@ -171,6 +175,9 @@ int Audiences::GetRandIndex()
 
 void Audiences::DeleteAllAudience()
 {
+	for (auto& aud : m_Audience) {
+		aud.DeleteModel();
+	}
 	m_Audience.clear();
 	Timer = 0;
 	Hoge = 0;

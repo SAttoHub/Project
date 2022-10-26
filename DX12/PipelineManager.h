@@ -20,9 +20,6 @@ public:
 	int PIPELINE_NUM = 0;
 	ComPtr<ID3DBlob> errorBlob; //エラーオブジェクト
 
-
-
-
 	//ルートシグネチャの生成
 	static ComPtr<ID3D12RootSignature> rootsignature[MAX_PIPELINE];
 

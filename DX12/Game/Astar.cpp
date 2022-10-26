@@ -128,7 +128,7 @@ bool Astar::AddAdjacentNode(std::list<AstarNode *> &open_list, std::list<AstarNo
 	return false;
 }
 
-void Astar::CreateMap(const int MapWidth, const int MapHeight, const vector<std::vector<int>> &CostTable)
+void Astar::CreateMap(const int MapWidth, const int MapHeight, const std::vector<std::vector<int>> &CostTable)
 {
 	for (int x = 0; x < MapWidth; x++)
 	{
@@ -185,7 +185,7 @@ void Astar::CreateMap(const int MapWidth, const int MapHeight, const vector<std:
 	//}
 }
 
-AstarResults Astar::DoAstar(Cell start, Cell goal, const vector<std::vector<int>> &CostTable)
+AstarResults Astar::DoAstar(Cell start, Cell goal, const std::vector<std::vector<int>> &CostTable)
 {
 	int Width = CostTable.size(), Height = CostTable[0].size();
 
@@ -203,7 +203,7 @@ AstarResults Astar::DoAstar(Cell start, Cell goal, const vector<std::vector<int>
 	const AstarNode *goal_node = &Map[goal.x][goal.y];
 
 	// 更新したノード位置保存用
-	vector<std::vector<Cell>> last_update_cells;
+	std::vector<std::vector<Cell>> last_update_cells;
 	last_update_cells.resize(Width);
 	for (int x = 0; x < Width; ++x) {
 		last_update_cells[x].resize(Height);
@@ -334,9 +334,9 @@ AstarResults Astar::DoAstar(Cell start, Cell goal, const vector<std::vector<int>
 	return AstarResults(route_list, NeedCost);
 }
 
-vector<std::vector<AstarResults>> Astar::DoAstarForAll(XMINT2 start, const vector<std::vector<int>> &CostTable)
+std::vector<std::vector<AstarResults>> Astar::DoAstarForAll(XMINT2 start, const std::vector<std::vector<int>> &CostTable)
 {
-	vector<std::vector<AstarResults>> Result;
+	std::vector<std::vector<AstarResults>> Result;
 	Result.resize(CostTable.size());
 	for (int x = 0; x < CostTable.size(); x++) {
 		Result[x].resize(CostTable[x].size());
@@ -355,9 +355,9 @@ vector<std::vector<AstarResults>> Astar::DoAstarForAll(XMINT2 start, const vecto
 	return Result;
 }
 
-vector<std::vector<AstarResults>> Astar::DoAstarForAllSaving(XMINT2 start, const vector<std::vector<int>> &CostTable, int Cost)
+std::vector<std::vector<AstarResults>> Astar::DoAstarForAllSaving(XMINT2 start, const std::vector<std::vector<int>> &CostTable, int Cost)
 {
-	vector<std::vector<AstarResults>> Result;
+	std::vector<std::vector<AstarResults>> Result;
 	Result.resize(CostTable.size());
 	for (int x = 0; x < CostTable.size(); x++) {
 		Result[x].resize(CostTable[x].size());

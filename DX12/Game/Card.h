@@ -4,12 +4,18 @@
 #include "..\TexManager.h"
 #include "Collider/GameCollisionManager.h"
 
+//-------------------------------------------------------------------------------------------------------------
+// カード種類
+//-------------------------------------------------------------------------------------------------------------
 enum class CardType {
 	NONE,
 	DEFAULT_ATTACK,
 	DEFAULT_MOVE
 };
 
+//-------------------------------------------------------------------------------------------------------------
+// カード
+//-------------------------------------------------------------------------------------------------------------
 class Card
 {
 private:
@@ -31,9 +37,9 @@ private:
 public:
 		GameBaseCollider *collider = nullptr;
 		virtual ~Card();
-		void SetCollider(GameBaseCollider *collider);
+		void SetCollider();
 		void ColliderUpdate();
-		GameBoxCollider *col = nullptr;
+		//GameBoxCollider *col = nullptr;
 public:
 	bool HitCursor = false;
 	bool Active = false;

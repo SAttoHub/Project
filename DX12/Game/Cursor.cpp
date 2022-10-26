@@ -12,10 +12,10 @@ Cursor::~Cursor()
 	}*/
 }
 
-void Cursor::SetCollider(GameBaseCollider *collider)
+void Cursor::SetCollider()
 {
+	collider = new GamePointCollider(&m_MousePos, "Mouse");
 	collider->SetBasisPosition(&m_MousePos);
-	this->collider = collider;
 	GCM::Instance()->AddCollider(collider);
 }
 
@@ -34,8 +34,7 @@ Cursor::Cursor()
 void Cursor::Initialize()
 {
 	m_MousePos = Input::GetMousePos();
-	col = new GamePointCollider(&m_MousePos, "Mouse");
-	SetCollider(col);
+	SetCollider();
 }
 
 void Cursor::Update()

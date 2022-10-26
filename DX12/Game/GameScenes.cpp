@@ -39,9 +39,6 @@ void GameScenes::Initialize()
 
 void GameScenes::Update()
 {
-	StaticCameraPos::Instance()->position = DirectX::XMFLOAT3(0, 0, 0);
-	StaticCameraPos::Instance()->target = DirectX::XMFLOAT3(0.01f, 0.01f, 1);
-
 	/*soko->position = XMFLOAT3(0, -10, 0);*/
 	Cursor::Instance()->Update();
 
@@ -71,7 +68,16 @@ void GameScenes::Update()
 		if (m_enemys.GetEnemyCount() == 0) {
 			NowWave++;
 			if (NowWave == 1) {
-				m_BattleWave->StartWave("Test2");
+				//m_BattleWave->StartWave("Test2");
+				EndCount++;
+				if (EndCount > 30) {
+					DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+						"R : ƒ^ƒCƒgƒ‹‚Ö");
+					if (Input::isKeyTrigger(DIK_R)) {
+						Reset();
+					}
+				}
+				NowWave--;
 			}
 			else if (NowWave == 2) {
 				m_BattleWave->StartWave("Test3");
@@ -211,6 +217,7 @@ void GameScenes::Reset()
 	m_player.Reset();
 	m_cards.Reset();
 	m_cards.StartTurn();
+	m_enemys.AllEnemyClear();
 	Scene = NowScene::Title;
 	m_Audiences.DeleteAllAudience();
 	Turn = 2;

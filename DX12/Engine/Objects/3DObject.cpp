@@ -456,26 +456,6 @@ void DepthDrawobject3d(Object3d *object)
 		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
 
-	if (object->shaderNumber == FBX_Bump_SHADER) {
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.BumpTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-	}
-	else if (object->shaderNumber == FBX_height_SHADER) {
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.BumpTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(6, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.HeightTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-	}
-
 	//if (object->shaderNumber == Sea_SHADER) {
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
 	//}
@@ -574,26 +554,6 @@ void DOFDepthDrawobject3d(Object3d *object)
 		object->material.texNumber,
 		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
-
-	if (object->shaderNumber == FBX_Bump_SHADER) {
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.BumpTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-	}
-	else if (object->shaderNumber == FBX_height_SHADER) {
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(5, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.BumpTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-		//シェーダーリソースビュー
-		DirectXBase::cmdList->SetGraphicsRootDescriptorTable(6, CD3DX12_GPU_DESCRIPTOR_HANDLE(
-			TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
-			object->material.HeightTexNumber,
-			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
-	}
 
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
 	//DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());

@@ -10,10 +10,10 @@
 #include "..\Engine\CommonMathIncludes.h"
 #include "AstarNode.h"
 
-using namespace std;
 
-
+//-------------------------------------------------------------------------------------------------------------
 // 削除結果
+//-------------------------------------------------------------------------------------------------------------
 enum EraseResult
 {
 	NotFound,		// 未発見
@@ -21,6 +21,9 @@ enum EraseResult
 	CouldntErased	// 削除できない
 };
 
+//-------------------------------------------------------------------------------------------------------------
+// A*結果格納用構造体
+//-------------------------------------------------------------------------------------------------------------
 struct AstarResults {
 	std::list<Cell> route_list;
 	int Cost;
@@ -34,6 +37,9 @@ struct AstarResults {
 	~AstarResults(){}
 };
 
+//-------------------------------------------------------------------------------------------------------------
+// A*アルゴリズムを使用した経路探索クラス
+//-------------------------------------------------------------------------------------------------------------
 class Astar : public Singleton<Astar> {
 	friend class Singleton<Astar>;
 private:
@@ -42,13 +48,13 @@ private:
 private:
 	const int Infinity = 100000;
 	// 計算用データ
-	vector<std::vector<AstarNode>> Map;
+	std::vector<std::vector<AstarNode>> Map;
 	// 計算用データリセット
 	void DataReset();
 
 public:
 	// ノードの作成
-	void CreateMap(const int MapWidth, const int MapHeight, const vector<std::vector<int>> &CostTable);
+	void CreateMap(const int MapWidth, const int MapHeight, const std::vector<std::vector<int>> &CostTable);
 	// セル範囲チェック関数
 	bool IsCellWithinTheRange(int x, int y, int MapWidth, int MapHeight);
 	// コスト初期化
@@ -63,10 +69,10 @@ public:
 
 public:
 	// A*実行
-	AstarResults DoAstar(Cell start, Cell goal, const vector<std::vector<int>> &CostTable);
+	AstarResults DoAstar(Cell start, Cell goal, const std::vector<std::vector<int>> &CostTable);
 	// 全てのルートに対してA*実行
-	vector<std::vector<AstarResults>> DoAstarForAll(XMINT2 start, const vector<std::vector<int>> &CostTable);
+	std::vector<std::vector<AstarResults>> DoAstarForAll(XMINT2 start, const std::vector<std::vector<int>> &CostTable);
 	// コストがxy軸の合計の差より小さいチップに対しての全てのルートに対してA*実行
-	vector<std::vector<AstarResults>> DoAstarForAllSaving(XMINT2 start, const vector<std::vector<int>> &CostTable, int Cost);
+	std::vector<std::vector<AstarResults>> DoAstarForAllSaving(XMINT2 start, const std::vector<std::vector<int>> &CostTable, int Cost);
 };
 

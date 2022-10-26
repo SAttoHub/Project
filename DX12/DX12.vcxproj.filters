@@ -441,9 +441,6 @@
     <ClCompile Include="Game\Astar.cpp">
       <Filter>ソース ファイル\Game\AStar</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StaticCameraPos.cpp">
-      <Filter>ソース ファイル\Game\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameCamera.cpp">
       <Filter>ソース ファイル\Game\Camera</Filter>
     </ClCompile>
@@ -687,9 +684,6 @@
       <Filter>ヘッダー ファイル\Game\AStar</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameCamera.h">
-      <Filter>ヘッダー ファイル\Game\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\StaticCameraPos.h">
       <Filter>ヘッダー ファイル\Game\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Game\Card.h">

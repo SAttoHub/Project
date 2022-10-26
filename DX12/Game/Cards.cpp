@@ -5,11 +5,11 @@
 Cards::Cards()
 {
 	//m_Cards.reserve(16);
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	//m_Cards.push_front(Card(CardType::NONE));
 
 	m_UseCardType = CardType::NONE;
@@ -258,11 +258,11 @@ void Cards::CardEffectPhaseUpdate()
 void Cards::Reset()
 {
 	m_Cards.clear();
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	for (int i = 0; i < int(m_Cards.size()); i++) {
 		m_Cards[i]->Initialize(i, int(m_Cards.size()));
 	}

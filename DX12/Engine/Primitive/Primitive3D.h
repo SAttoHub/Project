@@ -15,6 +15,100 @@ using namespace DirectX;
 
 #include "..\..\Singleton.h"
 
+namespace PrimitiveLoadShader {
+	static void LoadShader(ID3DBlob** blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName) {
+		HRESULT result;
+		ID3DBlob* errorBlob = nullptr;
+		//シェーダーの読み込みとコンパイル
+		result = D3DCompileFromFile(
+			FileName, //シェーダーファイル名
+			nullptr,
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, //インクルード可能にする
+			EntryPointName, ModelName, //エントリーポイント名、シェーダーモデル指定
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, //デバッグ用設定
+			0,
+			*(&blob), &errorBlob
+		);
+
+		//シェーダーのエラー内容を表示
+		if (FAILED(result)) {
+			//errorBlobからエラー内容をstring型にコピー
+			std::string errstr;
+			errstr.resize(errorBlob->GetBufferSize());
+
+			std::copy_n((char*)errorBlob->GetBufferPointer(),
+				errorBlob->GetBufferSize(),
+				errstr.begin());
+			errstr += "\n";
+			//エラー内容を出力ウィンドウに表示
+			OutputDebugStringA(errstr.c_str());
+			exit(1);
+		}
+	}
+}
+
+// プリミティブ基礎
+class PrimitiveData {
+public:
+	// プリミティブシェーダー
+	ID3DBlob* vsBlob = nullptr; //頂点シェーダー
+	ID3DBlob* psBlob = nullptr; //ピクセルシェーダー
+	ID3DBlob* gsBlob = nullptr; //ジオメトリシェーダー
+	// ルートシグネチャ
+	ComPtr<ID3D12RootSignature> Rootsignature;
+	// パイプラインステート
+	ComPtr<ID3D12PipelineState> Pipelinestate;
+	// 頂点バッファ
+	ComPtr<ID3D12Resource> VertBuff;
+	D3D12_VERTEX_BUFFER_VIEW vbView{};
+};
+
+// 箱プリミティブ
+class CubePrimData : public PrimitiveData {
+public:
+	// 箱プリミティブデータ
+	static const int MaxPrimitives = 32; // 箱プリミティブ最大数
+	CubePrimitive3D Data[MaxPrimitives];
+	// 箱プリミティブ専用セットアップ
+	void SetupCubePrimitive();
+};
+// 線プリミティブ
+class LinePrimData : public PrimitiveData {
+public:
+	// 線プリミティブデータ
+	static const int MaxPrimitives = 512; // 線プリミティブ最大数
+	LinePrimitive3D Data[MaxPrimitives];
+	// 線プリミティブ専用セットアップ
+	void SetupLinePrimitive();
+};
+// 正四面体プリミティブ
+class TetrahedronPrimData : public PrimitiveData {
+public:
+	// 正四面体プリミティブデータ
+	static const int MaxPrimitives = 1; // 正四面体プリミティブ最大数
+	TetrahedronPrimitive Data[MaxPrimitives];
+	// 正四面体プリミティブ専用セットアップ
+	void SetupTetrahedronPrimitive();
+};
+// 正八面体プリミティブ
+class OctahedronPrimData : public PrimitiveData {
+public:
+	// 正八面体プリミティブデータ
+	static const int MaxPrimitives = 1; // 正八面体プリミティブ最大数
+	OctahedronPrimitive Data[MaxPrimitives];
+	// 正八面体プリミティブ専用セットアップ
+	void SetupOctahedronPrimitive();
+};
+// 正二十面体プリミティブ
+class IcosahedronPrimData : public PrimitiveData {
+public:
+	// 正二十面体プリミティブデータ
+	static const int MaxPrimitives = 1; // 正二十面体プリミティブ最大数
+	IcosahedronPrimitive3D Data[MaxPrimitives];
+	// 正二十面体プリミティブ専用セットアップ
+	void SetupIcosahedronPrimitive();
+};
+
 class Primitive3D : public Singleton<Primitive3D>{
 	friend class Singleton<Primitive3D>;
 private:
@@ -28,95 +122,25 @@ public:
 
 	ID3DBlob *errorBlob = nullptr;
 
-private: // 箱プリミティブ専用
-	// 箱プリミティブ専用シェーダー
-	ID3DBlob *Cube_vsBlob = nullptr; //箱プリミティブ用頂点シェーダー
-	ID3DBlob *Cube_psBlob = nullptr; //箱プリミティブ用ピクセルシェーダー
-	ID3DBlob *Cube_gsBlob = nullptr; //箱プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> CubeRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> CubePipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> CubeVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW CubevbView{};
-	// 箱プリミティブ専用セットアップ
-	void SetupCubePrimitive();
-	// 箱プリミティブデータ
-	static const int MaxCubePrimitives = 32; // 箱プリミティブ最大数
-	CubePrimitive3D CubeData[MaxCubePrimitives];
+private: // 箱プリミティブ
+	const bool CubeUse = true;
+	std::unique_ptr<CubePrimData> CubePrim = nullptr;
 
-private: // Lineプリミティブ専用
-	// 線プリミティブ専用シェーダー
-	ID3DBlob *Line_vsBlob = nullptr; //箱プリミティブ用頂点シェーダー
-	ID3DBlob *Line_psBlob = nullptr; //箱プリミティブ用ピクセルシェーダー
-	ID3DBlob *Line_gsBlob = nullptr; //箱プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> LineRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> LinePipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> LineVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW LinevbView{};
-	// 線プリミティブ専用セットアップ
-	void SetupLinePrimitive();
-	// 線プリミティブデータ
-	static const int MaxLinePrimitives = 512; // 線プリミティブ最大数
-	LinePrimitive3D LineData[MaxLinePrimitives];
+private: // Lineプリミティブ
+	const bool LineUse = true;
+	std::unique_ptr<LinePrimData> LinePrim = nullptr;
 
-private: // 正四面体プリミティブ専用
-	// 正四面体プリミティブ専用シェーダー
-	ID3DBlob *Tetrahedron_vsBlob = nullptr; //正四面体プリミティブ用頂点シェーダー
-	ID3DBlob *Tetrahedron_psBlob = nullptr; //正四面体プリミティブ用ピクセルシェーダー
-	ID3DBlob *Tetrahedron_gsBlob = nullptr; //正四面体プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> TetrahedronRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> TetrahedronPipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> TetrahedronVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW TetrahedronvbView{};
-	// 正四面体プリミティブ専用セットアップ
-	void SetupTetrahedronPrimitive();
-	// 正四面体プリミティブデータ
-	static const int MaxTetrahedronPrimitives = 1; // 正四面体プリミティブ最大数
-	TetrahedronPrimitive TetrahedronData[MaxTetrahedronPrimitives];
+private: // 正四面体プリミティブ
+	const bool TetraUse = false;
+	std::unique_ptr<TetrahedronPrimData> TetraPrim = nullptr;
 
-private: // 正八面体プリミティブ専用
-	// 正八面体プリミティブ専用シェーダー
-	ID3DBlob *Octahedron_vsBlob = nullptr; //正八面体プリミティブ用頂点シェーダー
-	ID3DBlob *Octahedron_psBlob = nullptr; //正八面体プリミティブ用ピクセルシェーダー
-	ID3DBlob *Octahedron_gsBlob = nullptr; //正八面体プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> OctahedronRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> OctahedronPipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> OctahedronVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW OctahedronvbView{};
-	// 正八面体プリミティブ専用セットアップ
-	void SetupOctahedronPrimitive();
-	// 正八面体プリミティブデータ
-	static const int MaxOctahedronPrimitives = 1; // 正八面体プリミティブ最大数
-	OctahedronPrimitive OctahedronData[MaxOctahedronPrimitives];
+private: // 正八面体プリミティブ
+	const bool OctaUse = false;
+	std::unique_ptr<OctahedronPrimData> OctaPrim = nullptr;
 
-private: //	正二十面体プリミティブ専用
-	// 正二十面体プリミティブ専用シェーダー
-	ID3DBlob *Icosahedron_vsBlob = nullptr; //正二十面体プリミティブ用頂点シェーダー
-	ID3DBlob *Icosahedron_psBlob = nullptr; //正二十面体プリミティブ用ピクセルシェーダー
-	ID3DBlob *Icosahedron_gsBlob = nullptr; //正二十面体プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> IcosahedronRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> IcosahedronPipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> IcosahedronVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW IcosahedronvbView{};
-	// 正二十面体プリミティブ専用セットアップ
-	void SetupIcosahedronPrimitive();
-	// 正二十面体プリミティブデータ
-	static const int MaxIcosahedronPrimitives = 1; // 正二十面体プリミティブ最大数
-	IcosahedronPrimitive3D IcosahedronData[MaxIcosahedronPrimitives];
+private: //	正二十面体プリミティブ
+	const bool IcosaUse = false;
+	std::unique_ptr<IcosahedronPrimData> IcosaPrim = nullptr;
 
 public:
 	void Initialize();
@@ -128,7 +152,6 @@ public:
 	void DrawIcosahedronAll();
 	void Draw();
 
-	//void DrawCube(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color, bool Lighting = false);
 	void DrawCube(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 scale, XMFLOAT3 rotate, XMFLOAT4 color, bool Lighting = false);
 	void DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color);
 	void DrawTetrahedron(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 pos3, XMFLOAT3 pos4, XMFLOAT4 color, bool Lighting = false);

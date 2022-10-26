@@ -30,16 +30,17 @@ Card::~Card()
 	if (collider) {
 		GCM::Instance()->RemoveCollider(collider);
 		//delete collider;
+		//delete col;
 	}
 	/*if (col) {
 		delete col;
 	}*/
 }
 
-void Card::SetCollider(GameBaseCollider *collider)
+void Card::SetCollider()
 {
+	collider = new GameBoxCollider(&LeftTop, XMFLOAT2(0, 0), XMFLOAT2(width, height), "Card");
 	collider->SetBasisPosition(&LeftTop);
-	this->collider = collider;
 	GCM::Instance()->AddCollider(collider);
 }
 
@@ -101,6 +102,5 @@ void Card::Initialize(int index, int MaxIdx)
 {
 	float CenterIdx = MaxIdx / 2.0f;
 	LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f };
-	col = new GameBoxCollider(&LeftTop, XMFLOAT2(0, 0), XMFLOAT2(width, height), "Card");
-	SetCollider(col);
+	SetCollider();
 }

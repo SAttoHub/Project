@@ -26,6 +26,7 @@ Player::Player()
 
 Player::~Player()
 {
+	DirectX3dObject::DeleteObject(model);
 }
 
 void Player::SetMap(Map *Map)

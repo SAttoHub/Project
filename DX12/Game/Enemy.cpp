@@ -126,6 +126,7 @@ void Enemy::Update()
 		}
 	}
 
+
 	XMFLOAT3 aaa = pMap->ChangePos(m_MapPos);
 
 	model->position = pMap->ChangePos(m_MapPos);

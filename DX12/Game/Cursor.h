@@ -5,6 +5,9 @@
 #include "Collider/GameCollisionManager.h"
 #include "..\Singleton.h"
 
+//-------------------------------------------------------------------------------------------------------------
+// マウスカーソル
+//-------------------------------------------------------------------------------------------------------------
 class Cursor : public Singleton<Cursor> {
 	friend class Singleton<Cursor>;
 private:
@@ -16,9 +19,8 @@ public:
 public:
 	GameBaseCollider *collider = nullptr;
 	virtual ~Cursor();
-	void SetCollider(GameBaseCollider *collider);
+	void SetCollider();
 	void ColliderUpdate();
-	GamePointCollider *col = nullptr;
 
 public:
 	Cursor();

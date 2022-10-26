@@ -155,6 +155,11 @@ void Audience::AdmissionTrigger()
 	ActionCount = 0;
 }
 
+void Audience::DeleteModel()
+{
+	DirectX3dObject::DeleteObject(model);
+}
+
 void Audience::ActionExit()
  {
 	float Timer = float(ExitTimerAll) - float(ActionTimer);
@@ -169,7 +174,7 @@ void Audience::ActionExit()
 		model->position.z = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
-		float IndexF = Ease::EaseFunc(EaseName::OutCubic, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
+		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
 		model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
 		model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
@@ -210,14 +215,14 @@ void Audience::ActionAdmission()
 		model->position.z = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
-		float IndexF = Ease::EaseFunc(EaseName::OutCubic, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
+		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
 		model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
 		model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
 	}
 	else if (float(Timer) < Timer3) {
 		if (m_Step == 1) {
-			ActionTimer = float(ExitTimerAll) - Timer2;
+			ActionTimer = /*float(ExitTimerAll) - */Timer2;
 		}
 		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
 		model->position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));

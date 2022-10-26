@@ -1,6 +1,5 @@
 #pragma once
 #include "..\Singleton.h"
-#include "StaticCameraPos.h"
 
 #include "..\Engine\Primitive\PrimitiveFunc.h"
 #include "..\DrawStrings.h"
