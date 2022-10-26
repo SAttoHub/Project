@@ -19,9 +19,8 @@ void Charactor::SetDir()
 		cross *= -1;
 	}
 	// 計算用補正
-	cross = cross + 180.0f - 22.5f; // 正面がそのまま正面だと22.5度分ずれるのでずらす
+	cross = cross + 180.0f;
 	cross /= 45.0f;
-	cross += 0.5f; // 22.5度分ずらしている為、マイナスが出てしまうので補正
 
 	if (cross < 0.5f) m_Dir = Chara_Dir::BACK;
 	else if (cross < 1.5f) m_Dir = Chara_Dir::BACKRINGHT;
@@ -31,6 +30,7 @@ void Charactor::SetDir()
 	else if (cross < 5.5f) m_Dir = Chara_Dir::FRONTLEFT;
 	else if (cross < 6.5f) m_Dir = Chara_Dir::LEFT;
 	else if (cross < 7.5f) m_Dir = Chara_Dir::BACKLEFT;
+	else m_Dir = Chara_Dir::BACK;
 
 	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(5, 5), 32, XMFLOAT4(1, 1, 1, 1), "cross%f", cross);
 

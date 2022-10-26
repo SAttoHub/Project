@@ -74,6 +74,7 @@ void DirectX3dObject::AllObjectUpdate() {
 void DirectX3dObject::DeleteObject(Object3d *object) {
 	for (int i = 0; i < (int)object3ds.size(); i++) {
 		if (object == object3ds[i]) {
+			//object3ds[i]->DeleteFunc();
 			object3ds.erase_after(std::next(object3ds.before_begin(), i));
 			break;
 		}
@@ -720,4 +721,12 @@ void Object3d::ColliderUpdate() {
 	if (collider) {
 		collider->Update();
 	}
+}
+
+void Object3d::DeleteFunc()
+{
+	delete collider;
+	delete ptr;
+	delete model;
+	delete parent;
 }

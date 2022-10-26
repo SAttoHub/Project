@@ -150,6 +150,8 @@ public:
 	/// <returns>ワールド行列</returns>
 	const XMMATRIX &GetMatWorld() { return matWorld; }
 
+	void DeleteFunc();
+
 	//定数バッファ(スキン)
 	ComPtr<ID3D12Resource> constBuffTime;
 	UINT Timer = 0;

@@ -9,19 +9,20 @@ cbuffer shadow : register(b4)
 	matrix Light_viewproj;
 	float3 Light_Pos;
 };
-
+  
 float4 main(VSOutput input) : SV_TARGET
 {
+	float4 texcol = tex.Sample(smp, input.uv);
+	if (texcol.a < 0.1f) {
+		discard;
+	}
+
 	float4 col = float4(0.0f,0.0f,0.0f,1.0f);
 
 	//-----------------シャドウマップ用
 	float4 obj_shadow = mul(input.worldpos, Light_viewproj); //ビュー変換
 
 	col.r = input.svpos.z / input.svpos.w;
-
-	if (col.a <= 0.001f) {
-		discard;
-	}
 
 	return col;
 }

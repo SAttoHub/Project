@@ -41,7 +41,7 @@ void Audiences::Update()
 {
 
 	Timer++;
-	if (Timer == 30) {
+	if (Timer == 3) {
 		AudienceSummonAndDelete();
 	}
 
@@ -55,6 +55,7 @@ void Audiences::Update()
 	if (m_Audience.size() > 0) {
 		for (int i = 0; i < m_Audience.size() - 1; i++) {
 			if (m_Audience[i].GetDelete() == true) {
+				m_Audience[i].DeleteModel();
 				m_Audience.erase(m_Audience.begin() + i);
 			}
 		}

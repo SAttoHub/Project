@@ -73,16 +73,20 @@ void Audience::ExitTrigger()
 	ExitPosStep0.y = model->position.y;
 	ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
+	ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+	ExitPosStep1.y = model->position.y;
+	ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+
 	if (m_Step == 1) {
 
 		ExitPosStep0.x = cosf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
 		ExitPosStep0.y = model->position.y;
 		ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
-	}
 
-	ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-	ExitPosStep1.y = model->position.y;
-	ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
+		ExitPosStep1.y = model->position.y;
+		ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
+	}
 
 	ExitPosStep2.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
 	ExitPosStep2.y = Step1.y;
@@ -170,13 +174,19 @@ void Audience::ActionExit()
 	int Timer5 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4) + float(ExitTimer5);
 
 	if (float(Timer) < Timer1) {
-		model->position.x = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
-		model->position.z = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
+		model->position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
+		model->position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
 		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
-		model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-		model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		if (m_Step != 1) {
+			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		}
+		else {
+			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
+			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
+		}
 
 	}
 	else if (float(Timer) < Timer3) {
@@ -211,13 +221,21 @@ void Audience::ActionAdmission()
 	int Timer5 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4) + float(ExitTimer5);
 
 	if (float(Timer) < Timer1) {
-		model->position.x = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
-		model->position.z = Ease::EaseFunc(EaseName::OutCubic, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
+		model->position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
+		model->position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
 		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
-		model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-		model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		//model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+		//model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		if (m_Step != 1) {
+			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		}
+		else {
+			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
+			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
+		}
 
 	}
 	else if (float(Timer) < Timer3) {
@@ -327,10 +345,9 @@ void Audience::SetDir()
 		cross *= -1;
 	}
 	// 計算用補正
-	cross = cross + 180.0f - 22.5f; // 正面がそのまま正面だと22.5度分ずれるのでずらす
+	cross = cross + 180.0f;
 	cross /= 45.0f;
-	cross += 0.5f; // 22.5度分ずらしている為、マイナスが出てしまうので補正
-
+	
 	if (cross < 0.5f) m_Dir = Chara_Dir::BACK;
 	else if (cross < 1.5f) m_Dir = Chara_Dir::BACKRINGHT;
 	else if (cross < 2.5f) m_Dir = Chara_Dir::RINGHT;
@@ -339,6 +356,7 @@ void Audience::SetDir()
 	else if (cross < 5.5f) m_Dir = Chara_Dir::FRONTLEFT;
 	else if (cross < 6.5f) m_Dir = Chara_Dir::LEFT;
 	else if (cross < 7.5f) m_Dir = Chara_Dir::BACKLEFT;
+	else m_Dir = Chara_Dir::BACK;
 }
 
 void Audience::SetPosition(int Step, int Index)
