@@ -8,10 +8,12 @@ Enemy::Enemy()
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
-		XMFLOAT3(0, 0, 0), FBXSHADER);
+		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
 	model->rotation.y = 90.0f;
 	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
 	model->isBillboard = true;
+	model->UseShadow = true;
+	model->UseDOF = true;
 
 	m_MyTurn = false;
 	m_Next = false;

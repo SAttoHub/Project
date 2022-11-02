@@ -23,13 +23,18 @@ enum SHADER {
 	Depth_SHEADER, // 深度値用
 	Shadow_Depth_SHEADER,
 	DOF_SHEADER, // 深度値用
+
+	FBXSHADER_INS,
+	Depth_SHEADER_INS,
+	Shadow_Depth_SHEADER_INS,
+	DOF_SHEADER_INS
 };
 
 
 struct DirectXBase {
 public:
 	DirectXBase() {
-		
+		result = HRESULT();
 	};
 	~DirectXBase() {
 		//fence.Reset();
@@ -59,8 +64,8 @@ public:
 	static ComPtr<ID3D12GraphicsCommandList> cmdList;
 	static ComPtr<ID3D12CommandQueue> cmdQueue;
 	static ComPtr<ID3D12DescriptorHeap> rtvHeaps;
-	static std::vector<ComPtr<IDXGIAdapter>> adapters;
-	static ComPtr<IDXGIAdapter> tmpAdapter;
+	static std::vector<ComPtr<IDXGIAdapter1>> adapters;
+	static ComPtr<IDXGIAdapter1> tmpAdapter;
 	static D3D_FEATURE_LEVEL levels[4];
 	static D3D_FEATURE_LEVEL featureLevel;
 	static D3D12_COMMAND_QUEUE_DESC cmdQueueDesc;

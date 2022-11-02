@@ -14,7 +14,7 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
-	XMFLOAT3 position; // ターゲットポイントの位置
+	XMFLOAT3 position = XMFLOAT3(); // ターゲットポイントの位置
 
 public:
 	// ターゲットポイントの座標を取得

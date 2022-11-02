@@ -1,11 +1,12 @@
 #include "Audience.h"
+#include "../Engine/Common/Funcs.h"
 
 float Audience::IndexAngle = 3.0f;
 XMFLOAT2 Audience::Step1 = XMFLOAT2(88.9f, 18.45f);
 XMFLOAT2 Audience::Step2 = XMFLOAT2(93.9f, 23.45f);
 XMFLOAT2 Audience::Step3 = XMFLOAT2(98.9f, 28.45f);
 XMFLOAT2 Audience::Step4 = XMFLOAT2(103.9f, 33.45f);
-XMFLOAT2 Audience::Step5 = XMFLOAT2(108.9, 38.45f);
+XMFLOAT2 Audience::Step5 = XMFLOAT2(108.9f, 38.45f);
 int Audience::BoundTimer = 8;
 int Audience::ExitTimerAll = 165;
 int Audience::ExitTimer1 = 5;
@@ -166,12 +167,12 @@ void Audience::DeleteModel()
 
 void Audience::ActionExit()
  {
-	float Timer = float(ExitTimerAll) - float(ActionTimer);
-	int Timer1 = float(ExitTimer1);
-	int Timer2 = float(ExitTimer1) + float(ExitTimer2);
-	int Timer3 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3);
-	int Timer4 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4);
-	int Timer5 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4) + float(ExitTimer5);
+	int Timer = ExitTimerAll - ActionTimer;
+	int Timer1 = ExitTimer1;
+	int Timer2 = ExitTimer1 + ExitTimer2;
+	int Timer3 = ExitTimer1 + ExitTimer2 + ExitTimer3;
+	int Timer4 = ExitTimer1 + ExitTimer2 + ExitTimer3 + ExitTimer4;
+	int Timer5 = ExitTimer1 + ExitTimer2 + ExitTimer3 + ExitTimer4 + ExitTimer5;
 
 	if (float(Timer) < Timer1) {
 		model->position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
@@ -264,11 +265,13 @@ Audience::Audience()
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
-		XMFLOAT3(0, 0, 0), FBXSHADER);
+		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
 	model->rotation.y = 90.0f;
 	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
 	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
 	model->isBillboard = true;
+	model->UseShadow = true;
+	model->UseDOF = true;
 
 	Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaAud1.png");
 	Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaAud2.png");
@@ -322,7 +325,16 @@ void Audience::Update()
 
 void Audience::Draw()
 {
-	Drawobject3d(model);
+	bool Flag = false;
+	for (int i = 0; i < 6; i++) {
+		if (InScreen(model->vertices[i].pos, Camera::matView, Camera::matProjection, XMFLOAT2(1280, 720))) {
+			Flag = true;
+			break;
+		}
+	}
+	if (Flag) {
+		Drawobject3d(model);
+	}
 }
 
 void Audience::SetDir()

@@ -10,6 +10,8 @@
 My_F_List<Object3d> DirectX3dObject::object3ds;
 int DirectX3dObject::OldShaderLoad = -1;
 LightGroup *DirectX3dObject::lightGroup = nullptr;
+bool DirectX3dObject::isUpdateOther = true;
+bool DirectX3dObject::isUpdateOtherFlag = false;
 
 void DirectX3dObject::DirectX3DObjectReset(Window *Win) {
 	OldShaderLoad = -1;
@@ -69,6 +71,7 @@ void DirectX3dObject::AllObjectUpdate() {
 	for (int i = 0; i < (int)object3ds.size(); i++) {
 		UpdateObject3d(object3ds[i], Camera::matView, Camera::matProjection);
 	};
+	isUpdateOtherFlag = false;
 }
 
 void DirectX3dObject::DeleteObject(Object3d *object) {
@@ -77,6 +80,56 @@ void DirectX3dObject::DeleteObject(Object3d *object) {
 			//object3ds[i]->DeleteFunc();
 			object3ds.erase_after(std::next(object3ds.before_begin(), i));
 			break;
+		}
+	}
+}
+
+void DirectX3dObject::ShadowDraw()
+{
+	for (int i = 0; i < (int)object3ds.size(); i++) {
+		Object3d* ptr = object3ds[i];
+		if (ptr->UseShadow) { 
+			ShadowDepthDrawobject3d(ptr); 
+		}
+	}
+}
+
+void DirectX3dObject::DepthDraw()
+{
+	for (int i = 0; i < (int)object3ds.size(); i++) {
+		Object3d* ptr = object3ds[i];
+		if (ptr->UseShadow) {
+			DepthDrawobject3d(ptr);
+		}
+	}
+}
+
+void DirectX3dObject::BloomDraw()
+{
+	for (int i = 0; i < (int)object3ds.size(); i++) {
+		Object3d* ptr = object3ds[i];
+		if (ptr->UseBloom) {
+			Drawobject3d(ptr);
+		}
+	}
+}
+
+void DirectX3dObject::BloomDepthDraw()
+{
+	for (int i = 0; i < (int)object3ds.size(); i++) {
+		Object3d* ptr = object3ds[i];
+		if (ptr->UseBloom) {
+			DepthDrawobject3d(ptr);
+		}
+	}
+}
+
+void DirectX3dObject::DOFDraw()
+{
+	for (int i = 0; i < (int)object3ds.size(); i++) {
+		Object3d* ptr = object3ds[i];
+		if (ptr->UseDOF) {
+			DOFDepthDrawobject3d(ptr);
 		}
 	}
 }
@@ -238,9 +291,20 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 		}
 	}
 
+	if (isUpdateOtherFlag == false) {
+		if (object->oldposition != object->position || object->oldscale != object->scale || object->oldrotation != object->rotation ||
+			Camera::eye != Camera::oldeye || Camera::target != Camera::oldtarget) {
+			isUpdateOther = true;
+			isUpdateOtherFlag = true;
+		}
+		else {
+			isUpdateOther = false;
+		}
+	}
+
 	HRESULT result;
 	if (object->oldposition != object->position || object->oldscale != object->scale || object->oldrotation != object->rotation ||
-		Camera::eye != Camera::oldeye || object->alwaysUpdate == true) {
+		Camera::eye != Camera::oldeye || Camera::target != Camera::oldtarget || object->alwaysUpdate == true) {
 		if (Camera::eye != Camera::oldeye) {
 			Camera::oldeye = Camera::eye;
 		}

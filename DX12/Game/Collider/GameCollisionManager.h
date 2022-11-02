@@ -99,7 +99,7 @@ private:
 	GCM &operator=(const GCM &) = delete;
 
 	std::forward_list<GameBaseCollider * > colliders;
-	GameBaseCollider *colB;
+	GameBaseCollider *colB = nullptr;
 	std::forward_list<GameBaseCollider *>::iterator itB;
 
 public:

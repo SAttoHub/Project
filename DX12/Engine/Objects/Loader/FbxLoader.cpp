@@ -1003,7 +1003,7 @@ void FbxLoader::SetBoneAffectToVertex(std::map<int, std::forward_list<BoneAffect
                         break;
                     }
                 }
-                else {
+                else if(i >= 4) {
                     //対象の頂点のボーンデータで空な領域にデータを保存
                     if (VertexPtr->boneIndexB[i - 4] == -1)	//ボーン未登録
                     {

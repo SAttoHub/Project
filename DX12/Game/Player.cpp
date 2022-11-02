@@ -7,11 +7,13 @@ Player::Player()
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	model = DirectX3dObject::CreateObject(GetModelData(modelData),
-		XMFLOAT3(0, 0, 0), FBXSHADER);
+		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
 	model->rotation.y = 90.0f;
 	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
 	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
 	model->isBillboard = true;
+	model->UseShadow = true;
+	model->UseDOF = true;
 
 	Image[0] = TexManager::LoadTexture("Resource/image/Chara/Chara1.png");
 	Image[1] = TexManager::LoadTexture("Resource/image/Chara/Chara2.png");
@@ -45,8 +47,8 @@ void Player::Update()
 void Player::Draw()
 {
 	Drawobject3d(model);
-	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
-		"PlayerHP : %d", m_HP);
+	/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
+		"PlayerHP : %d", m_HP);*/
 }
 
 void Player::Reset()

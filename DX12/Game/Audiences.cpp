@@ -41,7 +41,7 @@ void Audiences::Update()
 {
 
 	Timer++;
-	if (Timer == 3) {
+	if (Timer == 30) {
 		AudienceSummonAndDelete();
 	}
 

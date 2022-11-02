@@ -258,9 +258,9 @@ int DrawStrings::lfout(double num, char *buf, int size, format_argdesc *desc)
         }
 
         int_begin = ret;
-        ulpart = (unsigned long)num;
+        ulpart = unsigned long(num);
         /* round off to @float_digit decimal places */
-        dpart = (num - ulpart) * lpow(10, desc->float_digit) + unsigned long(0.5);
+        dpart = (unsigned long(num) - ulpart) * lpow(10, desc->float_digit) + unsigned long(0.5);
 
         if (float_digit == INIT_FLOAT_DIGIT) {
             desc->digit = INIT_FLOAT_DIGIT;

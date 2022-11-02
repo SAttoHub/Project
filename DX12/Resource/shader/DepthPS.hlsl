@@ -17,7 +17,8 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	float4 texcol = tex.Sample(smp, input.uv);
 	if (texcol.a < 0.1f) {
-		discard;
+		clip(-1);
+		//discard;
 	}
 
 	if (tex.Sample(smp, input.uv).a == 0.0f) {

@@ -4,7 +4,7 @@ void Framework::Initialize()
 {
     FbxLoader::GetInstance()->Initialize();
     //最大FPS指定
-    fps = new FPS(60);
+    fps = new FPS(244);
 
     //メインループで使う変数等の宣言
     win = new Window(); //ウィンドウの作成

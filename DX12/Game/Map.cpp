@@ -62,6 +62,8 @@ Map::Map()
 	m_StageModel->scale.z = 8.0f;
 	m_StageModel->position.x = 32.0f * 5.0f / 4.0f;
 	m_StageModel->position.z = 32.0f * 5.0f / 4.0f;
+	m_StageModel->UseShadow = true;
+	m_StageModel->UseDOF = true;
 
 	int modelData2 = LoadModelOBJ("Fence", "stage");
 	m_StageModel_saku = DirectX3dObject::CreateObject(GetModelData(modelData2),
@@ -72,6 +74,8 @@ Map::Map()
 	m_StageModel_saku->scale.z = 8.0f;
 	m_StageModel_saku->position.x = 32.0f * 5.0f / 4.0f;
 	m_StageModel_saku->position.z = 32.0f * 5.0f / 4.0f;
+	m_StageModel_saku->UseShadow = true;
+	m_StageModel_saku->UseDOF = true;
 
 	Center = m_StageModel->position;
 

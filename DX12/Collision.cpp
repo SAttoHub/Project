@@ -115,8 +115,8 @@ bool Collision::RayCilinderCol(Object3d *player, Object3d *target, float Cilinde
 	headshot = false;
 	XMFLOAT3 CilinderPos1, CilinderPos2;
 	XMFLOAT3 radian;
-	radian.x = target->rotation.x * M_PI / 180.0f;
-	radian.y = target->rotation.y * M_PI / 180.0f;
+	radian.x = target->rotation.x * M_PI_F / 180.0f;
+	radian.y = target->rotation.y * M_PI_F / 180.0f;
 	radian.z = 0;
 
 	CilinderPos1.x = Cilinderdistance * sin(radian.y) * cos(radian.x) + target->position.x;
@@ -313,8 +313,8 @@ XMFLOAT3 Collision::CapsuleSpherePos(Object3d *target, float Cilinderdistance)
 	headshot = false;
 	XMFLOAT3 CilinderPos1, CilinderPos2;
 	XMFLOAT3 radian;
-	radian.x = target->rotation.x * M_PI / 180.0f;
-	radian.y = target->rotation.y * M_PI / 180.0f;
+	radian.x = target->rotation.x * M_PI_F / 180.0f;
+	radian.y = target->rotation.y * M_PI_F / 180.0f;
 	radian.z = 0;
 
 	CilinderPos1.x = Cilinderdistance * sin(radian.y) * cos(radian.x) + target->position.x;

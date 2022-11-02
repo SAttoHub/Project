@@ -45,6 +45,7 @@ public:
 	static XMFLOAT3 eye; //視点座標
 	static XMFLOAT3 oldeye; //視点座標
 	static XMFLOAT3 target; //注視点座標
+	static XMFLOAT3 oldtarget; //視点座標
 	static XMFLOAT3 up; //上方向ベクトル
 	static XMMATRIX matView; //ビュー変換行列
 	static XMMATRIX matProjection; //
@@ -52,7 +53,7 @@ public:
 	static XMMATRIX matViewProjection;
 	static XMMATRIX matViewProjection2;
 
-	void Update();
+	static void Update();
 	void NormalModeMove();
 
 	static bool CursorResetFlag;

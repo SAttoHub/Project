@@ -20,12 +20,12 @@ void RenderManager::CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_F
 	m_Renders[RenderName]->Initialize(RTV_Format, IsUseDepth, resolution);
 }
 
-void RenderManager::PreDraw(const char *RenderName)
+void RenderManager::PreDraw(const char *RenderName, bool Clear)
 {
 	// RenderNameキーが付いている要素が存在するか確認
 	if (m_Renders.find(RenderName) != m_Renders.end()) {
 		// 存在した場合に実行
-		m_Renders[RenderName]->PreDraw();
+		m_Renders[RenderName]->PreDraw(Clear);
 		return;
 	}
 	// 存在しなかった場合エラー

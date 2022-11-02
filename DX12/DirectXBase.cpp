@@ -10,8 +10,8 @@ ComPtr<ID3D12CommandAllocator> DirectXBase::cmdAllocator;
 ComPtr<ID3D12GraphicsCommandList> DirectXBase::cmdList;
 ComPtr<ID3D12CommandQueue> DirectXBase::cmdQueue;
 ComPtr<ID3D12DescriptorHeap> DirectXBase::rtvHeaps;
-std::vector<ComPtr<IDXGIAdapter>> DirectXBase::adapters;
-ComPtr<IDXGIAdapter> DirectXBase::tmpAdapter;
+std::vector<ComPtr<IDXGIAdapter1>> DirectXBase::adapters;
+ComPtr<IDXGIAdapter1> DirectXBase::tmpAdapter;
 D3D_FEATURE_LEVEL DirectXBase::levels[4] = {
 	D3D_FEATURE_LEVEL_12_1,
 	D3D_FEATURE_LEVEL_12_0,
@@ -40,17 +40,20 @@ void DirectXBase::ADDAdapters() {
 	//DXGIファクトリーの生成
 	result = CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory));
 	for (int i = 0;
-		dxgiFactory->EnumAdapters(i, &tmpAdapter) != DXGI_ERROR_NOT_FOUND;
+		dxgiFactory->EnumAdapters1(i, &tmpAdapter) != DXGI_ERROR_NOT_FOUND;
 		i++) {
 		adapters.emplace_back(tmpAdapter); //動的配列に追加
 	}
 	for (int i = 0; i < adapters.size(); i++) {
-		DXGI_ADAPTER_DESC adesc{};
-		adapters[i]->GetDesc(&adesc); //アダプターの情報を取得
+		DXGI_ADAPTER_DESC1 adesc{};
+		adapters[i]->GetDesc1(&adesc); //アダプターの情報を取得
+		//ソフトウェアデバイスを回避
+		if (adesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) {
+			continue;
+		}
 		std::wstring strDesc = adesc.Description; //アダプター名
 		// Microsoft basic Render Driver, Intel UHD Graphics を回避
-		if (strDesc.find(L"Microsoft") == std::wstring::npos &&
-			strDesc.find(L"Intel") == std::wstring::npos) {
+		if (strDesc.find(L"Intel") == std::wstring::npos) {
 			tmpAdapter = adapters[i]; //採用
 			break;
 		}

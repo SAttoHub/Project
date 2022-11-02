@@ -65,13 +65,15 @@ void Game::Initialize()
 	CreateRenderTarget("Bloom_Depth", DXGI_FORMAT_R32_FLOAT, true);
 	CreateRenderTarget("Bloom_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("Bloom_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("Bloom_Result", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("Bloom_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Gauss_X2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 	CreateRenderTarget("DOF_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 
+	PSf_Perf = PSf_Normal;
+	PSf_Counter = -2;
 }
 
 void Game::Update()
@@ -90,6 +92,7 @@ void Game::Update()
     Primitive3D::Instance()->Update();
 
     //-----------------ここからプログラム記入-----------------//
+	Camera::Update();
     game->Update();
     DX.AllObjectUpdate();
 
@@ -97,83 +100,100 @@ void Game::Update()
 	ShadowMapLight::SetLightPos(XMFLOAT3(0.0f, 350.0f, -245.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0, 1, 0));
 
 #pragma region 各深度値保存用の描画
-	//DOF用深度
-	PreDraw("DOF_Depth");
-	game->DOFDepthDraw();
-	PostDraw("DOF_Depth");
-	//カメラ視点の深度描画
-	PreDraw("Camera_Depth");
-	game->DepthDraw();
-	PostDraw("Camera_Depth");
-	//ライト視点の深度描画
-	PreDraw("Light_Depth");
-	game->ShadowDraw();
-	PostDraw("Light_Depth");
-	// Bloom 合成時に使用する深度値の保存
-	PreDraw("Bloom_Depth");
-	game->BloomDepthDraw();
-	PostDraw("Bloom_Depth");
+	if (DirectX3dObject::isUpdateOther) {
+		//DOF用深度
+		if (PSf_isDraw("DOF")) {
+			PreDraw("DOF_Depth");
+			game->DOFDepthDraw();
+			PostDraw("DOF_Depth");
+		}
+		//カメラ視点の深度描画
+		//if (PSf_isDraw("Shadow")) {
+		PreDraw("Camera_Depth");
+		game->DepthDraw();
+		PostDraw("Camera_Depth");
+			//ライト視点の深度描画
+		if (PSf_isDraw("Shadow")) {
+			PreDraw("Light_Depth");
+			game->ShadowDraw();
+			PostDraw("Light_Depth");
+		}
+		//}
+		// Bloom 合成時に使用する深度値の保存
+		if (PSf_isDraw("Bloom")) {
+			PreDraw("Bloom_Depth");
+			game->BloomDepthDraw();
+			PostDraw("Bloom_Depth");
+		}
+	}
 #pragma endregion
 
 	//ポストエフェクト無しのゲーム画面
 	PreDraw("BaseGameScene");
 	game->Draw();
+	Primitive3D::Instance()->Draw();
 	PostDraw("BaseGameScene");
 
-	//シャドウマップ
-	PreDraw("ShadowMap_Shadow");
-	shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
-	//shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetRenderTexture("Camera_Depth"));
-	PostDraw("ShadowMap_Shadow");
+	if (DirectX3dObject::isUpdateOther) {
+		//シャドウマップ
+		PreDraw("ShadowMap_Shadow");
+		shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
+		PostDraw("ShadowMap_Shadow");
 
 #pragma region Bloom
-	// Bloom する色のみの描画
-	PreDraw("Bloom_Base_Color");
-	game->BloomDraw();
-	PostDraw("Bloom_Base_Color");
-	// Bloom 色テクスチャの X 方向にブラーをかける
-	PreDraw("Bloom_Gauss_X");
-	GaussianEffectX_b->Draw(GetRenderTexture("Bloom_Base_Color"), 0.005f);
-	PostDraw("Bloom_Gauss_X");
-	// Bloom 色テクスチャの Y 方向にブラーをかける
-	PreDraw("Bloom_Gauss_Y");
-	GaussianEffectY_b->Draw(GetRenderTexture("Bloom_Gauss_X"), 0.005f);
-	PostDraw("Bloom_Gauss_Y");
-	// 最終結果を描画
-	PreDraw("Bloom_Result");
-	bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetRenderTexture("Camera_Depth"), GetRenderTexture("Bloom_Depth"));
-	PostDraw("Bloom_Result");
+		// Bloom する色のみの描画
+		if (PSf_isDraw("Bloom")) {
+			PreDraw("Bloom_Base_Color");
+			game->BloomDraw();
+			PostDraw("Bloom_Base_Color");
+			// Bloom 色テクスチャの X 方向にブラーをかける
+			PreDraw("Bloom_Gauss_X", false);
+			GaussianEffectX_b->Draw(GetRenderTexture("Bloom_Base_Color"), 0.005f);
+			PostDraw("Bloom_Gauss_X");
+			// Bloom 色テクスチャの Y 方向にブラーをかける
+			PreDraw("Bloom_Gauss_Y", false);
+			GaussianEffectY_b->Draw(GetRenderTexture("Bloom_Gauss_X"), 0.005f);
+			PostDraw("Bloom_Gauss_Y");
+		}
+		// 最終結果を描画
+		PreDraw("Bloom_Result", false);
+		bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetRenderTexture("Camera_Depth"), GetRenderTexture("Bloom_Depth"));
+		PostDraw("Bloom_Result");
+
 #pragma endregion
 
 #pragma region アウトライン
-	/*PreDraw("OutLine");
-	outLine->Draw(GetRenderTexture("Bloom_Result"), GetDepthTexture("Camera_Depth"));
-	PostDraw("OutLine");*/
+		/*PreDraw("OutLine");
+		outLine->Draw(GetRenderTexture("Bloom_Result"), GetDepthTexture("Camera_Depth"));
+		PostDraw("OutLine");*/
 #pragma endregion
 
 #pragma region 被写界深度
-	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける１
-	PreDraw("DOF_Gauss_X");
-	GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"), 0.03f);
-	PostDraw("DOF_Gauss_X");
-	// 上で描画したものの Y 方向にガウスをかける１
-	PreDraw("DOF_Gauss_Y");
-	GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X"), 0.03f);
-	PostDraw("DOF_Gauss_Y");
-	// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける２
-	PreDraw("DOF_Gauss_X2");
-	GaussianEffectX2->Draw(GetRenderTexture("Bloom_Result"), 0.1f);
-	PostDraw("DOF_Gauss_X2");
-	// 上で描画したものの Y 方向にガウスをかける２
-	PreDraw("DOF_Gauss_Y2");
-	GaussianEffectY2->Draw(GetRenderTexture("DOF_Gauss_X2"), 0.1f);
-	PostDraw("DOF_Gauss_Y2");
-	// 被写界深度を適応する
-	PreDraw("DOF_Result");
-	DOF->Draw(GetRenderTexture("Bloom_Result"), GetRenderTexture("DOF_Gauss_Y2"), GetRenderTexture("DOF_Gauss_Y"), GetRenderTexture("DOF_Depth"));
-	PostDraw("DOF_Result");
+		// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける１
+		if (PSf_isDraw("DOF")) {
+			PreDraw("DOF_Gauss_X", false);
+			GaussianEffectX->Draw(GetRenderTexture("Bloom_Result"), 0.03f);
+			PostDraw("DOF_Gauss_X");
+			// 上で描画したものの Y 方向にガウスをかける１
+			PreDraw("DOF_Gauss_Y", false);
+			GaussianEffectY->Draw(GetRenderTexture("DOF_Gauss_X"), 0.03f);
+			PostDraw("DOF_Gauss_Y");
+			// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける２
+			PreDraw("DOF_Gauss_X2", false);
+			GaussianEffectX2->Draw(GetRenderTexture("Bloom_Result"), 0.1f);
+			PostDraw("DOF_Gauss_X2");
+			// 上で描画したものの Y 方向にガウスをかける２
+			PreDraw("DOF_Gauss_Y2", false);
+			GaussianEffectY2->Draw(GetRenderTexture("DOF_Gauss_X2"), 0.1f);
+			PostDraw("DOF_Gauss_Y2");
+		}
+		// 被写界深度を適応する
+		PreDraw("DOF_Result", false);
+		DOF->Draw(GetRenderTexture("Bloom_Result"), GetRenderTexture("DOF_Gauss_Y2"), GetRenderTexture("DOF_Gauss_Y"), GetRenderTexture("DOF_Depth"));
+		PostDraw("DOF_Result");
 #pragma endregion
-
+	}
+	
 	DXBase.ClearDepthBuffer();
 	vignette->Draw(GetRenderTexture("DOF_Result"));
 
@@ -215,7 +235,7 @@ void Game::Update()
 	ImGui::Checkbox("isUse", &ShadowMapUse);
 	ImGui::End();
 	*/
-	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	/*mGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Vignette");
 	ImGui::SliderFloat("Influence", &VignetteInfluence, 0.0f, 10.0f);
@@ -224,7 +244,20 @@ void Game::Update()
 		VignetteInfluence = 0.2f;
 		UseVignette = true;
 	}
-	ImGui::End();*/
+	ImGui::End();
+	*/
+	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
+	ImGui::Begin("Config");
+	ImGui::SliderFloat("fps :", &FPS::fps, 0.0f, 200.0f);
+	ImGui::Checkbox("HighPerformance", &HighPerformance);
+	ImGui::End();
+	if (HighPerformance == false) {
+		PSf_Perf = PSf_Normal;
+	}
+	else {
+		PSf_Perf = PSf_High;
+	}
 	/*ImGui::SetNextWindowPos(ImVec2(1000, 0), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 400), 1);
 	ImGui::Begin("Camera");
@@ -236,8 +269,13 @@ void Game::Update()
 	ImGui::Text("targetZ : %f", Camera::target.z);
 	ImGui::End();*/
 	
-	imguiUse::Instance()->CommandExcute(true);
+	
 #pragma endregion
+
+	PSf_Counter++;
+	if (PSf_Counter >= 2) {
+		PSf_Counter = 0;
+	}
 
 	shadowMapping->SetUse(ShadowMapUse);
 	vignette->SetState(VignetteInfluence, UseVignette);
@@ -245,6 +283,7 @@ void Game::Update()
 
 	// 2Dプリミティブ描画
 	Primitive2D::Instance()->Draw();
+	imguiUse::Instance()->CommandExcute(true);
 
     //-----------------ここまでプログラム記入-----------------//
 
@@ -252,11 +291,7 @@ void Game::Update()
 	DXBase.DoScreen();
 
     //FPS
-      fps->FPS_Update();
-
-	if (Input::isKeyTrigger(DIK_O)) {
-		int i = 0;
-	}
+    fps->FPS_Update();
 }
 
 void Game::Finalize()
@@ -285,4 +320,31 @@ void Game::Run(const int iCmdShow)
 		}
 	}
     Finalize();
+}
+
+bool Game::PSf_isDraw(std::string RTName)
+{
+	if (PSf_Counter < 0) {
+		return true;
+	}
+	switch (PSf_Perf)
+	{
+	case Game::PSf_High:
+		return true;
+		break;
+	case Game::PSf_Normal:
+		if (RTName == "Shadow" && (PSf_Counter == -1 || PSf_Counter == 0)) {
+			return true;
+		}
+		else if (RTName == "Bloom" && (PSf_Counter == 1)) {
+			return true;
+		}
+		else if (RTName == "DOF" && (PSf_Counter == 1)) {
+			return true;
+		}
+		break;
+	default:
+		break;
+	}
+	return false;
 }

@@ -178,7 +178,7 @@ static DirectX::XMFLOAT3 rgb2hsv(DirectX::XMFLOAT3 rgb)
 
 static DirectX::XMFLOAT3 hsv2rgb(DirectX::XMFLOAT3 hsv)
 {
-	DirectX::XMFLOAT3  rgb;
+	DirectX::XMFLOAT3  rgb = XMFLOAT3();
 	int     Hi;
 	float   f;
 	float   p;

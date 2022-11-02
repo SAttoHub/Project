@@ -60,7 +60,7 @@ void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::
 	}
 }
 
-void RenderTarget::PreDraw()
+void RenderTarget::PreDraw(bool Clear)
 {
 	//リソースバリアを変更
 	DirectXBase::cmdList->ResourceBarrier(1,
@@ -83,16 +83,18 @@ void RenderTarget::PreDraw()
 	}
 	//ビューポートの設定
 	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f,
-		m_Resolution.x, m_Resolution.y));
+		FLOAT(m_Resolution.x), FLOAT(m_Resolution.y)));
 	//シザリング矩形の設定
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, m_Resolution.x, m_Resolution.y));
-	//全画面クリア
-	DirectXBase::cmdList->ClearRenderTargetView(rtvH, m_ClearColor, 0, nullptr);
-	//深度バッファのクリア
-	if (m_IsUseDepth) {
-		//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvH = m_descHeapDSV->GetCPUDescriptorHandleForHeapStart();
-		DirectXBase::cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	if (Clear) {
+		//全画面クリア
+		DirectXBase::cmdList->ClearRenderTargetView(rtvH, m_ClearColor, 0, nullptr);
+		//深度バッファのクリア
+		if (m_IsUseDepth) {
+			//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
+			D3D12_CPU_DESCRIPTOR_HANDLE dsvH = m_descHeapDSV->GetCPUDescriptorHandleForHeapStart();
+			DirectXBase::cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+		}
 	}
 }
 

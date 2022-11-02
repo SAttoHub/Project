@@ -209,8 +209,8 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	//テクスチャデータの生成
 	const int TextureWidth = (GM.gmBlackBoxX + 3) / 4 * 4;
 	const int TextureHeight = GM.gmBlackBoxY;
-	TextureData[TexNum].TextureSize.x = TextureWidth;
-	TextureData[TexNum].TextureSize.y = TextureHeight;
+	TextureData[TexNum].TextureSize.x = float(TextureWidth);
+	TextureData[TexNum].TextureSize.y = float(TextureHeight);
 	const int ImageDataSize = TextureWidth * TextureHeight;
 	XMFLOAT4 *imageData = new XMFLOAT4[ImageDataSize];
 	//ピクセルの色をセット
@@ -228,11 +228,11 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	for (int y = 0; y < TextureHeight; y++) {
 		for (int x = 0; x < TextureWidth; x++) {
 			DWORD alpha = ptr[y * TextureWidth + x] * 255 / grad;
-			imageData[y * TextureWidth + x].x = 0x00ffffff | (alpha << 24);
-			imageData[y * TextureWidth + x].y = 0x00ffffff | (alpha << 24);
-			imageData[y * TextureWidth + x].z = 0x00ffffff | (alpha << 24);
+			imageData[y * TextureWidth + x].x = float(0x00ffffff | (alpha << 24));
+			imageData[y * TextureWidth + x].y = float(0x00ffffff | (alpha << 24));
+			imageData[y * TextureWidth + x].z = float(0x00ffffff | (alpha << 24));
 			//imageData[y * TextureWidth + x].w = (alpha << 24) | 0x00ffffff;
-			imageData[y * TextureWidth + x].w = alpha;
+			imageData[y * TextureWidth + x].w = float(alpha);
 
 			if (x >= TextureWidth - 2) {
 				imageData[y * TextureWidth + x].w = 0.0f;
@@ -332,12 +332,12 @@ int TexManager::GetPostTexture(float width, float height, XMFLOAT4 color, DXGI_F
 	TextureData[TexNum].colorData.w = -1.0f;
 	TextureData[TexNum].FileName = "PostTexture";
 	//テクスチャデータの生成
-	const UINT ImageDataSize = width * height;
-	const UINT rowPitch = sizeof(UINT) * width;
-	const UINT depthPitch = rowPitch * height;
+	const UINT ImageDataSize = UINT(width * height);
+	const UINT rowPitch = sizeof(UINT) * UINT(width);
+	const UINT depthPitch = rowPitch * UINT(height);
 	UINT *imageData = new UINT[ImageDataSize];
 	//ピクセルの色をセット
-	for (int i = 0; i < ImageDataSize; i++) {
+	for (int i = 0; UINT(i) < ImageDataSize; i++) {
 		imageData[i] = 0xffffffff;
 	}
 	//テクスチャバッファの生成
@@ -360,7 +360,7 @@ int TexManager::GetPostTexture(float width, float height, XMFLOAT4 color, DXGI_F
 	//テクスチャリソース設定
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		format,
-		width,
+		UINT64(width),
 		(UINT)height,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
@@ -437,9 +437,9 @@ int TexManager::GetPostDepthTexture(float width, float height, XMFLOAT4 color)
 	TextureData[TexNum].colorData.w = -1.0f;
 	TextureData[TexNum].FileName = "PostTexture";
 	//テクスチャデータの生成
-	const UINT ImageDataSize = width * height;
-	const UINT rowPitch = sizeof(UINT) * width;
-	const UINT depthPitch = rowPitch * height;
+	const UINT ImageDataSize = UINT(width * height);
+	const UINT rowPitch = sizeof(UINT) * UINT(width);
+	const UINT depthPitch = rowPitch * UINT(height);
 	UINT *imageData = new UINT[ImageDataSize];
 	//ピクセルの色をセット
 	for (int i = 0; i < ImageDataSize; i++) {

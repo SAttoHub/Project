@@ -43,8 +43,8 @@ void Astar::InitCost(int heuristic_cost, int total_cost, int MapWidth, int MapHe
 	{
 		for (int y = 0; y < MapHeight; y++)
 		{
-			Map[x][y].HeuristicCost = heuristic_cost;
-			Map[x][y].TotalCost = total_cost;
+			Map[x][y].HeuristicCost = float(heuristic_cost);
+			Map[x][y].TotalCost = float(total_cost);
 		}
 	}
 	/*for (int y = 0; y < MapHeight; y++)
@@ -59,8 +59,8 @@ void Astar::InitCost(int heuristic_cost, int total_cost, int MapWidth, int MapHe
 
 float Astar::CalculateHeuristic(const AstarNode *node, const AstarNode *Goal)
 {
-	float x = fabsf(Goal->Position.x - node->Position.x);
-	float y = fabsf(Goal->Position.y - node->Position.y);
+	float x = fabsf(float(Goal->Position.x - node->Position.x));
+	float y = fabsf(float(Goal->Position.y - node->Position.y));
 
 	return sqrtf(x * x + y * y);
 }

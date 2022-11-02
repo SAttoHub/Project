@@ -12,6 +12,7 @@ XMMATRIX Camera::matBillboard;
 XMFLOAT3 Camera::eye{ 0, 0, 0 }; //視点座標
 XMFLOAT3 Camera::oldeye{ 0, 0, 0 }; //視点座標
 XMFLOAT3 Camera::target{ 0, 0, 0 }; //注視点座標
+XMFLOAT3 Camera::oldtarget{ 0, 0, 0 }; //視点座標
 XMFLOAT3 Camera::up{ 0, 1, 0 }; //上方向ベクトル
 XMMATRIX Camera::matView; //ビュー変換行列
 XMMATRIX Camera::matProjection;
@@ -147,7 +148,8 @@ void Camera::Update(){
 		SetTargetPointToAngle();
 		CursorSetSenter();
 	}*/
-
+	oldtarget = target;
+	oldeye = eye;
 }
 
 void Camera::NormalModeMove() {
@@ -204,14 +206,14 @@ void Camera::Targeting(XMFLOAT3 Target) {
 }
 
 void Camera::SetCameraPos(XMFLOAT3 pos) {
-	oldeye = eye;
+	//oldeye = eye;
 	eye = pos;
 	SetTargetPointToAngle();
 	CursorSetSenter();
 }
 void Camera::SetCameraPos3(XMFLOAT3 pos)
 {
-	oldeye = eye;
+	//oldeye = eye;
 	eye = pos;
 	
 	if (!isCameraStop) {

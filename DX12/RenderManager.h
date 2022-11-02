@@ -28,7 +28,7 @@ public:
 	/// RenderNameを指定して描画前処理を行う
 	/// </summary>
 	/// <param name="RenderName">レンダーターゲット名</param>
-	void PreDraw(const char *RenderName);
+	void PreDraw(const char *RenderName, bool Clear);
 
 	/// <summary>
 	/// RenderNameを指定して描画後処理を行う
@@ -65,8 +65,8 @@ static void CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, b
 /// RenderNameを指定して描画前処理を行う
 /// </summary>
 /// <param name="RenderName">レンダーターゲット名</param>
-static void PreDraw(const char *RenderName) {
-	RenderManager::Instance()->PreDraw(RenderName);
+static void PreDraw(const char *RenderName, bool Clear = true) {
+	RenderManager::Instance()->PreDraw(RenderName, Clear);
 }
 
 /// <summary>
@@ -111,8 +111,8 @@ static void CreateRenderTarget(std::string RenderName, DXGI_FORMAT RTV_Format, b
 /// RenderNameを指定して描画前処理を行う
 /// </summary>
 /// <param name="RenderName">レンダーターゲット名</param>
-static void PreDraw(std::string RenderName) {
-	RenderManager::Instance()->PreDraw(RenderName.c_str());
+static void PreDraw(std::string RenderName, bool Clear) {
+	RenderManager::Instance()->PreDraw(RenderName.c_str(), Clear);
 }
 
 /// <summary>

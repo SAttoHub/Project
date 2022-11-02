@@ -43,8 +43,6 @@ void GameManager::Update() {
 
 void GameManager::Draw() {
 	game.Draw();
-
-	Primitive3D::Instance()->Draw();
 }
 
 void GameManager::DepthDraw()

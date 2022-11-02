@@ -50,9 +50,9 @@ static float CalAngle2D(const DirectX::XMFLOAT2 &v1, const DirectX::XMFLOAT2 &v2
 static float CalcAngle(const DirectX::XMFLOAT2 &vectorA,
 	const DirectX::XMFLOAT2 &vectorB)
 {
-	double dLengthAxLengthB = Length2D(vectorA) * Length2D(vectorB);
+	double dLengthAxLengthB = double(Length2D(vectorA) * Length2D(vectorB));
 
-	double dCosAlpha = Dot2D(vectorA, vectorB) / dLengthAxLengthB;
+	double dCosAlpha = double(Dot2D(vectorA, vectorB)) / dLengthAxLengthB;
 	if (dCosAlpha > 1.0)
 	{
 		dCosAlpha = 1.0;
@@ -63,7 +63,7 @@ static float CalcAngle(const DirectX::XMFLOAT2 &vectorA,
 	}
 	dCosAlpha = acos(dCosAlpha);
 
-	return dCosAlpha = dCosAlpha * 180.0f / M_PI_F;
+	return float(dCosAlpha) * 180.0f / M_PI_F;
 }
 
 

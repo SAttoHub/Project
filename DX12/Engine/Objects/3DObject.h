@@ -66,6 +66,10 @@ struct Object3d {
 	bool DrawFlag = true; //DrawFlag
 	bool alwaysUpdate = false; // 常にマッピングし直すか
 
+	bool UseShadow = false;
+	bool UseDOF = false;
+	bool UseBloom = false;
+
 
 	vector<Vertex> vertices;
 	vector<unsigned short> indices;
@@ -170,6 +174,8 @@ private:
 	void TransConstBuffer();
 public:
 	static int OldShaderLoad;//前回セットしたシェーダー
+	static bool isUpdateOther;
+	static bool isUpdateOtherFlag;
 
 	//初期化処理
 	void DirectX3DObjectReset(Window *Win);
@@ -221,6 +227,11 @@ public:
 	}
 
 	//void DrawCube3D();
+	static void ShadowDraw();
+	static void DepthDraw();
+	static void BloomDraw();
+	static void BloomDepthDraw();
+	static void DOFDraw();
 };
 
 

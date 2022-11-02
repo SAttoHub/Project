@@ -23,7 +23,7 @@ public:
 	~RenderTarget();
 
 	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = {WINDOW_WIDTH, WINDOW_HEIGHT});
-	void PreDraw();
+	void PreDraw(bool Clear);
 	void PostDraw();
 
 	int GetRenderTexture() { return m_RTV_Texture; }
