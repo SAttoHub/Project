@@ -8,6 +8,7 @@ void Game::Initialize()
 
 	game = new GameManager(&DX, &Tex, win, Pipeline, Cam);
 	game->Init();
+	
 	//マウスカーソルを表示しない
 	CursorShow(true);
 

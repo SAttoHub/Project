@@ -5,6 +5,16 @@ Texture2D<float4> normalMap : register(t1); //1番スロットに設定されたテクスチャ
 Texture2D<float4> heightMap : register(t2); //2番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
+cbuffer cbuff0 : register(b0)
+{
+	matrix view; // ビュー行列
+	matrix viewproj; // ビュープロジェクション行列
+	matrix viewproj2; // ビュープロジェクション行列2
+	matrix world; // ワールド行列
+	float3 cameraPos; // カメラ座標（ワールド座標）
+	float4 InColor;
+};
+
 float4 main(VSOutput input) : SV_TARGET
 {
 	// 頂点から視点への方向ベクトル(視線ベクトル)

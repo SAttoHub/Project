@@ -865,9 +865,6 @@
     <FxCompile Include="Resource\shader\FBXPS.hlsl">
       <Filter>リソース ファイル\FBX</Filter>
     </FxCompile>
-    <FxCompile Include="Resource\shader\FBXVS.hlsl">
-      <Filter>リソース ファイル\FBX</Filter>
-    </FxCompile>
     <FxCompile Include="Resource\shader\OBJPixelShader.hlsl">
       <Filter>リソース ファイル\mat</Filter>
     </FxCompile>
@@ -1047,6 +1044,27 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\LinePrimitive2DPixel.hlsl">
       <Filter>リソース ファイル\Primitive\2D\Line</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXINSTANCEVS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXVS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FBXINSTANCEPS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Depth2Inst.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\DepthPSInst.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Shadow_FBX_PS_Inst.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Shadow_FBX_VS_Inst.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

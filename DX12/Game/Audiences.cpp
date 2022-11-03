@@ -26,6 +26,8 @@ Audiences::Audiences()
 	m_Audience.reserve(MAX_AUDIENCE);
 	Timer = 0;
 	Hoge = 1;
+
+	Tex = TexManager::LoadTexture("Resource/image/Chara/CharaAudSheet.png");
 }
 
 Audiences::~Audiences()
@@ -35,6 +37,19 @@ Audiences::~Audiences()
 void Audiences::Init(Map* map)
 {
 	pMap = map;
+	
+	int modelData = LoadModelOBJ("Charactor", "mob");
+	model = DirectX3dObject::CreateInstanceObject(GetModelData(modelData),
+		XMFLOAT3(-1000, -1000, -1000), FBXSHADER_INS, MAX_AUDIENCE);
+	for (int i = 0; i < MAX_AUDIENCE; i++) {
+		model->object[i].rotation.y = 90.0f;
+		model->object[i].scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
+	}
+
+	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
+	model->isBillboard = true;
+	model->UseShadow = true;
+	model->UseDOF = true;
 }
 
 void Audiences::Update()
@@ -52,6 +67,12 @@ void Audiences::Update()
 	if (Input::isKeyTrigger(DIK_L)) {
 		m_Audience[5].ExitTrigger();
 	}
+	for (int i = 0; i < m_Audience.size(); i++){
+		model->object[i].position = m_Audience[i].GetPosition();
+		XMFLOAT4 UV = m_Audience[i].GetTexUV();
+		model->object[i].LT_UV = XMFLOAT2(UV.x, UV.y);
+		model->object[i].RB_UV = XMFLOAT2(UV.z, UV.w);
+	}
 	if (m_Audience.size() > 0) {
 		for (int i = 0; i < m_Audience.size() - 1; i++) {
 			if (m_Audience[i].GetDelete() == true) {
@@ -60,6 +81,8 @@ void Audiences::Update()
 			}
 		}
 	}
+
+	model->material.texNumber = Tex;
 
 	/*ImGui::SetNextWindowPos(ImVec2(0, 60), 1);
 	ImGui::SetNextWindowSize(ImVec2(500, 500), 1);
@@ -77,30 +100,34 @@ void Audiences::Update()
 
 void Audiences::Draw()
 {
-	for (auto &data : m_Audience) {
+	/*for (auto &data : m_Audience) {
 		data.Draw();
-	}
+	}*/
+	Drawobject3d(model);
 }
 
 void Audiences::ShadowDraw()
 {
-	for (auto &data : m_Audience) {
+	/*for (auto &data : m_Audience) {
 		data.ShadowDraw();
-	}
+	}*/
+	ShadowDepthDrawobject3d(model);
 }
 
 void Audiences::DepthDraw()
 {
-	for (auto &data : m_Audience) {
+	/*for (auto &data : m_Audience) {
 		data.DepthDraw();
-	}
+	}*/
+	DepthDrawobject3d(model);
 }
 
 void Audiences::DOFDepthDraw()
 {
-	for (auto &data : m_Audience) {
+	/*for (auto &data : m_Audience) {
 		data.DOFDepthDraw();
-	}
+	}*/
+	DOFDepthDrawobject3d(model);
 }
 
 void Audiences::SummonAudience(int Count)

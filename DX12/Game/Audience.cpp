@@ -47,7 +47,7 @@ void Audience::Action()
 void Audience::ActionBound()
 {
 	BoundHeight = sinf((180.0f / float(BoundTimer) * float(ActionTimer)) * M_PI_F / 180.0f) * 3.0f;
-	model->position.y = m_LocalPos.y + BoundHeight;
+	position.y = m_LocalPos.y + BoundHeight;
 }
 
 void Audience::ExitTrigger()
@@ -71,21 +71,21 @@ void Audience::ExitTrigger()
 	}
 
 	ExitPosStep0.x = cosf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-	ExitPosStep0.y = model->position.y;
+	ExitPosStep0.y = position.y;
 	ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
 	ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-	ExitPosStep1.y = model->position.y;
+	ExitPosStep1.y = position.y;
 	ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
 	if (m_Step == 1) {
 
 		ExitPosStep0.x = cosf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-		ExitPosStep0.y = model->position.y;
+		ExitPosStep0.y = position.y;
 		ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 
 		ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-		ExitPosStep1.y = model->position.y;
+		ExitPosStep1.y = position.y;
 		ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 	}
 
@@ -127,19 +127,19 @@ void Audience::AdmissionTrigger()
 	}
 
 	ExitPosStep0.x = cosf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-	ExitPosStep0.y = model->position.y;
+	ExitPosStep0.y = position.y;
 	ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
 	ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-	ExitPosStep1.y = model->position.y;
+	ExitPosStep1.y = position.y;
 	ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 
 	if (m_Step == 1) {
 		ExitPosStep0.x = cosf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-		ExitPosStep0.y = model->position.y;
+		ExitPosStep0.y = position.y;
 		ExitPosStep0.z = sinf(IndexAngle * float(m_Index) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 		ExitPosStep1.x = cosf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-		ExitPosStep1.y = model->position.y;
+		ExitPosStep1.y = position.y;
 		ExitPosStep1.z = sinf(IndexAngle * float(TargetIndex) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 	}
 
@@ -175,18 +175,18 @@ void Audience::ActionExit()
 	int Timer5 = ExitTimer1 + ExitTimer2 + ExitTimer3 + ExitTimer4 + ExitTimer5;
 
 	if (float(Timer) < Timer1) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
+		position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
+		position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
 		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
 		if (m_Step != 1) {
-			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+			position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+			position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 		}
 		else {
-			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
+			position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
+			position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 		}
 
 	}
@@ -194,18 +194,18 @@ void Audience::ActionExit()
 		if (m_Step == 1) {
 			ActionTimer = float(ExitTimerAll) - Timer3;
 		}
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
-		model->position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.z, ExitPosStep2.z, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.z, ExitPosStep2.z, float(Timer - Timer2), float(Timer3 - Timer2));
 	}
 	else if (float(Timer) < Timer4) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.x, ExitPosStep3.x, float(Timer - Timer3), float(Timer4 - Timer3));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.z, ExitPosStep3.z, float(Timer - Timer3), float(Timer4 - Timer3));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.x, ExitPosStep3.x, float(Timer - Timer3), float(Timer4 - Timer3));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.z, ExitPosStep3.z, float(Timer - Timer3), float(Timer4 - Timer3));
 	}
 	else if (float(Timer) < Timer5) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.x, ExitPosStep4.x, float(Timer - Timer4), float(Timer5 - Timer4));
-		model->position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.y, ExitPosStep4.y, float(Timer - Timer4), float(Timer5 - Timer4));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.z, ExitPosStep4.z, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.x, ExitPosStep4.x, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.y, ExitPosStep4.y, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.z, ExitPosStep4.z, float(Timer - Timer4), float(Timer5 - Timer4));
 	}
 	else {
 		m_DeleteFlag = true;
@@ -222,20 +222,20 @@ void Audience::ActionAdmission()
 	int Timer5 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4) + float(ExitTimer5);
 
 	if (float(Timer) < Timer1) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
+		position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
+		position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
 		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
-		//model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-		//model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+		//position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+		//position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 		if (m_Step != 1) {
-			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
-			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
+			position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
+			position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 		}
 		else {
-			model->position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
-			model->position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
+			position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.x;
+			position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 		}
 
 	}
@@ -243,18 +243,18 @@ void Audience::ActionAdmission()
 		if (m_Step == 1) {
 			ActionTimer = /*float(ExitTimerAll) - */Timer2;
 		}
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
-		model->position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.z, ExitPosStep2.z, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.z, ExitPosStep2.z, float(Timer - Timer2), float(Timer3 - Timer2));
 	}
 	else if (float(Timer) < Timer4) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.x, ExitPosStep3.x, float(Timer - Timer3), float(Timer4 - Timer3));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.z, ExitPosStep3.z, float(Timer - Timer3), float(Timer4 - Timer3));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.x, ExitPosStep3.x, float(Timer - Timer3), float(Timer4 - Timer3));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep2.z, ExitPosStep3.z, float(Timer - Timer3), float(Timer4 - Timer3));
 	}
 	else if (float(Timer) <= Timer5) {
-		model->position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.x, ExitPosStep4.x, float(Timer - Timer4), float(Timer5 - Timer4));
-		model->position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.y, ExitPosStep4.y, float(Timer - Timer4), float(Timer5 - Timer4));
-		model->position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.z, ExitPosStep4.z, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.x, ExitPosStep4.x, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.y, ExitPosStep4.y, float(Timer - Timer4), float(Timer5 - Timer4));
+		position.z = Ease::EaseFunc(EaseName::Linear, ExitPosStep3.z, ExitPosStep4.z, float(Timer - Timer4), float(Timer5 - Timer4));
 	}
 }
 
@@ -263,25 +263,18 @@ Audience::Audience()
 	m_MapPos = { 0,0 };
 	m_HP = 100;
 
-	int modelData = LoadModelOBJ("Charactor", "mob");
-	model = DirectX3dObject::CreateObject(GetModelData(modelData),
-		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
-	model->rotation.y = 90.0f;
-	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
-	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
-	model->isBillboard = true;
-	model->UseShadow = true;
-	model->UseDOF = true;
+	//int modelData = LoadModelOBJ("Charactor", "mob");
+	//model = DirectX3dObject::CreateObject(GetModelData(modelData),
+	//	XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
+	//model->rotation.y = 90.0f;
+	//model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);
+	//model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
+	//model->isBillboard = true;
+	//model->UseShadow = true;
+	//model->UseDOF = true;
 
-	Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaAud1.png");
-	Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaAud2.png");
-	Image[2] = TexManager::LoadTexture("Resource/image/Chara/CharaAud3.png");
-	Image[3] = TexManager::LoadTexture("Resource/image/Chara/CharaAud4.png");
-	Image[4] = TexManager::LoadTexture("Resource/image/Chara/CharaAud5.png");
-	Image[5] = TexManager::LoadTexture("Resource/image/Chara/CharaAud6.png");
-	Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaAud7.png");
-	Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaAud8.png");
-	model->alwaysUpdate = true;
+	
+	//model->alwaysUpdate = true;
 
 	// 雑に初期化
 	m_Step = 0;
@@ -314,33 +307,33 @@ void Audience::SetMap(Map *Map)
 void Audience::Update()
 {
 	/*float Range = m_Step == 1 ? Step1.x : m_Step == 2 ? Step2.x : m_Step == 3 ? Step3.x : m_Step == 4 ? Step4.x : 0.0f;
-	model->position.x = hogePos.x * Range + pMap->Center.x;
-	model->position.y = m_Step == 1 ? Step1.y : m_Step == 2 ? Step2.y : m_Step == 3 ? Step3.y : m_Step == 4 ? Step4.y : 0.0f;
-	model->position.z = hogePos.z * Range + pMap->Center.z;*/
+	position.x = hogePos.x * Range + pMap->Center.x;
+	position.y = m_Step == 1 ? Step1.y : m_Step == 2 ? Step2.y : m_Step == 3 ? Step3.y : m_Step == 4 ? Step4.y : 0.0f;
+	position.z = hogePos.z * Range + pMap->Center.z;*/
 	Action();
 
 	SetDir();
-	model->material.texNumber = Image[(int)m_Dir];
+	//model->material.texNumber = Image[(int)m_Dir];
 }
 
 void Audience::Draw()
 {
-	bool Flag = false;
-	for (int i = 0; i < 6; i++) {
-		if (InScreen(model->vertices[i].pos, Camera::matView, Camera::matProjection, XMFLOAT2(1280, 720))) {
-			Flag = true;
-			break;
-		}
-	}
-	if (Flag) {
-		Drawobject3d(model);
-	}
+	//bool Flag = false;
+	//for (int i = 0; i < 6; i++) {
+	//	if (InScreen(model->vertices[i].pos, Camera::matView, Camera::matProjection, XMFLOAT2(1280, 720))) {
+	//		Flag = true;
+	//		break;
+	//	}
+	//}
+	//if (Flag) {
+		//Drawobject3d(model);
+	//}
 }
 
 void Audience::SetDir()
 {
 	// モデル座標XZとカメラ座標XZとマップ中心座標XZ
-	XMFLOAT2 modelPosXZ = XMFLOAT2(model->position.x, model->position.z);
+	XMFLOAT2 modelPosXZ = XMFLOAT2(position.x, position.z);
 	XMFLOAT2 cameraPosXZ = XMFLOAT2(Camera::eye.x, Camera::eye.z);
 	XMFLOAT2 mapCenterXZ = XMFLOAT2(pMap->Center.x, pMap->Center.z);
 
@@ -384,11 +377,20 @@ void Audience::SetPosition(int Step, int Index)
 	m_Step = Step;
 	m_Index = Index;
 
-	model->position = Pos;
+	position = Pos;
 	m_LocalPos = Pos;
 
 	ActionCount = GetRand(50, 100);
 	ActionTimer = 0;
 	BoundHeight = 0;
 	m_DeleteFlag = false;
+}
+
+XMFLOAT4 Audience::GetTexUV()
+{
+	XMFLOAT4 UV = { 0.0f,0.0f,1.0f,1.0f };
+	float _X = 1.0f / 8.0f;
+	float _Y = 1.0f / 8.0f;
+	UV = { _X * float(m_Dir), _Y * 0, _X * (float(m_Dir) + 1.0f), _Y * 1 };
+	return UV;
 }

@@ -442,7 +442,7 @@ void Primitive3D::DrawCube(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 scale, XMFLOAT
 		if (CubePrim->Data[i].Active == false) break;
 		Num++;
 	}
-	assert(Num <= MaxCubePrimitives);
+	assert(Num <= CubePrim->MaxPrimitives);
 
 	this->CubePrim->Data[Num].Data.pos1 = pos1;
 	this->CubePrim->Data[Num].Data.pos2 = pos2;
@@ -462,7 +462,7 @@ void Primitive3D::DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color) {
 		if (LinePrim->Data[i].Active == false) break;
 		Num++;
 	}
-	assert(Num <= MaxLinePrimitives);
+	assert(Num <= LinePrim->MaxPrimitives);
 
 	this->LinePrim->Data[Num].Data.pos1 = pos1;
 	this->LinePrim->Data[Num].Data.pos2 = pos2;
@@ -501,7 +501,7 @@ void Primitive3D::DrawOctahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, boo
 		if (OctaPrim->Data[i].Active == false) break;
 		Num++;
 	}
-	assert(Num <= MaxOctahedronPrimitives);
+	assert(Num <= OctaPrim->MaxPrimitives);
 
 	this->OctaPrim->Data[Num].Data.pos = pos;
 	this->OctaPrim->Data[Num].Data.Radius = Radius;
@@ -520,7 +520,7 @@ void Primitive3D::DrawIcosahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, bo
 		if (IcosaPrim->Data[i].Active == false) break;
 		Num++;
 	}
-	assert(Num <= MaxIcosahedronPrimitives);
+	assert(Num <= IcosaPrim->MaxPrimitives);
 
 	this->IcosaPrim->Data[Num].Data.pos = pos;
 	this->IcosaPrim->Data[Num].Data.Radius = Radius;

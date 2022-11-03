@@ -1,5 +1,6 @@
 #pragma once
 #include "Audience.h"
+#include <vector>
 
 //-------------------------------------------------------------------------------------------------------------
 // 観客管理class
@@ -10,6 +11,7 @@ private:
 	std::vector<Audience> m_Audience;
 
 	Map *pMap = nullptr;
+	InstanceObjectsData* model;
 
 	int Timer = 0;
 	int Hoge = 0; // 入退場テスト用
@@ -18,6 +20,8 @@ private:
 
 	// 
 	void AudienceSummonAndDelete();
+
+	int Tex = 0;
 public:
 	Audiences();
 	~Audiences();

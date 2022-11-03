@@ -53,6 +53,8 @@ private:
 	void ActionExit();
 	void ActionAdmission();
 
+	XMFLOAT3 position = XMFLOAT3();
+
 public:
 	// x íiñ⁄Å@y çÇÇ≥
 	static XMFLOAT2 Step1;
@@ -81,6 +83,8 @@ public:
 	/// <param name="Step">âΩíiñ⁄Ç©</param>
 	/// <param name="Index"></param>
 	void SetPosition(int Step, int Index);
+	XMFLOAT3 GetPosition() { return position; }
+	XMFLOAT4 GetTexUV();
 
 	void ExitTrigger();
 	void AdmissionTrigger();

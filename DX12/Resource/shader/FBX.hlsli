@@ -1,12 +1,4 @@
-cbuffer cbuff0 : register(b0)
-{
-	matrix view; // ビュー行列
-	matrix viewproj; // ビュープロジェクション行列
-	matrix viewproj2; // ビュープロジェクション行列2
-	matrix world; // ワールド行列
-	float3 cameraPos; // カメラ座標（ワールド座標）
-	float4 InColor;
-};
+
 
 cbuffer cbuff1 : register(b1)
 {
@@ -72,19 +64,6 @@ cbuffer cbuff2 : register(b2)
 	CircleShadow circleShadows[CIRCLESHADOW_NUM];
 }
 
-
-//バーテックスバッファーの入力
-struct VSInput
-{
-	float4 pos	: POSITION;//位置   
-	float3 normal : NORMAL;//頂点法線
-	float2 uv	: TEXCOORD;//テクスチャー座標
-	min16int4 boneIndices : BONEINDICES; //ボーンの番号
-	min16int4 boneIndicesB : BONEINDICESB; //ボーンの番号
-	float4 boneWeights : BONEWEIGHTS; //ボーンのスキンウェイト
-	float4 boneWeightsB : BONEWEIGHTSB; //ボーンのスキンウェイト
-};
-
 struct VSOutput
 {
 	float4 svpos : SV_POSITION;
@@ -92,6 +71,7 @@ struct VSOutput
 	float4 worldpos : POSITION; // ワールド座標
 	float3 normal :NORMAL;
 	float2 uv  :TEXCOORD;
+	uint InstanceID : InstanceID;
 };
 
 struct GSOutput

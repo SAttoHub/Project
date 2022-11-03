@@ -3,25 +3,25 @@
 Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
+struct InstanceData
+{
+	matrix world; // ワールド行列
+	float4 InColor;
+	float4 uv; // 左上右下
+};
+
 cbuffer cbuff0 : register(b0)
+{
+	InstanceData data[500];
+};
+
+
+cbuffer matr : register(b6)
 {
 	matrix view; // ビュー行列
 	matrix viewproj; // ビュープロジェクション行列
 	matrix viewproj2; // ビュープロジェクション行列2
-	matrix world; // ワールド行列
 	float3 cameraPos; // カメラ座標（ワールド座標）
-	float4 InColor;
-};
-//バーテックスバッファーの入力
-struct VSInput
-{
-	float4 pos	: POSITION;//位置   
-	float3 normal : NORMAL;//頂点法線
-	float2 uv	: TEXCOORD;//テクスチャー座標
-	min16int4 boneIndices : BONEINDICES; //ボーンの番号
-	min16int4 boneIndicesB : BONEINDICESB; //ボーンの番号
-	float4 boneWeights : BONEWEIGHTS; //ボーンのスキンウェイト
-	float4 boneWeightsB : BONEWEIGHTSB; //ボーンのスキンウェイト
 };
 
 //float smoothstepf(float edge0, float edge1, float x) {
@@ -49,6 +49,10 @@ float4 main(VSOutput input) : SV_TARGET
 	////陰影とテクスチャの色を合成
 	//return shadecolor * texcolor;
 	// テクスチャマッピング
+	uint index = input.InstanceID;
+	matrix world = data[index].world;
+	float4 InColor = data[index].InColor;
+	
 	float4 texcolor = tex.Sample(smp, input.uv);
 	if (InColor.w == -1.0f) {
 		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
@@ -224,14 +228,14 @@ float4 main(VSOutput input) : SV_TARGET
 			shadecolor.rgb -= atten;
 		}
 	}
-	
+
 	if (shadecolor.r > 0.6f) shadecolor.r = 0.9f;
 	if (shadecolor.r <= 0.6f) shadecolor.r = 0.6f;
 	if (shadecolor.g > 0.6f) shadecolor.g = 0.9f;
 	if (shadecolor.g <= 0.6f) shadecolor.g = 0.6f;
 	if (shadecolor.b > 0.6f) shadecolor.b = 0.9f;
 	if (shadecolor.b <= 0.6f) shadecolor.b = 0.6f;
-	
+
 	//smoothstep(circleShadows[i].factorAngleCos.y, circleShadows[i].factorAngleCos.x, cos);
 
 

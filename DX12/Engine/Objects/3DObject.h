@@ -23,6 +23,12 @@ struct ConstBufferDataB0 {
 	XMFLOAT4 color;
 };
 
+struct ConstBufferDataB0Inst {
+	XMMATRIX world; //ワールド行列
+	XMFLOAT4 color;
+	XMFLOAT4 uv;
+};
+
 struct ConstBufferDataB1
 {
 	XMFLOAT3 ambient; // アンビエント係数
@@ -40,6 +46,13 @@ struct ConstBufferDataOther {
 	float Focus;
 	float FocusSize;
 	float Flag;
+};
+
+struct ConstBufferDataInst {
+	XMMATRIX view;
+	XMMATRIX viewproj; //ビュープロジェクション行列
+	XMMATRIX viewproj2; //ビュープロジェクション行列2
+	XMFLOAT3 cameraPos; //カメラ座標（ワールド座標）
 };
 
 struct ConstBufferDataShadow {
@@ -163,6 +176,88 @@ public:
 	ComPtr<ID3D12Resource> constBuffShadow;
 };
 
+struct InstanceObject {
+	//アフィン変換情報
+	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT3 rotation = { 0,0,0 };
+	XMFLOAT3 scale = { 1,1,1 };
+	XMFLOAT3 position = { 0,0,0 };
+	XMFLOAT3 oldrotation = { -1,0,0 };
+	XMFLOAT3 oldscale = { -1,1,1 };
+	XMFLOAT3 oldposition = { -1,0,0 };
+	XMFLOAT2 LT_UV = { 0.0f,0.0f };
+	XMFLOAT2 RB_UV = { 1.0f,1.0f };
+	XMMATRIX matWorld;
+};
+
+struct InstanceObjectsData {
+	Model* model = nullptr; //モデル情報
+
+	vector<Vertex> vertices;
+	vector<unsigned short> indices;
+	Material material;
+	int _indices = 0; //頂点数
+	bool isMaterial = false; //マテリアルを適応するか
+	ComPtr<ID3D12Resource> vertBuff; //頂点バッファ
+	D3D12_VERTEX_BUFFER_VIEW vbView{}; //頂点バッファビュー
+	D3D12_INDEX_BUFFER_VIEW ibView{};
+	ComPtr<ID3D12Resource> indexBuff;
+
+	UINT shaderNumber = 0;
+	bool isBillboard = false;//ビルボード
+	bool DrawFlag = true; //DrawFlag
+	bool alwaysUpdate = false; // 常にマッピングし直すか
+	bool UseShadow = false;
+	bool UseDOF = false;
+	bool UseBloom = false;
+
+	static const int INSTANCE_MAX = 500;
+
+	//1メッシュが持てるボーンの最大数
+	static const int MAX_BONES = 61;
+	//定数バッファ用構造体(スキニング)
+	struct ConstBufferDataSkin {
+		XMMATRIX bones[MAX_BONES];
+	};
+	
+	int InstanceCount;
+
+	//1フレームの時間
+	FbxTime frameTime;
+	//アニメーション速度倍率
+	float flameSpeed = 1.0f;
+	//アニメーション開始時間
+	FbxTime startTime;
+	//アニメーション終了時間
+	FbxTime endTime;
+	//現在時間(アニメーション)
+	FbxTime currentTime;
+	//アニメーション再生中かどうか
+	bool isPlay = false;
+	//アニメーションをループさせるかどうか
+	bool isLoop = false;
+	//アニメーション終了時にそこで止めるかどうか
+	bool isEndStop = false;
+	//再生中のアニメーション番号
+	int PlayAnimationNumber = 0;
+	//void PlayAnimation(int AnimationNumber = 0, bool Loop = false);
+	//void StopAnimation();
+	//void StartAnimation();
+	//void ResetAnimetion();
+	//void ChangeAnimationSpeed(float Speed);
+
+	std::vector<InstanceObject> object;
+
+	ComPtr<ID3D12Resource> constBuffB0;
+	ComPtr<ID3D12Resource> constBuffSkin;
+	ComPtr<ID3D12Resource> constBuffTime;
+	ComPtr<ID3D12Resource> constBuffB4;
+	ComPtr<ID3D12Resource> constBuffShadow;
+	UINT Timer = 0;
+};
+
+
+
 class DirectX3dObject {
 private:
 	ComPtr<ID3DBlob> errorBlob; //エラーオブジェクト
@@ -179,6 +274,7 @@ public:
 
 	//初期化処理
 	void DirectX3DObjectReset(Window *Win);
+	static void CreateInstancePipiline(ShaderManager* _shader);
 	//描画コマンド
 	void DrawReset() {
 		for (int i = 0; i < (int)object3ds.size(); i++) {
@@ -192,6 +288,7 @@ public:
 
 
 	static My_F_List<Object3d> object3ds;
+	static My_F_List<InstanceObjectsData> InstanceObject3ds;
 
 	DirectX3dObject() {
 		//object3ds.reserve(constantBufferNum); //定数バッファの最大数分だけ先にメモリを確保しておく
@@ -202,6 +299,7 @@ public:
 	};
 
 	static void UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATRIX &matProjection);
+	static void UpdateInstanceObject3d(InstanceObjectsData* object, XMMATRIX& matView, XMMATRIX& matProjection);
 
 	/// <summary>
 	/// オブジェクトの作成
@@ -211,6 +309,9 @@ public:
 	/// <param name="ShaderNum">使用するシェーダー</param>
 	/// <returns></returns>
 	static Object3d *CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderNum);
+	static InstanceObjectsData* CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount);
+
+
 
 	static void AllObjectUpdate();
 
@@ -237,7 +338,30 @@ public:
 
 
 //オブジェクト初期化処理
-void InitalizeObject3d(Object3d *object, int index);
+static UINT RoundupConstantBufferSize(UINT size)
+{
+	size = (size + 255) & ~255;
+	return size;
+}
+static ComPtr<ID3D12Resource> CreateBufferResource(D3D12_HEAP_TYPE type, UINT bufferSize, D3D12_RESOURCE_STATES state)
+{
+	ComPtr<ID3D12Resource> ret;
+	HRESULT hr;
+
+	const auto heapProps = CD3DX12_HEAP_PROPERTIES(type);
+	const auto resDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+	hr = DirectXBase::dev->CreateCommittedResource(
+		&heapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&resDesc,
+		state,
+		nullptr,
+		IID_PPV_ARGS(&ret)
+	);
+	return ret;
+}
+void InitalizeObject3d(Object3d *object);
+void InitalizeInstanceObject3d(InstanceObjectsData* object);
 
 /// <summary>
 /// オブジェクトの描画
@@ -248,6 +372,14 @@ void Drawobject3d(Object3d *object);
 void DepthDrawobject3d(Object3d *object);
 void ShadowDepthDrawobject3d(Object3d *object);
 void DOFDepthDrawobject3d(Object3d *object);
+
+void Drawobject3d(InstanceObjectsData* object);
+void DepthDrawobject3d(InstanceObjectsData* object);
+void ShadowDepthDrawobject3d(InstanceObjectsData* object);
+void DOFDepthDrawobject3d(InstanceObjectsData* object);
+//void DepthDrawobject3d(InstanceObjectsData* object);
+//void ShadowDepthDrawobject3d(InstanceObjectsData* object);
+//void DOFDepthDrawobject3d(InstanceObjectsData* object);
 
 /// <summary>
 /// オブジェクトの描画

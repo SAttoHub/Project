@@ -8,6 +8,7 @@
 #include "..\..\DepthOfField.h"
 
 My_F_List<Object3d> DirectX3dObject::object3ds;
+My_F_List<InstanceObjectsData> DirectX3dObject::InstanceObject3ds;
 int DirectX3dObject::OldShaderLoad = -1;
 LightGroup *DirectX3dObject::lightGroup = nullptr;
 bool DirectX3dObject::isUpdateOther = true;
@@ -16,6 +17,60 @@ bool DirectX3dObject::isUpdateOtherFlag = false;
 void DirectX3dObject::DirectX3DObjectReset(Window *Win) {
 	OldShaderLoad = -1;
 	TransConstBuffer();
+}
+
+void DirectX3dObject::CreateInstancePipiline(ShaderManager* _shader)
+{
+	//頂点シェーダーに渡すための頂点データを整える
+	D3D12_INPUT_ELEMENT_DESC InputLayout[] = {
+		{
+			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			offsetof(Vertex, pos),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			offsetof(Vertex, normal),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+			offsetof(Vertex, uv),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"BONEINDICES", 0, DXGI_FORMAT_R16G16B16A16_SINT, 0,
+			offsetof(Vertex, boneIndex),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"BONEINDICESB", 0, DXGI_FORMAT_R16G16B16A16_SINT, 0,
+			offsetof(Vertex, boneIndexB),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"BONEWEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			offsetof(Vertex, boneWeight),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		},
+		{
+			"BONEWEIGHTSB", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			offsetof(Vertex, boneWeightB),
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
+		}
+	};
+	PipelineManager::createInstancePipeline(FBXSHADER_INS, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEPS.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceDepthPipeline(Depth_SHEADER_INS, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Depth2Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceShadowDepthPipeline(Shadow_Depth_SHEADER_INS, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_VS_Inst.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_PS_Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceDOFPipeline(DOF_SHEADER_INS, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/DepthPSInst.hlsl", "main", "ps_5_0"));
 }
 
 void DirectX3dObject::Draw() {
@@ -53,7 +108,7 @@ Object3d *DirectX3dObject::CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderN
 	object3ds.emplace_front(obj);
 	//int count = (int)std::distance(object3ds.begin(), object3ds.end()) - 1;
 	int count = 0;
-	InitalizeObject3d(object3ds[count], count);
+	InitalizeObject3d(object3ds[count]);
 	UpdateObject3d(object3ds[count], Camera::matView, Camera::matProjection);
 
 	int child = 0;
@@ -67,10 +122,43 @@ Object3d *DirectX3dObject::CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderN
 	return object3ds[count];
 }
 
+InstanceObjectsData* DirectX3dObject::CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount)
+{
+	InstanceObjectsData obj;
+	obj.shaderNumber = ShaderNum;
+	obj.model = model;
+	obj.InstanceCount = InstanceCount;
+	obj.object.resize(obj.INSTANCE_MAX);
+
+	for (int i = 0; i < obj.INSTANCE_MAX; i++) {
+		obj.object[i].position = pos;
+		obj.object[i].scale = model->scale;
+	}
+
+	obj.vertices = model->vertices;
+	obj.indices = model->indices;
+	obj.material = model->material;
+	obj._indices = model->_indices; //頂点数
+	obj.isMaterial = model->isMaterial; //マテリアルを適応するか
+
+	//obj.fbxScene == *model->GetFbxScene();
+
+	InstanceObject3ds.emplace_front(obj);
+	//int count = (int)std::distance(object3ds.begin(), object3ds.end()) - 1;
+	int count = 0;
+	InitalizeInstanceObject3d(InstanceObject3ds[0]);
+	UpdateInstanceObject3d(InstanceObject3ds[0], Camera::matView, Camera::matProjection);
+
+	return InstanceObject3ds[0];
+}
+
 void DirectX3dObject::AllObjectUpdate() {
 	for (int i = 0; i < (int)object3ds.size(); i++) {
 		UpdateObject3d(object3ds[i], Camera::matView, Camera::matProjection);
 	};
+	for (int i = 0; i < (int)InstanceObject3ds.size(); i++) {
+		UpdateInstanceObject3d(InstanceObject3ds[i], Camera::matView, Camera::matProjection);
+	}
 	isUpdateOtherFlag = false;
 }
 
@@ -135,7 +223,7 @@ void DirectX3dObject::DOFDraw()
 }
 
 
-void InitalizeObject3d(Object3d *object, int index) {
+void InitalizeObject3d(Object3d *object) {
 	HRESULT result;
 
 	//頂点データ全体のサイズ
@@ -231,7 +319,7 @@ void InitalizeObject3d(Object3d *object, int index) {
 	}
 	object->constBuffSkin->Unmap(0, nullptr);
 
-	//定数バッファの生成(スキン)
+	//定数バッファの生成
 	result = DirectXBase::dev->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
@@ -268,6 +356,176 @@ void InitalizeObject3d(Object3d *object, int index) {
 	//cbvDesc.BufferLocation = object->constBuffB0->GetGPUVirtualAddress();
 	//cbvDesc.SizeInBytes = (UINT)object->constBuffB0->GetDesc().Width;
 	//DirectXBase::dev->CreateConstantBufferView(&cbvDesc, object->cpuDescHandleCBV);
+}
+
+void InitalizeInstanceObject3d(InstanceObjectsData* object)
+{
+	HRESULT result;
+
+	//頂点データ全体のサイズ
+	UINT sizeVB = static_cast<UINT>(sizeof(Vertex) * object->vertices.size());
+	//頂点バッファ生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeVB),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->vertBuff));
+	//頂点バッファへのデータ転送
+	Vertex* vertMap = nullptr;
+	result = object->vertBuff->Map(0, nullptr, (void**)&vertMap);
+	if (SUCCEEDED(result)) {
+		std::copy(object->vertices.begin(), object->vertices.end(), vertMap);
+		object->vertBuff->Unmap(0, nullptr);
+	}
+	//頂点バッファビュー(VBV)の作成
+	object->vbView.BufferLocation = object->vertBuff->GetGPUVirtualAddress();
+	object->vbView.SizeInBytes = sizeVB;
+	object->vbView.StrideInBytes = sizeof(object->vertices[0]);
+	//頂点インデックス全体のサイズ
+	UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * object->indices.size());
+	//インデックスバッファ生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeIB),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->indexBuff));
+	//インデックスバッファへのデータ転送
+	unsigned short* indexMap = nullptr;
+	result = object->indexBuff->Map(0, nullptr, (void**)&indexMap);
+	if (SUCCEEDED(result)) {
+		std::copy(object->indices.begin(), object->indices.end(), indexMap);
+		object->indexBuff->Unmap(0, nullptr);
+	}
+	//インデックスバッファビュー(IBV)の作成
+	object->ibView.BufferLocation = object->indexBuff->GetGPUVirtualAddress();
+	object->ibView.Format = DXGI_FORMAT_R16_UINT;
+	object->ibView.SizeInBytes = sizeIB;
+
+
+
+
+	std::vector<ConstBufferDataB0Inst> instanceData(object->INSTANCE_MAX);
+	{
+		// インスタンシング中身を書き込んでおく.
+		for (UINT i = 0; i < object->INSTANCE_MAX; ++i)
+		{
+			XMMATRIX matScale, matRot, matTrans;
+			//スケール、回転、平行移動行列の計算
+			matScale = XMMatrixScaling(object->object[i].scale.x, object->object[i].scale.y, object->object[i].scale.z);
+			matRot = XMMatrixIdentity();
+			matRot *= XMMatrixRotationZ(XMConvertToRadians(object->object[i].rotation.z));
+			matRot *= XMMatrixRotationX(XMConvertToRadians(object->object[i].rotation.x));
+			matRot *= XMMatrixRotationY(XMConvertToRadians(object->object[i].rotation.y));
+			matTrans = XMMatrixTranslation(
+				object->object[i].position.x, object->object[i].position.y, object->object[i].position.z
+			);
+
+			//ワールド行列の合成
+			object->object[i].matWorld = XMMatrixIdentity(); //変形をリセット
+			object->object[i].matWorld *= matScale;
+			object->object[i].matWorld *= matRot;
+			object->object[i].matWorld *= matTrans;
+
+			if (object->isBillboard) {
+
+				object->object[i].matWorld = XMMatrixIdentity(); //変形をリセット
+				object->object[i].matWorld *= matScale;
+				object->object[i].matWorld *= matRot;
+				object->object[i].matWorld *= Camera::matBillboard;
+				object->object[i].matWorld *= matTrans;
+			}
+
+			auto& data = instanceData[i];
+			data.world = object->object[i].matWorld;
+			data.color = object->object[i].color;
+		}
+	}
+
+
+	//定数バッファのヒープ設定
+	 // インスタンシング用のバッファを準備.
+	UINT bufferSize = sizeof(ConstBufferDataB0Inst) * object->INSTANCE_MAX;
+	bufferSize = RoundupConstantBufferSize(bufferSize);
+	object->constBuffB0 = CreateBufferResource(
+		D3D12_HEAP_TYPE_UPLOAD,
+		bufferSize,
+		D3D12_RESOURCE_STATE_GENERIC_READ
+	);
+
+	void* mapped;
+	object->constBuffB0->Map(0, nullptr, &mapped);
+	memcpy(mapped, instanceData.data(), bufferSize);
+	object->constBuffB0->Unmap(0, nullptr);
+
+
+	if (object->isMaterial) {
+		result = DirectXBase::dev->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
+			D3D12_HEAP_FLAG_NONE,
+			&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nullptr,
+			IID_PPV_ARGS(&object->material.constBuffB1));
+	}
+
+	//定数バッファの生成(スキン)
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(Object3d::ConstBufferDataSkin) + 0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->constBuffSkin)
+	);
+
+	//定数バッファへデータ転送
+	Object3d::ConstBufferDataSkin* constMapSkin = nullptr;
+	result = object->constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	for (int i = 0; i < Object3d::MAX_BONES; i++) {
+		//合成してスキニング行列に
+		constMapSkin->bones[i] = XMMatrixIdentity();
+	}
+	object->constBuffSkin->Unmap(0, nullptr);
+
+	//定数バッファの生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataOther) + 0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->constBuffTime)
+	);
+
+	//定数バッファの生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataInst) + 0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->constBuffB4)
+	);
+
+	//定数バッファの生成
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataShadow) + 0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&object->constBuffShadow)
+	);
+
+	//デスクリプタ１つ分のサイズ
+	UINT descHandleIncrementSize =
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	object->frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 }
 
 void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATRIX &matProjection) {
@@ -412,6 +670,159 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 
 	ConstBufferDataShadow *constMap3 = nullptr;
 	if (SUCCEEDED(object->constBuffShadow->Map(0, nullptr, (void **)&constMap3))) {
+		constMap3->Light_view = ShadowMapLight::matView;
+		constMap3->Light_viewproj = ShadowMapLight::matViewProjection;
+		constMap3->Light_Pos = ShadowMapLight::Pos;
+		object->constBuffShadow->Unmap(0, nullptr);
+	}
+}
+
+void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object, XMMATRIX& matView, XMMATRIX& matProjection)
+{
+	if (object->isPlay) {
+		//1 * Speedフレーム進める
+		object->currentTime += object->frameTime * int(object->flameSpeed);
+		//最後まで再生したら先頭に戻す
+		if (object->currentTime > object->endTime) {
+			if (!object->isLoop && object->isEndStop == false) {
+				object->currentTime = object->startTime;
+				object->isPlay = false;
+			}
+			else {
+				if (object->isEndStop == true) {
+					object->isPlay = false;
+				}
+				else {
+					object->currentTime = object->startTime;
+				}
+			}
+		}
+	}
+
+	// インスタンシング中身を書き込んでおく.
+	std::vector<ConstBufferDataB0Inst> instanceData(object->INSTANCE_MAX);
+	for (UINT i = 0; i < object->INSTANCE_MAX; ++i)
+	{
+		if (isUpdateOtherFlag == false) {
+			if (object->object[i].oldposition != object->object[i].position ||
+				object->object[i].oldscale != object->object[i].scale ||
+				object->object[i].oldrotation != object->object[i].rotation ||
+				Camera::eye != Camera::oldeye || Camera::target != Camera::oldtarget) {
+				isUpdateOther = true;
+				isUpdateOtherFlag = true;
+			}
+			else {
+				isUpdateOther = false;
+			}
+		}
+
+		XMMATRIX matScale, matRot, matTrans;
+		//スケール、回転、平行移動行列の計算
+		matScale = XMMatrixScaling(object->object[i].scale.x, object->object[i].scale.y, object->object[i].scale.z);
+		matRot = XMMatrixIdentity();
+		matRot *= XMMatrixRotationZ(XMConvertToRadians(object->object[i].rotation.z));
+		matRot *= XMMatrixRotationX(XMConvertToRadians(object->object[i].rotation.x));
+		matRot *= XMMatrixRotationY(XMConvertToRadians(object->object[i].rotation.y));
+		matTrans = XMMatrixTranslation(
+			object->object[i].position.x, object->object[i].position.y, object->object[i].position.z
+		);
+
+		//ワールド行列の合成
+		object->object[i].matWorld = XMMatrixIdentity(); //変形をリセット
+		object->object[i].matWorld *= matScale;
+		object->object[i].matWorld *= matRot;
+		object->object[i].matWorld *= matTrans;
+
+		if (object->isBillboard) {
+
+			object->object[i].matWorld = XMMatrixIdentity(); //変形をリセット
+			object->object[i].matWorld *= matScale;
+			object->object[i].matWorld *= matRot;
+			object->object[i].matWorld *= Camera::matBillboard;
+			object->object[i].matWorld *= matTrans;
+		}
+
+		object->object[i].oldposition = object->object[i].position;
+		object->object[i].oldscale = object->object[i].scale;
+		object->object[i].oldrotation = object->object[i].rotation;
+
+		auto& data = instanceData[i];
+		data.world = object->object[i].matWorld;
+		data.color = object->object[i].color;
+		data.uv = XMFLOAT4(object->object[i].LT_UV.x, object->object[i].LT_UV.y, object->object[i].RB_UV.x, object->object[i].RB_UV.y);
+	}
+
+	//定数バッファのヒープ設定
+	 // インスタンシング用のバッファを準備.
+	UINT bufferSize = sizeof(ConstBufferDataB0Inst) * object->INSTANCE_MAX;
+	bufferSize = RoundupConstantBufferSize(bufferSize);
+	/*object->constBuffB0 = CreateBufferResource(
+		D3D12_HEAP_TYPE_UPLOAD,
+		bufferSize,
+		D3D12_RESOURCE_STATE_GENERIC_READ
+	);*/
+
+	//定数バッファへデータ転送
+	void* mapped;
+	object->constBuffB0->Map(0, nullptr, &mapped);
+	memcpy(mapped, instanceData.data(), bufferSize);
+	object->constBuffB0->Unmap(0, nullptr);
+
+	HRESULT result;
+
+
+
+	if (object->model->isMaterial) {
+		ConstBufferDataB1* constMap1 = nullptr;
+		result = object->material.constBuffB1->Map(0, nullptr, (void**)&constMap1);
+		constMap1->ambient = object->material.ambient;
+		constMap1->diffuse = object->material.diffuse;
+		constMap1->specular = object->material.specular;
+		constMap1->alpha = object->material.alpha;
+		object->material.constBuffB1->Unmap(0, nullptr);
+		//	}
+	}
+
+	//ボーン配列
+	std::vector<Model::Bone>& bones = object->model->GetBones();
+	//定数バッファへデータ転送
+	Object3d::ConstBufferDataSkin* constMapSkin = nullptr;
+	result = object->constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	for (int i = 0; i < bones.size(); i++) {
+		//今の姿勢行列
+		XMMATRIX matCurrentPose;
+		//今の姿勢行列を取得
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(object->currentTime);
+		//XMMATRIXに変換
+		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		//合成してスキニング行列に
+		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+	}
+	object->constBuffSkin->Unmap(0, nullptr);
+
+	object->Timer = object->Timer + 1;
+	ConstBufferDataInst* constMap2 = nullptr;
+	result = object->constBuffB4->Map(0, nullptr, (void**)&constMap2);
+	constMap2->view = Camera::matView;
+	constMap2->viewproj = Camera::matViewProjection;
+	constMap2->viewproj2 = Camera::matViewProjection2;
+	constMap2->cameraPos = Camera::eye;
+	object->constBuffB4->Unmap(0, nullptr);
+
+	object->Timer = object->Timer + 1;
+	ConstBufferDataOther* constMapT = nullptr;
+	result = object->constBuffTime->Map(0, nullptr, (void**)&constMapT);
+	constMapT->time = object->Timer;
+	constMapT->InterpSize = DepthOfField::InterpSize;
+	constMapT->Focus = DepthOfField::Focus;
+	constMapT->FocusSize = DepthOfField::FocusSize;
+	constMapT->Flag = DepthOfField::UseFlag;
+	object->constBuffTime->Unmap(0, nullptr);
+
+
+
+	ConstBufferDataShadow* constMap3 = nullptr;
+	if (SUCCEEDED(object->constBuffShadow->Map(0, nullptr, (void**)&constMap3))) {
 		constMap3->Light_view = ShadowMapLight::matView;
 		constMap3->Light_viewproj = ShadowMapLight::matViewProjection;
 		constMap3->Light_Pos = ShadowMapLight::Pos;
@@ -634,6 +1045,179 @@ void DOFDepthDrawobject3d(Object3d *object)
 			Drawobject3d(DirectX3dObject::object3ds[i]);
 		}
 	}*/
+}
+
+void Drawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap* ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+
+
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffB4->GetGPUVirtualAddress());
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, object->InstanceCount, 0, 0, 0);
+}
+
+void DepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Depth_SHEADER_INS].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Depth_SHEADER_INS].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap* ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(7, object->constBuffB4->GetGPUVirtualAddress());
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, object->InstanceCount, 0, 0, 0);
+}
+
+void ShadowDepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width * 2.0f, DirectXBase::Win_Height * 2.0f));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width * 2.0f), LONG(DirectXBase::Win_Height * 2.0f)));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Shadow_Depth_SHEADER_INS].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Shadow_Depth_SHEADER_INS].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap* ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(7, object->constBuffB4->GetGPUVirtualAddress());
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, object->InstanceCount, 0, 0, 0);
+}
+
+void DOFDepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+
+	//ビューポートの設定コマンド
+	DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+	//シザー矩形の設定コマンド
+	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
+
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[DOF_SHEADER_INS].Get());
+	//パイプラインステートの設定コマンド
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[DOF_SHEADER_INS].Get());
+
+	//プリミティブ形状の設定コマンド
+	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点バッファの設定
+	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &object->vbView);
+	//インデックスバッファの設定
+	DirectXBase::cmdList->IASetIndexBuffer(&object->ibView);
+	//デスクリプタヒープをセット
+	ID3D12DescriptorHeap* ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+	DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//定数バッファビューをセット
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		object->material.texNumber,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
+
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(7, object->constBuffB4->GetGPUVirtualAddress());
+	//DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
+
+	// ライトの描画
+	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
+
+	//描画コマンド
+	DirectXBase::cmdList->DrawIndexedInstanced(object->_indices, object->InstanceCount, 0, 0, 0);
 }
 
 void Drawobject3dOfDefaultLight(Object3d *object)

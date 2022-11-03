@@ -3,25 +3,25 @@
 Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
+struct InstanceData
+{
+	matrix world; // ワールド行列
+	float4 InColor;
+	float4 uv; // 左上右下
+};
+
 cbuffer cbuff0 : register(b0)
+{
+	InstanceData data[500];
+};
+
+
+cbuffer matr : register(b6)
 {
 	matrix view; // ビュー行列
 	matrix viewproj; // ビュープロジェクション行列
 	matrix viewproj2; // ビュープロジェクション行列2
-	matrix world; // ワールド行列
 	float3 cameraPos; // カメラ座標（ワールド座標）
-	float4 InColor;
-};
-//バーテックスバッファーの入力
-struct VSInput
-{
-	float4 pos	: POSITION;//位置   
-	float3 normal : NORMAL;//頂点法線
-	float2 uv	: TEXCOORD;//テクスチャー座標
-	min16int4 boneIndices : BONEINDICES; //ボーンの番号
-	min16int4 boneIndicesB : BONEINDICESB; //ボーンの番号
-	float4 boneWeights : BONEWEIGHTS; //ボーンのスキンウェイト
-	float4 boneWeightsB : BONEWEIGHTSB; //ボーンのスキンウェイト
 };
 
 cbuffer time : register(b4)
@@ -42,9 +42,15 @@ float4 main(VSOutput input) : SV_TARGET
 		//discard;
 	}
 
+
 	if (tex.Sample(smp, input.uv).a == 0.0f) {
 		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
+
+	uint index = input.InstanceID;
+	matrix world = data[index].world;
+	float4 InColor = data[index].InColor;
+
 	////---------------被写界深度用
 	float4 obj = mul(input.worldpos, view); //ビュー変換
 	float4 cp = float4(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f);

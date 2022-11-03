@@ -68,8 +68,8 @@ void GameScenes::Update()
 		if (m_enemys.GetEnemyCount() == 0) {
 			NowWave++;
 			if (NowWave == 1) {
-				//m_BattleWave->StartWave("Test2");
-				EndCount++;
+				m_BattleWave->StartWave("Test2");
+				/*EndCount++;
 				if (EndCount > 30) {
 					DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
 						"R : ƒ^ƒCƒgƒ‹‚Ö");
@@ -77,7 +77,7 @@ void GameScenes::Update()
 						Reset();
 					}
 				}
-				NowWave--;
+				NowWave--;*/
 			}
 			else if (NowWave == 2) {
 				m_BattleWave->StartWave("Test3");
