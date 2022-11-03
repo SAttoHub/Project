@@ -27,6 +27,7 @@ struct ConstBufferDataB0Inst {
 	XMMATRIX world; //ワールド行列
 	XMFLOAT4 color;
 	XMFLOAT4 uv;
+	bool DrawFlag = true;
 };
 
 struct ConstBufferDataB1
@@ -188,6 +189,7 @@ struct InstanceObject {
 	XMFLOAT2 LT_UV = { 0.0f,0.0f };
 	XMFLOAT2 RB_UV = { 1.0f,1.0f };
 	XMMATRIX matWorld;
+	bool isDraw = true;
 };
 
 struct InstanceObjectsData {
@@ -316,6 +318,7 @@ public:
 	static void AllObjectUpdate();
 
 	static void DeleteObject(Object3d *object);
+	static void DeleteObject(InstanceObjectsData* object);
 
 	// ライト
 	static LightGroup *lightGroup;

@@ -5,6 +5,7 @@ struct InstanceData
 	matrix world; // ワールド行列
 	float4 InColor;
 	float4 uv; // 左上右下
+	bool DrawFlag;
 };
 
 cbuffer cbuff0 : register(b0)

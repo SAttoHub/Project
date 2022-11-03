@@ -172,6 +172,17 @@ void DirectX3dObject::DeleteObject(Object3d *object) {
 	}
 }
 
+void DirectX3dObject::DeleteObject(InstanceObjectsData* object)
+{
+	for (int i = 0; i < (int)InstanceObject3ds.size(); i++) {
+		if (object == InstanceObject3ds[i]) {
+			//object3ds[i]->DeleteFunc();
+			InstanceObject3ds.erase_after(std::next(InstanceObject3ds.before_begin(), i));
+			break;
+		}
+	}
+}
+
 void DirectX3dObject::ShadowDraw()
 {
 	for (int i = 0; i < (int)object3ds.size(); i++) {
@@ -442,6 +453,7 @@ void InitalizeInstanceObject3d(InstanceObjectsData* object)
 			auto& data = instanceData[i];
 			data.world = object->object[i].matWorld;
 			data.color = object->object[i].color;
+			data.DrawFlag = true;
 		}
 	}
 
@@ -750,6 +762,7 @@ void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object, XMMATR
 		data.world = object->object[i].matWorld;
 		data.color = object->object[i].color;
 		data.uv = XMFLOAT4(object->object[i].LT_UV.x, object->object[i].LT_UV.y, object->object[i].RB_UV.x, object->object[i].RB_UV.y);
+		data.DrawFlag = object->object[i].isDraw;
 	}
 
 	//定数バッファのヒープ設定

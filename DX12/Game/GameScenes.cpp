@@ -59,7 +59,7 @@ void GameScenes::Update()
 		if (Input::isKeyTrigger(DIK_SPACE)) {
 			Scene = NowScene::Game;
 			GameCamera::Instance()->Positioning(30.0f, 45.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
-			GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+			GameCamera::Instance()->Targeting(m_map.ChangePos(m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			m_BattleWave->StartWave("Test1");
 			m_Audiences.SummonAudience(245);
 		}

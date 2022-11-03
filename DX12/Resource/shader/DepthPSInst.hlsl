@@ -8,6 +8,7 @@ struct InstanceData
 	matrix world; // ワールド行列
 	float4 InColor;
 	float4 uv; // 左上右下
+	bool DrawFlag;
 };
 
 cbuffer cbuff0 : register(b0)
@@ -42,7 +43,6 @@ float4 main(VSOutput input) : SV_TARGET
 		//discard;
 	}
 
-
 	if (tex.Sample(smp, input.uv).a == 0.0f) {
 		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
@@ -50,6 +50,10 @@ float4 main(VSOutput input) : SV_TARGET
 	uint index = input.InstanceID;
 	matrix world = data[index].world;
 	float4 InColor = data[index].InColor;
+
+	if (data[index].DrawFlag == false) {
+		discard;
+	}
 
 	////---------------被写界深度用
 	float4 obj = mul(input.worldpos, view); //ビュー変換

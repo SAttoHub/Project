@@ -76,6 +76,7 @@ void Audiences::Update()
 	if (m_Audience.size() > 0) {
 		for (int i = 0; i < m_Audience.size() - 1; i++) {
 			if (m_Audience[i].GetDelete() == true) {
+				//model->object[i].isDraw = false;
 				m_Audience[i].DeleteModel();
 				m_Audience.erase(m_Audience.begin() + i);
 			}
@@ -206,6 +207,7 @@ void Audiences::DeleteAllAudience()
 	for (auto& aud : m_Audience) {
 		aud.DeleteModel();
 	}
+	//DirectX3dObject::DeleteObject(model);
 	m_Audience.clear();
 	Timer = 0;
 	Hoge = 0;

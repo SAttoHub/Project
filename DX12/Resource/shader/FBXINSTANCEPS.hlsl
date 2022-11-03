@@ -8,6 +8,7 @@ struct InstanceData
 	matrix world; // ワールド行列
 	float4 InColor;
 	float4 uv; // 左上右下
+	bool DrawFlag;
 };
 
 cbuffer cbuff0 : register(b0)
@@ -53,6 +54,10 @@ float4 main(VSOutput input) : SV_TARGET
 	matrix world = data[index].world;
 	float4 InColor = data[index].InColor;
 	
+	if (data[index].DrawFlag == false) {
+		discard;
+	}
+
 	float4 texcolor = tex.Sample(smp, input.uv);
 	if (InColor.w == -1.0f) {
 		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
