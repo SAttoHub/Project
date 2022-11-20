@@ -158,7 +158,7 @@ void Game::Update()
 		}
 		// ÅIŒ‹‰Ê‚ð•`‰æ
 		PreDraw("Bloom_Result", false);
-		bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetRenderTexture("Camera_Depth"), GetRenderTexture("Bloom_Depth"));
+		bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetDepthTexture("BaseGameScene"), GetDepthTexture("Bloom_Depth"));
 		PostDraw("Bloom_Result");
 
 #pragma endregion
@@ -247,7 +247,7 @@ void Game::Update()
 	}
 	ImGui::End();
 	*/
-	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Config");
 	ImGui::SliderFloat("fps :", &FPS::fps, 0.0f, 200.0f);
@@ -258,7 +258,7 @@ void Game::Update()
 	}
 	else {
 		PSf_Perf = PSf_High;
-	}*/
+	}
 	/*ImGui::SetNextWindowPos(ImVec2(1000, 0), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 400), 1);
 	ImGui::Begin("Camera");
@@ -337,7 +337,7 @@ bool Game::PSf_isDraw(std::string RTName)
 		if (RTName == "Shadow" && (PSf_Counter == 1 || PSf_Counter == 0)) {
 			return true;
 		}
-		else if (RTName == "Bloom" && (PSf_Counter == 1)) {
+		else if (RTName == "Bloom" && (PSf_Counter == 1 || PSf_Counter == 0)) {
 			return true;
 		}
 		else if (RTName == "DOF" && (PSf_Counter == 1)) {

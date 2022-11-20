@@ -442,7 +442,7 @@ int TexManager::GetPostDepthTexture(float width, float height, XMFLOAT4 color)
 	const UINT depthPitch = rowPitch * UINT(height);
 	UINT *imageData = new UINT[ImageDataSize];
 	//ピクセルの色をセット
-	for (int i = 0; i < ImageDataSize; i++) {
+	for (int i = 0; i < int(ImageDataSize); i++) {
 		imageData[i] = 0xffffffff;
 	}
 	//テクスチャバッファの生成
@@ -465,8 +465,8 @@ int TexManager::GetPostDepthTexture(float width, float height, XMFLOAT4 color)
 	//テクスチャリソース設定
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D32_FLOAT,
-		width,
-		(UINT)height,
+		UINT(width),
+		UINT(height),
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
 	);
 	float col[4] = { color.x, color.y, color.z, color.w };

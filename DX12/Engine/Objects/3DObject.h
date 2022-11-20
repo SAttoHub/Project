@@ -186,8 +186,8 @@ struct InstanceObject {
 	XMFLOAT3 oldrotation = { -1,0,0 };
 	XMFLOAT3 oldscale = { -1,1,1 };
 	XMFLOAT3 oldposition = { -1,0,0 };
-	XMFLOAT2 LT_UV = { 0.0f,0.0f };
-	XMFLOAT2 RB_UV = { 1.0f,1.0f };
+	XMFLOAT2 LT_UV = { -2.0f,-2.0f };
+	XMFLOAT2 RB_UV = { -2.0f,-2.0f };
 	XMMATRIX matWorld;
 	bool isDraw = true;
 };
@@ -213,7 +213,7 @@ struct InstanceObjectsData {
 	bool UseDOF = false;
 	bool UseBloom = false;
 
-	static const int INSTANCE_MAX = 500;
+	int INSTANCE_MAX = 500;
 
 	//1メッシュが持てるボーンの最大数
 	static const int MAX_BONES = 61;
@@ -311,7 +311,7 @@ public:
 	/// <param name="ShaderNum">使用するシェーダー</param>
 	/// <returns></returns>
 	static Object3d *CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderNum);
-	static InstanceObjectsData* CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount);
+	static InstanceObjectsData* CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount, int MAX = 500);
 
 
 

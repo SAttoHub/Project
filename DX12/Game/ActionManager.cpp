@@ -2,6 +2,9 @@
 #include "Enemys.h"
 #include "Player.h"
 
+Enemys* ActionManager::pEnemys = nullptr;
+Player* ActionManager::pPlayer = nullptr;
+
 void ActionManager::Init(Enemys *pEn, Player *pPl)
 {
     pEnemys = pEn;
@@ -14,7 +17,7 @@ std::vector<AllResult> ActionManager::Action(XMINT2 Pos, int Damage, KnockBack K
     std::vector<AllResult> Results;
 
     // 攻撃した先にEnemyが存在するか
-    Enemy *MainEn = pEnemys->GetEnemy(Pos);
+    Enemy* MainEn = pEnemys->GetEnemy(Pos);
     // 存在しなかったとき
     if (MainEn == nullptr) {
         return Results;
@@ -40,12 +43,32 @@ std::vector<AllResult> ActionManager::Action(XMINT2 Pos, int Damage, KnockBack K
     // ノックバック先までの判定
     for (int i = 0; i < KnB.Power; i++) {
         XMINT2 ControlPos = Pos + Knock * i;
+        // playerに当たった
+        if (pPlayer->GetMapPos() == ControlPos) {
+            AllResult HitEnemy;
+            // playerのインデックス
+            HitEnemy.Index = short(65535);
+            // playerのダメージ
+            HitEnemy.Result.m_Damage = Damage - pPlayer->GetDef();
+            if (HitEnemy.Result.m_Damage < 0)  HitEnemy.Result.m_Damage = 0;
+            // playerはノックバックしない
+            HitEnemy.Result.m_KnB = KnockBack();
+            // playerには状態異常を与えない
+            HitEnemy.Result.m_Abn = Abnormality::None;
+            HitEnemy.Result.m_AbnTurn = 0;
+            // リザルトに結果を追加
+            Results.emplace_back(HitEnemy);
+
+            // 攻撃を受けたエネミーの最終的なノックバック量
+            Results[0].Result.m_KnB.Power = i - 1;
+            break;
+        }
         // ぶつかったらその場でノックバックを辞める
-        Enemy *en = pEnemys->GetEnemy(ControlPos);
+        Enemy* en = pEnemys->GetEnemy(ControlPos);
         if (en != nullptr) {
             AllResult HitEnemy;
             // 当たったEnemyのインデックス
-            HitEnemy.Index = pEnemys->GetEnemyIndex(ControlPos);
+            HitEnemy.Index = short(pEnemys->GetEnemyIndex(ControlPos));
             // 当たったEnemyのダメージ
             HitEnemy.Result.m_Damage = Damage - en->GetDef();
             if (HitEnemy.Result.m_Damage < 0)  HitEnemy.Result.m_Damage = 0;
@@ -59,6 +82,7 @@ std::vector<AllResult> ActionManager::Action(XMINT2 Pos, int Damage, KnockBack K
 
             // 攻撃を受けたエネミーの最終的なノックバック量
             Results[0].Result.m_KnB.Power = i - 1;
+            break;
         }
     }
 

@@ -1,15 +1,16 @@
 #include "Charactor.h"
 #include "..\Camera.h"
 #include "..\DrawStrings.h"
+#include "GameCamera.h"
 
 void Charactor::SetDir()
 {
 	// オブジェクトの回転角度から正面を求める
-	float Angle = Smath::ToRoundAngle(model->rotation.y);
+	float Angle = Smath::ToRoundAngle(pModel->rotation.y);
 	XMFLOAT2 FrontVec = Smath::AngleToDirectionVector(Angle);
 
 	// モデル座標XZとカメラ座標XZ
-	XMFLOAT2 modelPosXZ = XMFLOAT2(model->position.x, model->position.z);
+	XMFLOAT2 modelPosXZ = XMFLOAT2(pModel->position.x, pModel->position.z);
 	XMFLOAT2 cameraPosXZ = XMFLOAT2(Camera::eye.x, Camera::eye.z);
 	// モデル→カメラベクトルを正規化する
 	XMFLOAT2 norm = Normalize2D(modelPosXZ - cameraPosXZ);
@@ -54,15 +55,33 @@ Charactor::~Charactor()
 
 void Charactor::ShadowDraw()
 {
-	ShadowDepthDrawobject3d(model);
+	ShadowDepthDrawobject3d(pModel);
 }
 
 void Charactor::DepthDraw()
 {
-	DepthDrawobject3d(model);
+	DepthDrawobject3d(pModel);
 }
 
 void Charactor::DOFDepthDraw()
 {
-	DOFDepthDrawobject3d(model);
+	DOFDepthDrawobject3d(pModel);
+}
+
+void Charactor::CameraTargetOnMe(bool isWait, int WaitTime)
+{
+	GameCamera::Instance()->Targeting(pMap->ChangePos(GetMapPos()), WaitTime);
+	if (!isWait) {
+		return;
+	}
+	Wait(WaitTime);
+}
+
+bool Charactor::isWaitAndUpdate()
+{
+	if (m_WaitTimer > 0) {
+		m_WaitTimer--;
+		return true;
+	}
+	return false;
 }

@@ -301,6 +301,12 @@
     <Filter Include="ヘッダー ファイル\Game\Map">
       <UniqueIdentifier>{b5385904-6476-4fe7-8f9d-b596832bcb66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\GameUI">
+      <UniqueIdentifier>{d6a7ce32-69cb-4c02-b605-d1346dae0ed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\GameUI">
+      <UniqueIdentifier>{7d4f2424-419f-4676-b3ab-902327be9c52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -518,6 +524,15 @@
     </ClCompile>
     <ClCompile Include="Game\BattleWave.cpp">
       <Filter>ソース ファイル\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NoviceEnemy.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EnemyParamUI.cpp">
+      <Filter>ソース ファイル\Game\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameUIsManager.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -859,6 +874,15 @@
     </ClInclude>
     <ClInclude Include="Game\BattleWave.h">
       <Filter>ヘッダー ファイル\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NoviceEnemy.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyParamUI.h">
+      <Filter>ヘッダー ファイル\Game\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameUIsManager.h">
+      <Filter>ヘッダー ファイル\Game\GameUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

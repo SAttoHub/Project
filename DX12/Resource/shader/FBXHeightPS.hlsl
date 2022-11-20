@@ -32,7 +32,7 @@ float4 main(VSOutput input) : SV_TARGET
    float2 Tex = input.uv + m_Param * h * eyedir.xy;
 
 	//ノーマルマップから法線を抜き取る
-	input.normal = normalMap.Sample(smp, Tex);
+	input.normal = normalMap.Sample(smp, Tex).xyz;
 
 	// テクスチャマッピング
 	//float4 texcolor = tex.Sample(smp, input.uv);

@@ -6,14 +6,14 @@ Player::Player()
 	m_HP = 100;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
-	model = DirectX3dObject::CreateObject(GetModelData(modelData),
+	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
-	model->rotation.y = 90.0f;
-	model->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
-	model->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
-	model->isBillboard = true;
-	model->UseShadow = true;
-	model->UseDOF = true;
+	pModel->rotation.y = 90.0f;
+	pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
+	pModel->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
+	pModel->isBillboard = true;
+	pModel->UseShadow = true;
+	pModel->UseDOF = true;
 
 	Image[0] = TexManager::LoadTexture("Resource/image/Chara/Chara1.png");
 	Image[1] = TexManager::LoadTexture("Resource/image/Chara/Chara2.png");
@@ -23,12 +23,12 @@ Player::Player()
 	Image[5] = TexManager::LoadTexture("Resource/image/Chara/Chara6.png");
 	Image[6] = TexManager::LoadTexture("Resource/image/Chara/Chara7.png");
 	Image[7] = TexManager::LoadTexture("Resource/image/Chara/Chara8.png");
-	model->alwaysUpdate = true;
+	pModel->alwaysUpdate = true;
 }
 
 Player::~Player()
 {
-	DirectX3dObject::DeleteObject(model);
+	DirectX3dObject::DeleteObject(pModel);
 }
 
 void Player::SetMap(Map *Map)
@@ -38,15 +38,15 @@ void Player::SetMap(Map *Map)
 
 void Player::Update()
 {
-	model->position = pMap->ChangePos(m_MapPos);
+	pModel->position = pMap->ChangePos(m_MapPos);
 
 	SetDir();
-	model->material.texNumber = Image[(int)m_Dir];
+	pModel->material.texNumber = Image[(int)m_Dir];
 }
 
 void Player::Draw()
 {
-	Drawobject3d(model);
+	Drawobject3d(pModel);
 	/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
 		"PlayerHP : %d", m_HP);*/
 }

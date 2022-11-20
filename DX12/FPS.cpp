@@ -62,7 +62,7 @@ void FPS::FPS_Update() {
 
 	//経過時間が0より大きい時
 	if (FrameTime > 0.0) {
-		fps = (fps * 0.99f) + (0.01f / FrameTime); //平均fpsを計算
+		fps = (fps * 0.99f) + (0.01f / float(FrameTime)); //平均fpsを計算
 	}
 	//今の時間を前の時間に格納
 	OldTime = NowTime;

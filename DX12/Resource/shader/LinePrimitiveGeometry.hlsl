@@ -27,7 +27,9 @@ void main(
 {
 	GSOutput element[24];
 
-	for (int i = 0; i < 24; i++) {
+	int i = 0;
+	int j = 0;
+	for (i = 0; i < 24; i++) {
 		element[i].svpos = float4(0, 0, 0, 0);
 		element[i].uv = float2(0, 0);
 		element[i].color = float4(0, 0, 0, 0);
@@ -102,9 +104,9 @@ void main(
 	element[23].uv = float2(1.0f, 0.0f);
 
 	[unroll]
-	for (int i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		[unroll]
-		for (int j = 0; j < 4; j++) {
+		for (j = 0; j < 4; j++) {
 			const int a = i * 4 + j;
 			element[a].color = input[0].color;
 

@@ -22,7 +22,7 @@ float4 main(GSOutput input) : SV_TARGET
 		return Color1;
 	}*/
 
-	return Color1 + Color2 + Color2;
+	return Color1 + Color2 * 3.0f;
 
 	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
 

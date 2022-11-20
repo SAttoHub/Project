@@ -77,5 +77,6 @@ public:
 	void ChangeAngle(float Angle, int Flame);
 	void ChangeHeight(float Height, int Flame);
 	void Targeting(XMFLOAT3 Target, int Flame);
+	void TargetingInstantly(XMFLOAT3 Target);
 };
 

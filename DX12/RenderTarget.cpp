@@ -24,7 +24,7 @@ void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::
 	HRESULT result;
 
 	// RTV用テクスチャ生成
-	m_RTV_Texture = TexManager::GetPostTexture(m_Resolution.x, m_Resolution.y, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f), RTV_Format);
+	m_RTV_Texture = TexManager::GetPostTexture(float(m_Resolution.x), float(m_Resolution.y), XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f), RTV_Format);
 	// RTV用デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescHeapDesc{};
 	rtvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
@@ -42,7 +42,7 @@ void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::
 
 	if (m_IsUseDepth) {
 		// DSV用テクスチャ生成
-		m_DSV_Texture = TexManager::GetPostDepthTexture(m_Resolution.x, m_Resolution.y, XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f));
+		m_DSV_Texture = TexManager::GetPostDepthTexture(float(m_Resolution.x), float(m_Resolution.y), XMFLOAT4(0.0f, 0.0f, 0.0f, 255.0f));
 		// DSV用デスクリプタヒープ設定
 		D3D12_DESCRIPTOR_HEAP_DESC DescHeapDesc{};
 		DescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;

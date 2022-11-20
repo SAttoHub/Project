@@ -18,6 +18,9 @@ void GameScenes::Initialize()
 
 	m_Audiences.Init(&m_map);
 
+	m_GameUI.GetEnemyParamUI()->SetCardsPtr(&m_cards);
+	m_GameUI.GetEnemyParamUI()->SetPlayerPtr(&m_player);
+
 	m_BattleWave = std::make_unique<BattleWave>(&m_enemys, &m_player);
 	NowWave = 0;
 	EndCount = 0;
@@ -106,7 +109,7 @@ void GameScenes::Update()
 		if (Turn == 2) {
 			m_cards.PlayerTurnUpdate();
 			if (m_cards.TurnEnd) {
-				Turn = 1;
+				Turn = 1; 
 				m_enemys.StartTurn();
 			}
 		}
@@ -118,7 +121,7 @@ void GameScenes::Update()
 				m_cards.StartTurn();
 				//GameCamera::Instance()->Positioning(30.0f, 45.0f, 30.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 				GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
-				GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				GameCamera::Instance()->Targeting(m_map.ChangePos(m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 			}
 		}
 		MoveCamera();
@@ -141,6 +144,7 @@ void GameScenes::Draw()
 		m_enemys.Draw();
 		m_cards.Draw();
 		m_Audiences.Draw();
+		m_GameUI.Draw();
 	}
 	m_map.Draw();
 	Cursor::Instance()->Draw();
@@ -198,6 +202,7 @@ void GameScenes::BloomDraw()
 	if (bloomFlag2) {
 		Drawobject3d(saku5);
 	}*/
+	m_map.BloomDraw();
 }
 
 void GameScenes::BloomDepthDraw()
@@ -208,6 +213,7 @@ void GameScenes::BloomDepthDraw()
 	if (bloomFlag2) {
 		Drawobject3d(saku5);
 	}*/
+	m_map.BloomDepthDraw();
 }
 
 void GameScenes::Reset()
@@ -269,5 +275,5 @@ void GameScenes::MoveCamera()
 	}
 
 	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
-	GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+	//GameCamera::Instance()->Targeting(m_player.GetModelPos(), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 }

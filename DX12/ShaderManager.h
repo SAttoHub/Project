@@ -21,6 +21,16 @@ private:
 	
 	ComPtr<ID3DBlob> errorBlob; //エラーオブジェクト
 	void LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);
+
+	std::string convString(const std::wstring& input)
+	{
+		size_t i;
+		char* buffer = new char[input.size() * MB_CUR_MAX + 1];
+		wcstombs_s(&i, buffer, input.size() * MB_CUR_MAX + 1, input.c_str(), _TRUNCATE);
+		std::string result = buffer;
+		delete[] buffer;
+		return result;
+	}
 public:
 	// シェーダーをコンパイルする
 	const char *LoadShader(const char*ShaderName, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName);

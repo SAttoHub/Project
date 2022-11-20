@@ -26,6 +26,13 @@ private:
 	int TurnEndButton = 0;
 	bool isMyTurn = false;
 
+	// 攻撃で与えるダメージの予想値(防御力計算前)
+	int PreDamage = 0;
+
+	// 選択一度目はカードを発動しない為の変数
+	XMINT2 PreCheckChipOld = XMINT2(-1, -1);
+	XMINT2 PreCheckChip = XMINT2(-2, -2);
+	bool PreChipExistEnemy = false;
 public:
 	//std::vector<Card> m_Cards;
 	My_F_List<Card> m_Cards;
@@ -58,5 +65,9 @@ public:
 	void CardEffectPhaseUpdate();
 
 	void Reset(); // 仮リセット
+
+public:
+	// 攻撃で与えるダメージの予想値(防御力計算前)ゲッタ
+	int GetPreDamage() { return PreDamage; }
 };
 

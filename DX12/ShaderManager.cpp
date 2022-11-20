@@ -67,7 +67,9 @@ ID3DBlob *ShaderManager::GetShaderAndCompile(LPCWSTR FileName, LPCSTR EntryPoint
 
 
 	std::wstring ws(FileName);
-	std::string Name(ws.begin(), ws.end());
+	//std::string Name(ws.begin(), ws.end());
+
+	std::string Name = convString(ws);
 
 	// ‘¶İ‚µ‚È‚©‚Á‚½ê‡‚ÍƒRƒ“ƒpƒCƒ‹‚µ‚Ä‚»‚ê‚ğ•Ô‚·
 	m_Shaders[Name] = ShaderPtr(new Shader);

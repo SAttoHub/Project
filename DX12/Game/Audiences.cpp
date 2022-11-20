@@ -40,7 +40,7 @@ void Audiences::Init(Map* map)
 	
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	model = DirectX3dObject::CreateInstanceObject(GetModelData(modelData),
-		XMFLOAT3(-1000, -1000, -1000), FBXSHADER_INS, MAX_AUDIENCE);
+		XMFLOAT3(-1000, -1000, -1000), FBXSHADER_INS_AUD, MAX_AUDIENCE);
 	for (int i = 0; i < MAX_AUDIENCE; i++) {
 		model->object[i].rotation.y = 90.0f;
 		model->object[i].scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f);

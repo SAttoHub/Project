@@ -77,11 +77,13 @@ void main(
 	
 	GSOutput element;
 
+	int j = 0;
+	int k = 0;
 	[unroll]
-	for (int j = 0; j < 4; j++)
+	for (j = 0; j < 4; j++)
 	{
 		[unroll]
-		for (int k = 0; k < 3; k++)
+		for (k = 0; k < 3; k++)
 		{
 			const int vid = j * 3 + k;
 			element.svpos = float4(vertexs[vid], 1.0);

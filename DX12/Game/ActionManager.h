@@ -1,8 +1,15 @@
 #pragma once
 #include <vector>
 #include "..\Engine\CommonMathIncludes.h"
-#include "Map.h"
-#include "Charactor.h"
+
+//-------------------------------------------------------------------------------------------------------------
+// キャラクター状態異常
+//-------------------------------------------------------------------------------------------------------------
+enum class Abnormality {
+	None,
+	Poison,
+	Stun
+};
 
 //-------------------------------------------------------------------------------------------------------------
 // ノックバックステータス
@@ -48,12 +55,12 @@ class Player;
 class ActionManager
 {
 	using XMINT2 = DirectX::XMINT2;
-	Enemys *pEnemys = nullptr;
-	Player *pPlayer = nullptr;
+	static Enemys *pEnemys;
+	static Player *pPlayer;
 
 public:
 	void Init(Enemys *pEn, Player *pPl);
-	std::vector<AllResult> Action(XMINT2 Pos, int Damage, KnockBack KnB, Abnormality Abn, int AbnTurn);
+	static std::vector<AllResult> Action(XMINT2 Pos, int Damage, KnockBack KnB, Abnormality Abn, int AbnTurn);
 
 };
 

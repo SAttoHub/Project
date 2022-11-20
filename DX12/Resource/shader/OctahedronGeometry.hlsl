@@ -50,11 +50,14 @@ void main(
 {
     GSOutput element;
    const float Rad = input[0].Radius * 2;
+
+   int j = 0;
+   int k = 0;
     [unroll]
-    for (int j = 0; j < 8; j++) 
+    for (j = 0; j < 8; j++) 
     {
         [unroll]
-        for (int k = 0; k < 3; k++)
+        for (k = 0; k < 3; k++)
         {
             const int vid = j * 3 + k;
             element.svpos = float4(vertexs[vid].x * Rad, vertexs[vid].y * Rad, vertexs[vid].z * Rad, 0.0);

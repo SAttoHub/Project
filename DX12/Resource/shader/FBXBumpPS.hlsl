@@ -18,7 +18,7 @@ cbuffer cbuff0 : register(b0)
 float4 main(VSOutput input) : SV_TARGET
 {
 	//ノーマルマップから法線を抜き取る
-	input.normal = normalMap.Sample(smp, input.uv);
+	input.normal = normalMap.Sample(smp, input.uv).xyz;
 
 	// テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);

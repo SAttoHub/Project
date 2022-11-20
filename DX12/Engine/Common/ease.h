@@ -291,6 +291,10 @@ namespace Ease {
 		double t = double(Now / Max);
 		return start + (float(EaseFuncOrigin(type, t)) * (end - start));
 	}
+	static float EaseFunc(EaseName type, float start, float end, int Now, int Max) {
+		double t = double(float(Now) / float(Max));
+		return start + (float(EaseFuncOrigin(type, t)) * (end - start));
+	}
 
 	static DirectX::XMFLOAT2 EaseFunc(EaseName type, DirectX::XMFLOAT2 start, DirectX::XMFLOAT2 end, double Now, double Max) {
 		double t = Now / Max;

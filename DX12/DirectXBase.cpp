@@ -189,8 +189,8 @@ void DirectXBase::depthCreate() {
 
 void DirectXBase::DirectXReset(Window *Win) {
 	this->win = Win;
-	Win_Width = Win->Width;
-	Win_Height = Win->Height;
+	Win_Width = float(Win->Width);
+	Win_Height = float(Win->Height);
 	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))){
 	//		debugController->EnableDebugLayer();
 	//}

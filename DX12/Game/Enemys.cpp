@@ -24,7 +24,7 @@ void Enemys::SetPlayer(Player *player)
 
 void Enemys::GenerateEnemy(XMINT2 MapPos)
 {
-	Enemy en;
+	NoviceEnemy en;
 	en.SetMapPos(MapPos);
 	en.SetMap(pMap);
 	en.SetPlayer(pPlayer);
@@ -98,6 +98,9 @@ void Enemys::Update()
 			m_Enemy.erase(m_Enemy.begin() + i);
 		}
 	}
+
+	// UIに現在選択中のチップの敵情報を送る
+	GameUI::GetEnemyParamUI()->SetEnemyPtr(GetEnemy(pMap->NowSelectChip));
 }
 
 void Enemys::EnemyTurnUpdate()

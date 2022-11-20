@@ -71,6 +71,34 @@ void DirectX3dObject::CreateInstancePipiline(ShaderManager* _shader)
 	PipelineManager::createInstanceDOFPipeline(DOF_SHEADER_INS, _countof(InputLayout), InputLayout,
 		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
 		_shader->GetShaderAndCompile(L"Resource/shader/DepthPSInst.hlsl", "main", "ps_5_0"));
+
+	// Audience用
+	PipelineManager::createInstancePipeline(FBXSHADER_INS_AUD, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "AudMain", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEPS.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceDepthPipeline(Depth_SHEADER_INS_AUD, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "AudMain", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Depth2Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceShadowDepthPipeline(Shadow_Depth_SHEADER_INS_AUD, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_VS_Inst.hlsl", "AudMain", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_PS_Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceDOFPipeline(DOF_SHEADER_INS_AUD, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "AudMain", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/DepthPSInst.hlsl", "main", "ps_5_0"));
+
+	// Guide用
+	PipelineManager::createInstancePipeline(FBXSHADER_INS_GUIDE, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEPS.hlsl", "Guide", "ps_5_0"));
+	PipelineManager::createInstanceDepthPipeline(Depth_SHEADER_INS_GUIDE, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Depth2Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceShadowDepthPipeline(Shadow_Depth_SHEADER_INS_GUIDE, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_VS_Inst.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_PS_Inst.hlsl", "main", "ps_5_0"));
+	PipelineManager::createInstanceDOFPipeline(DOF_SHEADER_INS_GUIDE, _countof(InputLayout), InputLayout,
+		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
+		_shader->GetShaderAndCompile(L"Resource/shader/DepthPSInst.hlsl", "main", "ps_5_0"));
 }
 
 void DirectX3dObject::Draw() {
@@ -122,12 +150,13 @@ Object3d *DirectX3dObject::CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderN
 	return object3ds[count];
 }
 
-InstanceObjectsData* DirectX3dObject::CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount)
+InstanceObjectsData* DirectX3dObject::CreateInstanceObject(Model* model, XMFLOAT3 pos, UINT ShaderNum, int InstanceCount, int MAX)
 {
 	InstanceObjectsData obj;
 	obj.shaderNumber = ShaderNum;
 	obj.model = model;
 	obj.InstanceCount = InstanceCount;
+	obj.INSTANCE_MAX = MAX;
 	obj.object.resize(obj.INSTANCE_MAX);
 
 	for (int i = 0; i < obj.INSTANCE_MAX; i++) {
@@ -422,7 +451,7 @@ void InitalizeInstanceObject3d(InstanceObjectsData* object)
 	std::vector<ConstBufferDataB0Inst> instanceData(object->INSTANCE_MAX);
 	{
 		// インスタンシング中身を書き込んでおく.
-		for (UINT i = 0; i < object->INSTANCE_MAX; ++i)
+		for (int i = 0; i < object->INSTANCE_MAX; ++i)
 		{
 			XMMATRIX matScale, matRot, matTrans;
 			//スケール、回転、平行移動行列の計算
@@ -713,7 +742,7 @@ void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object, XMMATR
 
 	// インスタンシング中身を書き込んでおく.
 	std::vector<ConstBufferDataB0Inst> instanceData(object->INSTANCE_MAX);
-	for (UINT i = 0; i < object->INSTANCE_MAX; ++i)
+	for (int i = 0; i < object->INSTANCE_MAX; ++i)
 	{
 		if (isUpdateOtherFlag == false) {
 			if (object->object[i].oldposition != object->object[i].position ||
@@ -1095,6 +1124,7 @@ void Drawobject3d(InstanceObjectsData* object)
 		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffB4->GetGPUVirtualAddress());
+	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffTime->GetGPUVirtualAddress());
 
 	// ライトの描画
 	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
@@ -1112,9 +1142,9 @@ void DepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Depth_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 1].Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Depth_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 1].Get());
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1155,9 +1185,9 @@ void ShadowDepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width * 2.0f), LONG(DirectXBase::Win_Height * 2.0f)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Shadow_Depth_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 2].Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Shadow_Depth_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 2].Get());
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1198,9 +1228,9 @@ void DOFDepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[DOF_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 3].Get());
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[DOF_SHEADER_INS].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 3].Get());
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

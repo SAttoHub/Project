@@ -2,7 +2,7 @@
 #include "DirectXBase.h"
 #include "ShaderManager.h"
 
-const int MAX_PIPELINE = 20;
+const int MAX_PIPELINE = MAX_PIPLINE;
 
 enum class BlendType {
 	None,

@@ -5,6 +5,16 @@
 #include "ChipData.h"
 #include "..\Engine\Objects\3DObject.h"
 
+#include "GameUIsManager.h"
+
+enum class GuidePriority {
+	MOVE_OR_ATTACK,
+	NOW_ACT_UNIT,
+	NOW_HIT,
+	SELECT,
+	SELECT_ENEMY_PRE_CARD_USE
+};
+
 //-------------------------------------------------------------------------------------------------------------
 // 戦闘シーンマップ
 //-------------------------------------------------------------------------------------------------------------
@@ -22,8 +32,23 @@ private:
 	
 	Object3d *m_StageModel = nullptr;
 	Object3d *m_StageModel_saku = nullptr;
-	Object3d *m_StageModel_tree = nullptr;
 
+	InstanceObjectsData* torch = nullptr;
+	InstanceObjectsData* torchBloom = nullptr;
+	struct torchData {
+		XMFLOAT3 Pos;
+		XMFLOAT3 Rot;
+		XMFLOAT3 Scale;
+	};
+	static const int TORCH_MAX = 8;
+	torchData m_TorchDatas[TORCH_MAX];
+	torchData m_TorchBloomDatas[TORCH_MAX];
+
+	static const int GUIDE_MAX = 400;
+	InstanceObjectsData* ChipGuide = nullptr;
+	int m_DrawGuideCount = 0;
+	bool m_isGuideDraw[GUIDE_MAX] = { false };
+	int m_GuideDrawPriority[GUIDE_MAX] = { 0 };
 public:
 	Map();
 	~Map();
@@ -31,6 +56,7 @@ public:
 	std::vector<std::vector<ChipData>> m_Data;
 	std::vector<std::vector<int>> CostTable;
 	XMINT2 NowHitChip = XMINT2();
+	XMINT2 NowSelectChip = XMINT2(-1, -1);
 	bool isHitChip = false;
 
 	ChipData* Get(XMINT2 Pos);
@@ -42,6 +68,8 @@ public:
 	void ShadowDraw();
 	void DepthDraw();
 	void DOFDepthDraw();
+	void BloomDraw();
+	void BloomDepthDraw();
 
 	XMFLOAT3 ChangePos(XMINT2 MapPos);
 	bool InMap(XMINT2 MapPos);
@@ -52,5 +80,7 @@ public:
 	void HitCheckMouseRayMapPosition();
 
 	XMFLOAT3 Center;
+
+	void DrawGuide(XMINT2 MapPos, XMFLOAT4 Color, GuidePriority Priority, bool isDrawSide = true);
 };
 

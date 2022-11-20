@@ -77,8 +77,62 @@ Map::Map()
 	m_StageModel_saku->UseShadow = true;
 	m_StageModel_saku->UseDOF = true;
 
+	XMFLOAT3 hoge = { 32.0f * 5.0f / 4.0f, 0.0f,  32.0f * 5.0f / 4.0f };
+	for (int i = 0; i < TORCH_MAX; i++) {
+		m_TorchDatas[i].Pos = hoge;
+		m_TorchDatas[i].Rot = XMFLOAT3(0.0f, 90.0f, 0.0f);
+		m_TorchDatas[i].Scale = XMFLOAT3(3.0f, 3.0f, 3.0f);
+	}
+	m_TorchDatas[0].Pos = XMFLOAT3(hoge.x - 70.0f, hoge.y, hoge.z + 10.0f);
+	m_TorchDatas[1].Pos = XMFLOAT3(hoge.x - 70.0f, hoge.y, hoge.z - 10.0f);
+	m_TorchDatas[2].Pos = XMFLOAT3(hoge.x + 70.0f, hoge.y, hoge.z + 10.0f);
+	m_TorchDatas[3].Pos = XMFLOAT3(hoge.x + 70.0f, hoge.y, hoge.z - 10.0f);
+
+	m_TorchDatas[4].Pos = XMFLOAT3(hoge.x + 8.0f, 18.45f, hoge.z - 91.0f);
+	m_TorchDatas[5].Pos = XMFLOAT3(hoge.x - 8.0f, 18.45f, hoge.z - 91.0f);
+	m_TorchDatas[6].Pos = XMFLOAT3(hoge.x + 8.0f, 18.45f, hoge.z + 91.0f);
+	m_TorchDatas[7].Pos = XMFLOAT3(hoge.x - 8.0f, 18.45f, hoge.z + 91.0f);
+
+	for (int i = 0; i < TORCH_MAX; i++) {
+		m_TorchBloomDatas[i].Pos = m_TorchDatas[i].Pos;
+		m_TorchBloomDatas[i].Pos.y += 10.0f;
+		m_TorchBloomDatas[i].Rot = m_TorchDatas[i].Rot;
+		m_TorchBloomDatas[i].Scale = m_TorchDatas[i].Scale * 0.25f;
+	}
+	 
+	int modelData3 = LoadModelOBJ("Torch3", "stage");
+	torch = DirectX3dObject::CreateInstanceObject(GetModelData(modelData3),
+		XMFLOAT3(0, 0, 0), FBXSHADER_INS, TORCH_MAX, TORCH_MAX);
+	torch->UseShadow = true;
+	torch->UseDOF = true;
+
+	int modelData4 = LoadModelOBJ("ICO", "stage");
+	torchBloom = DirectX3dObject::CreateInstanceObject(GetModelData(modelData4),
+		XMFLOAT3(0, 0, 0), FBXSHADER_INS, TORCH_MAX, TORCH_MAX);
+	torchBloom->UseShadow = true;
+	torchBloom->UseDOF = true;
+
+	for (int i = 0; i < TORCH_MAX; i++) {
+		torch->object[i].position = m_TorchDatas[i].Pos;
+		torch->object[i].rotation = m_TorchDatas[i].Rot;
+		torch->object[i].scale = m_TorchDatas[i].Scale;
+
+		torchBloom->object[i].position = m_TorchBloomDatas[i].Pos;
+		torchBloom->object[i].rotation = m_TorchBloomDatas[i].Rot;
+		torchBloom->object[i].scale = m_TorchBloomDatas[i].Scale;
+	}
+
 	Center = m_StageModel->position;
 
+	int modelData5 = LoadModelOBJ("ChipGuide", "ChipGuide");
+	ChipGuide = DirectX3dObject::CreateInstanceObject(GetModelData(modelData5),
+		XMFLOAT3(0, 0, 0), FBXSHADER_INS_GUIDE, GUIDE_MAX, GUIDE_MAX);
+	ChipGuide->UseShadow = false;
+	ChipGuide->UseDOF = true;
+	for (int i = 0; i < GUIDE_MAX; i++) {
+		ChipGuide->object[i].scale = XMFLOAT3(3.95f, 3.95f, 3.95f);
+		ChipGuide->object[i].isDraw = false;
+	}
 }
 
 Map::~Map()
@@ -123,6 +177,13 @@ void Map::Initialize()
 void Map::Update()
 {
 	HitCheckMouseRayMapPosition();
+	m_DrawGuideCount = 0;
+
+	for (int i = 0; i < TORCH_MAX; i++) {
+		m_TorchBloomDatas[i].Rot.x += 1.0f;
+		m_TorchBloomDatas[i].Rot.z += 1.0f;
+		torchBloom->object[i].rotation = m_TorchBloomDatas[i].Rot;
+	}
 
 	/*ImGui::SetNextWindowPos(ImVec2(10, 60), 1);
 	ImGui::SetNextWindowSize(ImVec2(300, 100), 1);
@@ -135,6 +196,10 @@ void Map::Update()
 		m_cards.StartTurn();
 	}
 	ImGui::End();*/
+	for (int i = 0; i < GUIDE_MAX; i++) {
+		m_isGuideDraw[i] = false;
+		m_GuideDrawPriority[i] = 0;
+	}
 }
 
 void Map::Draw()
@@ -142,18 +207,38 @@ void Map::Draw()
 	Drawobject3d(m_StageModel);
 	Drawobject3d(m_StageModel_saku);
 	//Drawobject3d(m_StageModel_tree);
+	Drawobject3d(torch);
+	Drawobject3d(torchBloom);
 
 	for (auto &dataX : m_Data) {
 		for (auto &dataY : dataX) {
 			dataY.Draw();
 		}
 	}
+
+	for (int i = 0; i < GUIDE_MAX; i++) {
+		ChipGuide->object[i].isDraw = m_isGuideDraw[i];
+	}
+
 	if (NowHitChip.x != -1) {
-		XMINT3 pp = m_Data[NowHitChip.x][NowHitChip.y].m_Pos;
+
+		DrawGuide(NowHitChip, ColorConvert(0, 255, 0, 255), GuidePriority::NOW_HIT);
+
+		/*XMINT3 pp = m_Data[NowHitChip.x][NowHitChip.y].m_Pos;
+		DrawCube(XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE), float(pp.y), float(pp.z * ChipData::CHIP_SIZE)),
+			XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE), float(pp.y) + 0.5f, float(pp.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE)),
+			ColorConvert(0, 255, 0, 150));*/
+	}
+	if (NowSelectChip.x != -1) {
+
+		DrawGuide(NowSelectChip, ColorConvert(255, 255, 0, 255), GuidePriority::SELECT);
+
+		/*XMINT3 pp = m_Data[NowSelectChip.x][NowSelectChip.y].m_Pos;
 		DrawCube(XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE), float(pp.y), float(pp.z * ChipData::CHIP_SIZE)),
 			XMFLOAT3(float(pp.x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE), float(pp.y) + 1.0f, float(pp.z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE)),
-			ColorConvert(255, 255, 0, 150));
+			ColorConvert(255, 255, 0, 150));*/
 	}
+	Drawobject3d(ChipGuide);
 }
 
 void Map::ShadowDraw()
@@ -161,6 +246,7 @@ void Map::ShadowDraw()
 	ShadowDepthDrawobject3d(m_StageModel);
 	ShadowDepthDrawobject3d(m_StageModel_saku);
 	//ShadowDepthDrawobject3d(m_StageModel_tree);
+	ShadowDepthDrawobject3d(torch);
 }
 
 void Map::DepthDraw()
@@ -168,6 +254,8 @@ void Map::DepthDraw()
 	DepthDrawobject3d(m_StageModel);
 	DepthDrawobject3d(m_StageModel_saku);
 	//DepthDrawobject3d(m_StageModel_tree);
+	DepthDrawobject3d(torch);
+	DepthDrawobject3d(torchBloom);
 }
 
 void Map::DOFDepthDraw()
@@ -175,6 +263,18 @@ void Map::DOFDepthDraw()
 	DOFDepthDrawobject3d(m_StageModel);
 	DOFDepthDrawobject3d(m_StageModel_saku);
 	//DOFDepthDrawobject3d(m_StageModel_tree);
+	DOFDepthDrawobject3d(torch);
+	DOFDepthDrawobject3d(ChipGuide);
+}
+
+void Map::BloomDraw()
+{
+	Drawobject3d(torchBloom);
+}
+
+void Map::BloomDepthDraw()
+{
+	DepthDrawobject3d(torchBloom);
 }
 
 XMFLOAT3 Map::ChangePos(XMINT2 MapPos)
@@ -209,19 +309,17 @@ void Map::ResetCostTable()
 
 void Map::HitCheckMouseRayMapPosition()
 {
+	if (Input::isMouseTrigger(M_LEFT) && isHitChip == true) {
+		NowSelectChip = NowHitChip;
+	}
 	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
 		return;
 	}
 	Ray mRay = Input::GetMouseRay();
 	XMFLOAT3 normal = XMFLOAT3(0, 1, 0);
 	DirectX::XMVECTOR Vnormal = XMLoadFloat3(&normal);
-	/*Plane plane;
-	plane.distance = 0.0f;
-	plane.normal = XMLoadFloat3(&normal);
 
-	float Dis;
-	DirectX::XMVECTOR interPlane;*/
-	
+	// 各チップとの判定
 	XMINT2 HitChipNum = { -1, -1 };
 	float NowDist = 9999.0f;
 
@@ -235,8 +333,8 @@ void Map::HitCheckMouseRayMapPosition()
 
 			float Dist = 9999.9f;
 			Triangle t1;
-			t1.p0 = XMLoadFloat3(&point[0]);
-			t1.p1 = XMLoadFloat3(&point[1]);
+			t1.p0 = XMLoadFloat3(&point[1]);
+			t1.p1 = XMLoadFloat3(&point[0]);
 			t1.p2 = XMLoadFloat3(&point[2]);
 			t1.normal = Vnormal;
 			Triangle t2;
@@ -264,6 +362,44 @@ void Map::HitCheckMouseRayMapPosition()
 		isHitChip = true;
 	}
 	else {
+		NowHitChip = HitChipNum;
 		isHitChip = false;
 	}
+}
+
+void Map::DrawGuide(XMINT2 MapPos, XMFLOAT4 Color, GuidePriority Priority, bool isDrawSide)
+{
+	if (!InMap(MapPos)) {
+		return;
+	}
+	if (m_DrawGuideCount > GUIDE_MAX - 1) {
+		return;
+	}
+	XMFLOAT3 DrawPos = ChangePos(MapPos);
+	// 既にガイドが描画されている場合に上書きするか
+	for (int i = 0; i < m_DrawGuideCount; i++) {
+		if (ChipGuide->object[i].position == DrawPos && m_GuideDrawPriority[i] < int(Priority)) {
+			ChipGuide->object[i].isDraw = true;
+			m_isGuideDraw[i] = true;
+			m_GuideDrawPriority[i] = int(Priority);
+			ChipGuide->object[i].position = ChangePos(MapPos);
+			ChipGuide->object[i].color = Color;
+			if (!isDrawSide) {
+				ChipGuide->object[i].color.w = -Color.w;
+			}
+			return;
+		}
+		else if (ChipGuide->object[i].position == DrawPos && m_GuideDrawPriority[i] < int(Priority)) {
+			return;
+		}
+	}
+	ChipGuide->object[m_DrawGuideCount].isDraw = true;
+	m_isGuideDraw[m_DrawGuideCount] = true;
+	m_GuideDrawPriority[m_DrawGuideCount] = int(Priority);
+	ChipGuide->object[m_DrawGuideCount].position = ChangePos(MapPos);
+	ChipGuide->object[m_DrawGuideCount].color = Color;
+	if (!isDrawSide) {
+		ChipGuide->object[m_DrawGuideCount].color.w = -Color.w;
+	}
+	m_DrawGuideCount++;
 }

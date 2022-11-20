@@ -322,7 +322,6 @@ int DrawStrings::myvsnprintf(char *str, int size, const char *fmt, va_list args)
         fmt = parse_arg(fmt, &desc);
 
         len = 0;
-
         switch (desc.type) {
         case format_argtype::SIGNED:
             if (desc.len == format_arglen::LONG) {
@@ -365,7 +364,8 @@ int DrawStrings::myvsnprintf(char *str, int size, const char *fmt, va_list args)
             }
 
             len = int(strlen(s));
-            len = MIN(size, len);
+            //len = 11;
+            //len = MIN(size, len);
             strncpy(p, s, len);
             break;
 

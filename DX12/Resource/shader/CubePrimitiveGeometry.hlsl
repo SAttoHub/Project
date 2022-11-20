@@ -8,7 +8,9 @@ void main(
 {
 	GSOutput element[24];
 
-	for (int i = 0; i < 24; i++) {
+	int i = 0;
+	int j = 0;
+	for (i = 0; i < 24; i++) {
 		element[i].svpos = float4(0,0,0,0);
 		element[i].uv = float2(0,0);
 		element[i].normal = float3(0,0,0);
@@ -117,7 +119,7 @@ void main(
 		element[i].Lighting = input[0].Lighting;
 		output.Append(element[i]);
 	}*/
-	for (int i = 0; i < 24; i++) {
+	for (i = 0; i < 24; i++) {
 		element[i].svpos.x = element[i].svpos.x - genX;
 		element[i].svpos.y = element[i].svpos.y - genY;
 		element[i].svpos.z = element[i].svpos.z - genZ;
@@ -186,9 +188,9 @@ void main(
 	float4 ho = float4(0, 0, 0, 1);
 
 	[unroll]
-	for (int i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		[unroll]
-		for (int j = 0; j < 4; j++) {
+		for (j = 0; j < 4; j++) {
 			const int a = i * 4 + j;
 			element[a].color = input[0].color;
 

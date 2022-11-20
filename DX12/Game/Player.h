@@ -7,8 +7,6 @@
 //-------------------------------------------------------------------------------------------------------------
 class Player : public Charactor
 {
-private:
-	Map *pMap = nullptr;
 
 public:
 	Player();

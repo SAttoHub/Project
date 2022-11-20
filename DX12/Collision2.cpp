@@ -6,7 +6,7 @@ bool Collision2::CheckCircleCircle(const Circle &circleA, const Circle &circleB)
 {
 	float a = circleA.center.x - circleB.center.x;
 	float b = circleA.center.y - circleB.center.y;
-	float r = circleA.radius - circleB.radius;
+	float r = circleA.radius + circleB.radius;
 	if ((a * a) + (b * b) <= (r * r)) {
 		return true;
 	}

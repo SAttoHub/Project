@@ -119,27 +119,6 @@ SkinOutput ComputeSkin(VSInput input)
 
 VSOutput main(VSInput input)
 {
-	////スキニング計算
-	//SkinOutput skinned = ComputeSkin(input);
-	////法線にワールド行列によるスケーリング・回転を適用
-	//float4 wnormal = normalize(mul(world, float4(skinned.normal, 0)));
-
-	//float4 resultPos = skinned.pos; //スキニング後の座標を渡す
-	//float4 wpos = mul(world, resultPos); //ワールド変換
-
-	////ピクセルシェーダーに渡す値
-	//VSOutput output;
-	////行列による座標変換
-	//output.svpos = mul(mul(viewproj, world), skinned.pos);
-	//output.svpos2 = mul(mul(viewproj2, world), skinned.pos);
-	//output.worldpos = wpos;
-	////ワールド法線を次のステージに渡す
-	//output.normal = wnormal.xyz;
-	////入力値をそのまま次のステージに渡す
-	//output.uv = input.uv;
-
-	//return output;
-
 	uint index = input.InstanceID;
 
 	//スキニング計算
@@ -158,8 +137,54 @@ VSOutput main(VSInput input)
 	output.worldpos = wpos;
 	//ワールド法線を次のステージに渡す
 	output.normal = wnormal.xyz;
-
+	output.InstanceID = index;
 	output.uv = input.uv;
+	/*if (data[index].uv.x <= -1.0f) {
+		return output;
+	}*/
+	//入力値をそのまま次のステージに渡す
+	/*if (input.uv.x <= 0.1f && input.uv.y <= 0.1f) {
+		output.uv = float2(data[index].uv.x, data[index].uv.y);
+	}
+	else if (input.uv.x <= 0.1f && input.uv.y >= 0.9f) {
+		output.uv = float2(data[index].uv.x, data[index].uv.w);
+	}
+	else if (input.uv.x >= 0.9f && input.uv.y <= 0.1f) {
+		output.uv = float2(data[index].uv.z, data[index].uv.y);
+	}
+	else if (input.uv.x >= 0.9f && input.uv.y >= 0.9f) {
+		output.uv = float2(data[index].uv.z, data[index].uv.w);
+	}*/
+
+	return output;
+}
+
+// 観客
+VSOutput AudMain(VSInput input)
+{
+	uint index = input.InstanceID;
+
+	//スキニング計算
+	//SkinOutput skinned = ComputeSkin(input);
+	//法線にワールド行列によるスケーリング・回転を適用
+	float4 wnormal = normalize(mul(data[index].world, float4(input.normal, 0)));
+
+	//float4 resultPos = skinned.pos; //スキニング後の座標を渡す
+	float4 wpos = mul(data[index].world, input.pos); //ワールド変換
+
+	//ピクセルシェーダーに渡す値
+	VSOutput output;
+	//行列による座標変換
+	output.svpos = mul(mul(viewproj, data[index].world), input.pos);
+	output.svpos2 = mul(mul(viewproj2, data[index].world), input.pos);
+	output.worldpos = wpos;
+	//ワールド法線を次のステージに渡す
+	output.normal = wnormal.xyz;
+	output.InstanceID = index;
+	output.uv = input.uv;
+	if (data[index].uv.x <= -1.0f) {
+		return output;
+	}
 	//入力値をそのまま次のステージに渡す
 	if (input.uv.x <= 0.1f && input.uv.y <= 0.1f) {
 		output.uv  = float2(data[index].uv.x, data[index].uv.y);
@@ -173,7 +198,6 @@ VSOutput main(VSInput input)
 	else if (input.uv.x >= 0.9f && input.uv.y >= 0.9f) {
 		output.uv = float2(data[index].uv.z, data[index].uv.w);
 	}
-	output.InstanceID = index;
 
 	return output;
 }

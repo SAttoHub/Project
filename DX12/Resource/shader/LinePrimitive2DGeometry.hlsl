@@ -8,7 +8,8 @@ void main(
 {
 	GSOutput element[2];
 
-	for (int i = 0; i < 2; i++) {
+	int i = 0;
+	for (i = 0; i < 2; i++) {
 		element[i].svpos = float4(0, 0, 0, 0);
 		element[i].color = float4(1, 1, 1, 1);
 	}
@@ -33,7 +34,7 @@ void main(
 	//element[3].svpos = float4(0.5, -0.5, 0, 1);
 
 	[unroll]
-	for (int i = 0; i < 2; i++) {
+	for (i = 0; i < 2; i++) {
 		element[i].color = input[0].color;
 		output.Append(element[i]);
 	}

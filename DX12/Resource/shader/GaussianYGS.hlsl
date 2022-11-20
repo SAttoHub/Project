@@ -29,8 +29,9 @@ void main(
 {
 	GaussianGSOutput element[4];
 
+	int i = 0;
 	if (!input[0].Draw3D) {
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].svpos = float4(0, 0, 0, 0);
 			element[i].color = float4(1, 1, 1, 1);
 		}
@@ -55,7 +56,7 @@ void main(
 		element[3].uv = float2(0.0f, 0.0f);
 
 		[unroll]
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].color = input[0].color;
 			float2 texel = element[i].uv;
 
@@ -82,7 +83,7 @@ void main(
 		element[2].uv = float2(1.0f, 0.0f);
 		element[3].uv = float2(0.0f, 0.0f);
 		[unroll]
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].color = input[0].color;
 			float2 texel = element[i].uv;
 

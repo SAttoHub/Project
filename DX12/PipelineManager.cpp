@@ -110,7 +110,7 @@ void PipelineManager::createFBXPipeline(int PIPELINE_NUM, UINT inputLayoutCount,
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -205,7 +205,8 @@ void PipelineManager::createInstancePipeline(int PIPELINE_NUM, UINT inputLayoutC
 
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
-	//gpipeline.BlendState.AlphaToCoverageEnable = true;
+	//gpipeline.BlendState.AlphaToCoverageEnable = false;
+
 	//頂点レイアウトの設定
 	gpipeline.InputLayout.pInputElementDescs = inputLayout;
 	gpipeline.InputLayout.NumElements = inputLayoutCount;//_countof(nputLayout)
@@ -219,18 +220,26 @@ void PipelineManager::createInstancePipeline(int PIPELINE_NUM, UINT inputLayoutC
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	//深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
+
+	/*if (PIPELINE_NUM == FBXSHADER_INS_GUIDE) {
+		gpipeline.BlendState.AlphaToCoverageEnable = false;
+		gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	}*/
+
 	//デスクリプタテーブルの設定
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 
 	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[6] = {};
+	CD3DX12_ROOT_PARAMETER rootparams[7] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
 	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
 	rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
 	rootparams[5].InitAsConstantBufferView(6, 0, D3D12_SHADER_VISIBILITY_ALL);//ビューとか
+	rootparams[6].InitAsConstantBufferView(7, 0, D3D12_SHADER_VISIBILITY_ALL);//ビューとか
 
 	//テクスチャサンプラーの設定[
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
@@ -267,7 +276,7 @@ void PipelineManager::createFBXBumpPipeline(int PIPELINE_NUM, UINT inputLayoutCo
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
@@ -342,7 +351,7 @@ void PipelineManager::createFBXheightPipeline(int PIPELINE_NUM, UINT inputLayout
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
@@ -569,7 +578,7 @@ void PipelineManager::createFBXSeaPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -648,7 +657,7 @@ void PipelineManager::createFBXDepthPipeline(int PIPELINE_NUM, UINT inputLayoutC
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -727,7 +736,7 @@ void PipelineManager::createInstanceDepthPipeline(int PIPELINE_NUM, UINT inputLa
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -807,7 +816,7 @@ void PipelineManager::createFBXShadowDepthPipeline(int PIPELINE_NUM, UINT inputL
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -886,7 +895,7 @@ void PipelineManager::createInstanceShadowDepthPipeline(int PIPELINE_NUM, UINT i
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -966,7 +975,7 @@ void PipelineManager::createFBXDOFPipeline(int PIPELINE_NUM, UINT inputLayoutCou
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -1045,7 +1054,7 @@ void PipelineManager::createInstanceDOFPipeline(int PIPELINE_NUM, UINT inputLayo
 	//サンプルマスクとラスタライザステートの設定
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; //標準設定
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	//ブレンドステートの設定
 	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};

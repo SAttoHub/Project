@@ -8,8 +8,9 @@ void main(
 {
 	GSOutput element[4];
 
+	int i = 0;
 	if (!input[0].Draw3D) {
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].svpos = float4(0, 0, 0, 0);
 			element[i].color = float4(1, 1, 1, 1);
 		}
@@ -53,7 +54,7 @@ void main(
 		//element[3].svpos = float4(0.5, -0.5, 0, 1);
 
 		[unroll]
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].color = input[0].color;
 			output.Append(element[i]);
 		}
@@ -64,7 +65,7 @@ void main(
 		element[2].svpos = float4(input[0].pos1.x, input[0].pos1.y, input[0].pos1.z, 1);
 		element[3].svpos = float4(input[0].pos2.x, input[0].pos1.y, input[0].pos1.z, 1);
 		[unroll]
-		for (int i = 0; i < 4; i++) {
+		for (i = 0; i < 4; i++) {
 			element[i].color = input[0].color;
 			element[i].svpos = mul(mat, element[i].svpos);
 			output.Append(element[i]);

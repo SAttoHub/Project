@@ -187,7 +187,7 @@ void Astar::CreateMap(const int MapWidth, const int MapHeight, const std::vector
 
 AstarResults Astar::DoAstar(Cell start, Cell goal, const std::vector<std::vector<int>> &CostTable)
 {
-	int Width = CostTable.size(), Height = CostTable[0].size();
+	int Width = int(CostTable.size()), Height = int(CostTable[0].size());
 
 	DataReset();
 	Map.resize(Width);
@@ -243,7 +243,7 @@ AstarResults Astar::DoAstar(Cell start, Cell goal, const std::vector<std::vector
 			}
 
 			// ノード間コスト
-			float edge_cost = CostTable[adjacent_node->Position.x][adjacent_node->Position.y];
+			float edge_cost = float(CostTable[adjacent_node->Position.x][adjacent_node->Position.y]);
 			// 取得ノードのトータルコスト
 			float node_cost = search_node->TotalCost;
 			/*

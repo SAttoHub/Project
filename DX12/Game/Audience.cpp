@@ -162,7 +162,7 @@ void Audience::AdmissionTrigger()
 
 void Audience::DeleteModel()
 {
-	DirectX3dObject::DeleteObject(model);
+	DirectX3dObject::DeleteObject(pModel);
 }
 
 void Audience::ActionExit()
@@ -179,7 +179,7 @@ void Audience::ActionExit()
 		position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
-		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
+		float IndexF = Ease::EaseFunc(EaseName::Linear, float(m_Index), TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
 		if (m_Step != 1) {
 			position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
 			position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
@@ -192,7 +192,7 @@ void Audience::ActionExit()
 	}
 	else if (float(Timer) < Timer3) {
 		if (m_Step == 1) {
-			ActionTimer = float(ExitTimerAll) - Timer3;
+			ActionTimer = ExitTimerAll - Timer3;
 		}
 		position.x = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.x, ExitPosStep2.x, float(Timer - Timer2), float(Timer3 - Timer2));
 		position.y = Ease::EaseFunc(EaseName::Linear, ExitPosStep1.y, ExitPosStep2.y, float(Timer - Timer2), float(Timer3 - Timer2));
@@ -215,18 +215,18 @@ void Audience::ActionExit()
 void Audience::ActionAdmission()
 {
 	float Timer = float(ActionTimer);
-	int Timer1 = float(ExitTimer1);
-	int Timer2 = float(ExitTimer1) + float(ExitTimer2);
-	int Timer3 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3);
-	int Timer4 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4);
-	int Timer5 = float(ExitTimer1) + float(ExitTimer2) + float(ExitTimer3) + float(ExitTimer4) + float(ExitTimer5);
+	int Timer1 = ExitTimer1;
+	int Timer2 = ExitTimer1 + ExitTimer2;
+	int Timer3 = ExitTimer1 + ExitTimer2 + ExitTimer3;
+	int Timer4 = ExitTimer1 + ExitTimer2 + ExitTimer3 + ExitTimer4;
+	int Timer5 = ExitTimer1 + ExitTimer2 + ExitTimer3 + ExitTimer4 + ExitTimer5;
 
 	if (float(Timer) < Timer1) {
 		position.x = Ease::EaseFunc(EaseName::Linear, m_LocalPos.x, ExitPosStep0.x, float(Timer), float(Timer1));
 		position.z = Ease::EaseFunc(EaseName::Linear, m_LocalPos.z, ExitPosStep0.z, float(Timer), float(Timer1));
 	}
 	else if (float(Timer) < Timer2) {
-		float IndexF = Ease::EaseFunc(EaseName::Linear, m_Index, TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
+		float IndexF = Ease::EaseFunc(EaseName::Linear, float(m_Index), TargetIndex, float(Timer - Timer1), float(Timer2 - Timer1));
 		//position.x = cosf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.x;
 		//position.z = sinf(IndexAngle * float(IndexF) * M_PI_F / 180.0f) * (m_Range - 1) + pMap->Center.z;
 		if (m_Step != 1) {

@@ -24,6 +24,14 @@ cbuffer matr : register(b6)
 	matrix viewproj2; // ビュープロジェクション行列2
 	float3 cameraPos; // カメラ座標（ワールド座標）
 };
+cbuffer time : register(b7)
+{
+	uint Time;
+	float InterpSize;
+	float Focus;
+	float FocusSize;
+	float Flag;
+};
 
 //float smoothstepf(float edge0, float edge1, float x) {
 //	float t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
@@ -249,4 +257,195 @@ float4 main(VSOutput input) : SV_TARGET
 
 	// シェーディングによる色で描画
 	return shadecolor * texcolor * InColor;
+}
+
+
+//----------------- Guide
+float3 rgb2hsv(float3 rgb)
+{
+	float3 hsv;
+
+	// RGBの三つの値で最大のもの
+	float maxValue = max(rgb.r, max(rgb.g, rgb.b));
+	// RGBの三つの値で最小のもの
+	float minValue = min(rgb.r, min(rgb.g, rgb.b));
+	// 最大値と最小値の差
+	float delta = maxValue - minValue;
+
+	// V（明度）
+	// 一番強い色をV値にする
+	hsv.z = maxValue;
+
+	// S（彩度）
+	// 最大値と最小値の差を正規化して求める
+	if (maxValue != 0.0) {
+		hsv.y = delta / maxValue;
+	}
+	else {
+		hsv.y = 0.0;
+	}
+
+	// H（色相）
+	// RGBのうち最大値と最小値の差から求める
+	if (hsv.y > 0.0) {
+		if (rgb.r == maxValue) {
+			hsv.x = (rgb.g - rgb.b) / delta;
+		}
+		else if (rgb.g == maxValue) {
+			hsv.x = 2 + (rgb.b - rgb.r) / delta;
+		}
+		else {
+			hsv.x = 4 + (rgb.r - rgb.g) / delta;
+		}
+		hsv.x /= 6.0;
+		if (hsv.x < 0)
+		{
+			hsv.x += 1.0;
+		}
+	}
+
+	return hsv;
+}
+// HSV->RGB変換
+float3 hsv2rgb(float3 hsv)
+{
+	float3 rgb;
+
+	if (hsv.y == 0) {
+		// S（彩度）が0と等しいならば無色もしくは灰色
+		rgb.r = rgb.g = rgb.b = hsv.z;
+	}
+	else {
+		// 色環のH（色相）の位置とS（彩度）、V（明度）からRGB値を算出する
+		hsv.x *= 6.0;
+		float i = floor(hsv.x);
+		float f = hsv.x - i;
+		float aa = hsv.z * (1 - hsv.y);
+		float bb = hsv.z * (1 - (hsv.y * f));
+		float cc = hsv.z * (1 - (hsv.y * (1 - f)));
+		if (i < 1) {
+			rgb.r = hsv.z;
+			rgb.g = cc;
+			rgb.b = aa;
+		}
+		else if (i < 2) {
+			rgb.r = bb;
+			rgb.g = hsv.z;
+			rgb.b = aa;
+		}
+		else if (i < 3) {
+			rgb.r = aa;
+			rgb.g = hsv.z;
+			rgb.b = cc;
+		}
+		else if (i < 4) {
+			rgb.r = aa;
+			rgb.g = bb;
+			rgb.b = hsv.z;
+		}
+		else if (i < 5) {
+			rgb.r = cc;
+			rgb.g = aa;
+			rgb.b = hsv.z;
+		}
+		else {
+			rgb.r = hsv.z;
+			rgb.g = aa;
+			rgb.b = bb;
+		}
+	}
+	return rgb;
+}
+
+// 乱数
+
+// 補間関数
+float interpolate(float a, float b, float x) {
+	float PI = 3.1415926;
+
+	float f = (1.0 - cos(x * PI)) * 0.5;
+	return a * (1.0 - f) + b * f;
+}
+
+// 乱数生成
+float rnd(float2 p) {
+	return frac(sin(dot(p, float2(12.9898, 78.233))) * 43758.5453);
+}
+
+// 補間乱数
+float irnd(float2 p) {
+	float2 i = floor(p);
+	float2 f = frac(p);
+	float4 v = float4(rnd(float2(i.x, i.y)),
+		rnd(float2(i.x + 1.0, i.y)),
+		rnd(float2(i.x, i.y + 1.0)),
+		rnd(float2(i.x + 1.0, i.y + 1.0)));
+	return interpolate(interpolate(v.x, v.y, f.x), interpolate(v.z, v.w, f.x), f.y);
+}
+
+// ノイズ生成
+float noise(float2 p) {
+	int   oct = 8;
+	float per = 0.5;
+
+	float t = 0.0;
+	for (int i = 0; i < oct; i++) {
+		float freq = pow(2.0, float(i));
+		float amp = pow(per, float(oct - i));
+		t += irnd(float2(p.x / freq, p.y / freq)) * amp;
+	}
+	return t;
+}
+
+// シームレスノイズ生成
+float snoise(float2 p, float2 q, float2 r) {
+	return noise(float2(p.x, p.y)) * q.x * q.y +
+		noise(float2(p.x, p.y + r.y)) * q.x * (1.0 - q.y) +
+		noise(float2(p.x + r.x, p.y)) * (1.0 - q.x) * q.y +
+		noise(float2(p.x + r.x, p.y + r.y)) * (1.0 - q.x) * (1.0 - q.y);
+}
+
+float4 Guide(VSOutput input) : SV_TARGET
+{
+	// テクスチャマッピング
+	uint index = input.InstanceID;
+	matrix world = data[index].world;
+	float4 InColor = data[index].InColor;
+
+	if (data[index].DrawFlag == false) {
+		discard;
+	}
+
+	float4 texcolor = tex.Sample(smp, input.uv);
+	float3 TexHsv = rgb2hsv(texcolor.xyz);
+	float3 ColorHsv = rgb2hsv(InColor.xyz); 
+	TexHsv.x = ColorHsv.x;
+	float3 RGB = hsv2rgb(TexHsv);
+	float InColW = InColor.w;
+	if (InColor.w < 0.0f) {
+		InColW = -InColor.w;
+		if (input.worldpos.y > 0.1f) {
+			discard;
+		}
+	}
+	float4 ResultColor = float4(RGB.x, RGB.y, RGB.z, texcolor.w * InColW);
+
+	//float2 t = float2(input.uv.x, input.uv.x) * (Time * 10.0f);
+
+	int tTime = Time % 30000;
+	float2 t = float2(input.uv.x + tTime / 3000.0f, input.uv.x + tTime / 3000.0f) * 1000.0f;
+
+	if (input.worldpos.y > 0.1f) {
+		float nn = noise(t);
+		if (input.worldpos.y > nn * 4.0f) {
+			discard;
+		}
+		ResultColor.a = 0.51f + nn / 3.0f;
+	}
+
+	if (ResultColor.a == 0.0f) discard;
+
+
+	// シェーディングによる色で描画
+	return ResultColor;
 }

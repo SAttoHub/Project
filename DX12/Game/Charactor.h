@@ -5,12 +5,8 @@
 #include "..\Engine\Objects\3DObject.h"
 #include "..\DrawStrings.h"
 
-// キャラクター状態異常
-enum class Abnormality {
-	None,
-	Poison,
-	Stun
-};
+#include "ActionManager.h"
+#include "Map.h"
 
 //-------------------------------------------------------------------------------------------------------------
 // キャラクター基底class
@@ -27,10 +23,14 @@ public:
 protected:
 	XMINT2 m_MapPos = XMINT2();
 	int m_HP = 1;
+	int m_MaxHP = 1;
 	int m_Def = 0;
 	Abnormality m_Abn = Abnormality::None;
 
-	Object3d *model = nullptr;
+	Object3d *pModel = nullptr;
+	Map* pMap = nullptr;
+
+	int m_Stamina = 5;
 
 	// 向き関連
 	/*------------------------------------------------
@@ -59,11 +59,12 @@ public:
 	Charactor();
 	~Charactor();
 
-	XMFLOAT3 GetModelPos() { return model->position; }
+	XMFLOAT3 GetModelPos() { return pModel->position; }
 
 	void SetMapPos(XMINT2 MapPos) { m_MapPos = MapPos; }
 	XMINT2 GetMapPos() { return m_MapPos; }
 	int GetHP() { return m_HP; }
+	int GetMaxHP() { return m_MaxHP; }
 	void Damage(int value) { m_HP -= value; }
 	// 生存しているか判定
 	bool isAlive() { return m_HP > 0 ? true : false; }
@@ -73,10 +74,33 @@ public:
 	Abnormality GetAbn() { return m_Abn; }
 	void SetAbn(Abnormality Abn) { m_Abn = Abn; }
 
+	bool UseStamina(int val) {
+		if (m_Stamina < val) {
+			return false;
+		}
+		m_Stamina -= val;
+		return true;
+	}
+	int GetStamina() { return m_Stamina; }
+
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	void ShadowDraw();
 	void DepthDraw();
 	void DOFDepthDraw();
+
+protected:
+	static const int WAIT_TIMER_VALUE_MOVE = 5; // 移動時のカメラ待ち時間
+	static const int WAIT_TIMER_VALUE = 20;
+	int m_WaitTimer = 0;
+public:
+	/// <summary>
+	/// カメラのターゲットを自分に変更する
+	/// </summary>
+	/// <param name="isWait"> カメラ移動完了まで待つか </param>
+	/// /// <param name="WaitTime"> 待ち時間 </param>
+	void CameraTargetOnMe(bool isWait, int WaitTime = WAIT_TIMER_VALUE);
+	void Wait(int value) { m_WaitTimer = value; }
+	bool isWaitAndUpdate();
 };
 

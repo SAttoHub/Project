@@ -15,6 +15,7 @@
 #include "Cards.h"
 #include "Audiences.h"
 #include "BattleWave.h"
+#include "GameUIsManager.h"
 
 enum class NowScene {
 	Title,
@@ -39,6 +40,8 @@ public:
 	Map		m_map;
 	Cards	m_cards;
 	Audiences m_Audiences;
+	GameUI m_GameUI;
+
 	std::unique_ptr<BattleWave> m_BattleWave;
 	int NowWave; // 仮Wave
 	int EndCount; // 仮ゲーム終了カウント

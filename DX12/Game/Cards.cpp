@@ -64,14 +64,35 @@ void Cards::Draw()
 	}
 
 	if (m_UseCardType != CardType::NONE) {
-		DrawCube(XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE, 0, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE),
-			XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 5.1f, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
-			ColorConvert(255, 255, 0, 255));
-
-		for (auto &data : CanSelectChips) {
-			DrawCube(XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE, 0, float(data.y) * ChipData::CHIP_SIZE),
-				XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 2.1f, float(data.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
-				ColorConvert(0, 255, 0, 150));
+		//if (m_NowSelectChip.x != -1) {
+		//	/*DrawCube(XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE, 0, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE),
+		//		XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 5.1f, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
+		//		ColorConvert(255, 255, 0, 255));*/
+		//	pMap->DrawGuide(m_NowSelectChip, ColorConvert(255, 255, 0, 255), false);
+		//}
+		//for (auto& data : CanSelectChips) {
+		//	/*DrawCube(XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE, 0, float(data.y) * ChipData::CHIP_SIZE),
+		//		XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 2.1f, float(data.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
+		//		ColorConvert(0, 255, 0, 150));*/
+		//	pMap->DrawGuide(data, ColorConvert(0, 255, 0, 255), false);
+		//}
+		switch (m_UseCardType)
+		{
+		case CardType::DEFAULT_ATTACK:
+			for (auto& data : CanSelectChips) {
+				pMap->DrawGuide(data, ColorConvert(255, 0, 0, 255), GuidePriority::MOVE_OR_ATTACK, false);
+			}
+			if (PreChipExistEnemy) {
+				pMap->DrawGuide(PreCheckChipOld, ColorConvert(218, 82, 58, 255), GuidePriority::SELECT_ENEMY_PRE_CARD_USE, true);
+			}
+			break;
+		case CardType::DEFAULT_MOVE:
+			for (auto& data : CanSelectChips) {
+				pMap->DrawGuide(data, ColorConvert(0, 183, 206, 255), GuidePriority::MOVE_OR_ATTACK, false);
+			}
+			break;
+		default:
+			break;
 		}
 
 	}
@@ -87,6 +108,9 @@ void Cards::Draw()
 				LT + XMFLOAT2(160, 64) * 1.5f + XMFLOAT2(2, 2),
 				TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));
 		}
+	}
+	if (isMyTurn) {
+		pMap->DrawGuide(pPlayer->GetMapPos(), ColorConvert(171, 225, 250, 255), GuidePriority::NOW_ACT_UNIT);
 	}
 }
 
@@ -148,12 +172,15 @@ void Cards::CardPhaseUpdate()
 					m_Cards[i]->Active = true;
 					m_NowSelectChip = pPlayer->GetMapPos();
 					NowPhase = 1;
+					PreCheckChipOld = XMINT2(-1, -1);
+					PreCheckChip = XMINT2(-2, -2);
 
 					if (m_UseCardType == CardType::DEFAULT_ATTACK) {
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -1));
+						PreDamage = 1;
 					}
 					else if (m_UseCardType == CardType::DEFAULT_MOVE) {
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
@@ -168,6 +195,7 @@ void Cards::CardPhaseUpdate()
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 1));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, -1));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, -1));
+						PreDamage = 0;
 
 						for (int x = 0; x < CanSelectChips.size(); x++){
 							if (pEnemys->GetEnemy(CanSelectChips[x]) != nullptr) {
@@ -197,11 +225,14 @@ void Cards::CardPhaseUpdate()
 
 void Cards::CardEffectPhaseUpdate()
 {
-	if (Input::isKeyTrigger(DIK_BACKSPACE)) {
+	if (Input::isKeyTrigger(DIK_BACKSPACE) || Input::isMouseTrigger(M_RIGHT)) {
 		m_UseCardType = CardType::NONE;
 		m_Cards[m_UseCardIndex]->Active = false;
 		NowPhase = 0;
 		CanSelectChips.clear();
+		PreDamage = 0;
+		PreCheckChipOld = XMINT2(-1, -1);
+		PreCheckChip = XMINT2(-2, -2);
 	}
 	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
 		if (Input::isKeyTrigger(DIK_UP)) {
@@ -222,14 +253,26 @@ void Cards::CardEffectPhaseUpdate()
 	}
 	if (m_UseCardType == CardType::DEFAULT_ATTACK) {
 		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
-			Enemy *en = pEnemys->GetEnemy(m_NowSelectChip);
-			if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
-				en->Damage(1);
-
-				m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
-				m_UseCardType = CardType::NONE;
-				NowPhase = 0;
-				CanSelectChips.clear();
+			// 選択一度目はカードを発動しない
+			PreCheckChip = m_NowSelectChip;
+			if (PreCheckChipOld != PreCheckChip) {
+				PreCheckChipOld = PreCheckChip;
+				Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
+				if (en) PreChipExistEnemy = true;
+				else PreChipExistEnemy = false;
+			}
+			else {
+				Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
+				if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
+					en->Damage(1);
+					m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+					m_UseCardType = CardType::NONE;
+					PreDamage = 0;
+					NowPhase = 0;
+					CanSelectChips.clear();
+					PreCheckChipOld = XMINT2(-1, -1);
+					PreCheckChip = XMINT2(-2, -2);
+				}
 			}
 		}
 	}
@@ -239,9 +282,12 @@ void Cards::CardEffectPhaseUpdate()
 				m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
 				pPlayer->SetMapPos(m_NowSelectChip);
 				m_UseCardType = CardType::NONE;
+				PreDamage = 0;
 				NowPhase = 0;
 				CanSelectChips.clear();
 				GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				PreCheckChipOld = XMINT2(-1, -1);
+				PreCheckChip = XMINT2(-2, -2);
 			}
 		}
 	}
