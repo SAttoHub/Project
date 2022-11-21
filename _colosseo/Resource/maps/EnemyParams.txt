@@ -1,0 +1,10 @@
+敵 / 行動ペース / exp
+Frog       90 300
+ChildBoar  90 800
+Turtle     90 1200
+Wolf       70 1800
+Dacho      70 2800
+Boar       70 4100
+Kangaroo   50 5200
+Bear       50 7200
+Gollira    20 10000

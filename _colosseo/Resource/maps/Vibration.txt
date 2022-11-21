@@ -1,0 +1,16 @@
+コントローラー振動Config
+Power Max::65535
+Time (フレーム)
+
+四股振動
+ShikoVibrationPower 30000
+ShikoVibrationTime 40
+吸い込み振動
+SuikomiVibrationPower 60000
+SuikomiVibrationTime 20
+張り手振動
+HariteVibrationPower 53000
+HariteVibrationTime 10
+被弾振動
+DamageVibrationPower 60000
+DamageVibrationTime 30
