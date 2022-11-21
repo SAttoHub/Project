@@ -8,12 +8,12 @@ XMFLOAT2 Audience::Step3 = XMFLOAT2(98.9f, 28.45f);
 XMFLOAT2 Audience::Step4 = XMFLOAT2(103.9f, 33.45f);
 XMFLOAT2 Audience::Step5 = XMFLOAT2(108.9f, 38.45f);
 int Audience::BoundTimer = 8;
-int Audience::ExitTimerAll = 165;
+int Audience::ExitTimerAll = 225;
 int Audience::ExitTimer1 = 5;
 int Audience::ExitTimer2 = 70;
 int Audience::ExitTimer3 = 50;
 int Audience::ExitTimer4 = 20;
-int Audience::ExitTimer5 = 20;
+int Audience::ExitTimer5 = 80;
 
 void Audience::Action()
 {
@@ -97,9 +97,9 @@ void Audience::ExitTrigger()
 	ExitPosStep3.y = Step1.y;
 	ExitPosStep3.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 
-	ExitPosStep4.x = cosf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (103.9f) + pMap->Center.x;
-	ExitPosStep4.y = Step1.y - 5.0f;
-	ExitPosStep4.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (103.9f) + pMap->Center.z;
+	ExitPosStep4.x = cosf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (143.9f) + pMap->Center.x;
+	ExitPosStep4.y = Step1.y - 20.0f;
+	ExitPosStep4.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (143.9f) + pMap->Center.z;
 
 	m_ActionType = AUD_ActionType::EXIT;
 	ActionTimer = ExitTimerAll;
@@ -151,9 +151,9 @@ void Audience::AdmissionTrigger()
 	ExitPosStep3.y = Step1.y;
 	ExitPosStep3.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (83.9f) + pMap->Center.z;
 
-	ExitPosStep4.x = cosf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (103.9f) + pMap->Center.x;
-	ExitPosStep4.y = Step1.y - 5.0f;
-	ExitPosStep4.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (103.9f) + pMap->Center.z;
+	ExitPosStep4.x = cosf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (143.9f) + pMap->Center.x;
+	ExitPosStep4.y = Step1.y - 20.0f;
+	ExitPosStep4.z = sinf(IndexAngle * float(TargetIndex + IndexHoge * 2) * M_PI_F / 180.0f) * (143.9f) + pMap->Center.z;
 
 	m_ActionType = AUD_ActionType::ADMISSION;
 	ActionTimer = ExitTimerAll;

@@ -1,6 +1,7 @@
 #include "GameUIsManager.h"
 
 EnemyParamUI GameUI::m_En_Param_UI;
+PlayerParamUI GameUI::m_Pl_Param_UI;
 
 GameUI::GameUI()
 {
@@ -14,4 +15,5 @@ GameUI::~GameUI()
 void GameUI::Draw()
 {
 	m_En_Param_UI.Draw();
+	m_Pl_Param_UI.Draw();
 }

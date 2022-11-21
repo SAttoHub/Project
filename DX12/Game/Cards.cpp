@@ -40,6 +40,9 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 
 void Cards::Update()
 {
+	if (WaitTimer > 0) {
+		WaitTimer--;
+	}
 	for (int i = 0; i < int(m_Cards.size()); i++) {
 		m_Cards[i]->Update(i, int(m_Cards.size()));
 	}
@@ -97,9 +100,16 @@ void Cards::Draw()
 
 	}
 	else if(isMyTurn) {
-		DrawGraph(LT,
-			LT + XMFLOAT2(160, 64) * 1.5f,
-			TurnEndButton);
+		if (WaitTimer == 0) {
+			DrawGraph(LT,
+				LT + XMFLOAT2(160, 64) * 1.5f,
+				TurnEndButton);
+		}
+		else {
+			DrawGraphEffColor(LT,
+				LT + XMFLOAT2(160, 64) * 1.5f,
+				TurnEndButton, XMFLOAT4(0.3f, 0.3f, 0.4f, 1.0f));
+		}
 		XMFLOAT2 point = Input::GetMousePos();
 
 		if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
@@ -210,12 +220,15 @@ void Cards::CardPhaseUpdate()
 		}
 	}
 
-	XMFLOAT2 point = Input::GetMousePos();
-	if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
-		point.y >= LT.y && point.y <= LT.y + 64 * 1.5f) {
-		if (Input::isMouseTrigger(M_LEFT)) {
-			TurnEnd = true;
-			isMyTurn = false;
+	// Waitが0でない間はターンエンドできない
+	if (WaitTimer == 0) {
+		XMFLOAT2 point = Input::GetMousePos();
+		if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
+			point.y >= LT.y && point.y <= LT.y + 64 * 1.5f) {
+			if (Input::isMouseTrigger(M_LEFT)) {
+				TurnEnd = true;
+				isMyTurn = false;
+			}
 		}
 	}
 	/*if (Input::isKeyTrigger(DIK_RETURN)) {
@@ -272,6 +285,8 @@ void Cards::CardEffectPhaseUpdate()
 					CanSelectChips.clear();
 					PreCheckChipOld = XMINT2(-1, -1);
 					PreCheckChip = XMINT2(-2, -2);
+					en->DamageReaction(pPlayer->GetMapPos(), en->GetMapPos());
+					Wait(10);
 				}
 			}
 		}

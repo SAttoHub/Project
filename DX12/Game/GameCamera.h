@@ -78,5 +78,6 @@ public:
 	void ChangeHeight(float Height, int Flame);
 	void Targeting(XMFLOAT3 Target, int Flame);
 	void TargetingInstantly(XMFLOAT3 Target);
+	float GetAngle() { return m_PosData.MarkAngle; }
 };
 

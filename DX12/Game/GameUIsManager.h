@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyParamUI.h"
+#include "PlayerParamUI.h"
 #include "..\Window.h"
 
 // ÉQÅ[ÉÄíÜUIìùäá
@@ -12,6 +13,7 @@ private:
 
 private:
 	static EnemyParamUI m_En_Param_UI;
+	static PlayerParamUI m_Pl_Param_UI;
 	const XMFLOAT2 m_En_Param_UI_Ref_Point = XMFLOAT2(WINDOW_WIDTH - 200.0f, 0.0f);
 
 public:
@@ -19,6 +21,7 @@ public:
 	~GameUI();
 
 	static EnemyParamUI* GetEnemyParamUI() { return &m_En_Param_UI; }
+	static PlayerParamUI* GetPlayerParamUI() { return &m_Pl_Param_UI; }
 
 	void Draw();
 };

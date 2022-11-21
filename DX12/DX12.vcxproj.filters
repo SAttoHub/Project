@@ -534,6 +534,9 @@
     <ClCompile Include="Game\GameUIsManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\PlayerParamUI.cpp">
+      <Filter>ソース ファイル\Game\GameUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -882,6 +885,9 @@
       <Filter>ヘッダー ファイル\Game\GameUI</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameUIsManager.h">
+      <Filter>ヘッダー ファイル\Game\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PlayerParamUI.h">
       <Filter>ヘッダー ファイル\Game\GameUI</Filter>
     </ClInclude>
   </ItemGroup>

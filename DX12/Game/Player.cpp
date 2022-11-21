@@ -4,6 +4,7 @@ Player::Player()
 {
 	m_MapPos = { 0,0 };
 	m_HP = 100;
+	m_MaxHP = 100;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
@@ -38,8 +39,10 @@ void Player::SetMap(Map *Map)
 
 void Player::Update()
 {
-	pModel->position = pMap->ChangePos(m_MapPos);
+	isWaitAndUpdate();
 
+	ReactionUpdate();
+	pModel->position = pMap->ChangePos(m_MapPos) + m_ReactionOffset;
 	SetDir();
 	pModel->material.texNumber = Image[(int)m_Dir];
 }

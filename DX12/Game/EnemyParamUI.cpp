@@ -69,7 +69,7 @@ void EnemyParamUI::Draw()
 		float afterHP = float(pEnemy->GetHP()) - Damage;
 
 		// ŒvŽZŒãHP / Å‘åHP
-		DrawStrings::Instance()->DrawFormatString(LEFT_POS + XMFLOAT2(0.0f, 32.0f), 32, WHITE, "%d / %d", afterHP, pEnemy->GetMaxHP());
+		DrawStrings::Instance()->DrawFormatString(LEFT_POS + XMFLOAT2(0.0f, 32.0f), 32, WHITE, "%d / %d", int(afterHP), int(pEnemy->GetMaxHP()));
 		// HPƒo[— 
 		DrawBox(LEFT_POS + XMFLOAT2(0.0f, 64.0f), XMFLOAT2(LEFT_POS.x + WIDTH_SIZE, 64.0f + 32.0f), XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f));
 		// Œ¸‚Á‚½•ª‚ðÔ‚­•`‰æ
@@ -85,7 +85,7 @@ void EnemyParamUI::Draw()
 	}
 	else {
 		// Œ»ÝHP / Å‘åHP
-		DrawStrings::Instance()->DrawFormatString(LEFT_POS + XMFLOAT2(0.0f, 32.0f), 32, WHITE, "%d / %d", pEnemy->GetHP(), pEnemy->GetMaxHP());
+		DrawStrings::Instance()->DrawFormatString(LEFT_POS + XMFLOAT2(0.0f, 32.0f), 32, WHITE, "%d / %d", int(pEnemy->GetHP()), int(pEnemy->GetMaxHP()));
 		DrawBox(LEFT_POS + XMFLOAT2(0.0f, 64.0f), XMFLOAT2(LEFT_POS.x + WIDTH_SIZE, 64.0f + 32.0f), XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f));
 		DrawBox(LEFT_POS + XMFLOAT2(0.0f, 64.0f),
 			XMFLOAT2(LEFT_POS.x + WIDTH_SIZE * (float(pEnemy->GetHP()) / float(pEnemy->GetMaxHP())), 64.0f + 32.0f),

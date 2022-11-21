@@ -54,7 +54,7 @@ void Card::ColliderUpdate()
 void Card::Update(int index, int MaxIdx)
 {
 	float CenterIdx = MaxIdx / 2.0f;
-	LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f };
+	LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f + 100.0f, WINDOW_HEIGHT - 200.0f };
 	ColliderUpdate();
 }
 
@@ -65,7 +65,7 @@ void Card::Draw(int index, int MaxIdx)
 	//XMFLOAT2 LeftTop;
 	float CenterIdx = MaxIdx / 2.0f;
 	//if (MaxIdx % 2 == 0) {
-		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f/* + 150.0f */};
+		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f + 100.0f, WINDOW_HEIGHT - 200.0f/* + 150.0f */};
 	/*}
 	if (MaxIdx % 2 != 0) {
 		LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f };
@@ -101,6 +101,6 @@ void Card::Draw(int index, int MaxIdx)
 void Card::Initialize(int index, int MaxIdx)
 {
 	float CenterIdx = MaxIdx / 2.0f;
-	LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f, WINDOW_HEIGHT - 200.0f };
+	LeftTop = { WINDOW_WIDTH / 2.0f + (float(index) - CenterIdx) * width - width / 2.0f + 100.0f, WINDOW_HEIGHT - 200.0f };
 	SetCollider();
 }

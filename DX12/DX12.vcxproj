@@ -146,6 +146,7 @@
     <ClCompile Include="Game\Map.cpp" />
     <ClCompile Include="Game\NoviceEnemy.cpp" />
     <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Game\PlayerParamUI.cpp" />
     <ClCompile Include="Game\TargetPoint.cpp" />
     <ClCompile Include="Gaussian.cpp" />
     <ClCompile Include="imguiUse.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="Game\Map.h" />
     <ClInclude Include="Game\NoviceEnemy.h" />
     <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\PlayerParamUI.h" />
     <ClInclude Include="Game\TargetPoint.h" />
     <ClInclude Include="Gaussian.h" />
     <ClInclude Include="imguiUse.h" />

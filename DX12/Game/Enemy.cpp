@@ -5,6 +5,7 @@ Enemy::Enemy()
 {
 	m_MapPos = { 0,0 };
 	m_HP = 1;
+	m_MaxHP = 1;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
@@ -45,7 +46,8 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	m_MapPos = { 0,0 };
-	m_HP = 1;
+	m_HP = 5;
+	m_MaxHP = 5;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
 	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
@@ -162,6 +164,7 @@ void Enemy::Update()
 				if (m_CoolTime == 0) {
 					m_CoolTime = 15;
 					pPlayer->Damage(1);
+					pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
 					m_MyTurn = false;
 					m_Next = true;
 					m_Act = AC_Wait;
@@ -170,7 +173,9 @@ void Enemy::Update()
 		}
 	}
 
-	pModel->position = pMap->ChangePos(m_MapPos);
+	ReactionUpdate();
+
+	pModel->position = pMap->ChangePos(m_MapPos) + m_ReactionOffset;
 	SetDir();
 	pModel->material.texNumber = Image[(int)m_Dir];
 	if (m_MyTurn) {

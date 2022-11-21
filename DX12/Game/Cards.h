@@ -33,6 +33,10 @@ private:
 	XMINT2 PreCheckChipOld = XMINT2(-1, -1);
 	XMINT2 PreCheckChip = XMINT2(-2, -2);
 	bool PreChipExistEnemy = false;
+
+	// このタイマーが0ではない間は入力を受け付けない
+	int WaitTimer = 0;
+	void Wait(int Value) { WaitTimer = Value; }
 public:
 	//std::vector<Card> m_Cards;
 	My_F_List<Card> m_Cards;

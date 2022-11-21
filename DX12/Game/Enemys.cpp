@@ -59,8 +59,14 @@ void Enemys::StartTurn()
 	if (m_Enemy.size() > 0) {
 		for (int i = 0; i < m_Enemy.size(); i++) {
 			pMap->SetCostTableOnUnitPos(m_Enemy[i].GetMapPos(), 999);
+			// いずれかのエネミーがリアクション中である
+			if (m_Enemy[i].GetReaction() != Reactions::Reac_None) {
+				WaitReaction = true; // リアクションが終わるまで待つ
+			}
 		}
-		m_Enemy[0].StartTurn();
+		if (WaitReaction == false) {
+			m_Enemy[0].StartTurn();
+		}
 	}
 }
 
@@ -72,6 +78,18 @@ void Enemys::Initialize()
 
 void Enemys::Update()
 {
+	if (WaitReaction == true) {
+		WaitReaction = false;
+		for (int i = 0; i < m_Enemy.size(); i++) {
+			// いずれかのエネミーがリアクション中である もしくはプレイヤーがリアクション中である
+			if (m_Enemy[i].GetReaction() != Reactions::Reac_None || pPlayer->GetReaction() != Reactions::Reac_None) {
+				WaitReaction = true; // リアクションが終わるまで待つ
+			}
+		}
+		if (WaitReaction == false) {
+			m_Enemy[0].StartTurn();
+		}
+	}
 	for (auto &enemy : m_Enemy) {
 		enemy.Update();
 	}
@@ -93,7 +111,7 @@ void Enemys::Update()
 	}*/
 
 	for (int i = 0; i < m_Enemy.size(); i++) {
-		if (m_Enemy[i].GetHP() <= 0) {
+		if (m_Enemy[i].GetHP() <= 0 && m_Enemy[i].GetReaction() == Reactions::Reac_Death_End) {
 			m_Enemy[i].Death();
 			m_Enemy.erase(m_Enemy.begin() + i);
 		}
@@ -109,12 +127,20 @@ void Enemys::EnemyTurnUpdate()
 		if (i < m_Enemy.size() - 1) {
 			if (m_Enemy[i].m_Next) {
 				m_Enemy[i].m_Next = false;
+				WaitReaction2 = false;
 				for (int j = 0; j < m_Enemy.size(); j++) {
 					if (j != i + 1) {
 						pMap->SetCostTableOnUnitPos(m_Enemy[j].GetMapPos(), 999);
 					}
+					// いずれかのエネミーがリアクション中である
+					if (m_Enemy[j].GetReaction() != Reactions::Reac_None || pPlayer->GetReaction() != Reactions::Reac_None) {
+						WaitReaction2 = true; // リアクションが終わるまで待つ
+						m_Enemy[i].m_Next = true;
+					}
 				}
-				m_Enemy[i + 1].StartTurn();
+				if (WaitReaction2 == false) {
+					m_Enemy[i + 1].StartTurn();
+				}
 				break;
 			}
 		}

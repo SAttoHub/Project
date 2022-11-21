@@ -20,6 +20,8 @@ void GameScenes::Initialize()
 
 	m_GameUI.GetEnemyParamUI()->SetCardsPtr(&m_cards);
 	m_GameUI.GetEnemyParamUI()->SetPlayerPtr(&m_player);
+	m_GameUI.GetPlayerParamUI()->SetCardsPtr(&m_cards);
+	m_GameUI.GetPlayerParamUI()->SetPlayerPtr(&m_player);
 
 	m_BattleWave = std::make_unique<BattleWave>(&m_enemys, &m_player);
 	NowWave = 0;

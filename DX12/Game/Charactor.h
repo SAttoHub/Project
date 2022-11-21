@@ -8,6 +8,13 @@
 #include "ActionManager.h"
 #include "Map.h"
 
+enum Reactions {
+	Reac_None,
+	Reac_Damage,
+	Reac_Death,
+	Reac_Death_End
+};
+
 //-------------------------------------------------------------------------------------------------------------
 // キャラクター基底class
 //-------------------------------------------------------------------------------------------------------------
@@ -89,6 +96,7 @@ public:
 	void DepthDraw();
 	void DOFDepthDraw();
 
+	// 待ち時間関連
 protected:
 	static const int WAIT_TIMER_VALUE_MOVE = 5; // 移動時のカメラ待ち時間
 	static const int WAIT_TIMER_VALUE = 20;
@@ -102,5 +110,24 @@ public:
 	void CameraTargetOnMe(bool isWait, int WaitTime = WAIT_TIMER_VALUE);
 	void Wait(int value) { m_WaitTimer = value; }
 	bool isWaitAndUpdate();
+
+	// リアクション関連
+private:
+	static const float DAMAGE_REACTION_OFFSET_RANGE;
+	static const int DAMAGE_REACTION_TIME;
+	Reactions m_NowReaction = Reactions::Reac_None;
+	int m_ReactionTimeMax = 0;
+	XMINT2 m_ReactionMakeDir = XMINT2();
+	XMINT2 m_ReactionDoDir = XMINT2();
+	XMFLOAT3 OffsetDirGet();
+	XMFLOAT3 CameraOffsetDirGet();
+protected:
+	XMFLOAT3 m_ReactionOffset = XMFLOAT3();
+	void ReactionUpdate();
+	void DamageReactionUpdate();
+	void DeathReactionUpdate();
+public:
+	Reactions GetReaction() { return m_NowReaction; }
+	void DamageReaction(XMINT2 ReactionMakeDir, XMINT2 ReactionDoDir);
 };
 

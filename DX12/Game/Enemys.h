@@ -15,6 +15,8 @@ private:
 	Map *pMap = nullptr;
 	Player *pPlayer = nullptr;
 
+	bool WaitReaction = false;
+	bool WaitReaction2 = false;
 public:
 	Enemys();
 	~Enemys();
