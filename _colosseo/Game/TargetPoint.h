@@ -14,13 +14,13 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
-	XMFLOAT3 position = XMFLOAT3(); // ターゲットポイントの位置
+	XMFLOAT3 m_Position = XMFLOAT3(); // ターゲットポイントの位置
 
 public:
 	// ターゲットポイントの座標を取得
-	XMFLOAT3 GetPos() { return position; }
+	XMFLOAT3 GetPos() { return m_Position; }
 	// ターゲットポイントの座標をセット
-	void SetPos(XMFLOAT3 pos) { position = pos; }
+	void SetPos(XMFLOAT3 _Pos) { m_Position = _Pos; }
 };
 
 // ターゲットポイントの座標を取得
@@ -29,6 +29,6 @@ static DirectX::XMFLOAT3 GetTargetPos() {
 }
 
 // ターゲットポイントの座標をセット
-static void SetTargetPos(DirectX::XMFLOAT3 pos) {
-	TargetPoint::Instance()->SetPos(pos);
+static void SetTargetPos(DirectX::XMFLOAT3 _Pos) {
+	TargetPoint::Instance()->SetPos(_Pos);
 }

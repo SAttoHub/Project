@@ -3,8 +3,8 @@
 
 Cursor::~Cursor()
 {
-	if (collider) {
-		GCM::Instance()->RemoveCollider(collider);
+	if (m_Collider) {
+		GCM::Instance()->RemoveCollider(m_Collider);
 		//delete collider;
 	}
 	/*if (col) {
@@ -14,15 +14,15 @@ Cursor::~Cursor()
 
 void Cursor::SetCollider()
 {
-	collider = new GamePointCollider(&m_MousePos, "Mouse");
-	collider->SetBasisPosition(&m_MousePos);
-	GCM::Instance()->AddCollider(collider);
+	m_Collider = new GamePointCollider(&m_MousePos, "Mouse");
+	m_Collider->SetBasisPosition(&m_MousePos);
+	GCM::Instance()->AddCollider(m_Collider);
 }
 
 void Cursor::ColliderUpdate()
 {
-	if (collider) {
-		collider->Update();
+	if (m_Collider) {
+		m_Collider->Update();
 	}
 }
 
@@ -35,7 +35,7 @@ void Cursor::Initialize()
 {
 	m_MousePos = Input::GetMousePos();
 	SetCollider();
-	CusorImg = TexManager::LoadTexture("Resource/image/Cursor.png");
+	m_CusorImg = TexManager::LoadTexture("Resource/image/Cursor.png");
 }
 
 void Cursor::Update()
@@ -48,5 +48,5 @@ void Cursor::Draw()
 {
 	DrawGraph(m_MousePos,
 		m_MousePos + XMFLOAT2(24, 24),
-		CusorImg);
+		m_CusorImg);
 }

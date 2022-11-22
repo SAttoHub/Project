@@ -70,7 +70,7 @@ public:
 
 	void Update() override;
 	void Draw() override;
-	void SetDir() override;
+	void SetDirFromCamera() override;
 
 	int GetStep() { return m_Step; }
 	int GetIndex() { return m_Index; }

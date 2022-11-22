@@ -7,49 +7,49 @@ Player::Player()
 	m_MaxHP = 100;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
-	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
+	m_pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
-	pModel->rotation.y = 90.0f;
-	pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
-	pModel->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
-	pModel->isBillboard = true;
-	pModel->UseShadow = true;
-	pModel->UseDOF = true;
+	m_pModel->rotation.y = 90.0f;
+	m_pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
+	m_pModel->material.texNumber = TexManager::GetColor(XMFLOAT4(0, 255, 255, 255));
+	m_pModel->isBillboard = true;
+	m_pModel->UseShadow = true;
+	m_pModel->UseDOF = true;
 
-	Image[0] = TexManager::LoadTexture("Resource/image/Chara/Chara1.png");
-	Image[1] = TexManager::LoadTexture("Resource/image/Chara/Chara2.png");
-	Image[2] = TexManager::LoadTexture("Resource/image/Chara/Chara3.png");
-	Image[3] = TexManager::LoadTexture("Resource/image/Chara/Chara4.png");
-	Image[4] = TexManager::LoadTexture("Resource/image/Chara/Chara5.png");
-	Image[5] = TexManager::LoadTexture("Resource/image/Chara/Chara6.png");
-	Image[6] = TexManager::LoadTexture("Resource/image/Chara/Chara7.png");
-	Image[7] = TexManager::LoadTexture("Resource/image/Chara/Chara8.png");
-	pModel->alwaysUpdate = true;
+	m_Image[0] = TexManager::LoadTexture("Resource/image/Chara/Chara1.png");
+	m_Image[1] = TexManager::LoadTexture("Resource/image/Chara/Chara2.png");
+	m_Image[2] = TexManager::LoadTexture("Resource/image/Chara/Chara3.png");
+	m_Image[3] = TexManager::LoadTexture("Resource/image/Chara/Chara4.png");
+	m_Image[4] = TexManager::LoadTexture("Resource/image/Chara/Chara5.png");
+	m_Image[5] = TexManager::LoadTexture("Resource/image/Chara/Chara6.png");
+	m_Image[6] = TexManager::LoadTexture("Resource/image/Chara/Chara7.png");
+	m_Image[7] = TexManager::LoadTexture("Resource/image/Chara/Chara8.png");
+	m_pModel->alwaysUpdate = true;
 }
 
 Player::~Player()
 {
-	DirectX3dObject::DeleteObject(pModel);
+	DirectX3dObject::DeleteObject(m_pModel);
 }
 
 void Player::SetMap(Map *Map)
 {
-	pMap = Map;
+	m_pMap = Map;
 }
 
 void Player::Update()
 {
-	isWaitAndUpdate();
+	WaitUpdate();
 
 	ReactionUpdate();
-	pModel->position = pMap->ChangePos(m_MapPos) + m_ReactionOffset;
-	SetDir();
-	pModel->material.texNumber = Image[(int)m_Dir];
+	m_pModel->position = GetWorldPos() + m_ReactionOffset;
+	SetDirFromCamera();
+	m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
 }
 
 void Player::Draw()
 {
-	Drawobject3d(pModel);
+	Drawobject3d(m_pModel);
 	/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
 		"PlayerHP : %d", m_HP);*/
 }

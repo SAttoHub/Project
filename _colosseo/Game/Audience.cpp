@@ -162,7 +162,7 @@ void Audience::AdmissionTrigger()
 
 void Audience::DeleteModel()
 {
-	DirectX3dObject::DeleteObject(pModel);
+	DirectX3dObject::DeleteObject(m_pModel);
 }
 
 void Audience::ActionExit()
@@ -312,8 +312,8 @@ void Audience::Update()
 	position.z = hogePos.z * Range + pMap->Center.z;*/
 	Action();
 
-	SetDir();
-	//model->material.texNumber = Image[(int)m_Dir];
+	SetDirFromCamera();
+	//model->material.texNumber = Image[(int)m_DirFromCamera];
 }
 
 void Audience::Draw()
@@ -330,7 +330,7 @@ void Audience::Draw()
 	//}
 }
 
-void Audience::SetDir()
+void Audience::SetDirFromCamera()
 {
 	// モデル座標XZとカメラ座標XZとマップ中心座標XZ
 	XMFLOAT2 modelPosXZ = XMFLOAT2(position.x, position.z);
@@ -353,15 +353,15 @@ void Audience::SetDir()
 	cross = cross + 180.0f;
 	cross /= 45.0f;
 	
-	if (cross < 0.5f) m_Dir = Chara_Dir::BACK;
-	else if (cross < 1.5f) m_Dir = Chara_Dir::BACKRINGHT;
-	else if (cross < 2.5f) m_Dir = Chara_Dir::RINGHT;
-	else if (cross < 3.5f) m_Dir = Chara_Dir::FRONTRINGHT;
-	else if (cross < 4.5f) m_Dir = Chara_Dir::FRONT;
-	else if (cross < 5.5f) m_Dir = Chara_Dir::FRONTLEFT;
-	else if (cross < 6.5f) m_Dir = Chara_Dir::LEFT;
-	else if (cross < 7.5f) m_Dir = Chara_Dir::BACKLEFT;
-	else m_Dir = Chara_Dir::BACK;
+	if (cross < 0.5f) m_DirFromCamera = Chara_Dir::BACK;
+	else if (cross < 1.5f) m_DirFromCamera = Chara_Dir::BACKRINGHT;
+	else if (cross < 2.5f) m_DirFromCamera = Chara_Dir::RINGHT;
+	else if (cross < 3.5f) m_DirFromCamera = Chara_Dir::FRONTRINGHT;
+	else if (cross < 4.5f) m_DirFromCamera = Chara_Dir::FRONT;
+	else if (cross < 5.5f) m_DirFromCamera = Chara_Dir::FRONTLEFT;
+	else if (cross < 6.5f) m_DirFromCamera = Chara_Dir::LEFT;
+	else if (cross < 7.5f) m_DirFromCamera = Chara_Dir::BACKLEFT;
+	else m_DirFromCamera = Chara_Dir::BACK;
 }
 
 void Audience::SetPosition(int Step, int Index)
@@ -391,6 +391,6 @@ XMFLOAT4 Audience::GetTexUV()
 	XMFLOAT4 UV = { 0.0f,0.0f,1.0f,1.0f };
 	float _X = 1.0f / 8.0f;
 	float _Y = 1.0f / 8.0f;
-	UV = { _X * float(m_Dir), _Y * 0, _X * (float(m_Dir) + 1.0f), _Y * 1 };
+	UV = { _X * float(m_DirFromCamera), _Y * 0, _X * (float(m_DirFromCamera) + 1.0f), _Y * 1 };
 	return UV;
 }

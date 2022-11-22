@@ -8,13 +8,13 @@ Enemy::Enemy()
 	m_MaxHP = 1;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
-	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
+	m_pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
-	pModel->rotation.y = 90.0f;
-	pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
-	pModel->isBillboard = true;
-	pModel->UseShadow = true;
-	pModel->UseDOF = true;
+	m_pModel->rotation.y = 90.0f;
+	m_pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
+	m_pModel->isBillboard = true;
+	m_pModel->UseShadow = true;
+	m_pModel->UseDOF = true;
 
 	m_MyTurn = false;
 	m_Next = false;
@@ -22,17 +22,17 @@ Enemy::Enemy()
 
 	m_Act = AC_Wait;
 
-	Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaEn1.png");
-	Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaEn2.png");
-	Image[2] = TexManager::LoadTexture("Resource/image/Chara/CharaEn3.png");
-	Image[3] = TexManager::LoadTexture("Resource/image/Chara/CharaEn4.png");
-	Image[4] = TexManager::LoadTexture("Resource/image/Chara/CharaEn5.png");
-	Image[5] = TexManager::LoadTexture("Resource/image/Chara/CharaEn6.png");
-	Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
-	Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
+	m_Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaEn1.png");
+	m_Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaEn2.png");
+	m_Image[2] = TexManager::LoadTexture("Resource/image/Chara/CharaEn3.png");
+	m_Image[3] = TexManager::LoadTexture("Resource/image/Chara/CharaEn4.png");
+	m_Image[4] = TexManager::LoadTexture("Resource/image/Chara/CharaEn5.png");
+	m_Image[5] = TexManager::LoadTexture("Resource/image/Chara/CharaEn6.png");
+	m_Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
+	m_Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
 
-	pModel->color.w = -1.0f;
-	pModel->alwaysUpdate = true;
+	m_pModel->color.w = -1.0f;
+	m_pModel->alwaysUpdate = true;
 }
 
 Enemy::~Enemy()
@@ -50,13 +50,13 @@ void Enemy::Initialize()
 	m_MaxHP = 5;
 
 	int modelData = LoadModelOBJ("Charactor", "mob");
-	pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
+	m_pModel = DirectX3dObject::CreateObject(GetModelData(modelData),
 		XMFLOAT3(-1000, -1000, -1000), FBXSHADER);
-	pModel->rotation.y = 90.0f;
-	pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
-	pModel->isBillboard = true;
-	pModel->UseShadow = true;
-	pModel->UseDOF = true;
+	m_pModel->rotation.y = 90.0f;
+	m_pModel->scale = XMFLOAT3(16 / 4.0f, 16 / 4.0f, 16 / 4.0f) * 1.3f;
+	m_pModel->isBillboard = true;
+	m_pModel->UseShadow = true;
+	m_pModel->UseDOF = true;
 
 	m_MyTurn = false;
 	m_Next = false;
@@ -64,17 +64,17 @@ void Enemy::Initialize()
 
 	m_Act = AC_Wait;
 
-	Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaEn1.png");
-	Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaEn2.png");
-	Image[2] = TexManager::LoadTexture("Resource/image/Chara/CharaEn3.png");
-	Image[3] = TexManager::LoadTexture("Resource/image/Chara/CharaEn4.png");
-	Image[4] = TexManager::LoadTexture("Resource/image/Chara/CharaEn5.png");
-	Image[5] = TexManager::LoadTexture("Resource/image/Chara/CharaEn6.png");
-	Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
-	Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
+	m_Image[0] = TexManager::LoadTexture("Resource/image/Chara/CharaEn1.png");
+	m_Image[1] = TexManager::LoadTexture("Resource/image/Chara/CharaEn2.png");
+	m_Image[2] = TexManager::LoadTexture("Resource/image/Chara/CharaEn3.png");
+	m_Image[3] = TexManager::LoadTexture("Resource/image/Chara/CharaEn4.png");
+	m_Image[4] = TexManager::LoadTexture("Resource/image/Chara/CharaEn5.png");
+	m_Image[5] = TexManager::LoadTexture("Resource/image/Chara/CharaEn6.png");
+	m_Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
+	m_Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
 
-	pModel->color.w = -1.0f;
-	pModel->alwaysUpdate = true;
+	m_pModel->color.w = -1.0f;
+	m_pModel->alwaysUpdate = true;
 }
 
 void Enemy::Finalize()
@@ -88,7 +88,7 @@ void Enemy::StartTurn()
 	m_Next = false;
 	m_CoolTime = 30;
 	m_Count = 3;
-	pMap->ResetCostTable();
+	m_pMap->ResetCostTable();
 	if (m_Route.route_list.size() > 2) {
 		m_Act = AC_Move;
 	}
@@ -100,7 +100,7 @@ void Enemy::StartTurn()
 
 void Enemy::SetMap(Map *Map)
 {
-	pMap = Map;
+	m_pMap = Map;
 }
 
 void Enemy::SetPlayer(Player *player)
@@ -113,7 +113,7 @@ void Enemy::FindRouteToPlayer()
 	XMINT2 start = GetMapPos();
 	XMINT2 goal = pPlayer->GetMapPos();
 
-	m_Route = Astar::Instance()->DoAstar(Cell(start.x, start.y), Cell(goal.x, goal.y), pMap->CostTable);
+	m_Route = Astar::Instance()->DoAstar(Cell(start.x, start.y), Cell(goal.x, goal.y), m_pMap->CostTable);
 }
 
 void Enemy::Update()
@@ -128,7 +128,8 @@ void Enemy::Update()
 		m_Route.route_list.pop_front();
 	}*/
 
-	if (!isWaitAndUpdate()) {
+	WaitUpdate();
+	if (!isWait()) {
 		if (m_MyTurn) {
 			if (m_Act == AC_Move) {
 				m_CoolTime--;
@@ -175,40 +176,40 @@ void Enemy::Update()
 
 	ReactionUpdate();
 
-	pModel->position = pMap->ChangePos(m_MapPos) + m_ReactionOffset;
-	SetDir();
-	pModel->material.texNumber = Image[(int)m_Dir];
+	m_pModel->position = GetWorldPos() + m_ReactionOffset;
+	SetDirFromCamera();
+	m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
 	if (m_MyTurn) {
-		pModel->color.x = 1.0f;
-		pModel->color.y = 1.0f;
-		pModel->color.z = 1.0f;
+		m_pModel->color.x = 1.0f;
+		m_pModel->color.y = 1.0f;
+		m_pModel->color.z = 1.0f;
 	}
 	else {
-		pModel->color.x = 0.5f;
-		pModel->color.y = 0.5f;
-		pModel->color.z = 0.5f;
+		m_pModel->color.x = 0.5f;
+		m_pModel->color.y = 0.5f;
+		m_pModel->color.z = 0.5f;
 	}
 }
 
 void Enemy::Draw()
 {
 	if (m_MyTurn) {
-		pModel->color.x = 1.0f;
-		pModel->color.y = 1.0f;
-		pModel->color.z = 1.0f;
-		pMap->DrawGuide(GetMapPos(), ColorConvert(228, 86, 83, 255), GuidePriority::NOW_ACT_UNIT);
+		m_pModel->color.x = 1.0f;
+		m_pModel->color.y = 1.0f;
+		m_pModel->color.z = 1.0f;
+		m_pMap->DrawGuide(GetMapPos(), ColorConvert(228, 86, 83, 255), GuidePriority::NOW_ACT_UNIT);
 	}
 	else {
-		pModel->color.x = 0.5f;
-		pModel->color.y = 0.5f;
-		pModel->color.z = 0.5f;
+		m_pModel->color.x = 0.5f;
+		m_pModel->color.y = 0.5f;
+		m_pModel->color.z = 0.5f;
 	}
-	Drawobject3d(pModel);
+	Drawobject3d(m_pModel);
 }
 
 void Enemy::Death()
 {
-	DirectX3dObject::DeleteObject(pModel);
+	DirectX3dObject::DeleteObject(m_pModel);
 }
 
 std::vector<AllResult> Enemy::AttackAct(int Index, XMINT2 Pos) {

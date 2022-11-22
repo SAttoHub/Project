@@ -158,7 +158,7 @@ void Audiences::SummonAudience(int Count)
 		int Index = int(m_Audience.size()) - 1;
 		m_Audience[Index].SetMap(pMap);
 		m_Audience[Index].SetPosition(CoStep, CoIndex);
-		m_Audience[Index].SetDir();
+		m_Audience[Index].SetDirFromCamera();
 	}
 }
 
@@ -189,7 +189,7 @@ void Audiences::SummonAudience2(int Count)
 		int Index = int(m_Audience.size()) - 1;
 		m_Audience[Index].SetMap(pMap);
 		m_Audience[Index].SetPosition(CoStep, CoIndex);
-		m_Audience[Index].SetDir();
+		m_Audience[Index].SetDirFromCamera();
 		m_Audience[Index].AdmissionTrigger();
 	}
 }

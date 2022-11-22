@@ -15,9 +15,9 @@ private:
 
 public:
 	XMFLOAT2 m_MousePos;
-	int CusorImg;
+	int m_CusorImg;
 public:
-	GameBaseCollider *collider = nullptr;
+	GameBaseCollider *m_Collider = nullptr;
 	virtual ~Cursor();
 	void SetCollider();
 	void ColliderUpdate();
