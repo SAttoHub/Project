@@ -46,13 +46,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -69,7 +69,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\_colosseo\lib\fbx_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -95,7 +95,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libfbxsdk-mt.lib;libxml2-mt.lib;zlib-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-mt.lib;libxml2-mt.lib;zlib-mt.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\_colosseo\lib\fbx_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -123,6 +123,7 @@
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game\ActionManager.cpp" />
     <ClCompile Include="Game\Astar.cpp" />
     <ClCompile Include="Game\Audience.cpp" />
@@ -165,6 +166,8 @@
     <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
+    <ClCompile Include="SceneCommon.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShadowMapLight.cpp" />
     <ClCompile Include="ShadowMapping.cpp" />
     <ClCompile Include="main.cpp" />
@@ -176,6 +179,7 @@
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="TexManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Vignette.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -238,6 +242,7 @@
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Game\ActionManager.h" />
     <ClInclude Include="Game\Astar.h" />
     <ClInclude Include="Game\AstarNode.h" />
@@ -282,6 +287,9 @@
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="RenderTarget.h" />
+    <ClInclude Include="SceneBase.h" />
+    <ClInclude Include="SceneCommon.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShadowMapLight.h" />
     <ClInclude Include="ShadowMapping.h" />
     <ClInclude Include="MeshCollider.h" />
@@ -295,6 +303,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="TexManager.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vignette.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -727,11 +736,6 @@
     <None Include="Resource\shader\PostEffect.hlsli" />
     <None Include="Resource\shader\SpriteShaderHeader.hlsli" />
     <None Include="Resource\shader\Tetrahedron.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DirectXTex\DirectXTex\DirectXTex_Desktop_2019.vcxproj">
-      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX12.rc" />

@@ -9,28 +9,28 @@ using namespace Ease;
 #include "Engine\Primitive\PrimitiveFunc.h"
 
 //げーむてすと
-#include "Game/GameScenes.h"
+#include "SceneManager.h"
 #include "Game/GameCamera.h"
 
 class GameManager {
-	DirectX3dObject *OBJECT;
-	TexManager *TEX;
-	Camera *Cam;
+	DirectX3dObject* OBJECT;
+	TexManager* TEX;
+	Camera* Cam;
 
 	//ライトのテスト
-	LightGroup *lightGroup = nullptr;
+	LightGroup* lightGroup = nullptr;
 	//ライト場所用
 	Model BoxModel[3];
-	Object3d *TesObj[3];
+	Object3d* TesObj[3];
 
-	
+
 public:
-	GameManager(DirectX3dObject *OBJECT, TexManager *TEX, Window *Win, PipelineManager *Pileline, Camera *Cam);
+	GameManager(DirectX3dObject* OBJECT, TexManager* TEX, Window* Win, PipelineManager* Pileline, Camera* Cam);
 	~GameManager() {
 	};
 
 	//げーむ
-	GameScenes game;
+	SceneManager m_Scene;
 
 	void Init();
 	void Update();

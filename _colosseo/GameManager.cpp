@@ -4,14 +4,14 @@
 #include "imguiUse.h"
 #include "Engine\Common\Funcs.h"
 
-GameManager::GameManager(DirectX3dObject *OBJECT, TexManager *TEX, Window *Win, PipelineManager *Pipeline, Camera *Cam) {
+GameManager::GameManager(DirectX3dObject* OBJECT, TexManager* TEX, Window* Win, PipelineManager* Pipeline, Camera* Cam) {
 	this->OBJECT = OBJECT;
 	this->TEX = TEX;
 	this->Cam = Cam;
 
 	GameCamera::Instance()->Initialize();
 
-	
+
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -25,7 +25,7 @@ GameManager::GameManager(DirectX3dObject *OBJECT, TexManager *TEX, Window *Win, 
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0, -1, 0 });
 	lightGroup->SetDirLightColor(0, XMFLOAT3{ 1,1,1 });
 
-	game.Initialize();
+	m_Scene.Initialize();
 }
 
 void GameManager::Init()
@@ -37,35 +37,35 @@ void GameManager::Update() {
 	lightGroup->Update();
 
 	GameCamera::Instance()->Update();
-	game.Update();
-	game.BackDraw();
+	m_Scene.Update();
+	m_Scene.BackDraw();
 }
 
 void GameManager::Draw() {
-	game.Draw();
+	m_Scene.Draw();
 }
 
 void GameManager::DepthDraw()
 {
-	game.DepthDraw();
+	m_Scene.DepthDraw();
 }
 
 void GameManager::DOFDepthDraw()
 {
-	game.DOFDepthDraw();
+	m_Scene.DOFDepthDraw();
 }
 
 void GameManager::ShadowDraw()
 {
-	game.ShadowDraw();
+	m_Scene.ShadowDraw();
 }
 
 void GameManager::BloomDraw()
 {
-	game.BloomDraw();
+	m_Scene.BloomDraw();
 }
 
 void GameManager::BloomDepthDraw()
 {
-	game.BloomDepthDraw();
+	m_Scene.BloomDepthDraw();
 }
