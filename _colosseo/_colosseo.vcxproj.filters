@@ -486,9 +486,6 @@
     <ClCompile Include="Game\Player.cpp">
       <Filter>ソース ファイル\Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameScenes.cpp">
-      <Filter>ソース ファイル\Game\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Map.cpp">
       <Filter>ソース ファイル\Game\Map</Filter>
     </ClCompile>
@@ -751,9 +748,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player.h">
       <Filter>ヘッダー ファイル\Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameScenes.h">
-      <Filter>ヘッダー ファイル\Game\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Game\ChipData.h">
       <Filter>ヘッダー ファイル\Game\Map</Filter>

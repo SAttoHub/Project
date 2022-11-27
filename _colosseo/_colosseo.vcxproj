@@ -144,7 +144,6 @@
     <ClCompile Include="Game\EnemyParamUI.cpp" />
     <ClCompile Include="Game\Enemys.cpp" />
     <ClCompile Include="Game\GameCamera.cpp" />
-    <ClCompile Include="Game\GameScenes.cpp" />
     <ClCompile Include="Game\GameUIsManager.cpp" />
     <ClCompile Include="Game\Map.cpp" />
     <ClCompile Include="Game\NoviceEnemy.cpp" />
@@ -264,7 +263,6 @@
     <ClInclude Include="Game\EnemyParamUI.h" />
     <ClInclude Include="Game\Enemys.h" />
     <ClInclude Include="Game\GameCamera.h" />
-    <ClInclude Include="Game\GameScenes.h" />
     <ClInclude Include="Game\GameUIsManager.h" />
     <ClInclude Include="Game\Map.h" />
     <ClInclude Include="Game\NoviceEnemy.h" />
