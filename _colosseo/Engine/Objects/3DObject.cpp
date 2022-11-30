@@ -14,6 +14,9 @@ LightGroup *DirectX3dObject::lightGroup = nullptr;
 bool DirectX3dObject::isUpdateOther = true;
 bool DirectX3dObject::isUpdateOtherFlag = false;
 
+int  DirectX3dObject::Counter = 0;
+HANDLE DirectX3dObject::handle;
+
 void DirectX3dObject::DirectX3DObjectReset(Window *Win) {
 	OldShaderLoad = -1;
 	TransConstBuffer();
@@ -112,10 +115,58 @@ void DirectX3dObject::Draw() {
 void DirectX3dObject::TransConstBuffer() {
 
 	for (int i = 0; i < (int)object3ds.size(); i++) {
-		UpdateObject3d(object3ds[i], Camera::matView, Camera::matProjection);
+		UpdateObject3d(object3ds[i]);
 	}
 }
 
+
+DWORD __stdcall DirectX3dObject::T_UpdateObject3d(void* Vobject)
+{
+	Object3d* object = (Object3d*)Vobject;
+	Do_UpdateObject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+DWORD __stdcall DirectX3dObject::T_UpdatetObject3dIns(void* Vobject)
+{
+	InstanceObjectsData* object = (InstanceObjectsData*)Vobject;
+	Do_UpdateInstanceObject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+void DirectX3dObject::UpdateObject3d(Object3d* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 1) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		handle = CreateThread(NULL, 0, T_UpdateObject3d, object, 0, &dwID);
+	}
+	else {
+		Do_UpdateObject3d(object);
+	}
+	if (DirectX3dObject::Counter == 0) {
+		CloseHandle(handle);
+	}
+}
+
+void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 1) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		handle = CreateThread(NULL, 0, T_UpdatetObject3dIns, object, 0, &dwID);
+	}
+	else {
+		Do_UpdateInstanceObject3d(object);
+	}
+	if (DirectX3dObject::Counter == 0) {
+		CloseHandle(handle);
+	}
+}
 
 Object3d *DirectX3dObject::CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderNum)
 {
@@ -137,7 +188,7 @@ Object3d *DirectX3dObject::CreateObject(Model *model, XMFLOAT3 pos, UINT ShaderN
 	//int count = (int)std::distance(object3ds.begin(), object3ds.end()) - 1;
 	int count = 0;
 	InitalizeObject3d(object3ds[count]);
-	UpdateObject3d(object3ds[count], Camera::matView, Camera::matProjection);
+	UpdateObject3d(object3ds[count]);
 
 	int child = 0;
 	for (int i = 0; i < ModelManager::Instance()->models.size(); i++) {
@@ -176,18 +227,22 @@ InstanceObjectsData* DirectX3dObject::CreateInstanceObject(Model* model, XMFLOAT
 	//int count = (int)std::distance(object3ds.begin(), object3ds.end()) - 1;
 	int count = 0;
 	InitalizeInstanceObject3d(InstanceObject3ds[0]);
-	UpdateInstanceObject3d(InstanceObject3ds[0], Camera::matView, Camera::matProjection);
+	UpdateInstanceObject3d(InstanceObject3ds[0]);
 
 	return InstanceObject3ds[0];
 }
 
 void DirectX3dObject::AllObjectUpdate() {
+	//Counter = 0;
 	for (int i = 0; i < (int)object3ds.size(); i++) {
-		UpdateObject3d(object3ds[i], Camera::matView, Camera::matProjection);
+		Do_UpdateObject3d(object3ds[i]);
 	};
 	for (int i = 0; i < (int)InstanceObject3ds.size(); i++) {
-		UpdateInstanceObject3d(InstanceObject3ds[i], Camera::matView, Camera::matProjection);
+		Do_UpdateInstanceObject3d(InstanceObject3ds[i]);
 	}
+	//while (DirectX3dObject::Counter != 0) {
+//
+	//}
 	isUpdateOtherFlag = false;
 }
 
@@ -569,7 +624,9 @@ void InitalizeInstanceObject3d(InstanceObjectsData* object)
 	object->frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 }
 
-void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATRIX &matProjection) {
+void DirectX3dObject::Do_UpdateObject3d(Object3d *object) {
+	XMMATRIX& matView = Camera::matView;
+	XMMATRIX& matProjection = Camera::matProjection;
 	if (object->isPlay) {
 		//1 * Speedフレーム進める
 		object->currentTime += object->frameTime * int(object->flameSpeed);
@@ -718,8 +775,10 @@ void DirectX3dObject::UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATR
 	}
 }
 
-void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object, XMMATRIX& matView, XMMATRIX& matProjection)
+void DirectX3dObject::Do_UpdateInstanceObject3d(InstanceObjectsData* object)
 {
+	XMMATRIX& matView = Camera::matView;
+	XMMATRIX& matProjection = Camera::matProjection;
 	if (object->isPlay) {
 		//1 * Speedフレーム進める
 		object->currentTime += object->frameTime * int(object->flameSpeed);
@@ -871,6 +930,197 @@ void DirectX3dObject::UpdateInstanceObject3d(InstanceObjectsData* object, XMMATR
 		object->constBuffShadow->Unmap(0, nullptr);
 	}
 }
+
+/*
+
+void Drawobject3d(Object3d* object)
+{
+	if (object == nullptr)return;
+	while (DirectX3dObject::Counter != 0) {
+
+	}
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_Drawobject3d, object, 0, &dwID);
+	}
+	//else {
+	//	Do_Drawobject3d(object);
+	//}
+}
+
+void Drawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+	while (DirectX3dObject::Counter != 0) {
+
+	}
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_Drawobject3dIns, object, 0, &dwID);
+	}
+	//else {
+	//	Do_Drawobject3dIns(object);
+	//}
+}
+
+
+
+DWORD __stdcall T_Drawobject3d(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	Object3d* object = (Object3d*)Vobject;
+	Do_Drawobject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+DWORD __stdcall T_Drawobject3dIns(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	InstanceObjectsData* object = (InstanceObjectsData*)Vobject;
+	Do_Drawobject3dIns(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+
+void DepthDrawobject3d(Object3d* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_DepthDrawobject3d, object, 0, &dwID);
+	}
+	else {
+		Do_DepthDrawobject3d(object);
+	}
+}
+
+void DepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_DepthDrawobject3dIns, object, 0, &dwID);
+	}
+	else {
+		Do_DepthDrawobject3dIns(object);
+	}
+}
+
+DWORD __stdcall T_DepthDrawobject3d(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	Object3d* object = (Object3d*)Vobject;
+	Do_DepthDrawobject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+DWORD __stdcall T_DepthDrawobject3dIns(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	InstanceObjectsData* object = (InstanceObjectsData*)Vobject;
+	Do_DepthDrawobject3dIns(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+
+void ShadowDepthDrawobject3d(Object3d* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_ShadowDepthDrawobject3d, object, 0, &dwID);
+	}
+	else {
+		Do_ShadowDepthDrawobject3d(object);
+	}
+}
+
+void ShadowDepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_ShadowDepthDrawobject3dIns, object, 0, &dwID);
+	}
+	else {
+		Do_ShadowDepthDrawobject3dIns(object);
+	}
+}
+
+DWORD __stdcall T_ShadowDepthDrawobject3d(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	Object3d* object = (Object3d*)Vobject;
+	Do_ShadowDepthDrawobject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+DWORD __stdcall T_ShadowDepthDrawobject3dIns(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	InstanceObjectsData* object = (InstanceObjectsData*)Vobject;
+	Do_ShadowDepthDrawobject3dIns(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+
+void DOFDepthDrawobject3d(Object3d* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_DOFDepthDrawobject3d, object, 0, &dwID);
+	}
+	else {
+		Do_DOFDepthDrawobject3d(object);
+	}
+}
+
+void DOFDepthDrawobject3d(InstanceObjectsData* object)
+{
+	if (object == nullptr)return;
+	if (DirectX3dObject::Counter < 4) {
+		static DWORD dwID;
+		DirectX3dObject::Counter++;
+		CreateThread(NULL, 0, T_DOFDepthDrawobject3dIns, object, 0, &dwID);
+	}
+	else {
+		Do_DOFDepthDrawobject3dIns(object);
+	}
+}
+
+DWORD __stdcall T_DOFDepthDrawobject3d(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	Object3d* object = (Object3d*)Vobject;
+	Do_DOFDepthDrawobject3d(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+DWORD __stdcall T_DOFDepthDrawobject3dIns(void* Vobject)
+{
+	if (Vobject == nullptr)return 1;
+	InstanceObjectsData* object = (InstanceObjectsData*)Vobject;
+	Do_DOFDepthDrawobject3dIns(object);
+	DirectX3dObject::Counter--;
+	return 1;
+}
+
+*/
 
 void Drawobject3d(Object3d *object) {
 	if (object == nullptr)return;

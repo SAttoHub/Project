@@ -13,6 +13,19 @@ using namespace Microsoft::WRL;
 
 #include "Engine\Common\Colors\ColorFuncs.h"
 
+#define DEFINE_TO_STRING(enum_name, ...) static std::string ToString(enum_name s){\
+    static const std::string LABEL[] = { __VA_ARGS__ };\
+    return LABEL[static_cast<int>(s)];\
+}
+
+#define DEFINE_TO_ENUM(enum_name, ...) static enum_name Toenum_name(const std::string& value) {\
+    static const std::string LABEL[] = { __VA_ARGS__ };\
+    auto it = std::find(std::begin(LABEL), std::end(LABEL), value);\
+    if (it == std::end(LABEL)) throw std::bad_cast();\
+    auto index = std::distance(std::begin(LABEL), it);\
+    return static_cast<enum_name>(index);\
+}
+
 //使用するシェーダーの指定用
 enum SHADER {
 	FBXSHADER,
@@ -41,6 +54,50 @@ enum SHADER {
 
 	MAX_PIPLINE
 };
+
+DEFINE_TO_STRING(SHADER, "FBXSHADER", 
+	"FBX_Bump_SHADER", 
+	"FBX_height_SHADER",
+	"FBX_Line_SHADER",
+	"Sea_SHADER",
+	"Depth_SHEADER",
+	"Shadow_Depth_SHEADER",
+	"DOF_SHEADER",
+	"FBXSHADER_INS",
+	"Depth_SHEADER_INS",
+	"Shadow_Depth_SHEADER_INS",
+	"DOF_SHEADER_INS",
+	"FBXSHADER_INS_AUD",
+	"Depth_SHEADER_INS_AUD",
+	"Shadow_Depth_SHEADER_INS_AUD",
+	"DOF_SHEADER_INS_AUD",
+	"FBXSHADER_INS_GUIDE",
+	"Depth_SHEADER_INS_GUIDE",
+	"Shadow_Depth_SHEADER_INS_GUIDE",
+	"DOF_SHEADER_INS_GUIDE",
+	);
+
+DEFINE_TO_ENUM(SHADER, "FBXSHADER",
+	"FBX_Bump_SHADER",
+	"FBX_height_SHADER",
+	"FBX_Line_SHADER",
+	"Sea_SHADER",
+	"Depth_SHEADER",
+	"Shadow_Depth_SHEADER",
+	"DOF_SHEADER",
+	"FBXSHADER_INS",
+	"Depth_SHEADER_INS",
+	"Shadow_Depth_SHEADER_INS",
+	"DOF_SHEADER_INS",
+	"FBXSHADER_INS_AUD",
+	"Depth_SHEADER_INS_AUD",
+	"Shadow_Depth_SHEADER_INS_AUD",
+	"DOF_SHEADER_INS_AUD",
+	"FBXSHADER_INS_GUIDE",
+	"Depth_SHEADER_INS_GUIDE",
+	"Shadow_Depth_SHEADER_INS_GUIDE",
+	"DOF_SHEADER_INS_GUIDE",
+	);
 
 
 struct DirectXBase {

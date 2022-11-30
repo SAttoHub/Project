@@ -247,7 +247,7 @@ void Game::Update()
 	}
 	ImGui::End();
 	*/
-	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Config");
 	ImGui::SliderFloat("fps :", &FPS::fps, 0.0f, 200.0f);
@@ -258,7 +258,7 @@ void Game::Update()
 	}
 	else {
 		PSf_Perf = PSf_High;
-	}*/
+	}
 	/*ImGui::SetNextWindowPos(ImVec2(1000, 0), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 400), 1);
 	ImGui::Begin("Camera");

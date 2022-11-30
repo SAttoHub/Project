@@ -300,8 +300,26 @@ public:
 		kodomo->parent = oya;
 	};
 
-	static void UpdateObject3d(Object3d *object, XMMATRIX &matView, XMMATRIX &matProjection);
-	static void UpdateInstanceObject3d(InstanceObjectsData* object, XMMATRIX& matView, XMMATRIX& matProjection);
+	static void UpdateObject3d(Object3d *object);
+	static void UpdateInstanceObject3d(InstanceObjectsData* object);
+
+	struct UpdateObject3dData {
+		Object3d* object;
+		XMMATRIX* matView;
+		XMMATRIX* matProjection;
+	};
+
+	struct UpdateInstanceObject3dData {
+		InstanceObjectsData* object;
+		XMMATRIX* matView;
+		XMMATRIX* matProjection;
+	};
+
+	static DWORD WINAPI T_UpdateObject3d(void* object);
+	static DWORD WINAPI T_UpdatetObject3dIns(void* object);
+
+	static void Do_UpdateObject3d(Object3d* object);
+	static void Do_UpdateInstanceObject3d(InstanceObjectsData* object);
 
 	/// <summary>
 	/// オブジェクトの作成
@@ -336,6 +354,9 @@ public:
 	static void BloomDraw();
 	static void BloomDepthDraw();
 	static void DOFDraw();
+
+	static int Counter;
+	static HANDLE handle;
 };
 
 
@@ -366,11 +387,33 @@ static ComPtr<ID3D12Resource> CreateBufferResource(D3D12_HEAP_TYPE type, UINT bu
 void InitalizeObject3d(Object3d *object);
 void InitalizeInstanceObject3d(InstanceObjectsData* object);
 
+//void TDraw(Object3d* object);
+
 /// <summary>
 /// オブジェクトの描画
 /// </summary>
 /// <param name="object">使用するオブジェクトデータ</param>
 /// <returns></returns>
+//void Drawobject3d(Object3d* object);
+//void DepthDrawobject3d(Object3d* object);
+//void ShadowDepthDrawobject3d(Object3d* object);
+//void DOFDepthDrawobject3d(Object3d* object);
+//
+//void Drawobject3d(InstanceObjectsData* object);
+//void DepthDrawobject3d(InstanceObjectsData* object);
+//void ShadowDepthDrawobject3d(InstanceObjectsData* object);
+//void DOFDepthDrawobject3d(InstanceObjectsData* object);
+//
+//DWORD WINAPI T_Drawobject3d(void* object);
+//DWORD WINAPI T_DepthDrawobject3d(void* object);
+//DWORD WINAPI T_ShadowDepthDrawobject3d(void* object);
+//DWORD WINAPI T_DOFDepthDrawobject3d(void* object);
+//
+//DWORD WINAPI T_Drawobject3dIns(void* object);
+//DWORD WINAPI T_DepthDrawobject3dIns(void* object);
+//DWORD WINAPI T_ShadowDepthDrawobject3dIns(void* object);
+//DWORD WINAPI T_DOFDepthDrawobject3dIns(void* object);
+
 void Drawobject3d(Object3d *object);
 void DepthDrawobject3d(Object3d *object);
 void ShadowDepthDrawobject3d(Object3d *object);

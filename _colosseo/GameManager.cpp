@@ -63,6 +63,9 @@ void GameManager::ShadowDraw()
 void GameManager::BloomDraw()
 {
 	m_Scene.BloomDraw();
+	while (DirectX3dObject::Counter != 0) {
+
+	}
 }
 
 void GameManager::BloomDepthDraw()

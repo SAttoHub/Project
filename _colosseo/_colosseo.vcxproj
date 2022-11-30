@@ -161,6 +161,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="LoadJsonManager.cpp" />
     <ClCompile Include="OutLine.cpp" />
     <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="RenderManager.cpp" />
@@ -281,6 +282,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="LoadJsonManager.h" />
     <ClInclude Include="OutLine.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="RenderManager.h" />

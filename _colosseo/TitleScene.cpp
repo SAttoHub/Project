@@ -8,6 +8,17 @@ void TitleScene::Initialize(SceneCommon* _Common)
 
 	TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
 	m_WaitTimer = -1; // -1の時は次シーンに移行しない
+
+	LoadJsonManager::Instance()->LoadJson("Resource/JSON/TESTJSON.json");
+	int Model = LoadModelOBJ("Torch3", "TEST");
+
+	test = LoadJsonManager::Instance()->LoadScene("Resource/JSON/TESTJSON.json");
+
+	/*test = DirectX3dObject::CreateObject(GetModelData(Model),
+		XMFLOAT3(0, 0, 0), FBXSHADER);
+	test->position = LoadJsonManager::Instance()->GetPosition("TEST");
+	test->rotation = LoadJsonManager::Instance()->GetRotate("TEST");
+	test->scale = LoadJsonManager::Instance()->GetScale("TEST");*/
 }
 
 void TitleScene::Update()
@@ -25,6 +36,9 @@ void TitleScene::Draw()
 		"SPACE : スタート");
 	Common->m_map.Draw();
 	Cursor::Instance()->Draw();
+	for (auto& data : test) {
+		Drawobject3d(data);
+	}
 }
 
 void TitleScene::DepthDraw()

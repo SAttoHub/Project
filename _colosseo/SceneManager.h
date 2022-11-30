@@ -5,6 +5,7 @@
 #include "Singleton.h"
 #include "SceneCommon.h"
 
+
 class SceneManager : public Singleton <SceneManager>
 {
 	friend class Singleton <SceneManager>;
@@ -15,7 +16,7 @@ private:
 
 	SceneBase::SCENE_ID m_NowScene;		// 現在のシーン番号
 	SceneBase::SCENE_ID m_NextScene;	// 次遷移するときのシーン番号
-
+	
 public:
 	SceneManager();
 

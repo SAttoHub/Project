@@ -2,12 +2,16 @@
 #include "SceneBase.h"
 #include "SceneCommon.h"
 
+#include "LoadJsonManager.h"
+
 class TitleScene :   public SceneBase
 {
 private:
 	SceneCommon* Common;
 
 	int TitleTex;
+
+	std::vector<Object3d*> test;
 public:
 	void Initialize(SceneCommon* _Common) override;
 	void Update() override;
