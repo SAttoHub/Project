@@ -191,6 +191,7 @@ void ShadowMapping::SetUse(bool isUse)
 void ShadowMapping::Draw(int TexNum1, int TexNum2, int TexNum3)
 {
 	int Num = 0;
+	time++;
 	assert(Num <= MaxGraphPrimitives);
 
 	XMFLOAT2 pos1 = { 0,0 };
@@ -224,6 +225,7 @@ void ShadowMapping::Draw(int TexNum1, int TexNum2, int TexNum3)
 	ConstBufferData *constMap0 = nullptr;
 	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void **)&constMap0))) {
 		constMap0->mat = Camera::matView * Camera::matProjection;
+		constMap0->time = time;
 		constMap0->UseFlag = UseFlag;
 		ConstBuff0->Unmap(0, nullptr);
 	}

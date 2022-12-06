@@ -7,6 +7,7 @@ SamplerState smp : register(s0);
 cbuffer cbuff0 : register(b0)
 {
     matrix mat;
+    float time;
     float flag;
 };
 
@@ -122,6 +123,52 @@ float ShadowRandom(float DepthCamera, float2 uv, float4 Wpos) {
     return result;
 }
 
+// 補間関数
+float interpolate(float a, float b, float x) {
+    float PI = 3.1415926;
+
+    float f = (1.0 - cos(x * PI)) * 0.5;
+    return a * (1.0 - f) + b * f;
+}
+
+// 乱数生成
+float rnd(float2 p) {
+    return frac(sin(dot(p, float2(12.9898, 78.233))) * 43758.5453);
+}
+
+// 補間乱数
+float irnd(float2 p) {
+    float2 i = floor(p);
+    float2 f = frac(p);
+    float4 v = float4(rnd(float2(i.x, i.y)),
+        rnd(float2(i.x + 1.0, i.y)),
+        rnd(float2(i.x, i.y + 1.0)),
+        rnd(float2(i.x + 1.0, i.y + 1.0)));
+    return interpolate(interpolate(v.x, v.y, f.x), interpolate(v.z, v.w, f.x), f.y);
+}
+
+// ノイズ生成
+float noise(float2 p) {
+    int   oct = 8;
+    float per = 0.5;
+
+    float t = 0.0;
+    for (int i = 0; i < oct; i++) {
+        float freq = pow(2.0, float(i));
+        float amp = pow(per, float(oct - i));
+        t += irnd(float2(p.x / freq, p.y / freq)) * amp;
+    }
+    return t;
+}
+
+// シームレスノイズ生成
+float snoise(float2 p, float2 q, float2 r) {
+    return noise(float2(p.x, p.y)) * q.x * q.y +
+        noise(float2(p.x, p.y + r.y)) * q.x * (1.0 - q.y) +
+        noise(float2(p.x + r.x, p.y)) * (1.0 - q.x) * q.y +
+        noise(float2(p.x + r.x, p.y + r.y)) * (1.0 - q.x) * (1.0 - q.y);
+}
+
 float4 main(GSOutput input) : SV_TARGET
 {
     float4 Color = tex.Sample(smp, input.uv);
@@ -174,6 +221,29 @@ float4 main(GSOutput input) : SV_TARGET
             Color.rgb *= 0.5f;
         }*/
         //Color.rgb *= 1.0f - 0.5f * ShadowRandom(DepthCamera, input.uv, Wpos);
+    }
+    else {
+        int tTime = int(time / 2.0f) % 30000;
+        float2 t = float2(obj_shadow.x + tTime / 3000.0f, obj_shadow.y + tTime / 3000.0f) * 1000.0f;
+        float nn = noise(t);
+        if (nn < 0.25f) {
+            Color.rgb *= 0.7f;
+        }
+        else if (nn < 0.26f) {
+            Color.rgb *= 0.75f;
+        }
+        else if (nn < 0.27f) {
+            Color.rgb *= 0.8f;
+        }
+        else if (nn < 0.28f) {
+            Color.rgb *= 0.85f;
+        }
+        else if (nn < 0.29f) {
+            Color.rgb *= 0.9f;
+        }
+        else if (nn < 0.3f) {
+            Color.rgb *= 0.95f;
+        }
     }
 
 	return Color;

@@ -26,6 +26,7 @@ void RenderManager::PreDraw(const char *RenderName, bool Clear)
 	if (m_Renders.find(RenderName) != m_Renders.end()) {
 		// ‘¶İ‚µ‚½ê‡‚ÉÀs
 		m_Renders[RenderName]->PreDraw(Clear);
+		m_NowRenderName = RenderName;
 		return;
 	}
 	// ‘¶İ‚µ‚È‚©‚Á‚½ê‡ƒGƒ‰[

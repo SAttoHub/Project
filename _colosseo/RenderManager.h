@@ -12,6 +12,8 @@ private:
 	// レンダーターゲット格納用
 	typedef std::unique_ptr<RenderTarget> RenderPtr;
 	std::unordered_map<std::string , RenderPtr> m_Renders;
+
+	std::string m_NowRenderName = "";
 public:
 	RenderManager();
 	~RenderManager();
@@ -47,6 +49,10 @@ public:
 	/// </summary>
 	/// <param name="RenderName">レンダーターゲット名</param>
 	int GetDepthTexture(const char *RenderName);
+
+	DirectX::XMINT2 GetNowRenderSize() {
+		return m_Renders[m_NowRenderName]->GetSize();
+	}
 };
 
 #pragma region RenderName を const char* 型で指定する場合
@@ -137,6 +143,13 @@ static int GetRenderTexture(std::string RenderName) {
 /// <param name="RenderName">レンダーターゲット名</param>
 static int GetDepthTexture(std::string RenderName) {
 	return RenderManager::Instance()->GetDepthTexture(RenderName.c_str());
+}
+
+/// <summary>
+/// 現在設定中のレンダーテクスチャのサイズを取得する
+/// </summary>
+static DirectX::XMINT2 GetNowRenderSize() {
+	return RenderManager::Instance()->GetNowRenderSize();
 }
 
 #pragma endregion

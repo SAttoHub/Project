@@ -1,5 +1,6 @@
 #include "Gaussian.h"
 #include "Camera.h"
+#include "RenderManager.h"
 
 void Gaussian::SetupGraphPrimitive()
 {
@@ -175,8 +176,12 @@ void Gaussian::Draw(int TexNum1, float Power)
 	int Num = 0;
 	assert(Num <= MaxGraphPrimitives);
 
+	DirectX::XMINT2 WinSize = GetNowRenderSize();
+	int WINDOW_WIDTH = WinSize.x;
+	int WINDOW_HEIGHT = WinSize.y;
+
 	XMFLOAT2 pos1 = { 0,0 };
-	XMFLOAT2 pos2 = { WINDOW_WIDTH,WINDOW_HEIGHT };
+	XMFLOAT2 pos2 = { float(WINDOW_WIDTH),float(WINDOW_HEIGHT) };
 
 	//左上頂点を右下頂点を算出
 	float x1 = pos1.x;
@@ -257,8 +262,8 @@ void Gaussian::Draw(int TexNum1, float Power)
 		XMFLOAT3 pos1, pos2;
 		if (SUCCEEDED(result)) {
 			if (!GraphData[i].Data.Draw3D) {
-				pos1 = XMFLOAT3{ GraphData[i].Data.pos1.x / DirectXBase::Win_Width * 2 , GraphData[i].Data.pos1.y / DirectXBase::Win_Height * 2, 0.0f };
-				pos2 = XMFLOAT3{ GraphData[i].Data.pos2.x / DirectXBase::Win_Width * 2, GraphData[i].Data.pos2.y / DirectXBase::Win_Height * 2, 0.0f };
+				pos1 = XMFLOAT3{ GraphData[i].Data.pos1.x / float(WINDOW_WIDTH) * 2.0f , GraphData[i].Data.pos1.y / float(WINDOW_HEIGHT) * 2.0f, 0.0f };
+				pos2 = XMFLOAT3{ GraphData[i].Data.pos2.x / float(WINDOW_WIDTH) * 2.0f, GraphData[i].Data.pos2.y / float(WINDOW_HEIGHT) * 2.0f, 0.0f };
 			}
 			else {
 				pos1 = GraphData[i].Data.pos1;
@@ -273,9 +278,9 @@ void Gaussian::Draw(int TexNum1, float Power)
 		}
 		GraphVertBuff[i]->Unmap(0, nullptr);
 		//ビューポートの設定コマンド
-		DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+		DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
 		//シザー矩形の設定コマンド
-		DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
+		DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WINDOW_WIDTH), LONG(WINDOW_HEIGHT)));
 		//ルートシグネチャ
 		DirectXBase::cmdList->SetGraphicsRootSignature(GraphRootsignature.Get());
 		//パイプラインステートの設定コマンド

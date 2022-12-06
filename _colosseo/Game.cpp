@@ -62,15 +62,15 @@ void Game::Initialize()
 	CreateRenderTarget("Light_Depth", DXGI_FORMAT_R32_FLOAT, true, DirectX::XMINT2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
 	CreateRenderTarget("BaseGameScene", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("ShadowMap_Shadow", DXGI_FORMAT_R8G8B8A8_UNORM, true);
-	CreateRenderTarget("Bloom_Base_Color", DXGI_FORMAT_R8G8B8A8_UNORM, true);
-	CreateRenderTarget("Bloom_Depth", DXGI_FORMAT_R32_FLOAT, true);
-	CreateRenderTarget("Bloom_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("Bloom_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("Bloom_Base_Color", DXGI_FORMAT_R8G8B8A8_UNORM, true, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("Bloom_Depth", DXGI_FORMAT_R32_FLOAT, true, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("Bloom_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("Bloom_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	CreateRenderTarget("Bloom_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("DOF_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("DOF_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("DOF_Gauss_X2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
-	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	CreateRenderTarget("DOF_Gauss_X", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("DOF_Gauss_Y", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("DOF_Gauss_X2", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	CreateRenderTarget("DOF_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 
 	PSf_Perf = PSf_Normal;
@@ -135,13 +135,13 @@ void Game::Update()
 	Primitive3D::Instance()->Draw();
 	PostDraw("BaseGameScene");
 
-	if (DirectX3dObject::isUpdateOther) {
-		//シャドウマップ
-		PreDraw("ShadowMap_Shadow");
-		shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
-		PostDraw("ShadowMap_Shadow");
-
+	
+	//シャドウマップ
+	PreDraw("ShadowMap_Shadow");
+	shadowMapping->Draw(GetRenderTexture("BaseGameScene"), GetRenderTexture("Light_Depth"), GetDepthTexture("Camera_Depth"));
+	PostDraw("ShadowMap_Shadow");
 #pragma region Bloom
+	if (DirectX3dObject::isUpdateOther) {
 		// Bloom する色のみの描画
 		if (PSf_isDraw("Bloom")) {
 			PreDraw("Bloom_Base_Color");
@@ -156,10 +156,11 @@ void Game::Update()
 			GaussianEffectY_b->Draw(GetRenderTexture("Bloom_Gauss_X"), 0.005f);
 			PostDraw("Bloom_Gauss_Y");
 		}
-		// 最終結果を描画
-		PreDraw("Bloom_Result", false);
-		bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetDepthTexture("BaseGameScene"), GetDepthTexture("Bloom_Depth"));
-		PostDraw("Bloom_Result");
+	}
+	// 最終結果を描画
+	PreDraw("Bloom_Result", false);
+	bloom->Draw(GetRenderTexture("ShadowMap_Shadow"), GetRenderTexture("Bloom_Gauss_Y"), GetDepthTexture("BaseGameScene"), GetDepthTexture("Bloom_Depth"));
+	PostDraw("Bloom_Result");
 
 #pragma endregion
 
@@ -170,6 +171,7 @@ void Game::Update()
 #pragma endregion
 
 #pragma region 被写界深度
+	if (DirectX3dObject::isUpdateOther) {
 		// 被写界深度を適応する前までのポストエフェクトを適応したの最終描画結果の X 方向にガウスをかける１
 		if (PSf_isDraw("DOF")) {
 			PreDraw("DOF_Gauss_X", false);
@@ -188,12 +190,12 @@ void Game::Update()
 			GaussianEffectY2->Draw(GetRenderTexture("DOF_Gauss_X2"), 0.1f);
 			PostDraw("DOF_Gauss_Y2");
 		}
+	}
 		// 被写界深度を適応する
 		PreDraw("DOF_Result", false);
 		DOF->Draw(GetRenderTexture("Bloom_Result"), GetRenderTexture("DOF_Gauss_Y2"), GetRenderTexture("DOF_Gauss_Y"), GetRenderTexture("DOF_Depth"));
 		PostDraw("DOF_Result");
 #pragma endregion
-	}
 	
 	DXBase.ClearDepthBuffer();
 	vignette->Draw(GetRenderTexture("DOF_Result"));
@@ -215,7 +217,7 @@ void Game::Update()
 
 	float AddY = -200;
 
-	/*ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
+	ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200 + AddY), 1);
 	ImGui::Begin("DOF");
 	ImGui::SliderFloat("InterpSize", &InterpSize, 1.0f, 1000.0f);
@@ -232,11 +234,11 @@ void Game::Update()
 	
 	ImGui::SetNextWindowPos(ImVec2(1000, 470 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 60 + AddY), 1);
-	ImGui::Begin("ShadowMap");
+	ImGui::Begin("ShadowMap"); 
 	ImGui::Checkbox("isUse", &ShadowMapUse);
 	ImGui::End();
-	*/
-	/*mGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	
+	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Vignette");
 	ImGui::SliderFloat("Influence", &VignetteInfluence, 0.0f, 10.0f);
@@ -246,8 +248,10 @@ void Game::Update()
 		UseVignette = true;
 	}
 	ImGui::End();
-	*/
-	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
+	
+
+
+	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
 	ImGui::Begin("Config");
 	ImGui::SliderFloat("fps :", &FPS::fps, 0.0f, 200.0f);
@@ -258,7 +262,9 @@ void Game::Update()
 	}
 	else {
 		PSf_Perf = PSf_High;
-	}
+	}*/
+
+
 	/*ImGui::SetNextWindowPos(ImVec2(1000, 0), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 400), 1);
 	ImGui::Begin("Camera");

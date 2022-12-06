@@ -65,6 +65,8 @@ struct ConstBufferDataShadow {
 //3Dオブジェクト型
 struct Object3d {
 	ComPtr<ID3D12Resource> constBuffB0;
+
+	ComPtr<ID3D12Resource> constBuffB00;
 	//アフィン変換情報
 	XMFLOAT4 color = { 1,1,1,1 };
 	XMFLOAT3 rotation = { 0,0,0 };
@@ -74,6 +76,7 @@ struct Object3d {
 	XMFLOAT3 oldscale = { -1,1,1 };
 	XMFLOAT3 oldposition = { -1,0,0 };
 	XMMATRIX matWorld;
+	XMMATRIX matWorld2;
 	Object3d *parent = nullptr;
 	UINT shaderNumber = 0;
 	bool isBillboard = false;//ビルボード

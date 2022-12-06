@@ -9,10 +9,9 @@ void TitleScene::Initialize(SceneCommon* _Common)
 	TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
 	m_WaitTimer = -1; // -1‚ÌŽž‚ÍŽŸƒV[ƒ“‚ÉˆÚs‚µ‚È‚¢
 
-	LoadJsonManager::Instance()->LoadJson("Resource/JSON/TESTJSON.json");
-	int Model = LoadModelOBJ("Torch3", "TEST");
+	//LoadJsonManager::Instance()->LoadJson("Resource/JSON/Test.json");
 
-	test = LoadJsonManager::Instance()->LoadScene("Resource/JSON/TESTJSON.json");
+	//test = LoadJsonManager::Instance()->LoadScene("Resource/JSON/Test.json");
 
 	/*test = DirectX3dObject::CreateObject(GetModelData(Model),
 		XMFLOAT3(0, 0, 0), FBXSHADER);

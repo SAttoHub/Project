@@ -28,5 +28,9 @@ public:
 
 	int GetRenderTexture() { return m_RTV_Texture; }
 	int GetDepthTexture();
+
+	DirectX::XMINT2 GetSize() {
+		return m_Resolution;
+	}
 };
 

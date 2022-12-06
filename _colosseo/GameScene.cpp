@@ -49,33 +49,51 @@ void GameScene::Update()
 					"R : タイトルへ");
 				if (Input::isKeyTrigger(DIK_R)) {
 					m_IsNext = true;
+					Common->m_player.Reset();
+					Common->m_cards.Reset();
+					Common->m_cards.StartTurn();
+					Common->m_Audiences.DeleteAllAudience();
 				}
 			}
 			NowWave--;
 		}
 	}
-	Common->m_player.Update();
-	Common->m_enemys.Update();
-	Common->m_map.Update();
-	Common->m_cards.Update();
-	Common->m_Audiences.Update();
 
-	if (Turn == 2) {
-		Common->m_cards.PlayerTurnUpdate();
-		if (Common->m_cards.TurnEnd) {
-			Turn = 1;
-			Common->m_enemys.StartTurn();
+	if (Common->m_player.GetHP() <= 0) {
+		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+			"R : タイトルへ");
+		if (Input::isKeyTrigger(DIK_R)) {
+			m_IsNext = true;
+			Common->m_player.Reset();
+			Common->m_cards.Reset();
+			Common->m_cards.StartTurn();
+			Common->m_Audiences.DeleteAllAudience();
 		}
 	}
-	else if (Turn == 1) {
-		Common->m_enemys.EnemyTurnUpdate();
-		if (Common->m_enemys.NextTurn()) {
-			Common->m_enemys.m_Enemy[Common->m_enemys.m_Enemy.size() - 1].m_Next = false;
-			Turn = 2;
-			Common->m_cards.StartTurn();
+	if (m_IsNext == false) {
+		Common->m_player.Update();
+		Common->m_enemys.Update();
+		Common->m_map.Update();
+		Common->m_cards.Update();
+		Common->m_Audiences.Update();
 
-			GameCamera::Instance()->Positioning(Common->m_CameraRange, Common->m_CameraAngle, Common->m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
-			GameCamera::Instance()->Targeting(Common->m_map.ChangePos(Common->m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+		if (Turn == 2) {
+			Common->m_cards.PlayerTurnUpdate();
+			if (Common->m_cards.TurnEnd) {
+				Turn = 1;
+				Common->m_enemys.StartTurn();
+			}
+		}
+		else if (Turn == 1) {
+			Common->m_enemys.EnemyTurnUpdate();
+			if (Common->m_enemys.NextTurn()) {
+				Common->m_enemys.m_Enemy[Common->m_enemys.m_Enemy.size() - 1].m_Next = false;
+				Turn = 2;
+				Common->m_cards.StartTurn();
+
+				GameCamera::Instance()->Positioning(Common->m_CameraRange, Common->m_CameraAngle, Common->m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				GameCamera::Instance()->Targeting(Common->m_map.ChangePos(Common->m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+			}
 		}
 	}
 	Common->MoveCamera();
