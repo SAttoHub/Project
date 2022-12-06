@@ -36,6 +36,6 @@ void CommonTime::Draw(int _Index)
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(_Index, m_TimeConstBuffer->GetGPUVirtualAddress());
 }
 
-void CreateRootParameter(CD3DX12_ROOT_PARAMETER* _RootParam) {
+void CommonTime::CreateRootParameter(CD3DX12_ROOT_PARAMETER* _RootParam) {
 	_RootParam->InitAsConstantBufferView(13, 0, D3D12_SHADER_VISIBILITY_ALL);//éûä‘ëççá
 }
