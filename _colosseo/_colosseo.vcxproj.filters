@@ -307,6 +307,9 @@
     <Filter Include="ソース ファイル\Game\GameUI">
       <UniqueIdentifier>{7d4f2424-419f-4676-b3ab-902327be9c52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\CommonTime">
+      <UniqueIdentifier>{454c032e-27d0-4f93-8492-0332fda1d378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -547,6 +550,9 @@
       <Filter>ソース ファイル\Game\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="LoadJsonManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonTime.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -917,6 +923,9 @@
     <ClInclude Include="LoadJsonManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="CommonTime.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\FBXPS.hlsl">
@@ -1166,6 +1175,9 @@
     </None>
     <None Include="Resource\shader\LinePrimitive2D.hlsli">
       <Filter>リソース ファイル\Primitive\2D\Line</Filter>
+    </None>
+    <None Include="Resource\shader\CommonTime.hlsli">
+      <Filter>リソース ファイル\CommonTime</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

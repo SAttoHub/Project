@@ -12,6 +12,9 @@ void Game::Initialize()
 	//マウスカーソルを表示しない
 	CursorShow(false);
 
+	m_CommonTime = std::make_unique<CommonTime>();
+	m_CommonTime->Initialize();
+
 	//被写界深度
 	InterpSize = 380.0f;
 	Focus = 30.0f;
@@ -93,6 +96,7 @@ void Game::Update()
     Primitive3D::Instance()->Update();
 
     //-----------------ここからプログラム記入-----------------//
+	m_CommonTime->Update();
 	Camera::Update();
     game->Update();
     DX.AllObjectUpdate();

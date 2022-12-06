@@ -1,4 +1,5 @@
 #include "PostEffect.hlsli"
+#include "CommonTime.hlsli"
 Texture2D<float4> tex : register(t0);
 Texture2D<float> LightDepth : register(t1); //ÉâÉCÉgÇ©ÇÁ
 Texture2D<float> CameraDepth : register(t2); //ÉJÉÅÉâÇ©ÇÁ
@@ -7,7 +8,6 @@ SamplerState smp : register(s0);
 cbuffer cbuff0 : register(b0)
 {
     matrix mat;
-    float time;
     float flag;
 };
 
@@ -223,7 +223,7 @@ float4 main(GSOutput input) : SV_TARGET
         //Color.rgb *= 1.0f - 0.5f * ShadowRandom(DepthCamera, input.uv, Wpos);
     }
     else {
-        int tTime = int(time / 2.0f) % 30000;
+        int tTime = int(Time[0] / 2.0f) % 30000;
         float2 t = float2(obj_shadow.x + tTime / 3000.0f, obj_shadow.y + tTime / 3000.0f) * 1000.0f;
         float nn = noise(t);
         if (nn < 0.25f) {

@@ -107,6 +107,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CommonTime.cpp" />
     <ClCompile Include="Depth.cpp" />
     <ClCompile Include="Depth2.cpp" />
     <ClCompile Include="DepthOfField.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="CollisionInfo.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionPrimitive.h" />
+    <ClInclude Include="CommonTime.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Depth.h" />
     <ClInclude Include="Depth2.h" />
@@ -724,6 +726,7 @@
   <ItemGroup>
     <None Include="Resource\shader\BasicShaderHeader.hlsli" />
     <None Include="Resource\shader\BoxPrimitive.hlsli" />
+    <None Include="Resource\shader\CommonTime.hlsli" />
     <None Include="Resource\shader\CubePrimitive.hlsli" />
     <None Include="Resource\shader\FBX.hlsli" />
     <None Include="Resource\shader\GraphPrimitive.hlsli" />

@@ -24,7 +24,6 @@ private:
 
 	struct ConstBufferData {
 		XMMATRIX mat; //ïœä∑çsóÒ
-		float time;
 		float UseFlag;
 	};
 	ID3DBlob *errorBlob = nullptr;
@@ -57,7 +56,6 @@ public:
 
 	const float clearColor[4] = { 0.0f, 0.0f,0.0f, 1.0f };
 	float UseFlag;
-	float time = 0.0f;
 	void SetUse(bool isUse);
 
 	void Draw(int TexNum1, int TexNum2, int TexNum3);

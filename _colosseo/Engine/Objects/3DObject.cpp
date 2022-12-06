@@ -64,6 +64,7 @@ void DirectX3dObject::CreateInstancePipiline(ShaderManager* _shader)
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA
 		}
 	};
+
 	PipelineManager::createInstancePipeline(FBXSHADER_INS, _countof(InputLayout), InputLayout,
 		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEVS.hlsl", "main", "vs_5_0"),
 		_shader->GetShaderAndCompile(L"Resource/shader/FBXINSTANCEPS.hlsl", "main", "ps_5_0"));
@@ -1152,9 +1153,9 @@ void Drawobject3d(Object3d *object) {
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1238,9 +1239,9 @@ void DepthDrawobject3d(Object3d *object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Depth_SHEADER].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Depth_SHEADER));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Depth_SHEADER].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Depth_SHEADER));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1305,9 +1306,9 @@ void ShadowDepthDrawobject3d(Object3d *object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[Shadow_Depth_SHEADER].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Shadow_Depth_SHEADER));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[Shadow_Depth_SHEADER].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Shadow_Depth_SHEADER));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1357,9 +1358,9 @@ void DOFDepthDrawobject3d(Object3d *object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[DOF_SHEADER].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(DOF_SHEADER));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[DOF_SHEADER].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(DOF_SHEADER));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1410,9 +1411,9 @@ void Drawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1458,9 +1459,9 @@ void DepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 1].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber + 1));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 1].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber + 1));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1505,9 +1506,9 @@ void ShadowDepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 2].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber + 2));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 2].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber + 2));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1552,9 +1553,9 @@ void DOFDepthDrawobject3d(InstanceObjectsData* object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber + 3].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber + 3));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber + 3].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber + 3));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1598,9 +1599,9 @@ void Drawobject3dOfDefaultLight(Object3d *object)
 	//シザー矩形の設定コマンド
 	DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(WIDTH), LONG(HEIGHT)));
 
-	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::rootsignature[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(object->shaderNumber));
 	//パイプラインステートの設定コマンド
-	DirectXBase::cmdList->SetPipelineState(PipelineManager::pipelinestate[object->shaderNumber].Get());
+	DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(object->shaderNumber));
 
 	//プリミティブ形状の設定コマンド
 	DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

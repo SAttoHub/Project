@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework.h"
 #include "PostEffect.h"
+#include "CommonTime.h"
 
 #include "Gaussian.h"
 #include "DepthOfField.h"
@@ -15,6 +16,8 @@
 class Game : public Framework
 {
 private:
+	// éûä‘ëççá
+	std::unique_ptr<CommonTime> m_CommonTime = nullptr;
 	// ÉKÉEÉXÇ⁄Ç©Çµóp
 	std::unique_ptr<Gaussian> GaussianEffectX = nullptr;
 	std::unique_ptr<Gaussian> GaussianEffectY = nullptr;
