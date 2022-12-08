@@ -40,6 +40,7 @@ private:
 public:
 	//std::vector<Card> m_Cards;
 	My_F_List<Card> m_Cards;
+	std::vector<int> m_Deck;
 
 	int NowPhase = 0;
 	CardType m_UseCardType = CardType::NONE;

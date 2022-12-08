@@ -94,6 +94,7 @@ void Game::Update()
     // WinAPIInput::Update();
     Primitive2D::Instance()->Update();
     Primitive3D::Instance()->Update();
+	PipelineManager::m_NowSetPipeline = -1;
 
     //-----------------‚±‚±‚©‚çƒvƒƒOƒ‰ƒ€‹L“ü-----------------//
 	m_CommonTime->Update();
@@ -219,6 +220,7 @@ void Game::Update()
 	ImGui::End();
 	*/
 
+	/*
 	float AddY = -200;
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
@@ -253,7 +255,7 @@ void Game::Update()
 	}
 	ImGui::End();
 	
-
+	*/
 
 	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);

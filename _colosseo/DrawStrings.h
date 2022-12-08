@@ -87,6 +87,12 @@ private:
 	std::string wide_to_utf8_cppapi(std::wstring const &src);
 	std::wstring multi_to_wide_winapi(std::string const &src);
 	std::string multi_to_utf8_cppapi(std::string const &src);
+
+	struct StringData {
+		std::string str;
+		int c;
+	};
+	std::vector<StringData> datas;
 public:
 	// •¶Žš—ñ‚ð•`‰æ‚·‚é
 	void DrawFormatString(XMFLOAT2 pos1, float height, XMFLOAT4 color, const char *FormatString, ...);

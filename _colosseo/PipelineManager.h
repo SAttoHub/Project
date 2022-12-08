@@ -15,8 +15,6 @@ class PipelineManager
 {
 	ShaderManager *Shader;//シェーダー
 
-	static int m_NowSetPipeline;
-
 	static int PIPELINE_NUM;
 	static ComPtr<ID3DBlob> m_ErrorBlob; //エラーオブジェクト
 
@@ -25,7 +23,7 @@ class PipelineManager
 	//パイプラインステートの生成
 	static ComPtr<ID3D12PipelineState> m_PipelineState[MAX_PIPELINE];
 public:
-
+	static int m_NowSetPipeline;
 	PipelineManager(ShaderManager *Shader);
 	~PipelineManager() {}
 

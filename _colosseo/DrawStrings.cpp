@@ -481,8 +481,25 @@ void DrawStrings::DrawFormatString(XMFLOAT2 pos1, float height, XMFLOAT4 color, 
 #endif
 
     std::string s = pbuf;
-    int c = lenUtf8(multi_to_utf8_cppapi(s));
+    int c = 0;
+    bool flag = false;
+    for (auto& d : datas) {
+        if (d.str == s) {
+            flag = true;
+            c = d.c;
+        }
+    }
+    if (!flag) {
+        c = lenUtf8(multi_to_utf8_cppapi(s));
+    }
     float next = 0;
+
+    if (!flag) {
+        StringData hoge;
+        hoge.str = s;
+        hoge.c = c;
+        datas.push_back(hoge);
+    }
 
     for (int i = 0; i < c; i++) {
         int Num = TexManager::GetStringTexture(&buf[i]);

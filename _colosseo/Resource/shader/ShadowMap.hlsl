@@ -177,6 +177,11 @@ float4 main(GSOutput input) : SV_TARGET
     }
     float DepthCamera = CameraDepth.Sample(smp, input.uv);
 
+    //int AtTime = int(Time[0] / 2.0f) % 30000;
+   // float2 At = float2(input.uv.x + AtTime / 3000.0f, input.uv.y + AtTime / 3000.0f) * 1000.0f;
+    //float Ann = noise(At);
+   // return float4(Ann, Ann, Ann, 1);
+
     // 深度値からワールド座標を復元
     float3 Wpos_hoge = CalcWorldPosFromUVZ(input.uv, DepthCamera, Camera_viewproj_inv);
     float4 Wpos = float4(Wpos_hoge.x, Wpos_hoge.y, Wpos_hoge.z, 1.0f);
@@ -244,6 +249,7 @@ float4 main(GSOutput input) : SV_TARGET
         else if (nn < 0.3f) {
             Color.rgb *= 0.95f;
         }
+
     }
 
 	return Color;
