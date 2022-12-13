@@ -64,29 +64,29 @@ private: // 画像付き箱プリミティブ専用
 	// 画像付き箱プリミティブデータ
 	GraphPrimitive GraphData[MaxGraphPrimitives];
 
-private: // 線プリミティブ専用
-// 線プリミティブ専用シェーダー
-	ID3DBlob *Line_vsBlob = nullptr; //線プリミティブ用頂点シェーダー
-	ID3DBlob *Line_psBlob = nullptr; //線プリミティブ用ピクセルシェーダー
-	ID3DBlob *Line_gsBlob = nullptr; //線プリミティブ用ジオメトリシェーダー
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> LineRootsignature;
-	// パイプラインステート
-	ComPtr<ID3D12PipelineState> LinePipelinestate;
-	// 頂点バッファ
-	ComPtr<ID3D12Resource> LineVertBuff;
-	D3D12_VERTEX_BUFFER_VIEW LinevbView{};
-	// 線プリミティブ専用セットアップ
-	void SetupLinePrimitive();
-	// 箱プリミティブデータ
-	static const int MaxLinePrimitives = 128; // 線プリミティブ最大数
-	LinePrimitive LineData[MaxLinePrimitives];
+//private: // 線プリミティブ専用
+//// 線プリミティブ専用シェーダー
+//	ID3DBlob *Line_vsBlob = nullptr; //線プリミティブ用頂点シェーダー
+//	ID3DBlob *Line_psBlob = nullptr; //線プリミティブ用ピクセルシェーダー
+//	ID3DBlob *Line_gsBlob = nullptr; //線プリミティブ用ジオメトリシェーダー
+//	// ルートシグネチャ
+//	ComPtr<ID3D12RootSignature> LineRootsignature;
+//	// パイプラインステート
+//	ComPtr<ID3D12PipelineState> LinePipelinestate;
+//	// 頂点バッファ
+//	ComPtr<ID3D12Resource> LineVertBuff;
+//	D3D12_VERTEX_BUFFER_VIEW LinevbView{};
+//	// 線プリミティブ専用セットアップ
+//	void SetupLinePrimitive();
+//	// 箱プリミティブデータ
+//	static const int MaxLinePrimitives = 128; // 線プリミティブ最大数
+//	LinePrimitive LineData[MaxLinePrimitives];
 
 public:
 	void Initialize();
 	void Update();
 	void BoxDrawAll();
-	void LineDrawAll();
+	//void LineDrawAll();
 	void GraphDrawAll();
 	void BackGraphDrawAll();
 	//void LineDrawAll();
@@ -99,7 +99,7 @@ public:
 	void DrawGraph(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f }, bool Draw3D = false);
 	void DrawGraphBack(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void DrawGraphBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f }, bool Draw3D = false);
-	void DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color);
+	//void DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color);
 	//void DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color);
 	//void DrawGrid(XMFLOAT3 pos1, XMFLOAT3 pos2, float interval, XMFLOAT4 color);
 

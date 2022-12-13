@@ -161,6 +161,13 @@ void Cards::AddCanSelectChips(XMINT2 MapPos)
 	}
 }
 
+void Cards::AddCanSelectChips_Move(XMINT2 MapPos)
+{
+	if (pMap->InMap(MapPos) && pMap->CostTable[MapPos.x][MapPos.y] < 999) {
+		CanSelectChips.push_back(MapPos);
+	}
+}
+
 void Cards::PlayerTurnUpdate()
 {
 	if (NowPhase == 0) {
@@ -193,18 +200,18 @@ void Cards::CardPhaseUpdate()
 						PreDamage = 1;
 					}
 					else if (m_UseCardType == CardType::DEFAULT_MOVE) {
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -1));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(2, 0));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-2, 0));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 2));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -2));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 1));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 1));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, -1));
-						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, -1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(1, 0));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(-1, 0));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(0, 1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(0, -1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(2, 0));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(-2, 0));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(0, 2));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(0, -2));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(1, 1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(-1, 1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(-1, -1));
+						AddCanSelectChips_Move(pPlayer->GetMapPos() + XMINT2(1, -1));
 						PreDamage = 0;
 
 						for (int x = 0; x < CanSelectChips.size(); x++){

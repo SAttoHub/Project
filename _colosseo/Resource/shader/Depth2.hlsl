@@ -28,8 +28,8 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	float4 texcol = tex.Sample(smp, input.uv);
 	if (texcol.a < 0.1f) {
-		clip(-1);
-		//discard;
+		//clip(-1);
+		discard;
 	}
 	//-----------------シャドウマップ用
 	float4 col = float4(0.0f, 0.0f, 0.0f, 1.0f);

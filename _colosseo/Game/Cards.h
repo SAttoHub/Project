@@ -64,6 +64,7 @@ public:
 
 	bool ExistInCanSelectChips(XMINT2 MapPos);
 	void AddCanSelectChips(XMINT2 MapPos);
+	void AddCanSelectChips_Move(XMINT2 MapPos);
 
 	void PlayerTurnUpdate();
 	void CardPhaseUpdate();

@@ -210,6 +210,7 @@ void Primitive2D::SetupGraphPrimitive()
 	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&GraphPipelinestate));
 }
 
+/*
 void Primitive2D::SetupLinePrimitive()
 {
 	LoadShader(&Line_vsBlob, L"Resource/shader/LinePrimitive2DVertex.hlsl", "main", "vs_5_0");
@@ -296,7 +297,7 @@ void Primitive2D::SetupLinePrimitive()
 	//パイプラインステートの生成
 	result = DirectXBase::dev->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&LinePipelinestate));
 }
-
+*/
 void Primitive2D::Initialize()
 {
 	//頂点バッファの生成
@@ -345,17 +346,17 @@ void Primitive2D::Initialize()
 	}
 #pragma endregion
 #pragma region 線プリミティブ
-	result = DirectXBase::dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(LinePrimitive::Line) * MaxLinePrimitives),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&LineVertBuff)
-	);
-	LinevbView.BufferLocation = LineVertBuff->GetGPUVirtualAddress();
-	LinevbView.SizeInBytes = sizeof(LinePrimitive::Line) * MaxLinePrimitives;
-	LinevbView.StrideInBytes = sizeof(LinePrimitive::Line);
+	//result = DirectXBase::dev->CreateCommittedResource(
+	//	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), //アップロード可能
+	//	D3D12_HEAP_FLAG_NONE,
+	//	&CD3DX12_RESOURCE_DESC::Buffer(sizeof(LinePrimitive::Line) * MaxLinePrimitives),
+	//	D3D12_RESOURCE_STATE_GENERIC_READ,
+	//	nullptr,
+	//	IID_PPV_ARGS(&LineVertBuff)
+	//);
+	//LinevbView.BufferLocation = LineVertBuff->GetGPUVirtualAddress();
+	//LinevbView.SizeInBytes = sizeof(LinePrimitive::Line) * MaxLinePrimitives;
+	//LinevbView.StrideInBytes = sizeof(LinePrimitive::Line);
 #pragma endregion
 	//定数バッファの生成
 	result = DirectXBase::dev->CreateCommittedResource(
@@ -373,7 +374,7 @@ void Primitive2D::Initialize()
 
 	SetupBoxPrimitive();
 	SetupGraphPrimitive();
-	SetupLinePrimitive();
+	//SetupLinePrimitive();
 }
 
 void Primitive2D::Update()
@@ -394,12 +395,12 @@ void Primitive2D::Update()
 		GraphData[i].TextureNumber = 0;
 		GraphData[i].isBack = false;
 	}
-	for (int i = 0; i < MaxLinePrimitives; i++) {
-		LineData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-		LineData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-		LineData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-		LineData[i].Active = false;
-	}
+	//for (int i = 0; i < MaxLinePrimitives; i++) {
+	//	LineData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
+	//	LineData[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
+	//	LineData[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+	//	LineData[i].Active = false;
+	//}
 }
 
 void Primitive2D::BoxDrawAll()
@@ -478,6 +479,7 @@ void Primitive2D::BoxDrawAll()
 	DirectXBase::cmdList->DrawInstanced(activeCount, 1, 0, 0);
 }
 
+/*
 void Primitive2D::LineDrawAll()
 {
 	HRESULT result;
@@ -533,7 +535,7 @@ void Primitive2D::LineDrawAll()
 	//描画コマンド
 	DirectXBase::cmdList->DrawInstanced(activeCount, 1, 0, 0);
 }
-
+*/
 void Primitive2D::GraphDrawAll()
 {
 	HRESULT result;
@@ -687,7 +689,7 @@ void Primitive2D::Draw()
 {
 	BoxDrawAll();
 	GraphDrawAll();
-	LineDrawAll();
+	//LineDrawAll();
 }
 
 void Primitive2D::BackDraw()
@@ -926,6 +928,7 @@ void Primitive2D::DrawGraphBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber,
 	GraphData[Num].isBack = true;
 }
 
+/*
 void Primitive2D::DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color)
 {
 	int Num = 0;
@@ -957,7 +960,7 @@ void Primitive2D::DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color)
 	this->LineData[Num].Data.color = color;
 	LineData[Num].Active = true;
 }
-
+*/
 void Primitive2D::LoadShader(ID3DBlob **blob, LPCWSTR FileName, LPCSTR EntryPointName, LPCSTR ModelName)
 {
 	HRESULT result;

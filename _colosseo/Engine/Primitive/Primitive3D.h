@@ -67,7 +67,7 @@ public:
 class CubePrimData : public PrimitiveData {
 public:
 	// 箱プリミティブデータ
-	static const int MaxPrimitives = 32; // 箱プリミティブ最大数
+	static const int MaxPrimitives = 1; // 箱プリミティブ最大数
 	CubePrimitive3D Data[MaxPrimitives];
 	// 箱プリミティブ専用セットアップ
 	void SetupCubePrimitive();
@@ -76,7 +76,7 @@ public:
 class LinePrimData : public PrimitiveData {
 public:
 	// 線プリミティブデータ
-	static const int MaxPrimitives = 512; // 線プリミティブ最大数
+	static const int MaxPrimitives = 1024; // 線プリミティブ最大数
 	LinePrimitive3D Data[MaxPrimitives];
 	// 線プリミティブ専用セットアップ
 	void SetupLinePrimitive();
@@ -123,12 +123,13 @@ public:
 	ID3DBlob *errorBlob = nullptr;
 
 private: // 箱プリミティブ
-	const bool CubeUse = true;
+	const bool CubeUse = false;
 	std::unique_ptr<CubePrimData> CubePrim = nullptr;
 
 private: // Lineプリミティブ
 	const bool LineUse = true;
 	std::unique_ptr<LinePrimData> LinePrim = nullptr;
+	int LineTexture;
 
 private: // 正四面体プリミティブ
 	const bool TetraUse = false;

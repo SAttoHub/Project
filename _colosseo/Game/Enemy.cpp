@@ -138,21 +138,28 @@ void Enemy::Update()
 					m_CoolTime = 15;
 					std::vector<Cell> result(m_Route.route_list.begin(), m_Route.route_list.end());
 					Cell p = result[0];
-					SetMapPos(XMINT2(p.x, p.y));
-					CameraTargetOnMe(true, WAIT_TIMER_VALUE_MOVE);
-					m_Route.route_list.pop_front();
-					if (m_Route.route_list.size() <= 1) {
-						if (m_Count != 0) {
-							m_MyTurn = false;
-							m_Next = true;
-							m_Act = AC_Attack;
-						}
-						else {
-							m_MyTurn = false;
-							m_Next = true;
-							m_Act = AC_Wait;
+					if (m_pMap->CostTable[p.x][p.y] != 999) {
+						SetMapPos(XMINT2(p.x, p.y));
+						m_Route.route_list.pop_front();
+						if (m_Route.route_list.size() <= 1) {
+							if (m_Count != 0) {
+								m_MyTurn = false;
+								m_Next = true;
+								m_Act = AC_Attack;
+							}
+							else {
+								m_MyTurn = false;
+								m_Next = true;
+								m_Act = AC_Wait;
+							}
 						}
 					}
+					else {
+						m_MyTurn = false;
+						m_Next = true;
+						m_Act = AC_Wait;
+					}
+					CameraTargetOnMe(true, WAIT_TIMER_VALUE_MOVE);
 				}
 				else if (m_Count == 0) {
 					m_MyTurn = false;

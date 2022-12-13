@@ -67,93 +67,93 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 	}
 	// FBX_Bump
 	{
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
-		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV2; //テクスチャ用
-		descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1レジスタ
-		//ルートパラメータの設定
-		CD3DX12_ROOT_PARAMETER rootparams[6] = {};
-		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
-		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
-		rootparams[5].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
-		CreatePipeline(FBX_Bump_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
-			_countof(InputLayout), InputLayout,
-			_countof(rootparams), rootparams,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXBumpPS.hlsl", "main", "ps_5_0"));
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV2; //テクスチャ用
+		//descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1レジスタ
+		////ルートパラメータの設定
+		//CD3DX12_ROOT_PARAMETER rootparams[6] = {};
+		//rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		//rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		//rootparams[5].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
+		//CreatePipeline(FBX_Bump_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
+		//	_countof(InputLayout), InputLayout,
+		//	_countof(rootparams), rootparams,
+		//	DXGI_FORMAT_R8G8B8A8_UNORM,
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXBumpPS.hlsl", "main", "ps_5_0"));
 	}
 	// FBX_height
 	{
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
-		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV2; //テクスチャ用
-		descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1レジスタ
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV3; //テクスチャ用
-		descRangeSRV3.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2); //t2レジスタ
-		//ルートパラメータの設定
-		CD3DX12_ROOT_PARAMETER rootparams[7] = {};
-		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
-		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
-		rootparams[5].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
-		rootparams[6].InitAsDescriptorTable(1, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
-		CreatePipeline(FBX_height_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
-			_countof(InputLayout), InputLayout,
-			_countof(rootparams), rootparams,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXHeightPS.hlsl", "main", "ps_5_0"));
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0レジスタ
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV2; //テクスチャ用
+		//descRangeSRV2.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1レジスタ
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV3; //テクスチャ用
+		//descRangeSRV3.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2); //t2レジスタ
+		////ルートパラメータの設定
+		//CD3DX12_ROOT_PARAMETER rootparams[7] = {};
+		//rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		//rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		//rootparams[5].InitAsDescriptorTable(1, &descRangeSRV2, D3D12_SHADER_VISIBILITY_ALL);
+		//rootparams[6].InitAsDescriptorTable(1, &descRangeSRV3, D3D12_SHADER_VISIBILITY_ALL);
+		//CreatePipeline(FBX_height_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
+		//	_countof(InputLayout), InputLayout,
+		//	_countof(rootparams), rootparams,
+		//	DXGI_FORMAT_R8G8B8A8_UNORM,
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXHeightPS.hlsl", "main", "ps_5_0"));
 	}
 	// FBX_Line
 	{
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
-		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-		//ルートパラメータの設定
-		CD3DX12_ROOT_PARAMETER rootparams[5] = {};
-		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
-		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
-		CreatePipeline(FBX_Line_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
-			_countof(InputLayout), InputLayout,
-			_countof(rootparams), rootparams,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXLinePS.hlsl", "main", "ps_5_0"),
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXLineGS.hlsl", "main", "gs_5_0"));
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+		////ルートパラメータの設定
+		//CD3DX12_ROOT_PARAMETER rootparams[5] = {};
+		//rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		//rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		//CreatePipeline(FBX_Line_SHADER, BlendMode::BM_NONE, D3D12_CULL_MODE_BACK,
+		//	_countof(InputLayout), InputLayout,
+		//	_countof(rootparams), rootparams,
+		//	DXGI_FORMAT_R8G8B8A8_UNORM,
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXLinePS.hlsl", "main", "ps_5_0"),
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXLineGS.hlsl", "main", "gs_5_0"));
 	}
 	// FBX_Sea
 	{
-		//デスクリプタテーブルの設定
-		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
-		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-		//ルートパラメータの設定
-		CD3DX12_ROOT_PARAMETER rootparams[6] = {};
-		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
-		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
-		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
-		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
-		CreatePipeline(Sea_SHADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_BACK,
-			_countof(InputLayout), InputLayout,
-			_countof(rootparams), rootparams,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
-			Shader->GetShaderAndCompile(L"Resource/shader/SeaPS.hlsl", "main", "ps_5_0"));
+		////デスクリプタテーブルの設定
+		//CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		//descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+		////ルートパラメータの設定
+		//CD3DX12_ROOT_PARAMETER rootparams[6] = {};
+		//rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		//rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		//rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		//rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
+		//CreatePipeline(Sea_SHADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_BACK,
+		//	_countof(InputLayout), InputLayout,
+		//	_countof(rootparams), rootparams,
+		//	DXGI_FORMAT_R8G8B8A8_UNORM,
+		//	Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
+		//	Shader->GetShaderAndCompile(L"Resource/shader/SeaPS.hlsl", "main", "ps_5_0"));
 	}
 	// FBX_Depth
 	{

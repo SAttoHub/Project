@@ -33,6 +33,17 @@ private:
 	Object3d *m_StageModel = nullptr;
 	Object3d *m_StageModel_saku = nullptr;
 
+	Object3d* m_StageModel_floor = nullptr;
+
+	InstanceObjectsData* m_Pillar = nullptr;
+	struct pillarData {
+		XMFLOAT3 Pos;
+		XMFLOAT3 Rot;
+		XMFLOAT3 Scale;
+	};
+	static const int PILLAR_MAX = 4;
+	pillarData m_PillarDatas[PILLAR_MAX];
+
 	InstanceObjectsData* torch = nullptr;
 	InstanceObjectsData* torchBloom = nullptr;
 	struct torchData {
@@ -79,6 +90,8 @@ public:
 
 	void HitCheckMouseRayMapPosition();
 
+	static const int m_MAP_SIZE_X = 14;
+	static const int m_MAP_SIZE_Z = 14;
 	XMFLOAT3 Center;
 
 	void DrawGuide(XMINT2 MapPos, XMFLOAT4 Color, GuidePriority Priority, bool isDrawSide = true);

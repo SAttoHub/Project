@@ -2,7 +2,7 @@
 
 Player::Player()
 {
-	m_MapPos = { 0,0 };
+	m_MapPos = { 3,3 };
 	m_HP = 100;
 	m_MaxHP = 100;
 
@@ -56,6 +56,6 @@ void Player::Draw()
 
 void Player::Reset()
 {
-	m_MapPos = { 0,0 };
+	m_MapPos = { 3,3 };
 	m_HP = 100;
 }

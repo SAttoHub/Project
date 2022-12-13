@@ -256,9 +256,9 @@ void Game::Update()
 	ImGui::End();
 	
 	*/
-
-	/*ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddY), 1);
-	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddY), 1);
+	/*float AddH = -200;
+	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddH), 1);
+	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddH), 1);
 	ImGui::Begin("Config");
 	ImGui::SliderFloat("fps :", &FPS::fps, 0.0f, 200.0f);
 	ImGui::Checkbox("HighPerformance", &HighPerformance);

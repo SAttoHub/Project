@@ -60,8 +60,8 @@ Map::Map()
 	m_StageModel->scale.x = 8.0f;
 	m_StageModel->scale.y = 8.0f;
 	m_StageModel->scale.z = 8.0f;
-	m_StageModel->position.x = 32.0f * 5.0f / 4.0f;
-	m_StageModel->position.z = 32.0f * 5.0f / 4.0f;
+	m_StageModel->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
 	m_StageModel->UseShadow = true;
 	m_StageModel->UseDOF = true;
 
@@ -72,12 +72,53 @@ Map::Map()
 	m_StageModel_saku->scale.x = 8.0f;
 	m_StageModel_saku->scale.y = 8.0f;
 	m_StageModel_saku->scale.z = 8.0f;
-	m_StageModel_saku->position.x = 32.0f * 5.0f / 4.0f;
-	m_StageModel_saku->position.z = 32.0f * 5.0f / 4.0f;
+	m_StageModel_saku->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_saku->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
 	m_StageModel_saku->UseShadow = true;
 	m_StageModel_saku->UseDOF = true;
 
-	XMFLOAT3 hoge = { 32.0f * 5.0f / 4.0f, 0.0f,  32.0f * 5.0f / 4.0f };
+	int modelDataSand = LoadModelOBJ("sandfloor", "stage");
+	m_StageModel_floor = DirectX3dObject::CreateObject(GetModelData(modelDataSand),
+		XMFLOAT3(0, 0, 0), FBXSHADER);
+	m_StageModel_floor->rotation.y = 90.0f;
+	m_StageModel_floor->scale.x = 8.0f;
+	m_StageModel_floor->scale.y = 8.0f;
+	m_StageModel_floor->scale.z = 8.0f;
+	m_StageModel_floor->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_floor->position.y = -0.5f;
+	m_StageModel_floor->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
+	m_StageModel_floor->UseShadow = true;
+	m_StageModel_floor->UseDOF = true;
+
+	// Pillar
+	{
+		XMFLOAT3 Center = { 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f, 0.0f,  32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f };
+		for (int i = 0; i < PILLAR_MAX; i++) {
+			m_PillarDatas[i].Pos = Center;
+			m_PillarDatas[i].Rot = XMFLOAT3(0.0f, 90.0f, 0.0f);
+			m_PillarDatas[i].Scale = XMFLOAT3(6.0f, 6.0f, 6.0f);
+		}
+		m_PillarDatas[0].Pos = XMFLOAT3(Center.x - 20.0f, Center.y, Center.z + 20.0f);
+		m_PillarDatas[1].Pos = XMFLOAT3(Center.x - 20.0f, Center.y, Center.z - 20.0f);
+		m_PillarDatas[2].Pos = XMFLOAT3(Center.x + 20.0f, Center.y, Center.z + 20.0f);
+		m_PillarDatas[3].Pos = XMFLOAT3(Center.x + 20.0f, Center.y, Center.z - 20.0f);
+
+		int modelDataPillar = LoadModelOBJ("pillar", "stage");
+		m_Pillar = DirectX3dObject::CreateInstanceObject(GetModelData(modelDataPillar),
+			XMFLOAT3(0, 0, 0), FBXSHADER_INS, PILLAR_MAX, PILLAR_MAX);
+		m_Pillar->UseShadow = true;
+		m_Pillar->UseDOF = true;
+
+		for (int i = 0; i < PILLAR_MAX; i++) {
+			m_Pillar->object[i].position = m_PillarDatas[i].Pos;
+			m_Pillar->object[i].rotation = m_PillarDatas[i].Rot;
+			m_Pillar->object[i].scale = m_PillarDatas[i].Scale;
+		}
+	}
+	//
+
+
+	XMFLOAT3 hoge = { 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f, 0.0f,  32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f };
 	for (int i = 0; i < TORCH_MAX; i++) {
 		m_TorchDatas[i].Pos = hoge;
 		m_TorchDatas[i].Rot = XMFLOAT3(0.0f, 90.0f, 0.0f);
@@ -153,22 +194,44 @@ ChipData* Map::Get(XMINT2 Pos)
 
 void Map::Initialize()
 {
-	m_Data.resize(10);
+	m_Data.resize(m_MAP_SIZE_X);
 	for (auto &dataX : m_Data) {
-		dataX.resize(10);
+		dataX.resize(m_MAP_SIZE_Z);
 	}
 	for (int x = 0; x < m_Data.size(); x++) {
 		for (int z = 0; z < m_Data[x].size(); z++) {
 			m_Data[x][z].m_Pos = XMINT3(x, 0, z);
+			for (int p = 0; p < PILLAR_MAX; p++) {
+				if (m_PillarDatas[p].Pos.x == float(x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE / 2.0f) &&
+					m_PillarDatas[p].Pos.z == float(z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE / 2.0f)) {
+					m_Data[x][z].Cost = 9999;
+				}
+			}
 		}
 	}
-	CostTable.resize(10);
+	m_Data[0][0].Cost = 9999;
+	m_Data[1][0].Cost = 9999;
+	m_Data[0][1].Cost = 9999;
+
+	m_Data[13][0].Cost = 9999;
+	m_Data[12][0].Cost = 9999;
+	m_Data[13][1].Cost = 9999;
+
+	m_Data[0][13].Cost = 9999;
+	m_Data[0][12].Cost = 9999;
+	m_Data[1][13].Cost = 9999;
+
+	m_Data[13][13].Cost = 9999;
+	m_Data[12][13].Cost = 9999;
+	m_Data[13][12].Cost = 9999;
+
+	CostTable.resize(m_MAP_SIZE_X);
 	for (auto &dataX : CostTable) {
-		dataX.resize(10);
+		dataX.resize(m_MAP_SIZE_Z);
 	}
 	for (int x = 0; x < CostTable.size(); x++) {
 		for (int z = 0; z < CostTable[x].size(); z++) {
-			CostTable[x][z] = 1;
+			CostTable[x][z] = m_Data[x][z].Cost;
 		}
 	}
 	isHitChip = false;
@@ -206,13 +269,17 @@ void Map::Draw()
 {
 	Drawobject3d(m_StageModel);
 	Drawobject3d(m_StageModel_saku);
+	Drawobject3d(m_StageModel_floor);
 	//Drawobject3d(m_StageModel_tree);
 	Drawobject3d(torch);
 	Drawobject3d(torchBloom);
+	Drawobject3d(m_Pillar);
 
 	for (auto &dataX : m_Data) {
 		for (auto &dataY : dataX) {
-			dataY.Draw();
+			if (dataY.Cost != 9999) {
+				dataY.Draw();
+			}
 		}
 	}
 
@@ -245,26 +312,32 @@ void Map::ShadowDraw()
 {
 	ShadowDepthDrawobject3d(m_StageModel);
 	ShadowDepthDrawobject3d(m_StageModel_saku);
+	ShadowDepthDrawobject3d(m_StageModel_floor);
 	//ShadowDepthDrawobject3d(m_StageModel_tree);
 	ShadowDepthDrawobject3d(torch);
+	ShadowDepthDrawobject3d(m_Pillar);
 }
 
 void Map::DepthDraw()
 {
 	DepthDrawobject3d(m_StageModel);
 	DepthDrawobject3d(m_StageModel_saku);
+	DepthDrawobject3d(m_StageModel_floor);
 	//DepthDrawobject3d(m_StageModel_tree);
 	DepthDrawobject3d(torch);
 	DepthDrawobject3d(torchBloom);
+	DepthDrawobject3d(m_Pillar);
 }
 
 void Map::DOFDepthDraw()
 {
 	DOFDepthDrawobject3d(m_StageModel);
 	DOFDepthDrawobject3d(m_StageModel_saku);
+	DOFDepthDrawobject3d(m_StageModel_floor);
 	//DOFDepthDrawobject3d(m_StageModel_tree);
 	DOFDepthDrawobject3d(torch);
 	DOFDepthDrawobject3d(ChipGuide);
+	DOFDepthDrawobject3d(m_Pillar);
 }
 
 void Map::BloomDraw()
@@ -302,7 +375,7 @@ void Map::ResetCostTable()
 {
 	for (int x = 0; x < CostTable.size(); x++) {
 		for (int z = 0; z < CostTable[x].size(); z++) {
-			CostTable[x][z] = 1;
+			CostTable[x][z] = m_Data[x][z].Cost;
 		}
 	}
 }
@@ -369,6 +442,9 @@ void Map::HitCheckMouseRayMapPosition()
 
 void Map::DrawGuide(XMINT2 MapPos, XMFLOAT4 Color, GuidePriority Priority, bool isDrawSide)
 {
+	if (m_Data[MapPos.x][MapPos.y].Cost > 999) {
+		return;
+	}
 	if (!InMap(MapPos)) {
 		return;
 	}

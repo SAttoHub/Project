@@ -51,8 +51,8 @@ void SceneCommon::MoveCamera()
 
 	const float MIN_CAMERA_RANGE = 30.0f;
 	const float MAX_CAMERA_RANGE = 90.0f;
-	const float MIN_CAMERA_HEIGHT = 30.0f;
-	const float MAX_CAMERA_HEIGHT = 90.0f;
+	const float MIN_CAMERA_HEIGHT = 15.0f;
+	const float MAX_CAMERA_HEIGHT = 75.0f;
 	if (Input::isKeyTrigger(DIK_W)) {
 		if (m_CameraRange > MIN_CAMERA_RANGE) m_CameraRange -= 5.0f;
 		if (m_CameraHeight > MIN_CAMERA_HEIGHT) m_CameraHeight -= 5.0f;

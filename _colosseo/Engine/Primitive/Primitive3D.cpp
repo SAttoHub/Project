@@ -1,5 +1,6 @@
 #include "Primitive3D.h"
 #include "..\..\Camera.h"
+#include "..\..\TexManager.h"
 
 void Primitive3D::Initialize()
 {
@@ -107,6 +108,8 @@ void Primitive3D::Initialize()
 	if (TetraUse)	TetraPrim->SetupTetrahedronPrimitive();
 	if (OctaUse)	OctaPrim->SetupOctahedronPrimitive();
 	if (IcosaUse)	IcosaPrim->SetupIcosahedronPrimitive();
+
+	LineTexture = TexManager::LoadTexture("Resource/image/line.png");
 }
 
 void Primitive3D::Update()
@@ -268,6 +271,11 @@ void Primitive3D::LineDrawAll()
 	DirectXBase::cmdList->IASetVertexBuffers(0, 1, &LinePrim->vbView);
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
+	//シェーダーリソースビュー
+	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+		LineTexture,
+		DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 	//描画コマンド
 	DirectXBase::cmdList->DrawInstanced(activeCount, 1, 0, 0);
 }
@@ -749,6 +757,7 @@ void CubePrimData::SetupCubePrimitive()
 	//ブレンドステートの設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	gpipeline.BlendState.AlphaToCoverageEnable = true;
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -862,9 +871,13 @@ void LinePrimData::SetupLinePrimitive()
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	//深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 	//ルートパラメータの設定
-	CD3DX12_ROOT_PARAMETER rootparams[1] = {};
+	CD3DX12_ROOT_PARAMETER rootparams[2] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//テクスチャサンプラーの設定[
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc{};
 	samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);

@@ -41,7 +41,7 @@ static void DrawBox3D(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color) {
 /// <param name="pos2">Šî€‚Æ‚È‚é’¸“_À•W‚Q</param>
 /// <param name="color">F</param>
 static void DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color) {
-	Primitive2D::Instance()->DrawLine(pos1, pos2, color);
+	//Primitive2D::Instance()->DrawLine(pos1, pos2, color);
 }
 
 #pragma region DrawGraph

@@ -12,6 +12,7 @@ private:
 public:
 	static const float CHIP_SIZE;
 	XMINT3 m_Pos = XMINT3();
+	int Cost = 1;
 
 	void Draw();
 };

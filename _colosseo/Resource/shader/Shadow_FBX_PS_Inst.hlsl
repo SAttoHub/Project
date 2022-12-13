@@ -36,8 +36,8 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	float4 texcol = tex.Sample(smp, input.uv);
 	if (texcol.a < 0.1f) {
-		clip(-1);
-		//discard;
+		//clip(-1);
+		discard;
 	}
 	uint index = input.InstanceID;
 	matrix world = data[index].world;
