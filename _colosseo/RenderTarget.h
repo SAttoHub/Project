@@ -22,7 +22,7 @@ public:
 	RenderTarget();
 	~RenderTarget();
 
-	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = {WINDOW_WIDTH, WINDOW_HEIGHT});
+	void Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = { WINDOW_WIDTH, WINDOW_HEIGHT }, DirectX::XMFLOAT4 _ClearColor = XMFLOAT4());
 	void PreDraw(bool Clear);
 	void PostDraw();
 

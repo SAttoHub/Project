@@ -16,10 +16,15 @@ RenderTarget::~RenderTarget()
 {
 }
 
-void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution)
+void RenderTarget::Initialize(DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution, DirectX::XMFLOAT4 _ClearColor)
 {
 	m_Resolution = resolution;
 	m_IsUseDepth = IsUseDepth;
+	m_ClearColor[0] = _ClearColor.x;
+	m_ClearColor[1] = _ClearColor.y;
+	m_ClearColor[2] = _ClearColor.z;
+	m_ClearColor[3] = 1.0f;
+
 	// ê∂ê¨ê¨å˜îªíËóp
 	HRESULT result;
 

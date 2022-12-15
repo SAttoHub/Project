@@ -70,15 +70,6 @@ float4 main(VSOutput input) : SV_TARGET
 	if (InColor.w == -1.0f) {
 		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
 	}
-	if (InColor.r == -1.0f) {
-		return 1.0f;
-	}
-	if (InColor.g == -1.0f) {
-		return 1.0f;
-	}
-	if (InColor.b == -1.0f) {
-		return 1.0f;
-	}
 
 	// Œõ‘ò“x
 	const float shininess = 4.0f;

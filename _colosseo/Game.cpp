@@ -63,7 +63,7 @@ void Game::Initialize()
 	CreateRenderTarget("DOF_Depth", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("Camera_Depth", DXGI_FORMAT_R32_FLOAT, true);
 	CreateRenderTarget("Light_Depth", DXGI_FORMAT_R32_FLOAT, true, DirectX::XMINT2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
-	CreateRenderTarget("BaseGameScene", DXGI_FORMAT_R8G8B8A8_UNORM, true);
+	CreateRenderTarget("BaseGameScene", DXGI_FORMAT_R8G8B8A8_UNORM, true, {1280, 720}, DirectX::XMFLOAT4(0.5843f, 0.7529f, 0.9255f, 1.0f));
 	CreateRenderTarget("ShadowMap_Shadow", DXGI_FORMAT_R8G8B8A8_UNORM, true);
 	CreateRenderTarget("Bloom_Base_Color", DXGI_FORMAT_R8G8B8A8_UNORM, true, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	CreateRenderTarget("Bloom_Depth", DXGI_FORMAT_R32_FLOAT, true, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));

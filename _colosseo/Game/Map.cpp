@@ -442,10 +442,10 @@ void Map::HitCheckMouseRayMapPosition()
 
 void Map::DrawGuide(XMINT2 MapPos, XMFLOAT4 Color, GuidePriority Priority, bool isDrawSide)
 {
-	if (m_Data[MapPos.x][MapPos.y].Cost > 999) {
+	if (!InMap(MapPos)) {
 		return;
 	}
-	if (!InMap(MapPos)) {
+	if (m_Data[MapPos.x][MapPos.y].Cost > 999) {
 		return;
 	}
 	if (m_DrawGuideCount > GUIDE_MAX - 1) {

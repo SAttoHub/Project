@@ -150,15 +150,6 @@ float4 main(VSOutput input) : SV_TARGET
 	if (InColor.w == -1.0f) {
 		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
 	}
-	if (InColor.r == -1.0f) {
-		return 1.0f;
-	}
-	if (InColor.g == -1.0f) {
-		return 1.0f;
-	}
-	if (InColor.b == -1.0f) {
-		return 1.0f;
-	}
 
 	float DisAlpha = 1.0f;
 	float dist = distance(input.worldpos.xyz, cameraPos);
@@ -342,12 +333,14 @@ float4 main(VSOutput input) : SV_TARGET
 	if (shadecolor.b > 0.6f) shadecolor.b = 1.0f;
 	if (shadecolor.b <= 0.6f) shadecolor.b = 0.6f;*/
 
-	if (hsv.b < 0.6f) {
+	/*if (hsv.b < 0.6f) {
 		hsv.b = 0.6f;
 	}
 	else {
 		hsv.b = 0.9f;
-	}
+	}*/
+
+	hsv.b = (float)(hsv.b < 0.6f) ? 0.6f : 0.9f;
 	float3 RGB = hsv2rgb(hsv);
 	shadecolor.r = RGB.r;
 	shadecolor.g = RGB.g;

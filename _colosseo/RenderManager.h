@@ -24,7 +24,7 @@ public:
 	/// <param name="RenderName">生成するレンダーターゲット名</param>
 	/// <param name="RTV_Format">RTVのフォーマット</param>
 	/// <param name="IsUseDepth">深度を使用するか</param>
-	void CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = { WINDOW_WIDTH, WINDOW_HEIGHT });
+	void CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = { WINDOW_WIDTH, WINDOW_HEIGHT }, DirectX::XMFLOAT4 _ClearColor = XMFLOAT4());
 
 	/// <summary>
 	/// RenderNameを指定して描画前処理を行う
@@ -63,8 +63,8 @@ public:
 /// <param name="RenderName">生成するレンダーターゲット名</param>
 /// <param name="RTV_Format">RTVのフォーマット</param>
 /// <param name="IsUseDepth">深度を使用するか</param>
-static void CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = { WINDOW_WIDTH, WINDOW_HEIGHT }) {
-	RenderManager::Instance()->CreateRenderTarget(RenderName, RTV_Format, IsUseDepth, resolution);
+static void CreateRenderTarget(const char *RenderName, DXGI_FORMAT RTV_Format, bool IsUseDepth, DirectX::XMINT2 resolution = { WINDOW_WIDTH, WINDOW_HEIGHT }, DirectX::XMFLOAT4 _ClearColor = XMFLOAT4()) {
+	RenderManager::Instance()->CreateRenderTarget(RenderName, RTV_Format, IsUseDepth, resolution, _ClearColor);
 }
 
 /// <summary>
