@@ -390,6 +390,12 @@ static ComPtr<ID3D12Resource> CreateBufferResource(D3D12_HEAP_TYPE type, UINT bu
 void InitalizeObject3d(Object3d *object);
 void InitalizeInstanceObject3d(InstanceObjectsData* object);
 
+static DWORD WINAPI T_Test(void* object) {
+	ShaderManager* _shader = (ShaderManager*)object;
+	DirectX3dObject::CreateInstancePipiline(_shader);
+	return 1;
+}
+
 //void TDraw(Object3d* object);
 
 /// <summary>

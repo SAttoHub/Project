@@ -160,6 +160,15 @@ float4 main(VSOutput input) : SV_TARGET
 		return 1.0f;
 	}
 
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 10.0f) {
+		DisAlpha = dist / 10.0f;
+		if (DisAlpha < 0.0f) {
+			DisAlpha = 0.0f;
+		}
+	}
+
 	// 光沢度
 	const float shininess = 4.0f;
 	// 頂点から視点への方向ベクトル
@@ -349,7 +358,8 @@ float4 main(VSOutput input) : SV_TARGET
 
 	if (texcolor.a == 0) discard;
 
-
+	float4 ResultColor = shadecolor * texcolor * InColor;
+	ResultColor.a = ResultColor.a * DisAlpha;
 	// シェーディングによる色で描画
-	return shadecolor * texcolor * InColor;
+	return ResultColor;
 }

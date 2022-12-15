@@ -117,8 +117,11 @@ void DirectX3dObject::Draw() {
 
 void DirectX3dObject::TransConstBuffer() {
 
-	for (int i = 0; i < (int)object3ds.size(); i++) {
-		UpdateObject3d(object3ds[i]);
+	//for (int i = 0; i < (int)object3ds.size(); i++) {
+	//	UpdateObject3d(object3ds[i]);
+	//}
+	for (auto& data : object3ds) {
+		UpdateObject3d(&data);
 	}
 }
 

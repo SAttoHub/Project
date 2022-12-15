@@ -26,13 +26,13 @@ void SceneCommon::Initialize()
 
 	m_CamDir = C_FRONTRINGHT;
 	m_CameraAngle = 45.0f;
-	m_CameraHeight = 30.0f;
+	m_CameraHeight = 15.0f;
 	m_CameraRange = 30.0f;
 }
 
 void SceneCommon::MoveCamera()
 {
-	if (!(Input::isKeyTrigger(DIK_D) || Input::isKeyTrigger(DIK_A) || Input::isKeyTrigger(DIK_W) || Input::isKeyTrigger(DIK_S))) {
+	if (!(Input::isKeyTrigger(DIK_D) || Input::isKeyTrigger(DIK_A) || Input::isKeyTrigger(DIK_W) || Input::isKeyTrigger(DIK_S) || Input::isKeyTrigger(DIK_Q))) {
 		return;
 	}
 	if (Input::isKeyTrigger(DIK_D)) {
@@ -62,5 +62,9 @@ void SceneCommon::MoveCamera()
 		if (m_CameraHeight < MAX_CAMERA_HEIGHT) m_CameraHeight += 5.0f;
 	}
 
-	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+	if (Input::isKeyTrigger(DIK_Q)) {
+		m_AddHeightValue == 0.0f ? m_AddHeightValue = 15.0f : m_AddHeightValue = 0.0f;
+	}
+
+	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight + m_AddHeightValue, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 }

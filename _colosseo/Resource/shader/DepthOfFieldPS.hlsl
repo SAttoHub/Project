@@ -14,6 +14,16 @@ cbuffer cbuff0 : register(b0)
 	float Flag;
 };
 
+float sa(float v1, float v2) {
+	if (v1 > v2) {
+		return v1 - v2;
+	}
+	else {
+		return v2 - v1;
+	}
+	return 0.0f;
+}
+
 float4 main(GSOutput input) : SV_TARGET
 {
 	if (Flag == 0.0f) {
@@ -37,6 +47,7 @@ float4 main(GSOutput input) : SV_TARGET
 	// 深度値を取得する
 	DepthCol = DepthTexture.Sample(smp, input.uv);
 	float Depth = DepthCol.r;
+	//return float4(Depth, Depth, Depth, 1);
 
 	// フォーカス情報からぼやけ率を算出
 	if (Depth < ParamF.x) {
@@ -47,7 +58,7 @@ float4 main(GSOutput input) : SV_TARGET
 			Fade = 0.0f;
 		}
 		else {
-			Fade = (Depth - ParamF.y) / (1.0f - ParamF.y);
+			Fade = sa(Depth, ParamF.y) / sa(1.0f, ParamF.y);
 		}
 	}
 

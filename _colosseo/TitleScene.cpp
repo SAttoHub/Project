@@ -30,9 +30,9 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	//DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), TitleTex);
-	//DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 400), 64, XMFLOAT4(1, 1, 1, 1),
-	//	"SPACE : スタート");
+	DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), TitleTex);
+	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 400), 64, XMFLOAT4(1, 1, 1, 1),
+		"SPACE : スタート");
 	Common->m_map.Draw();
 	Cursor::Instance()->Draw();
 	for (auto& data : test) {

@@ -249,14 +249,26 @@ float4 main(VSOutput input) : SV_TARGET
 	if (shadecolor.b > 0.6f) shadecolor.b = 0.9f;
 	if (shadecolor.b <= 0.6f) shadecolor.b = 0.6f;
 
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 10.0f) {
+		DisAlpha = dist / 10.0f;
+		if (DisAlpha < 0.0f) {
+			DisAlpha = 0.0f;
+		}
+	}
+	float4 ResultColor = shadecolor * texcolor * InColor;
+	ResultColor.a = ResultColor.a * DisAlpha;
 	//smoothstep(circleShadows[i].factorAngleCos.y, circleShadows[i].factorAngleCos.x, cos);
 
 
-	if (texcolor.a == 0) discard;
+	if (ResultColor.a <= 0) {
+		discard;
+	}
 
 
 	// シェーディングによる色で描画
-	return shadecolor * texcolor * InColor;
+	return ResultColor;
 }
 
 
@@ -443,8 +455,18 @@ float4 Guide(VSOutput input) : SV_TARGET
 		ResultColor.a = 0.51f + nn / 3.0f;
 	}
 
-	if (ResultColor.a == 0.0f) discard;
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 10.0f) {
+		DisAlpha = dist / 10.0f;
+		if (DisAlpha < 0.0f) {
+			DisAlpha = 0.0f;
+		}
+	}
 
+	ResultColor.a = ResultColor.a * DisAlpha;
+
+	if (ResultColor.a == 0.0f) discard;
 
 	// シェーディングによる色で描画
 	return ResultColor;

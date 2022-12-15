@@ -35,6 +35,7 @@ public:
 	};
 	float m_CameraAngle;
 	float m_CameraHeight;
+	float m_AddHeightValue;
 	float m_CameraRange;
 	Camera_Dir m_CamDir;
 	void MoveCamera();

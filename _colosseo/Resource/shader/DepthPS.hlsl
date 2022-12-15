@@ -33,6 +33,15 @@ cbuffer time : register(b4)
 	float Flag;
 };
 
+float sa(float v1, float v2) {
+	if (v1 > v2) {
+		return v1 - v2;
+	}
+	else {
+		return v2 - v1;
+	}
+	return 0.0f;
+}
 
 float4 main(VSOutput input) : SV_TARGET
 {
@@ -45,10 +54,16 @@ float4 main(VSOutput input) : SV_TARGET
 	if (tex.Sample(smp, input.uv).a == 0.0f) {
 		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
+
+	matrix viewR = view;
+	viewR[0][3] = viewR[0][3] - 180.0f;
+	viewR[1][3] = viewR[1][3] - 180.0f;
+	viewR[2][3] = viewR[2][3] - 180.0f;
+
 	////---------------被写界深度用
-	float4 obj = mul(input.worldpos, view); //ビュー変換
-	float4 cp = float4(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f);
-	float4 cam = mul(cp, view); //ビュー変換
+	float4 obj = mul(input.worldpos, viewR); //ビュー変換
+	float4 cp = float4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	float4 cam = mul(cp, viewR); //ビュー変換
 
 	float3 DOFArea = float3(InterpSize, Focus, FocusSize);
 	float3 ParamF = float3(0.0f, 0.0f, 0.0f);
@@ -65,15 +80,24 @@ float4 main(VSOutput input) : SV_TARGET
 	float4 col = float4(0.0f,0.0f,0.0f,1.0f);
 
 	// 被写界深度の範囲内を 0.0f ～ 1.0f に変換
-	if ((cam.z - obj.z) < ParamF.x) {
+	if (sa(cam.z, obj.z) < ParamF.x) {
 		col.r = 0.0f;
 	}
-	else if ((cam.z - obj.z) > ParamF.y) {
+	else if (sa(cam.z, obj.z) > ParamF.y) {
 		col.r = 1.0f;
 	}
 	else {
-		col.r = ((cam.z - obj.z) - ParamF.x) * ParamF.z;
+		col.r = (sa(cam.z, obj.z) - ParamF.x) * ParamF.z;
 	}
+
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 5.0f) {
+		discard;
+	}
+
+	///float sss = sa(cam.z, obj.z);
+	//return float4(sss / 500.0f, sss / 500.0f, sss / 500.0f, 1);
 
 	return col;
 }

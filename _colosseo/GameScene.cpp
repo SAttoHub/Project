@@ -41,7 +41,7 @@ void GameScene::Update()
 		}
 		else if (NowWave == 3) {
 			m_BattleWave->StartWave("Test4");
-		}
+		}  
 		else {
 			EndCount++;
 			if (EndCount > 30) {

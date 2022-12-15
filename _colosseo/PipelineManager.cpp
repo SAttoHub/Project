@@ -241,7 +241,7 @@ void PipelineManager::CreatePipeline(int _PIPELINE_NUM, BlendMode _BlendMode, D3
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	gpipeline.RasterizerState.CullMode = _CullMode;
 	//ブレンドステートの設定
-	gpipeline.BlendState.AlphaToCoverageEnable = true;
+	gpipeline.BlendState.AlphaToCoverageEnable = false;
 	//gpipeline.BlendState.IndependentBlendEnable = true;
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画

@@ -52,6 +52,12 @@ float4 main(VSOutput input) : SV_TARGET
 	//-----------------シャドウマップ用
 	float4 obj_shadow = mul(input.worldpos, Light_viewproj); //ビュー変換
 
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 5.0f) {
+		discard;
+	}
+
 	col.r = input.svpos.z / input.svpos.w;
 
 	return col;

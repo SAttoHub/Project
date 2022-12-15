@@ -45,6 +45,11 @@ float4 main(VSOutput input) : SV_TARGET
 	float4 col = float4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//float4 obj_shadow = mul(input.worldpos, Light_viewproj); //ƒrƒ…[•ÏŠ·
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 5.0f) {
+		discard;
+	}
 
 	col.r = input.svpos.z / input.svpos.w;
 

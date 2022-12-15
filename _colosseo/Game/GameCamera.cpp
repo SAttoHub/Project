@@ -38,7 +38,7 @@ void GameCamera::Initialize()
 
 void GameCamera::Update()
 {
-		if (Input::isKeyTrigger(DIK_Q)) {
+		if (Input::isKeyTrigger(DIK_P)) {
 			Mode = CM_Debug;
 			Camera::isCameraStop = false;
 			DebugCamPos = XMFLOAT3(0, 0, 0);
@@ -237,6 +237,7 @@ void GameCamera::ChangeHeight(float Height, int Flame)
 
 void GameCamera::Targeting(XMFLOAT3 Target, int Flame)
 {
+	Target.y = Target.y + 4.0f;
 	m_TargetData.AgoTarget = m_TargetData.Target;
 	m_TargetData.MarkTarget = Target;
 	m_TargetData.NowFlame = 0;
@@ -246,6 +247,7 @@ void GameCamera::Targeting(XMFLOAT3 Target, int Flame)
 
 void GameCamera::TargetingInstantly(XMFLOAT3 Target)
 {
+	Target.y = Target.y + 4.0f;
 	m_TargetData.AgoTarget = Target;
 	m_TargetData.MarkTarget = Target;
 	m_TargetData.NowFlame = 0;

@@ -13,6 +13,8 @@ void Framework::Initialize()
     DXBase.DirectXReset(win);
     audio.XAudioInit();
     Pipeline = new PipelineManager(&Shader);
+    //static DWORD dwID;
+  //  CreateThread(NULL, 0, T_Test, &Shader, 0, &dwID);
     DirectX3dObject::CreateInstancePipiline(&Shader);
     Cam = new Camera(win);
 

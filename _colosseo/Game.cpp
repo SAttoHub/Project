@@ -50,7 +50,7 @@ void Game::Initialize()
 	shadowMapping->Initialize(ShadowMapUse);
 
 	//ビネット
-	VignetteInfluence = 0.2f;
+	VignetteInfluence = 0.13f;
 	UseVignette = true;
 	vignette = std::make_unique<Vignette>();
 	vignette->Initialize(VignetteInfluence, UseVignette);
@@ -220,7 +220,7 @@ void Game::Update()
 	ImGui::End();
 	*/
 
-	/*
+	
 	float AddY = -200;
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
@@ -231,7 +231,7 @@ void Game::Update()
 	ImGui::SliderFloat("FocusSize", &FocusSize, 1.0f, 1000.0f);
 	ImGui::Checkbox("isUse", &UseFlag);
 	if (ImGui::Button("Reset")) {
-		InterpSize = 20.0f;
+		InterpSize = 380.0f;
 		Focus = 30.0f;
 		FocusSize = 20.0f;
 		UseFlag = true;
@@ -250,12 +250,12 @@ void Game::Update()
 	ImGui::SliderFloat("Influence", &VignetteInfluence, 0.0f, 10.0f);
 	ImGui::Checkbox("isUse", &UseVignette);
 	if (ImGui::Button("Reset")) {
-		VignetteInfluence = 0.2f;
+		VignetteInfluence = 0.13f;
 		UseVignette = true;
 	}
 	ImGui::End();
 	
-	*/
+	
 	/*float AddH = -200;
 	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddH), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 120 + AddH), 1);

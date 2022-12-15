@@ -31,7 +31,7 @@ Enemy::Enemy()
 	m_Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
 	m_Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
 
-	m_pModel->color.w = -1.0f;
+	//m_pModel->color.w = -1.0f;
 	m_pModel->alwaysUpdate = true;
 }
 
@@ -73,7 +73,7 @@ void Enemy::Initialize()
 	m_Image[6] = TexManager::LoadTexture("Resource/image/Chara/CharaEn7.png");
 	m_Image[7] = TexManager::LoadTexture("Resource/image/Chara/CharaEn8.png");
 
-	m_pModel->color.w = -1.0f;
+	//m_pModel->color.w = -1.0f;
 	m_pModel->alwaysUpdate = true;
 }
 

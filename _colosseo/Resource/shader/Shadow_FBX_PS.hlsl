@@ -46,5 +46,11 @@ float4 main(VSOutput input) : SV_TARGET
 
 	col.r = input.svpos.z / input.svpos.w;
 
+	float DisAlpha = 1.0f;
+	float dist = distance(input.worldpos.xyz, cameraPos);
+	if (dist < 5.0f) {
+		discard;
+	}
+
 	return col;
 }
