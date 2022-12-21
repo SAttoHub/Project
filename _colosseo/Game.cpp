@@ -221,7 +221,7 @@ void Game::Update()
 	*/
 
 	
-	float AddY = -200;
+	/*float AddY = -200;
 
 	ImGui::SetNextWindowPos(ImVec2(1000, 260 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 200 + AddY), 1);
@@ -236,9 +236,9 @@ void Game::Update()
 		FocusSize = 20.0f;
 		UseFlag = true;
 	}
-	ImGui::End();
+	ImGui::End();*/
 	
-	ImGui::SetNextWindowPos(ImVec2(1000, 470 + AddY), 1);
+	/*ImGui::SetNextWindowPos(ImVec2(1000, 470 + AddY), 1);
 	ImGui::SetNextWindowSize(ImVec2(250, 60 + AddY), 1);
 	ImGui::Begin("ShadowMap"); 
 	ImGui::Checkbox("isUse", &ShadowMapUse);
@@ -254,7 +254,7 @@ void Game::Update()
 		UseVignette = true;
 	}
 	ImGui::End();
-	
+	*/
 	
 	/*float AddH = -200;
 	ImGui::SetNextWindowPos(ImVec2(1000, 540 + AddH), 1);

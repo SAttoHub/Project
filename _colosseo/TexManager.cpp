@@ -136,9 +136,9 @@ int TexManager::GetStringTexture(TCHAR *moji)
 
 	// フォントを読み込む
 	// フォントを使えるようにする
-	DESIGNVECTOR design;
+	DESIGNVECTOR design = DESIGNVECTOR();
 	AddFontResourceEx(
-		TEXT("Resource/HANDGOTN.TTF"), //ttfファイルへのパス
+		TEXT("Resource/APJapanesefontF.ttf"), //ttfファイルへのパス
 		FR_PRIVATE,
 		&design
 	);
@@ -153,7 +153,7 @@ int TexManager::GetStringTexture(TCHAR *moji)
 		CLIP_DEFAULT_PRECIS,
 		PROOF_QUALITY,
 		FIXED_PITCH | FF_MODERN,
-		TEXT("装甲明朝")
+		TEXT("あんずもじ湛")
 	};
 	HFONT hFont = CreateFontIndirect(&lf);
 	if (!(hFont))
@@ -195,24 +195,28 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	//	&design
 	//);
 
-	TexNum < TextureSRVCount ? TexNum++ : 0;
-	TextureData[TexNum].TexNum = TexNum;
-	TextureData[TexNum].colorData.x = 1.0f;
-	TextureData[TexNum].colorData.y = 1.0f;
-	TextureData[TexNum].colorData.z = 1.0f;
-	TextureData[TexNum].colorData.w = 1.0f;
-	TextureData[TexNum].FileName = string(&ss).c_str();
-	TextureData[TexNum].tag = ss;
-	TextureData[TexNum].Mcode = code;
-	TextureData[TexNum].gm = GM;
-	TextureData[TexNum].tm = TM;
+	//TexNum < TextureSRVCount ? TexNum++ : 0;
+	if (TexNum < TextureSRVCount) {
+		TexNum += 1;
+		TextureData[size_t(TexNum)].TexNum = TexNum;
+		TextureData[size_t(TexNum)].colorData.x = 1.0f;
+		TextureData[size_t(TexNum)].colorData.y = 1.0f;
+		TextureData[size_t(TexNum)].colorData.z = 1.0f;
+		TextureData[size_t(TexNum)].colorData.w = 1.0f;
+		TextureData[size_t(TexNum)].FileName = string(&ss).c_str();
+		TextureData[size_t(TexNum)].tag = ss;
+		TextureData[size_t(TexNum)].Mcode = code;
+		TextureData[size_t(TexNum)].gm = GM;
+		TextureData[size_t(TexNum)].tm = TM;
+	}
 	//テクスチャデータの生成
 	const int TextureWidth = (GM.gmBlackBoxX + 3) / 4 * 4;
 	const int TextureHeight = GM.gmBlackBoxY;
-	TextureData[TexNum].TextureSize.x = float(TextureWidth);
-	TextureData[TexNum].TextureSize.y = float(TextureHeight);
+	TextureData[size_t(TexNum)].TextureSize.x = float(TextureWidth);
+	TextureData[size_t(TexNum)].TextureSize.y = float(TextureHeight);
 	const int ImageDataSize = TextureWidth * TextureHeight;
-	XMFLOAT4 *imageData = new XMFLOAT4[ImageDataSize];
+	XMFLOAT4* imageData = nullptr;
+	imageData = new XMFLOAT4[ImageDataSize];
 	//ピクセルの色をセット
 	int grad = 16;
 	/*for (int i = 0; i < ImageDataSize; ++i) {

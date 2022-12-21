@@ -19,6 +19,7 @@ private:
 	XMFLOAT2 m_RefPoint;
 
 	int Img = 0;
+	int StateImg = 0;
 public:
 	PlayerParamUI();
 	~PlayerParamUI();

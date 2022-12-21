@@ -22,7 +22,21 @@ void GameScene::Update()
 {
 	Cursor::Instance()->Update();
 
-	if (Common->m_enemys.GetEnemyCount() == 0) {
+	if (Common->m_player.GetHP() <= 0) {
+		EndCount++;
+		if (EndCount > 30) {
+			DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+				"R : ƒ^ƒCƒgƒ‹‚Ö");
+			if (Input::isKeyTrigger(DIK_R)) {
+				m_IsNext = true;
+				Common->m_player.Reset();
+				Common->m_cards.Reset();
+				Common->m_cards.StartTurn();
+				Common->m_Audiences.DeleteAllAudience();
+			}
+		}
+	}
+	else if (Common->m_enemys.GetEnemyCount() == 0) {
 		NowWave++;
 		if (NowWave == 1) {
 			m_BattleWave->StartWave("Test2");

@@ -129,7 +129,7 @@ private: // 箱プリミティブ
 private: // Lineプリミティブ
 	const bool LineUse = true;
 	std::unique_ptr<LinePrimData> LinePrim = nullptr;
-	int LineTexture;
+	int LineTexture = 0;
 
 private: // 正四面体プリミティブ
 	const bool TetraUse = false;

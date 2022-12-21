@@ -6,6 +6,7 @@
 #include "..\DrawStrings.h"
 
 #include "ActionManager.h"
+#include "GameCamera.h"
 
 //----------------------------------------------------------------
 // リアクション一覧
@@ -211,7 +212,16 @@ public:
 	/// _Valuw分のダメージを受ける
 	/// </summary>
 	/// <param name="_Value">ダメージ量</param>
-	void Damage(int _Value) { m_HP -= _Value; }
+	void Damage(int _Value) { m_HP -= _Value; };
+
+	/// <summary>
+	/// _Valuw分のダメージを受ける
+	/// </summary>
+	/// <param name="_Value">ダメージ量</param>
+	void DamageShake(int _Value) { 
+		m_HP -= _Value;
+		GameCamera::Instance()->Shake(5, 14);
+	};
 
 	/// <summary>
 	/// 現在生存しているか

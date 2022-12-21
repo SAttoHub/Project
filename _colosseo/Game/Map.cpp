@@ -174,6 +174,12 @@ Map::Map()
 		ChipGuide->object[i].scale = XMFLOAT3(3.95f, 3.95f, 3.95f);
 		ChipGuide->object[i].isDraw = false;
 	}
+
+	m_Data.clear();
+	m_Data.resize(m_MAP_SIZE_X);
+	for (auto& dataX : m_Data) {
+		dataX.resize(m_MAP_SIZE_Z);
+	}
 }
 
 Map::~Map()
@@ -194,10 +200,16 @@ ChipData* Map::Get(XMINT2 Pos)
 
 void Map::Initialize()
 {
-	m_Data.resize(m_MAP_SIZE_X);
+	//m_Data.reserve(30);
+	//m_Data.shrink_to_fit();
+
+	/*m_Data.resize(m_MAP_SIZE_X);
 	for (auto &dataX : m_Data) {
 		dataX.resize(m_MAP_SIZE_Z);
-	}
+	}*/
+	/*for (int x = 0; x < m_MAP_SIZE_X; x++) {
+		m_Data[x].resize(m_MAP_SIZE_Z);
+	}*/
 	for (int x = 0; x < m_Data.size(); x++) {
 		for (int z = 0; z < m_Data[x].size(); z++) {
 			m_Data[x][z].m_Pos = XMINT3(x, 0, z);

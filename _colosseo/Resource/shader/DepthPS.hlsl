@@ -34,13 +34,9 @@ cbuffer time : register(b4)
 };
 
 float sa(float v1, float v2) {
-	if (v1 > v2) {
-		return v1 - v2;
-	}
-	else {
-		return v2 - v1;
-	}
-	return 0.0f;
+	float m1 = max(v1, v2);
+	float m2 = min(v1, v2);
+	return m1 - m2;
 }
 
 float4 main(VSOutput input) : SV_TARGET

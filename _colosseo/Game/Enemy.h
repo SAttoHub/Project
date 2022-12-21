@@ -49,6 +49,7 @@ public:
 	std::vector<AllResult> AttackAct(int Index, XMINT2 Pos);
 
 	std::string m_Name; // –¼‘O
+	std::string m_JobName = ""; // –¼‘O
 
 public:
 	bool m_MyTurn = false;

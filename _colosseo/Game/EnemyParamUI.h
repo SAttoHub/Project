@@ -18,6 +18,7 @@ private:
 	Cards* pCards;
 	XMFLOAT2 m_RefPoint;
 
+	int StateImg = 0;
 public:
 	EnemyParamUI();
 	~EnemyParamUI();

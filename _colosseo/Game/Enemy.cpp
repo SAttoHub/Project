@@ -171,7 +171,7 @@ void Enemy::Update()
 				m_CoolTime--;
 				if (m_CoolTime == 0) {
 					m_CoolTime = 15;
-					pPlayer->Damage(1);
+					pPlayer->DamageShake(1);
 					pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
 					m_MyTurn = false;
 					m_Next = true;

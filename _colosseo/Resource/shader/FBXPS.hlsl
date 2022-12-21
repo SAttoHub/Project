@@ -147,17 +147,19 @@ float4 main(VSOutput input) : SV_TARGET
 	//return shadecolor * texcolor;
 	// テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);
+
 	if (InColor.w == -1.0f) {
 		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
 	}
+	/*if (InColor.w == -1.0f) {
+		return texcolor * float4(InColor.r, InColor.g, InColor.b, 1.0f);
+	}*/
 
 	float DisAlpha = 1.0f;
 	float dist = distance(input.worldpos.xyz, cameraPos);
 	if (dist < 10.0f) {
 		DisAlpha = dist / 10.0f;
-		if (DisAlpha < 0.0f) {
-			DisAlpha = 0.0f;
-		}
+		DisAlpha = max(DisAlpha, 0.0f);
 	}
 
 	// 光沢度
@@ -190,6 +192,8 @@ float4 main(VSOutput input) : SV_TARGET
 	float _SpecularBlur = 0.05f;
 	//アンビエントが暗すぎたので値を直接入れる
 
+	
+	float4 PointShade = float4(0, 0, 0, 1);
 
 	// 平行光源
 	for (int i = 0; i < DIRLIGHT_NUM; i++) {
@@ -209,9 +213,9 @@ float4 main(VSOutput input) : SV_TARGET
 			specular = ttt * m_specular;
 			//影響がマイナスにならないように補正する
 			float3 result = (diffuse + specular) * dirLights[i].lightcolor;
-			if (result.r < 0.0f) result.r = 0.0f;
-			if (result.g < 0.0f) result.g = 0.0f;
-			if (result.b < 0.0f) result.b = 0.0f;
+			result.r = max(result.r, 0.0f);
+			result.g = max(result.g, 0.0f);
+			result.b = max(result.b, 0.0f);
 			// 全て加算する
 			shadecolor.rgb += result;
 		}
@@ -242,12 +246,12 @@ float4 main(VSOutput input) : SV_TARGET
 			specular = ttt * m_specular;
 			//影響がマイナスにならないように補正する
 			float3 result = atten * (diffuse + specular) * pointLights[i].lightcolor;
-			if (result.r < 0.0f) result.r = 0.0f;
-			if (result.g < 0.0f) result.g = 0.0f;
-			if (result.b < 0.0f) result.b = 0.0f;
+			result.r = max(result.r, 0.0f);
+			result.g = max(result.g, 0.0f);
+			result.b = max(result.b, 0.0f);
 			// 全て加算する
 			if (d  < 10.0f && d  > -10.0f) {
-				shadecolor.rgb += result;
+				PointShade.rgb += result;
 			}
 		}
 	}
@@ -286,9 +290,9 @@ float4 main(VSOutput input) : SV_TARGET
 			specular = ttt * m_specular;
 			//影響がマイナスにならないように補正する
 			float3 result = atten * (diffuse + specular) * spotLights[i].lightcolor;
-			if (result.r < 0.0f) result.r = 0.0f;
-			if (result.g < 0.0f) result.g = 0.0f;
-			if (result.b < 0.0f) result.b = 0.0f;
+			result.r = max(result.r, 0.0f);
+			result.g = max(result.g, 0.0f);
+			result.b = max(result.b, 0.0f);
 			// 全て加算する
 			shadecolor.rgb += atten * (diffuse + specular) * spotLights[i].lightcolor;
 		}
@@ -345,6 +349,12 @@ float4 main(VSOutput input) : SV_TARGET
 	shadecolor.r = RGB.r;
 	shadecolor.g = RGB.g;
 	shadecolor.b = RGB.b;
+
+	shadecolor = shadecolor + PointShade;
+	shadecolor.r = min(shadecolor.r, 1.0f);
+	shadecolor.g = min(shadecolor.g, 1.0f);
+	shadecolor.b = min(shadecolor.b, 1.0f);
+	shadecolor.a = min(shadecolor.a, 1.0f);
 	
 	//smoothstep(circleShadows[i].factorAngleCos.y, circleShadows[i].factorAngleCos.x, cos);
 

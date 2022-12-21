@@ -29,7 +29,7 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 private:
-	
+	std::vector<std::vector<ChipData>> m_Data;
 	Object3d *m_StageModel = nullptr;
 	Object3d *m_StageModel_saku = nullptr;
 
@@ -64,7 +64,7 @@ public:
 	Map();
 	~Map();
 
-	std::vector<std::vector<ChipData>> m_Data;
+	
 	std::vector<std::vector<int>> CostTable;
 	XMINT2 NowHitChip = XMINT2();
 	XMINT2 NowSelectChip = XMINT2(-1, -1);

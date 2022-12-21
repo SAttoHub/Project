@@ -15,19 +15,19 @@ class TexManager {
 	static UINT TexNum;
 public:
 	struct Texture {
-		int TexNum;
-		ComPtr<ID3D12Resource> TextureBuff;
-		TexMetadata metadata;
-		ScratchImage scratchImg;
-		const Image *img;
+		int TexNum = 0;
+		ComPtr<ID3D12Resource> TextureBuff = nullptr;
+		TexMetadata metadata = TexMetadata();
+		ScratchImage scratchImg = ScratchImage();
+		const Image *img = nullptr;
 		XMFLOAT4 colorData = { -1,-1,-1,-1 };
-		string FileName;
-		XMFLOAT2 TextureSize;
+		string FileName = "";
+		XMFLOAT2 TextureSize = XMFLOAT2();
 		// フォント用
-		char tag;
-		GLYPHMETRICS gm;
-		TEXTMETRIC tm;
-		UINT Mcode; // 文字コード保存
+		char tag = 0;
+		GLYPHMETRICS gm = GLYPHMETRICS();
+		TEXTMETRIC tm = TEXTMETRIC();
+		UINT Mcode = 0; // 文字コード保存
 	};
 	TexManager();
 	~TexManager();

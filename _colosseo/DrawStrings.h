@@ -89,8 +89,8 @@ private:
 	std::string multi_to_utf8_cppapi(std::string const &src);
 
 	struct StringData {
-		std::string str;
-		int c;
+		std::string str = "";
+		int c = 0;
 	};
 	std::vector<StringData> datas;
 public:
