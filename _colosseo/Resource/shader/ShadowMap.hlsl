@@ -198,7 +198,7 @@ float4 main(GSOutput input) : SV_TARGET
         Color.rgb *= 0.5f;
     }
     else if(DepthCamera < 0.999999f) {
-        int tTime = int(Time[0] / 2.0f) % 30000;
+        uint tTime = uint(Time[0] / 2.0f) % 30000;
         float2 t = float2(obj_shadow.x + tTime / 3000.0f, obj_shadow.y + tTime / 3000.0f) * 1000.0f;
         float nn = noise(t);
         if (nn < 0.25f) {

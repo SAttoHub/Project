@@ -64,6 +64,7 @@ public:
 	Map();
 	~Map();
 
+	const int IMMOVABLE_CHIP_COST = 9999;
 	
 	std::vector<std::vector<int>> CostTable;
 	XMINT2 NowHitChip = XMINT2();
@@ -84,6 +85,7 @@ public:
 
 	XMFLOAT3 ChangePos(XMINT2 MapPos);
 	bool InMap(XMINT2 MapPos);
+	bool IsImmovableChip(XMINT2 MapPos);
 
 	void SetCostTableOnUnitPos(XMINT2 MapPos, int Cost);
 	void ResetCostTable();

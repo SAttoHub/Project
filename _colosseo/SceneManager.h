@@ -4,13 +4,14 @@
 #include "SceneBase.h"
 #include "Singleton.h"
 #include "SceneCommon.h"
+#include "Engine/Common/Containers/MyFList.h"
 
 
 class SceneManager : public Singleton <SceneManager>
 {
 	friend class Singleton <SceneManager>;
 private:
-	std::vector<std::shared_ptr<SceneBase>> m_Scenes;
+	My_F_List<std::shared_ptr<SceneBase>> m_Scenes;
 	SceneCommon Common;
 private:
 

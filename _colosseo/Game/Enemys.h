@@ -3,6 +3,7 @@
 #include "Enemy.h"
 
 #include "NoviceEnemy.h"
+#include "MagicEnemy.h"
 
 class Player;
 
@@ -25,7 +26,7 @@ public:
 	void SetMap(Map *Map);
 	void SetPlayer(Player *player);
 
-	void GenerateEnemy(XMINT2 MapPos);
+	void GenerateEnemy(XMINT2 MapPos, int Type);
 	Enemy *GetEnemy(XMINT2 MapPos);
 	int GetEnemyIndex(XMINT2 MapPos);
 	int GetEnemyCount() { return int(m_Enemy.size()); }

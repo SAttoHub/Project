@@ -286,15 +286,15 @@ public:
 // リアクション関連
 //----------------------------------------------------------------
 
+protected:
+	// 現在のリアクション状態
+	Reactions m_NowReaction = Reactions::Reac_None;
 private:
 	// ダメージリアクションで動く距離
 	static const float DAMAGE_REACTION_OFFSET_RANGE;
 
 	// ダメージリアクションの総フレーム数
 	static const int DAMAGE_REACTION_TIME;
-
-	// 現在のリアクション状態
-	Reactions m_NowReaction = Reactions::Reac_None;
 
 	// [一時保存用]　現在実行中のリアクションの総フレーム数
 	int m_ReactionTimeMax = 0;

@@ -22,13 +22,22 @@ void Enemys::SetPlayer(Player *player)
 	pPlayer = player;
 }
 
-void Enemys::GenerateEnemy(XMINT2 MapPos)
+void Enemys::GenerateEnemy(XMINT2 MapPos, int Type)
 {
-	NoviceEnemy en;
-	en.SetMapPos(MapPos);
-	en.SetMap(pMap);
-	en.SetPlayer(pPlayer);
-	m_Enemy.emplace_back(en);
+	if (Type == 1) {
+		NoviceEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
+	else if (Type == 2) {
+		MagicEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
 }
 
 Enemy *Enemys::GetEnemy(XMINT2 MapPos)
@@ -198,7 +207,7 @@ void Enemys::RandamEnemyGenerate(int Count)
 		RandPos.y = GetRand(0, 9);
 		while (1) {
 			if (RandPos != pPlayer->GetMapPos() && GetEnemy(RandPos) == nullptr) {
-				GenerateEnemy(RandPos);
+				GenerateEnemy(RandPos, 1);
 				break;
 			}
 			else {

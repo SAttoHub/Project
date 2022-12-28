@@ -48,6 +48,7 @@ struct AllResult {
 
 class Enemys;
 class Player;
+class Map;
 
 //-------------------------------------------------------------------------------------------------------------
 // çUåÇä«óù
@@ -57,10 +58,17 @@ class ActionManager
 	using XMINT2 = DirectX::XMINT2;
 	static Enemys *pEnemys;
 	static Player *pPlayer;
+	static Map* pMap;
 
 public:
-	void Init(Enemys *pEn, Player *pPl);
-	static std::vector<AllResult> Action(XMINT2 Pos, int Damage, KnockBack KnB, Abnormality Abn, int AbnTurn);
+	enum ACT_UNIT_TYPE {
+		AUT_PL,
+		AUT_EN
+	};
+
+public:
+	void Init(Enemys *pEn, Player *pPl, Map* pM);
+	static std::vector<AllResult> Action(XMINT2 Pos, int Damage, KnockBack KnB, Abnormality Abn, int AbnTurn, ACT_UNIT_TYPE AUT_Type);
 
 };
 

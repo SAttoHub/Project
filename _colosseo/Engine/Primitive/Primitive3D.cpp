@@ -115,49 +115,49 @@ void Primitive3D::Initialize()
 void Primitive3D::Update()
 {
 	if (CubeUse) {
-		for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
-			CubePrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-			CubePrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-			CubePrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-			CubePrim->Data[i].Data.Lighting = false; // ライティングが有効か
-			CubePrim->Data[i].Active = false;
+		for (auto& data : CubePrim->Data) {
+			data.Data.pos1 = XMFLOAT3{ 0,0,0 };
+			data.Data.pos2 = XMFLOAT3{ 0,0,0 };
+			data.Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			data.Data.Lighting = false; // ライティングが有効か
+			data.Active = false;
 		}
 	}
 	if (LineUse) {
-		for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
-			LinePrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-			LinePrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-			LinePrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-			LinePrim->Data[i].Active = false;
+		for (auto& data : LinePrim->Data) {
+			data.Data.pos1 = XMFLOAT3{ 0,0,0 };
+			data.Data.pos2 = XMFLOAT3{ 0,0,0 };
+			data.Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			data.Active = false;
 		}
 	}
 	if (OctaUse) {
-		for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
-			OctaPrim->Data[i].Data.pos = XMFLOAT3{ 0,0,0 };
-			OctaPrim->Data[i].Data.Radius = 0;
-			OctaPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-			OctaPrim->Data[i].Data.Lighting = false; // ライティングが有効か
-			OctaPrim->Data[i].Active = false;
+		for (auto& data : OctaPrim->Data) {
+			data.Data.pos = XMFLOAT3{ 0,0,0 };
+			data.Data.Radius = 0;
+			data.Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			data.Data.Lighting = false; // ライティングが有効か
+			data.Active = false;
 		}
 	}
 	if (IcosaUse) {
-		for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
-			IcosaPrim->Data[i].Data.pos = XMFLOAT3{ 0,0,0 };
-			IcosaPrim->Data[i].Data.Radius = 0;
-			IcosaPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-			IcosaPrim->Data[i].Data.Lighting = false; // ライティングが有効か
-			IcosaPrim->Data[i].Active = false;
+		for (auto& data : IcosaPrim->Data) {
+			data.Data.pos = XMFLOAT3{ 0,0,0 };
+			data.Data.Radius = 0;
+			data.Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			data.Data.Lighting = false; // ライティングが有効か
+			data.Active = false;
 		}
 	}
 	if (TetraUse) {
-		for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
-			TetraPrim->Data[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
-			TetraPrim->Data[i].Data.pos2 = XMFLOAT3{ 0,0,0 };
-			TetraPrim->Data[i].Data.pos3 = XMFLOAT3{ 0,0,0 };
-			TetraPrim->Data[i].Data.pos4 = XMFLOAT3{ 0,0,0 };
-			TetraPrim->Data[i].Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
-			TetraPrim->Data[i].Data.Lighting = false; // ライティングが有効か
-			TetraPrim->Data[i].Active = false;
+		for (auto& data : TetraPrim->Data) {
+			data.Data.pos1 = XMFLOAT3{ 0,0,0 };
+			data.Data.pos2 = XMFLOAT3{ 0,0,0 };
+			data.Data.pos3 = XMFLOAT3{ 0,0,0 };
+			data.Data.pos4 = XMFLOAT3{ 0,0,0 };
+			data.Data.color = XMFLOAT4{ 0,0,0,0 }; // プリミティブの色
+			data.Data.Lighting = false; // ライティングが有効か
+			data.Active = false;
 		}
 	}
 }
@@ -177,14 +177,14 @@ void Primitive3D::CubeDrawAll()
 	CubePrimitive3D::Cube *vertMap = nullptr;
 	result = CubePrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
-			if (CubePrim->Data[i].Active) {
-				vertMap->pos1 =		 CubePrim->Data[i].Data.pos1;
-				vertMap->pos2 =		 CubePrim->Data[i].Data.pos2;
-				vertMap->Scale =	 CubePrim->Data[i].Data.Scale;
-				vertMap->Rotate =	 CubePrim->Data[i].Data.Rotate;
-				vertMap->color =	 CubePrim->Data[i].Data.color;
-				vertMap->Lighting =	 CubePrim->Data[i].Data.Lighting;
+		for (auto& data : CubePrim->Data) {
+			if (data.Active) {
+				vertMap->pos1 =		 data.Data.pos1;
+				vertMap->pos2 =		 data.Data.pos2;
+				vertMap->Scale =	 data.Data.Scale;
+				vertMap->Rotate =	 data.Data.Rotate;
+				vertMap->color =	 data.Data.color;
+				vertMap->Lighting =	 data.Data.Lighting;
 				vertMap++;
 			}
 		}
@@ -230,8 +230,8 @@ void Primitive3D::LineDrawAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
-		if (LinePrim->Data[i].Active) {
+	for (auto& data : LinePrim->Data) {
+		if (data.Active) {
 			activeCount++;
 		}
 	}
@@ -241,11 +241,11 @@ void Primitive3D::LineDrawAll()
 	LinePrimitive3D::Line *vertMap = nullptr;
 	result = LinePrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
-			if (LinePrim->Data[i].Active) {
-				vertMap->pos1 = LinePrim->Data[i].Data.pos1;
-				vertMap->pos2 = LinePrim->Data[i].Data.pos2;
-				vertMap->color = LinePrim->Data[i].Data.color;
+		for (auto& data : LinePrim->Data) {
+			if (data.Active) {
+				vertMap->pos1 =  data.Data.pos1;
+				vertMap->pos2 =  data.Data.pos2;
+				vertMap->color = data.Data.color;
 				vertMap++;
 			}
 		}
@@ -284,8 +284,8 @@ void Primitive3D::DrawTetrahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
-		if (TetraPrim->Data[i].Active) {
+	for (auto& data : TetraPrim->Data) {
+		if (data.Active) {
 			activeCount++;
 		}
 	}
@@ -295,14 +295,14 @@ void Primitive3D::DrawTetrahedronAll()
 	TetrahedronPrimitive::Tetrahedron *vertMap = nullptr;
 	result = TetraPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
-			if (TetraPrim->Data[i].Active) {
-				vertMap->pos1 = TetraPrim->Data[i].Data.pos1;
-				vertMap->pos2 = TetraPrim->Data[i].Data.pos2;
-				vertMap->pos3 = TetraPrim->Data[i].Data.pos3;
-				vertMap->pos4 = TetraPrim->Data[i].Data.pos4;
-				vertMap->color = TetraPrim->Data[i].Data.color;
-				vertMap->Lighting = TetraPrim->Data[i].Data.Lighting;
+		for (auto& data : TetraPrim->Data) {
+			if (data.Active) {
+				vertMap->pos1 =		data.Data.pos1;
+				vertMap->pos2 =		data.Data.pos2;
+				vertMap->pos3 =		data.Data.pos3;
+				vertMap->pos4 =		data.Data.pos4;
+				vertMap->color =	data.Data.color;
+				vertMap->Lighting = data.Data.Lighting;
 				vertMap++;
 			}
 		}
@@ -336,8 +336,8 @@ void Primitive3D::DrawOctahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
-		if (OctaPrim->Data[i].Active) {
+	for (auto& data : OctaPrim->Data) {
+		if (data.Active) {
 			activeCount++;
 		}
 	}
@@ -347,12 +347,12 @@ void Primitive3D::DrawOctahedronAll()
 	OctahedronPrimitive::Octahedron *vertMap = nullptr;
 	result = OctaPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
-			if (OctaPrim->Data[i].Active) {
-				vertMap->pos =		OctaPrim->Data[i].Data.pos;
-				vertMap->Radius =	OctaPrim->Data[i].Data.Radius;
-				vertMap->color =	OctaPrim->Data[i].Data.color;
-				vertMap->Lighting = OctaPrim->Data[i].Data.Lighting;
+		for (auto& data : OctaPrim->Data) {
+			if (data.Active) {
+				vertMap->pos =		data.Data.pos;
+				vertMap->Radius =	data.Data.Radius;
+				vertMap->color =	data.Data.color;
+				vertMap->Lighting = data.Data.Lighting;
 				vertMap++;
 			}
 		}
@@ -386,8 +386,8 @@ void Primitive3D::DrawIcosahedronAll()
 {
 	HRESULT result;
 	int activeCount = 0;
-	for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
-		if (IcosaPrim->Data[i].Active) {
+	for (auto& data : IcosaPrim->Data) {
+		if (data.Active) {
 			activeCount++;
 		}
 	}
@@ -397,12 +397,12 @@ void Primitive3D::DrawIcosahedronAll()
 	IcosahedronPrimitive3D::Icosahedron *vertMap = nullptr;
 	result = IcosaPrim->VertBuff->Map(0, nullptr, (void **)&vertMap);
 	if (SUCCEEDED(result)) {
-		for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
-			if (IcosaPrim->Data[i].Active) {
-				vertMap->pos =		IcosaPrim->Data[i].Data.pos;
-				vertMap->Radius =	IcosaPrim->Data[i].Data.Radius;
-				vertMap->color =	IcosaPrim->Data[i].Data.color;
-				vertMap->Lighting = IcosaPrim->Data[i].Data.Lighting;
+		for (auto& data : IcosaPrim->Data) {
+			if (data.Active) {
+				vertMap->pos =		data.Data.pos;
+				vertMap->Radius =	data.Data.Radius;
+				vertMap->color =	data.Data.color;
+				vertMap->Lighting = data.Data.Lighting;
 				vertMap++;
 			}
 		}
@@ -446,8 +446,8 @@ void Primitive3D::DrawCube(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 scale, XMFLOAT
 		return;
 	}
 	int Num = 0;
-	for (int i = 0; i < CubePrim->MaxPrimitives; i++) {
-		if (CubePrim->Data[i].Active == false) break;
+	for (auto& data : CubePrim->Data) {
+		if (data.Active == false) break;
 		Num++;
 	}
 	assert(Num <= CubePrim->MaxPrimitives);
@@ -466,8 +466,8 @@ void Primitive3D::DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color) {
 		return;
 	}
 	int Num = 0;
-	for (int i = 0; i < LinePrim->MaxPrimitives; i++) {
-		if (LinePrim->Data[i].Active == false) break;
+	for (auto& data : LinePrim->Data) {
+		if (data.Active == false) break;
 		Num++;
 	}
 	assert(Num <= LinePrim->MaxPrimitives);
@@ -484,8 +484,8 @@ void Primitive3D::DrawTetrahedron(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT3 pos3, X
 		return;
 	}
 	int Num = 0;
-	for (int i = 0; i < TetraPrim->MaxPrimitives; i++) {
-		if (TetraPrim->Data[i].Active == false) break;
+	for (auto& data : TetraPrim->Data) {
+		if (data.Active == false) break;
 		Num++;
 	}
 	assert(Num <= TetraPrim->MaxPrimitives);
@@ -505,8 +505,8 @@ void Primitive3D::DrawOctahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, boo
 		return;
 	}
 	int Num = 0;
-	for (int i = 0; i < OctaPrim->MaxPrimitives; i++) {
-		if (OctaPrim->Data[i].Active == false) break;
+	for (auto& data : OctaPrim->Data) {
+		if (data.Active == false) break;
 		Num++;
 	}
 	assert(Num <= OctaPrim->MaxPrimitives);
@@ -524,8 +524,8 @@ void Primitive3D::DrawIcosahedron(XMFLOAT3 pos, float Radius, XMFLOAT4 color, bo
 		return;
 	}
 	int Num = 0;
-	for (int i = 0; i < IcosaPrim->MaxPrimitives; i++) {
-		if (IcosaPrim->Data[i].Active == false) break;
+	for (auto& data : IcosaPrim->Data) {
+		if (data.Active == false) break;
 		Num++;
 	}
 	assert(Num <= IcosaPrim->MaxPrimitives);

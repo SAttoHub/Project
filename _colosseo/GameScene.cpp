@@ -25,11 +25,12 @@ void GameScene::Update()
 	if (Common->m_player.GetHP() <= 0) {
 		EndCount++;
 		if (EndCount > 30) {
-			DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
-				"R : タイトルへ");
+			/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+				"PressR");*/
 			if (Input::isKeyTrigger(DIK_R)) {
 				m_IsNext = true;
 				Common->m_player.Reset();
+				Common->m_enemys.AllEnemyClear();
 				Common->m_cards.Reset();
 				Common->m_cards.StartTurn();
 				Common->m_Audiences.DeleteAllAudience();
@@ -59,11 +60,12 @@ void GameScene::Update()
 		else {
 			EndCount++;
 			if (EndCount > 30) {
-				DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
-					"R : タイトルへ");
+				/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+					"R : タイトルへ");*/
 				if (Input::isKeyTrigger(DIK_R)) {
 					m_IsNext = true;
 					Common->m_player.Reset();
+					Common->m_enemys.AllEnemyClear();
 					Common->m_cards.Reset();
 					Common->m_cards.StartTurn();
 					Common->m_Audiences.DeleteAllAudience();
@@ -73,7 +75,7 @@ void GameScene::Update()
 		}
 	}
 
-	if (Common->m_player.GetHP() <= 0) {
+	/*if (Common->m_player.GetHP() <= 0) {
 		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
 			"R : タイトルへ");
 		if (Input::isKeyTrigger(DIK_R)) {
@@ -83,8 +85,8 @@ void GameScene::Update()
 			Common->m_cards.StartTurn();
 			Common->m_Audiences.DeleteAllAudience();
 		}
-	}
-	if (m_IsNext == false) {
+	}*/
+	if (m_IsNext == false && Common->m_player.GetHP() > 0) {
 		Common->m_player.Update();
 		Common->m_enemys.Update();
 		Common->m_map.Update();
@@ -123,6 +125,11 @@ void GameScene::Draw()
 
 	Common->m_map.Draw();
 	Cursor::Instance()->Draw();
+
+	if (EndCount > 30) {
+		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+			"R : タイトルへ");
+	}
 }
 
 void GameScene::DepthDraw()

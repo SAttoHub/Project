@@ -39,7 +39,7 @@ private: // 箱プリミティブ専用
 	// 箱プリミティブ専用セットアップ
 	void SetupBoxPrimitive();
 	// 箱プリミティブデータ
-	static const int MaxBoxPrimitives = 256; // 箱プリミティブ最大数
+	static const int MaxBoxPrimitives = 512; // 箱プリミティブ最大数
 	BoxPrimitive BoxData[MaxBoxPrimitives];
 
 private: // 画像付き箱プリミティブ専用
@@ -52,7 +52,7 @@ private: // 画像付き箱プリミティブ専用
 	// パイプラインステート
 	ComPtr<ID3D12PipelineState> GraphPipelinestate;
 	// 頂点バッファ
-	static const int MaxGraphPrimitives = 256; // 画像付き箱プリミティブ最大数
+	static const int MaxGraphPrimitives = 512; // 画像付き箱プリミティブ最大数
 	ComPtr<ID3D12Resource> GraphVertBuff[MaxGraphPrimitives];
 	D3D12_VERTEX_BUFFER_VIEW GraphvbView[MaxGraphPrimitives]{};
 

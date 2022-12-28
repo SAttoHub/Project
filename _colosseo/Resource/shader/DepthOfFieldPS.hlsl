@@ -47,6 +47,10 @@ float4 main(GSOutput input) : SV_TARGET
 	// 深度値を取得する
 	DepthCol = DepthTexture.Sample(smp, input.uv);
 	float Depth = DepthCol.r;
+
+	if (Depth > 0.95f) {
+		tex.Sample(smp, input.uv);
+	}
 	//return float4(Depth, Depth, Depth, 1);
 
 	// フォーカス情報からぼやけ率を算出

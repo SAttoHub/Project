@@ -12,24 +12,24 @@ BattleWave::BattleWave(Enemys* en, Player* pl)
 	TestWave1.EnemysData.emplace_back(WaveEnemy(1, XMINT2(4, 7)));
 	TestWave1.EnemysData.emplace_back(WaveEnemy(1, XMINT2(5, 7)));
 	TestWave1.EnemysData.emplace_back(WaveEnemy(1, XMINT2(3, 6)));
-	TestWave1.EnemysData.emplace_back(WaveEnemy(1, XMINT2(6, 6)));
+	TestWave1.EnemysData.emplace_back(WaveEnemy(2, XMINT2(6, 6)));
 	WaveData TestWave2;
 	TestWave2.WaveName = "Test2";
 	TestWave2.EnemysData.emplace_back(WaveEnemy(1, XMINT2(4, 2)));
 	TestWave2.EnemysData.emplace_back(WaveEnemy(1, XMINT2(5, 2)));
-	TestWave2.EnemysData.emplace_back(WaveEnemy(1, XMINT2(3, 3)));
+	TestWave2.EnemysData.emplace_back(WaveEnemy(2, XMINT2(3, 3)));
 	TestWave2.EnemysData.emplace_back(WaveEnemy(1, XMINT2(6, 3)));
 	WaveData TestWave3;
 	TestWave3.WaveName = "Test3";
 	TestWave3.EnemysData.emplace_back(WaveEnemy(1, XMINT2(7, 4)));
-	TestWave3.EnemysData.emplace_back(WaveEnemy(1, XMINT2(7, 5)));
+	TestWave3.EnemysData.emplace_back(WaveEnemy(2, XMINT2(7, 5)));
 	TestWave3.EnemysData.emplace_back(WaveEnemy(1, XMINT2(6, 3)));
-	TestWave3.EnemysData.emplace_back(WaveEnemy(1, XMINT2(6, 6)));
+	TestWave3.EnemysData.emplace_back(WaveEnemy(2, XMINT2(6, 6)));
 	WaveData TestWave4;
 	TestWave4.WaveName = "Test4";
-	TestWave4.EnemysData.emplace_back(WaveEnemy(1, XMINT2(2, 4)));
-	TestWave4.EnemysData.emplace_back(WaveEnemy(1, XMINT2(2, 5)));
-	TestWave4.EnemysData.emplace_back(WaveEnemy(1, XMINT2(3, 3)));
+	TestWave4.EnemysData.emplace_back(WaveEnemy(2, XMINT2(2, 4)));
+	TestWave4.EnemysData.emplace_back(WaveEnemy(2, XMINT2(2, 5)));
+	TestWave4.EnemysData.emplace_back(WaveEnemy(2, XMINT2(3, 3)));
 	TestWave4.EnemysData.emplace_back(WaveEnemy(1, XMINT2(3, 6)));
 
 	Waves.emplace_back(TestWave1);
@@ -59,6 +59,6 @@ void BattleWave::StartWave(std::string WaveName)
 		if (enemy.MapPos == pPlayer->GetMapPos()) {
 			continue;
 		}
-		pEnemys->GenerateEnemy(enemy.MapPos);
+		pEnemys->GenerateEnemy(enemy.MapPos, enemy.Type);
 	}
 }

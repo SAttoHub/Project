@@ -216,26 +216,26 @@ void Map::Initialize()
 			for (int p = 0; p < PILLAR_MAX; p++) {
 				if (m_PillarDatas[p].Pos.x == float(x * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE / 2.0f) &&
 					m_PillarDatas[p].Pos.z == float(z * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE / 2.0f)) {
-					m_Data[x][z].Cost = 9999;
+					m_Data[x][z].Cost = IMMOVABLE_CHIP_COST;
 				}
 			}
 		}
 	}
-	m_Data[0][0].Cost = 9999;
-	m_Data[1][0].Cost = 9999;
-	m_Data[0][1].Cost = 9999;
+	m_Data[0][0].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[1][0].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[0][1].Cost = IMMOVABLE_CHIP_COST;
 
-	m_Data[13][0].Cost = 9999;
-	m_Data[12][0].Cost = 9999;
-	m_Data[13][1].Cost = 9999;
+	m_Data[13][0].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[12][0].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[13][1].Cost = IMMOVABLE_CHIP_COST;
 
-	m_Data[0][13].Cost = 9999;
-	m_Data[0][12].Cost = 9999;
-	m_Data[1][13].Cost = 9999;
+	m_Data[0][13].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[0][12].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[1][13].Cost = IMMOVABLE_CHIP_COST;
 
-	m_Data[13][13].Cost = 9999;
-	m_Data[12][13].Cost = 9999;
-	m_Data[13][12].Cost = 9999;
+	m_Data[13][13].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[12][13].Cost = IMMOVABLE_CHIP_COST;
+	m_Data[13][12].Cost = IMMOVABLE_CHIP_COST;
 
 	CostTable.resize(m_MAP_SIZE_X);
 	for (auto &dataX : CostTable) {
@@ -373,6 +373,14 @@ XMFLOAT3 Map::ChangePos(XMINT2 MapPos)
 bool Map::InMap(XMINT2 MapPos)
 {
 	if (MapPos.x < m_Data.size() && MapPos.x >= 0 && MapPos.y < m_Data[0].size() && MapPos.y >= 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Map::IsImmovableChip(XMINT2 MapPos)
+{
+	if (m_Data[MapPos.x][MapPos.y].Cost == IMMOVABLE_CHIP_COST) {
 		return true;
 	}
 	return false;

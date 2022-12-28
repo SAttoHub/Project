@@ -59,4 +59,6 @@ void Player::Reset()
 {
 	m_MapPos = { 3,3 };
 	m_HP = 100;
+	m_ReactionOffset = XMFLOAT3();
+	m_NowReaction = Reactions::Reac_None;
 }

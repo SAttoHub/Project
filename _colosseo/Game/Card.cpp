@@ -12,13 +12,13 @@ Card::Card(CardType Type)
 	switch (m_Type)
 	{
 	case CardType::NONE:
-		Graph = TexManager::LoadTexture("Resource/image/kougeki.png");
+		Graph = TexManager::LoadTexture("Resource/image/ATK_CARD.png");
 		break;
 	case CardType::DEFAULT_ATTACK:
-		Graph = TexManager::LoadTexture("Resource/image/kougeki.png");
+		Graph = TexManager::LoadTexture("Resource/image/ATK_CARD.png");
 		break;
 	case CardType::DEFAULT_MOVE:
-		Graph = TexManager::LoadTexture("Resource/image/idou.png");
+		Graph = TexManager::LoadTexture("Resource/image/MOVE_CARD.png");
 		break;
 	default:
 		break;

@@ -23,7 +23,7 @@ private:
 
 private:
 	struct WaveEnemy {
-		int Type; // 種類
+		int Type; // 種類  1 : 剣士　　2 : 魔法使い
 		XMINT2 MapPos;
 		WaveEnemy(int _Type, XMINT2 _MapPos) : Type(_Type), MapPos(_MapPos) {}
 	};

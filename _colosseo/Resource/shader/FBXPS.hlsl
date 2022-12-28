@@ -157,9 +157,11 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float DisAlpha = 1.0f;
 	float dist = distance(input.worldpos.xyz, cameraPos);
+
 	if (dist < 10.0f) {
-		DisAlpha = dist / 10.0f;
-		DisAlpha = max(DisAlpha, 0.0f);
+		DisAlpha = 0.0f;
+		//DisAlpha = dist / 10.0f;
+		//DisAlpha = max(DisAlpha, 0.0f);
 	}
 
 	// Œõ‘ò“x

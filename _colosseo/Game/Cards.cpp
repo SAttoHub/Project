@@ -4,12 +4,15 @@
 
 Cards::Cards()
 {
+
 	//m_Cards.reserve(16);
-	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	/*m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
+
+
 	//m_Cards.push_front(Card(CardType::NONE));
 
 	m_UseCardType = CardType::NONE;
@@ -33,9 +36,21 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	pPlayer = _Player;
 	pEnemys = _Enemys;
 	pMap = _Map;
-	for (int i = 0; i < int(m_Cards.size()); i++) {
-		m_Cards[i]->Initialize(i, int(m_Cards.size()));
-	}
+	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+
+	m_Cards[0]->Initialize(0, 5);
+	m_Cards[1]->Initialize(1, 5);
+	m_Cards[2]->Initialize(2, 5);
+	m_Cards[3]->Initialize(3, 5);
+	m_Cards[4]->Initialize(4, 5);
+
+	/*for (int i = 0; i < 5; i++) {
+		m_Cards[i]->Initialize(i, 5);
+	}*/
 }
 
 void Cards::Update()
