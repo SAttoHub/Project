@@ -319,6 +319,12 @@
     <Filter Include="ヘッダー ファイル\Game\StageSelect">
       <UniqueIdentifier>{0606d971-cd45-42ee-b6c8-5dbbaaf1606e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\StageSelect">
+      <UniqueIdentifier>{c74e1196-5b98-4814-ab7f-64a677e56737}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Fade">
+      <UniqueIdentifier>{6eab0553-2bc4-49aa-ae69-8cbd7e04fdfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -531,9 +537,6 @@
     <ClCompile Include="Game\Audiences.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BattleWave.cpp">
-      <Filter>ソース ファイル\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Game\NoviceEnemy.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
@@ -567,29 +570,32 @@
     <ClCompile Include="Game\MagicEnemy.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StageSelect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="StageSelectScene.cpp">
       <Filter>ソース ファイル\Game\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="FadeManger.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FadeBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneBase.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\MagicBossEnemy.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Game\NoviceBossEnemy.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>ソース ファイル\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BattleWave.cpp">
+      <Filter>ソース ファイル\Game\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageSelect.cpp">
+      <Filter>ソース ファイル\Game\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Fade.cpp">
+      <Filter>ソース ファイル\Game\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeBuffer.cpp">
+      <Filter>ソース ファイル\Game\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeManger.cpp">
+      <Filter>ソース ファイル\Game\Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
