@@ -43,7 +43,7 @@ void GameCamera::Update()
 			Camera::isCameraStop = false;
 			DebugCamPos = XMFLOAT3(0, 0, 0);
 		}
-		else if(Input::isKeyTrigger(DIK_E)) {
+		if(Input::isKeyTrigger(DIK_E)) {
 			Mode = CM_Game;
 			Camera::isCameraStop = true;
 		}

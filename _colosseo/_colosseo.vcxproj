@@ -122,6 +122,8 @@
     <ClCompile Include="Engine\Objects\ModelManager.cpp" />
     <ClCompile Include="Engine\Primitive\Primitive2D.cpp" />
     <ClCompile Include="Engine\Primitive\Primitive3D.cpp" />
+    <ClCompile Include="FadeBuffer.cpp" />
+    <ClCompile Include="FadeManger.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -145,13 +147,17 @@
     <ClCompile Include="Game\Enemy.cpp" />
     <ClCompile Include="Game\EnemyParamUI.cpp" />
     <ClCompile Include="Game\Enemys.cpp" />
+    <ClCompile Include="Game\Fade.cpp" />
     <ClCompile Include="Game\GameCamera.cpp" />
     <ClCompile Include="Game\GameUIsManager.cpp" />
+    <ClCompile Include="Game\MagicBossEnemy.cpp" />
     <ClCompile Include="Game\MagicEnemy.cpp" />
     <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\NoviceBossEnemy.cpp" />
     <ClCompile Include="Game\NoviceEnemy.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\PlayerParamUI.cpp" />
+    <ClCompile Include="Game\StageSelect.cpp" />
     <ClCompile Include="Game\TargetPoint.cpp" />
     <ClCompile Include="Gaussian.cpp" />
     <ClCompile Include="imguiUse.cpp" />
@@ -169,6 +175,7 @@
     <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
+    <ClCompile Include="SceneBase.cpp" />
     <ClCompile Include="SceneCommon.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShadowMapLight.cpp" />
@@ -181,6 +188,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="TexManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Vignette.cpp" />
@@ -243,6 +251,8 @@
     <ClInclude Include="Engine\Primitive\PrimitiveDatas\OctahedronPrimitive.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveDatas\TetrahedronPrimitive.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveFunc.h" />
+    <ClInclude Include="FadeBuffer.h" />
+    <ClInclude Include="FadeManger.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Game.h" />
@@ -267,13 +277,17 @@
     <ClInclude Include="Game\Enemy.h" />
     <ClInclude Include="Game\EnemyParamUI.h" />
     <ClInclude Include="Game\Enemys.h" />
+    <ClInclude Include="Game\Fade.h" />
     <ClInclude Include="Game\GameCamera.h" />
     <ClInclude Include="Game\GameUIsManager.h" />
+    <ClInclude Include="Game\MagicBossEnemy.h" />
     <ClInclude Include="Game\MagicEnemy.h" />
     <ClInclude Include="Game\Map.h" />
+    <ClInclude Include="Game\NoviceBossEnemy.h" />
     <ClInclude Include="Game\NoviceEnemy.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\PlayerParamUI.h" />
+    <ClInclude Include="Game\StageSelect.h" />
     <ClInclude Include="Game\TargetPoint.h" />
     <ClInclude Include="Gaussian.h" />
     <ClInclude Include="imguiUse.h" />
@@ -307,6 +321,7 @@
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SphereCollider.h" />
+    <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="TexManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vignette.h" />
@@ -417,6 +432,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FadeShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resource\shader\FBXBumpPS.hlsl">

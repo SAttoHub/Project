@@ -21,7 +21,7 @@ private:
 	Enemys* pEnemys = nullptr;
 	Player* pPlayer = nullptr;
 
-private:
+public:
 	struct WaveEnemy {
 		int Type; // 種類  1 : 剣士　　2 : 魔法使い
 		XMINT2 MapPos;
@@ -32,11 +32,18 @@ private:
 		std::vector<WaveEnemy> EnemysData;
 	};
 
-	std::vector<WaveData> Waves;
+	
 public:
-	BattleWave(Enemys *en, Player*pl);
+	std::vector<WaveData> Waves;
+
+	BattleWave(/*Enemys *en, Player*pl*/);
 	~BattleWave();
 
+	void SetPLandENPtr(Enemys* en, Player* pl);
+
 	void StartWave(std::string WaveName);
+
+	int NowWaveNum = 0;
+	bool NextWaveStart();
 };
 

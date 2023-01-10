@@ -4,11 +4,13 @@ void TitleScene::Initialize(SceneCommon* _Common)
 {
 	Common = _Common;
 	m_IsNext = false;
-	m_NextScene = SCENE_ID::GAME;
+	//m_NextScene = SCENE_ID::GAME;
+	m_NextScene = SCENE_ID::STAGE_SELECT;
 
 	TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
 	m_WaitTimer = -1; // -1‚ÌŽž‚ÍŽŸƒV[ƒ“‚ÉˆÚs‚µ‚È‚¢
 
+	Common->m_StageSelect.Start();
 	//LoadJsonManager::Instance()->LoadJson("Resource/JSON/Test.json");
 
 	//test = LoadJsonManager::Instance()->LoadScene("Resource/JSON/Test.json");
@@ -18,14 +20,20 @@ void TitleScene::Initialize(SceneCommon* _Common)
 	test->position = LoadJsonManager::Instance()->GetPosition("TEST");
 	test->rotation = LoadJsonManager::Instance()->GetRotate("TEST");
 	test->scale = LoadJsonManager::Instance()->GetScale("TEST");*/
+
+	FadeInStart(30);
 }
 
 void TitleScene::Update()
 {
 	Cursor::Instance()->Update();
+
 	if (Input::isKeyTrigger(DIK_SPACE)) {
-		m_IsNext = true;
+		//m_IsNext = true;
+		FadeStart(30);
 	}
+
+	SceneTimeUpdate();
 }
 
 void TitleScene::Draw()
@@ -38,6 +46,7 @@ void TitleScene::Draw()
 	for (auto& data : test) {
 		Drawobject3d(data);
 	}
+	FadeDraw();
 }
 
 void TitleScene::DepthDraw()

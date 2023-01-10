@@ -2,7 +2,7 @@
 #include "DirectXBase.h"
 
 // 時間最大数
-static const int TIME_MAX_ELEMENT = 1;
+static const int TIME_MAX_ELEMENT = 2;
 // レジスタナンバー
 static const int TIME_REGISTER_NUM = 999;
 

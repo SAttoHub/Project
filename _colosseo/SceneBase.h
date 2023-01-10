@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "SceneCommon.h"
+#include "Game/Fade.h"
 
 // ÉVÅ[ÉìäÓíÍ
 class SceneBase
@@ -13,6 +14,7 @@ public:
 public:
 	enum SCENE_ID {
 		TITLE,
+		STAGE_SELECT,
 		GAME
 	};
 
@@ -22,6 +24,14 @@ protected:
 	bool m_IsNext;
 	int m_WaitTimer;
 
+	bool m_isOut;
+	bool m_isIn;
+	int m_Timer;
+	int m_EndTimer;
+	void FadeStart(int _Time);
+	void FadeInStart(int _Time);
+	void SceneTimeUpdate();
+	void FadeDraw();
 public:
 	SceneBase() {
 		m_ThisScene = SCENE_ID::TITLE;

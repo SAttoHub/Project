@@ -7,6 +7,7 @@ NoviceEnemy::NoviceEnemy()
 	m_JobName = "Œ•m";
 
 	m_HP = 2;
+	m_MaxHP = m_HP;
 
 	m_Attack_Datas.emplace_back("UŒ‚ - 1", 1, 1, 0, Abnormality::None, 0);
 	m_Attack_Datas.emplace_back("UŒ‚ - 2", 1, 3, 1, Abnormality::None, 0);

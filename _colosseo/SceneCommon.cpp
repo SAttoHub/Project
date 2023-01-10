@@ -20,6 +20,8 @@ void SceneCommon::Initialize()
 	m_GameUI.GetPlayerParamUI()->SetCardsPtr(&m_cards);
 	m_GameUI.GetPlayerParamUI()->SetPlayerPtr(&m_player);
 
+	m_StageSelect.Initialize(&m_enemys, &m_player);
+
 
 	GameCamera::Instance()->Positioning(90.0f, 45.0f, 50.0f, 1);
 	GameCamera::Instance()->Targeting(m_map.Center, 1);

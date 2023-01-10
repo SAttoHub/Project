@@ -19,7 +19,7 @@ private:
 	SceneBase::SCENE_ID m_NextScene;	// Ÿ‘JˆÚ‚·‚é‚Æ‚«‚ÌƒV[ƒ“”Ô†
 	
 public:
-	SceneManager();
+	//SceneManager() {};
 
 	void Initialize();
 	void Update();

@@ -7,16 +7,10 @@ cbuffer cbuff0 : register(b0)
 	matrix mat;
 };
 
-cbuffer time : register(b2)
-{
-	uint Time;
-};
-
-#define  Iterations  24
-
 float4 main(GSOutput input) : SV_TARGET
 {
-	//float4 colors = tex.Sample(smp, input.uv);
+	float4 color = tex.Sample(smp, input.uv);
+	return color;
 
 	//if (colors.x == 1.0f && colors.y == 1.0f && colors.z == 1.0f) {
 	//	float2 windowSize = float2(1280, 720);
@@ -58,7 +52,7 @@ float4 main(GSOutput input) : SV_TARGET
 	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
 
 
-	return float4(1, 0, 0, 1);
+	//return float4(1, 0, 0, 1);
 
 	//return tex.Sample(smp, input.uv) * input.color;
 }

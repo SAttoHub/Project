@@ -12,6 +12,7 @@
 #include "ShadowMapping.h"
 #include "Vignette.h"
 #include "OutLine.h"
+//#include "FadeManger.h"
 
 class Game : public Framework
 {
@@ -26,6 +27,9 @@ private:
 	std::unique_ptr<Gaussian> GaussianEffectX_b = nullptr;
 	std::unique_ptr<Gaussian> GaussianEffectY_b = nullptr;
 	std::unique_ptr<DepthOfField> DOF = nullptr;
+
+	// 最終描画用
+	//std::unique_ptr<FadeBuffer> ResultScr = nullptr;
 
 	bool DOFFlag = true;
 	//ブルーム

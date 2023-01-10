@@ -24,15 +24,29 @@ void Enemys::SetPlayer(Player *player)
 
 void Enemys::GenerateEnemy(XMINT2 MapPos, int Type)
 {
-	if (Type == 1) {
+	if (Type == NoviceEn) {
 		NoviceEnemy en;
 		en.SetMapPos(MapPos);
 		en.SetMap(pMap);
 		en.SetPlayer(pPlayer);
 		m_Enemy.emplace_back(en);
 	}
-	else if (Type == 2) {
+	else if (Type == MagicEn) {
 		MagicEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
+	else if (Type == NoviceBoss) {
+		NoviceBossEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
+	else if (Type == MagicBoss) {
+		MagicBossEnemy en;
 		en.SetMapPos(MapPos);
 		en.SetMap(pMap);
 		en.SetPlayer(pPlayer);

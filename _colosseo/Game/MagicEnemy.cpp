@@ -7,11 +7,12 @@ MagicEnemy::MagicEnemy()
 	m_JobName = "ñÇèpét";
 
 	m_HP = 2;
+	m_MaxHP = m_HP;
 
 	m_Attack_Datas.emplace_back("ñÇñ@ - 1", 3, 1, 0, Abnormality::None, 0);
 	m_Attack_Datas.emplace_back("ñÇñ@ - 2", 5, 3, 1, Abnormality::None, 0);
 
-	m_Attack_Datas[0].SetAttackRange(4, false);
+	m_Attack_Datas[0].SetAttackRange(3, false);
 	m_Attack_Datas[1].SetAttackRange(1, false);
 
 	m_StartUp.m_MoveCost = 1;

@@ -67,11 +67,13 @@ XMFLOAT3 Charactor::GetWorldPos()
 void Charactor::ShadowDraw()
 {
 	ShadowDepthDrawobject3d(m_pModel);
+	ShadowDepthDrawobject3d(m_pModel, false);
 }
 
 void Charactor::DepthDraw()
 {
 	DepthDrawobject3d(m_pModel);
+	DepthDrawobject3d(m_pModel, false);
 }
 
 void Charactor::DOFDepthDraw()

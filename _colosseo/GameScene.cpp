@@ -3,19 +3,33 @@
 void GameScene::Initialize(SceneCommon* _Common)
 {
 	Common = _Common;
-	m_BattleWave = std::make_unique<BattleWave>(&Common->m_enemys, &Common->m_player);
+	//m_BattleWave = std::make_unique<BattleWave>(&Common->m_enemys, &Common->m_player);
+	//m_BattleWave = std::make_unique<BattleWave>();
+	m_BattleWave = Common->m_StageSelect.GetWaveData();
 	NowWave = 0;
 	EndCount = 0;
 	Turn = 2;
 
+	ClearTex = TexManager::LoadTexture("Resource/image/StageClear.png");
+
 	GameCamera::Instance()->Positioning(30.0f, 45.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 	GameCamera::Instance()->Targeting(Common->m_map.ChangePos(Common->m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
-	m_BattleWave->StartWave("Test1");
+
+	m_BattleWave->NowWaveNum = -1;
+	m_BattleWave->NextWaveStart();
+	//m_BattleWave->StartWave("Test1");
 	Common->m_Audiences.SummonAudience(245);
 
 	m_IsNext = false;
-	m_NextScene = SCENE_ID::TITLE;
+	if (Common->m_StageSelect.GetNowStageData().m_StageName == "Boss") {
+		m_NextScene = SCENE_ID::TITLE;
+	}
+	else {
+		m_NextScene = SCENE_ID::STAGE_SELECT;
+	}
 	m_WaitTimer = -1; // -1の時は次シーンに移行しない
+
+	FadeInStart(30);
 }
 
 void GameScene::Update()
@@ -27,52 +41,66 @@ void GameScene::Update()
 		if (EndCount > 30) {
 			/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
 				"PressR");*/
-			if (Input::isKeyTrigger(DIK_R)) {
-				m_IsNext = true;
-				Common->m_player.Reset();
-				Common->m_enemys.AllEnemyClear();
-				Common->m_cards.Reset();
-				Common->m_cards.StartTurn();
-				Common->m_Audiences.DeleteAllAudience();
-			}
-		}
-	}
-	else if (Common->m_enemys.GetEnemyCount() == 0) {
-		NowWave++;
-		if (NowWave == 1) {
-			m_BattleWave->StartWave("Test2");
-			/*EndCount++;
-			if (EndCount > 30) {
-				DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
-					"R : タイトルへ");
-				if (Input::isKeyTrigger(DIK_R)) {
-					Reset();
-				}
-			}
-			NowWave--;*/
-		}
-		else if (NowWave == 2) {
-			m_BattleWave->StartWave("Test3");
-		}
-		else if (NowWave == 3) {
-			m_BattleWave->StartWave("Test4");
-		}  
-		else {
-			EndCount++;
-			if (EndCount > 30) {
-				/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
-					"R : タイトルへ");*/
-				if (Input::isKeyTrigger(DIK_R)) {
-					m_IsNext = true;
+			if (Input::isKeyTrigger(DIK_R) || Input::isMouseTrigger(M_LEFT)) {
+				//m_IsNext = true;
+				if (!m_isOut) {
 					Common->m_player.Reset();
 					Common->m_enemys.AllEnemyClear();
 					Common->m_cards.Reset();
 					Common->m_cards.StartTurn();
 					Common->m_Audiences.DeleteAllAudience();
 				}
+				FadeStart(30);
 			}
-			NowWave--;
 		}
+	}
+	else if (Common->m_enemys.GetEnemyCount() == 0) {
+
+		if (!m_BattleWave->NextWaveStart()) {
+			EndCount++;
+			if (EndCount > 30) {
+				/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+					"R : タイトルへ");*/
+				if (Input::isKeyTrigger(DIK_R) || Input::isMouseTrigger(M_LEFT)) {
+					//m_IsNext = true;
+					if (!m_isOut) {
+						Common->m_player.Reset();
+						Common->m_enemys.AllEnemyClear();
+						Common->m_cards.Reset();
+						Common->m_cards.StartTurn();
+						Common->m_Audiences.DeleteAllAudience();
+					}
+					FadeStart(30);
+				}
+			}
+		}
+
+		//NowWave++;
+		//if (NowWave == 1) {
+		//	m_BattleWave->StartWave("Test2");
+		//}
+		//else if (NowWave == 2) {
+		//	m_BattleWave->StartWave("Test3");
+		//}
+		//else if (NowWave == 3) {
+		//	m_BattleWave->StartWave("Test4");
+		//}  
+		//else {
+		//	EndCount++;
+		//	if (EndCount > 30) {
+		//		/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+		//			"R : タイトルへ");*/
+		//		if (Input::isKeyTrigger(DIK_R)) {
+		//			m_IsNext = true;
+		//			Common->m_player.Reset();
+		//			Common->m_enemys.AllEnemyClear();
+		//			Common->m_cards.Reset();
+		//			Common->m_cards.StartTurn();
+		//			Common->m_Audiences.DeleteAllAudience();
+		//		}
+		//	}
+		//	NowWave--;
+		//}
 	}
 
 	/*if (Common->m_player.GetHP() <= 0) {
@@ -113,6 +141,8 @@ void GameScene::Update()
 		}
 	}
 	Common->MoveCamera();
+
+	SceneTimeUpdate();
 }
 
 void GameScene::Draw()
@@ -126,10 +156,16 @@ void GameScene::Draw()
 	Common->m_map.Draw();
 	Cursor::Instance()->Draw();
 
+	int wave = m_BattleWave->NowWaveNum + 1;
+	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(0, 0), 64, XMFLOAT4(1, 1, 1, 1),
+		"Wave %d/%d", wave < int(m_BattleWave->Waves.size()) ? wave : int(m_BattleWave->Waves.size()), int(m_BattleWave->Waves.size()));
+
 	if (EndCount > 30) {
-		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
-			"R : タイトルへ");
+		/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
+			"R : タイトルへ");*/
+		DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), ClearTex);
 	}
+	FadeDraw();
 }
 
 void GameScene::DepthDraw()

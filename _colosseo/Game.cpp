@@ -55,6 +55,10 @@ void Game::Initialize()
 	vignette = std::make_unique<Vignette>();
 	vignette->Initialize(VignetteInfluence, UseVignette);
 
+	// 最終
+	//ResultScr = std::make_unique<FadeBuffer>();
+	//ResultScr->Initialize();
+
 	//アウトライン
 	/*UseOutLine = true;
 	outLine = new OutLine;
@@ -76,8 +80,13 @@ void Game::Initialize()
 	CreateRenderTarget("DOF_Gauss_Y2", DXGI_FORMAT_R8G8B8A8_UNORM, false, DirectX::XMINT2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	CreateRenderTarget("DOF_Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
 
+	//CreateRenderTarget("Result", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+	//CreateRenderTarget("Result2", DXGI_FORMAT_R8G8B8A8_UNORM, false);
+
 	PSf_Perf = PSf_Normal;
 	PSf_Counter = -2;
+
+	//FadeManger::Instance()->CreateFadeRender();
 }
 
 void Game::Update()
@@ -202,6 +211,10 @@ void Game::Update()
 		PostDraw("DOF_Result");
 #pragma endregion
 	
+	//DOF->Draw(GetRenderTexture("Bloom_Result"), GetRenderTexture("DOF_Gauss_Y2"), GetRenderTexture("DOF_Gauss_Y"), GetRenderTexture("DOF_Depth"));
+	
+	//FadeManger::Instance()->Test();
+
 	DXBase.ClearDepthBuffer();
 	vignette->Draw(GetRenderTexture("DOF_Result"));
 
@@ -296,6 +309,32 @@ void Game::Update()
 
 	// 2Dプリミティブ描画
 	Primitive2D::Instance()->Draw();
+
+
+	//// Fade用画面保存
+	//if (FadeManger::Instance()->m_SaveFlag == true) {
+	//	PreDraw("Result", false);
+	//	vignette->Draw(GetRenderTexture("DOF_Result"));
+	//	//Primitive2D::Instance()->Draw();
+	//	PostDraw("Result");
+	//	FadeManger::Instance()->Save(GetRenderTexture("Result"));
+	//}
+	//DXBase.ClearDepthBuffer();
+
+
+	//if (FadeManger::Instance()->isFade == true) {
+	//	PreDraw("Result2", false);
+	//	vignette->Draw(GetRenderTexture("DOF_Result"));
+	//	//Primitive2D::Instance()->Draw();
+	//	PostDraw("Result2");
+
+	//	FadeManger::Instance()->FadeDraw(GetRenderTexture("Result2"));
+
+	//	DXBase.ClearDepthBuffer();
+	//	ResultScr->Draw(GetRenderTexture("FadeScene"));
+
+	//}
+
 	imguiUse::Instance()->CommandExcute(true);
 
     //-----------------ここまでプログラム記入-----------------//

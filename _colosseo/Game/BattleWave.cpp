@@ -2,9 +2,9 @@
 #include "Enemys.h"
 #include "Player.h"
 
-BattleWave::BattleWave(Enemys* en, Player* pl)
+BattleWave::BattleWave(/*Enemys* en, Player* pl */ )
 {
-	pPlayer = pl;
+	/*pPlayer = pl;
 	pEnemys = en;
 
 	WaveData TestWave1;
@@ -35,11 +35,17 @@ BattleWave::BattleWave(Enemys* en, Player* pl)
 	Waves.emplace_back(TestWave1);
 	Waves.emplace_back(TestWave2);
 	Waves.emplace_back(TestWave3);
-	Waves.emplace_back(TestWave4);
+	Waves.emplace_back(TestWave4);*/
 }
 
 BattleWave::~BattleWave()
 {
+}
+
+void BattleWave::SetPLandENPtr(Enemys* en, Player* pl)
+{
+	pPlayer = pl;
+	pEnemys = en;
 }
 
 void BattleWave::StartWave(std::string WaveName)
@@ -61,4 +67,20 @@ void BattleWave::StartWave(std::string WaveName)
 		}
 		pEnemys->GenerateEnemy(enemy.MapPos, enemy.Type);
 	}
+}
+
+bool BattleWave::NextWaveStart()
+{
+	NowWaveNum++;
+	if (NowWaveNum >= Waves.size()) {
+		return false;
+	}
+	WaveData* Wave = &Waves[NowWaveNum];
+	for (auto& enemy : Wave->EnemysData) {
+		if (enemy.MapPos == pPlayer->GetMapPos()) {
+			continue;
+		}
+		pEnemys->GenerateEnemy(enemy.MapPos, enemy.Type);
+	}
+	return true;
 }

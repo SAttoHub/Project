@@ -94,6 +94,7 @@ public:
 
 	std::string m_Name; // 名前
 	std::string m_JobName = ""; // 名前
+	bool m_isBoss = false; // ボス敵フラグ
 
 public:
 	bool m_MyTurn = false;

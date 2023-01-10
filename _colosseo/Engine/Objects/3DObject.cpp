@@ -1220,20 +1220,22 @@ void Drawobject3d(Object3d *object) {
 	}*/
 }
 
-void DepthDrawobject3d(Object3d *object)
+void DepthDrawobject3d(Object3d *object, bool blB)
 {
 	if (object == nullptr)return;
 
-	ConstBufferDataB0* constMap0 = nullptr;
-	if (SUCCEEDED(object->constBuffB00->Map(0, nullptr, (void**)&constMap0))) {
-		//constMap0->mat = object->matWorld * matView * matProjection;
-		constMap0->view = Camera::matView;
-		constMap0->viewproj = Camera::matViewProjection;
-		constMap0->viewproj2 = Camera::matViewProjection2;
-		constMap0->world = object->matWorld2;
-		constMap0->cameraPos = Camera::eye;
-		constMap0->color = object->color; //RGBA
-		object->constBuffB00->Unmap(0, nullptr);
+	if (blB) {
+		ConstBufferDataB0* constMap0 = nullptr;
+		if (SUCCEEDED(object->constBuffB00->Map(0, nullptr, (void**)&constMap0))) {
+			//constMap0->mat = object->matWorld * matView * matProjection;
+			constMap0->view = Camera::matView;
+			constMap0->viewproj = Camera::matViewProjection;
+			constMap0->viewproj2 = Camera::matViewProjection2;
+			constMap0->world = object->matWorld2;
+			constMap0->cameraPos = Camera::eye;
+			constMap0->color = object->color; //RGBA
+			object->constBuffB00->Unmap(0, nullptr);
+		}
 	}
 
 	DirectX::XMINT2 WinSize = GetNowRenderSize();
@@ -1290,20 +1292,22 @@ void DepthDrawobject3d(Object3d *object)
 	}*/
 }
 
-void ShadowDepthDrawobject3d(Object3d *object)
+void ShadowDepthDrawobject3d(Object3d *object, bool blB)
 {
 	if (object == nullptr)return;
 
-	ConstBufferDataB0* constMap0 = nullptr;
-	if (SUCCEEDED(object->constBuffB00->Map(0, nullptr, (void**)&constMap0))) {
-		//constMap0->mat = object->matWorld * matView * matProjection;
-		constMap0->view = Camera::matView;
-		constMap0->viewproj = Camera::matViewProjection;
-		constMap0->viewproj2 = Camera::matViewProjection2;
-		constMap0->world = object->matWorld2;
-		constMap0->cameraPos = Camera::eye;
-		constMap0->color = object->color; //RGBA
-		object->constBuffB00->Unmap(0, nullptr);
+	if (blB) {
+		ConstBufferDataB0* constMap0 = nullptr;
+		if (SUCCEEDED(object->constBuffB00->Map(0, nullptr, (void**)&constMap0))) {
+			//constMap0->mat = object->matWorld * matView * matProjection;
+			constMap0->view = Camera::matView;
+			constMap0->viewproj = Camera::matViewProjection;
+			constMap0->viewproj2 = Camera::matViewProjection2;
+			constMap0->world = object->matWorld2;
+			constMap0->cameraPos = Camera::eye;
+			constMap0->color = object->color; //RGBA
+			object->constBuffB00->Unmap(0, nullptr);
+		}
 	}
 
 	DirectX::XMINT2 WinSize = GetNowRenderSize();

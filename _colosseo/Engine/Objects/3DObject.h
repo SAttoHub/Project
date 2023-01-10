@@ -424,8 +424,8 @@ static DWORD WINAPI T_Test(void* object) {
 //DWORD WINAPI T_DOFDepthDrawobject3dIns(void* object);
 
 void Drawobject3d(Object3d *object);
-void DepthDrawobject3d(Object3d *object);
-void ShadowDepthDrawobject3d(Object3d *object);
+void DepthDrawobject3d(Object3d *object, bool blB = true);
+void ShadowDepthDrawobject3d(Object3d *object, bool blB = true);
 void DOFDepthDrawobject3d(Object3d *object);
 
 void Drawobject3d(InstanceObjectsData* object);

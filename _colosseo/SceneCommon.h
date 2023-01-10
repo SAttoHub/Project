@@ -8,6 +8,7 @@
 #include "Game/BattleWave.h"
 #include "Game/GameUIsManager.h"
 #include "Game/GameCamera.h"
+#include "Game/StageSelect.h"
 
 // ‘SƒV[ƒ“‹¤’Ê•Ï”
 class SceneCommon
@@ -19,6 +20,7 @@ public:
 	Cards	m_cards;
 	Audiences m_Audiences;
 	GameUI m_GameUI;
+	StageSelect m_StageSelect;
 
 	void Initialize();
 

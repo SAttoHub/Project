@@ -1,10 +1,8 @@
 #include "SceneManager.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "StageSelectScene.h"
 
-SceneManager::SceneManager()
-{
-}
 
 void SceneManager::Initialize()
 {
@@ -12,7 +10,9 @@ void SceneManager::Initialize()
 
 	m_Scenes.emplace_front(std::make_shared<TitleScene>());
 	//m_Scenes.emplace_back(std::make_shared<GameScene>());
-	m_Scenes.emplace_after(std::next(m_Scenes.begin(), 0), std::make_shared<GameScene>());
+	m_Scenes.emplace_after(std::next(m_Scenes.begin(), 0), std::make_shared<StageSelectScene>());
+	m_Scenes.emplace_after(std::next(m_Scenes.begin(), 1), std::make_shared<GameScene>());
+	
 	m_NowScene = SceneBase::SCENE_ID::TITLE;
 	m_NextScene = SceneBase::SCENE_ID::GAME;
 

@@ -4,8 +4,17 @@
 
 #include "NoviceEnemy.h"
 #include "MagicEnemy.h"
+#include "NoviceBossEnemy.h"
+#include "MagicBossEnemy.h"
 
 class Player;
+
+enum EnemyType {
+	NoviceEn = 1,
+	MagicEn,
+	NoviceBoss,
+	MagicBoss
+};
 
 //-------------------------------------------------------------------------------------------------------------
 // ìGä«óùclass

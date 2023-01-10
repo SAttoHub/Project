@@ -310,6 +310,15 @@
     <Filter Include="リソース ファイル\CommonTime">
       <UniqueIdentifier>{454c032e-27d0-4f93-8492-0332fda1d378}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Fade">
+      <UniqueIdentifier>{e01bd367-ac6b-4234-afeb-8664089e7d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PostEffect\Fade">
+      <UniqueIdentifier>{4eafa7a2-4d57-4441-bdde-3acc15c6f842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\StageSelect">
+      <UniqueIdentifier>{0606d971-cd45-42ee-b6c8-5dbbaaf1606e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -556,6 +565,30 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\MagicEnemy.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageSelect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>ソース ファイル\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeManger.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MagicBossEnemy.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NoviceBossEnemy.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -893,9 +926,6 @@
     <ClInclude Include="Game\Audiences.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BattleWave.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\NoviceEnemy.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
@@ -931,6 +961,30 @@
     </ClInclude>
     <ClInclude Include="Game\MagicEnemy.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageSelect.h">
+      <Filter>ヘッダー ファイル\Game\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BattleWave.h">
+      <Filter>ヘッダー ファイル\Game\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>ヘッダー ファイル\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NoviceBossEnemy.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MagicBossEnemy.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeManger.h">
+      <Filter>ヘッダー ファイル\Game\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeBuffer.h">
+      <Filter>ヘッダー ファイル\Game\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Fade.h">
+      <Filter>ヘッダー ファイル\Game\Fade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1137,6 +1191,9 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\Shadow_FBX_VS_Inst.hlsl">
       <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\FadeShader.hlsl">
+      <Filter>リソース ファイル\PostEffect\Fade</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
