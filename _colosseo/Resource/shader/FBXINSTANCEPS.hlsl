@@ -101,6 +101,7 @@ float4 main(VSOutput input) : SV_TARGET
 	float _SpecularBlur = 0.05f;
 	//アンビエントが暗すぎたので値を直接入れる
 
+	float4 PointShade = float4(0, 0, 0, 1);
 
 	// 平行光源
 	for (int i = 0; i < DIRLIGHT_NUM; i++) {
@@ -157,7 +158,7 @@ float4 main(VSOutput input) : SV_TARGET
 			result.g = max(result.g, 0.0f);
 			result.b = max(result.b, 0.0f);
 			// 全て加算する
-			shadecolor.rgb += result;
+			PointShade.rgb += result;
 		}
 	}
 
@@ -242,6 +243,8 @@ float4 main(VSOutput input) : SV_TARGET
 	shadecolor.r = max(shadecolor.r, 0.6f);
 	shadecolor.g = max(shadecolor.g, 0.6f);
 	shadecolor.b = max(shadecolor.b, 0.6f);
+
+	shadecolor = shadecolor + PointShade;
 
 	float DisAlpha = 1.0f;
 	float dist = distance(input.worldpos.xyz, cameraPos);

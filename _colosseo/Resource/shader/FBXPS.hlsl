@@ -352,11 +352,16 @@ float4 main(VSOutput input) : SV_TARGET
 	shadecolor.g = RGB.g;
 	shadecolor.b = RGB.b;
 
-	shadecolor = shadecolor + PointShade;
 	shadecolor.r = min(shadecolor.r, 1.0f);
 	shadecolor.g = min(shadecolor.g, 1.0f);
 	shadecolor.b = min(shadecolor.b, 1.0f);
 	shadecolor.a = min(shadecolor.a, 1.0f);
+
+	shadecolor = shadecolor + PointShade;
+	/*shadecolor.r = min(shadecolor.r, 1.0f);
+	shadecolor.g = min(shadecolor.g, 1.0f);
+	shadecolor.b = min(shadecolor.b, 1.0f);
+	shadecolor.a = min(shadecolor.a, 1.0f);*/
 	
 	//smoothstep(circleShadows[i].factorAngleCos.y, circleShadows[i].factorAngleCos.x, cos);
 

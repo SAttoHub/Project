@@ -37,6 +37,10 @@ private:
 	// 移動可能コスト
 	int m_MoveCost;
 	ActPattern m_Act = ActPattern::AC_Wait;
+	
+	bool m_isNowAttack = false;
+	int m_AttackTimer = 0;
+	int m_AttackIndex = 0;
 
 public:
 	// 攻撃のデータ構造体
@@ -95,6 +99,10 @@ public:
 	std::string m_Name; // 名前
 	std::string m_JobName = ""; // 名前
 	bool m_isBoss = false; // ボス敵フラグ
+
+	// 攻撃時の演出を実行
+	void AttackEffect();
+	void AttackEffectUpdate();
 
 public:
 	bool m_MyTurn = false;

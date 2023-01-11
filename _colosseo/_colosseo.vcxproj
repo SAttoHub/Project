@@ -128,6 +128,8 @@
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Game\ActionEffectBase.cpp" />
+    <ClCompile Include="Game\ActionEffectsMgr.cpp" />
     <ClCompile Include="Game\ActionManager.cpp" />
     <ClCompile Include="Game\Astar.cpp" />
     <ClCompile Include="Game\Audience.cpp" />
@@ -150,9 +152,11 @@
     <ClCompile Include="Game\Fade.cpp" />
     <ClCompile Include="Game\GameCamera.cpp" />
     <ClCompile Include="Game\GameUIsManager.cpp" />
+    <ClCompile Include="Game\MagicAttackEffect.cpp" />
     <ClCompile Include="Game\MagicBossEnemy.cpp" />
     <ClCompile Include="Game\MagicEnemy.cpp" />
     <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\NoviceAttackEffect.cpp" />
     <ClCompile Include="Game\NoviceBossEnemy.cpp" />
     <ClCompile Include="Game\NoviceEnemy.cpp" />
     <ClCompile Include="Game\Player.cpp" />
@@ -257,6 +261,8 @@
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Game\ActionEffectBase.h" />
+    <ClInclude Include="Game\ActionEffectsMgr.h" />
     <ClInclude Include="Game\ActionManager.h" />
     <ClInclude Include="Game\Astar.h" />
     <ClInclude Include="Game\AstarNode.h" />
@@ -280,9 +286,11 @@
     <ClInclude Include="Game\Fade.h" />
     <ClInclude Include="Game\GameCamera.h" />
     <ClInclude Include="Game\GameUIsManager.h" />
+    <ClInclude Include="Game\MagicAttackEffect.h" />
     <ClInclude Include="Game\MagicBossEnemy.h" />
     <ClInclude Include="Game\MagicEnemy.h" />
     <ClInclude Include="Game\Map.h" />
+    <ClInclude Include="Game\NoviceAttackEffect.h" />
     <ClInclude Include="Game\NoviceBossEnemy.h" />
     <ClInclude Include="Game\NoviceEnemy.h" />
     <ClInclude Include="Game\Player.h" />

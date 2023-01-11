@@ -187,6 +187,20 @@ void Charactor::DamageReaction(XMINT2 _ReactionMakeDir, XMINT2 _ReactionDoDir)
 	}
 }
 
+void Charactor::NoviceAttackReaction(XMINT2 _ReactionMakeDir, XMINT2 _ReactionDoDir)
+{
+	m_ReactionMakeDir = _ReactionMakeDir;
+	m_ReactionDoDir = _ReactionDoDir;
+	m_ReactionTimeMax = DAMAGE_REACTION_TIME;
+	m_NowReaction = Reactions::Reac_Novice_Attack;
+	m_NotUseWaitTimer = -10;
+	// 攻撃タイミング(試験的に実数値で)
+	m_ReactionTrigger = 15;
+
+	// 演出側でwaitするので無し
+	//Wait(DAMAGE_REACTION_TIME);
+}
+
 void Charactor::ReactionUpdate() {
 	switch (m_NowReaction)
 	{
@@ -198,6 +212,9 @@ void Charactor::ReactionUpdate() {
 		break;
 	case Reac_Death:
 		DeathReactionUpdate();
+		break;
+	case Reac_Novice_Attack:
+		NoviceAttackReactionUpdate();
 		break;
 	default:
 		//m_ReactionOffset = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -221,6 +238,33 @@ void Charactor::DamageReactionUpdate() {
 			Offset * DAMAGE_REACTION_OFFSET_RANGE, XMFLOAT3(0.0f, 0.0f, 0.0f), NowT, MaxT);
 	}
 	if (m_WaitTimer == 0) {
+		m_NowReaction = Reactions::Reac_None;
+		m_ReactionOffset = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	}
+}
+
+void Charactor::NoviceAttackReactionUpdate() {
+	m_NotUseWaitTimer++;
+	if (m_NotUseWaitTimer < 0) {
+		return;
+	}
+	XMFLOAT3 Offset = OffsetDirGet();
+	int NowTime = m_NotUseWaitTimer;
+	if (float(NowTime) < float(m_ReactionTimeMax) * (3.0f / 4.0f)) {
+		m_ReactionOffset = Ease::EaseFunc(EaseName::OutQuad,
+			XMFLOAT3(0.0f, 0.0f, 0.0f), Offset * DAMAGE_REACTION_OFFSET_RANGE, NowTime, float(m_ReactionTimeMax) * (3.0f / 4.0f));
+		m_ReactionOffset.y = 2.0f * sinf(((float(NowTime) / (float(m_ReactionTimeMax) * (3.0f / 4.0f))) * 180.0f * M_PI_F) / 180.0f);
+	}
+	else {
+		float T = float(m_ReactionTimeMax) * (3.0f / 4.0f);
+		float NowT = float(NowTime) - T;
+		float MaxT = float(m_ReactionTimeMax) - T;
+		m_ReactionOffset = Ease::EaseFunc(EaseName::OutQuad,
+			Offset * DAMAGE_REACTION_OFFSET_RANGE, XMFLOAT3(0.0f, 0.0f, 0.0f), NowT, MaxT);
+		m_ReactionOffset.y = 0.0f;
+	}
+	if (m_NotUseWaitTimer == m_ReactionTimeMax) {
+		m_NotUseWaitTimer = 0;
 		m_NowReaction = Reactions::Reac_None;
 		m_ReactionOffset = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	}

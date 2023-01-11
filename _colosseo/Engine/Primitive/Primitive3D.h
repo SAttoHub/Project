@@ -103,7 +103,7 @@ public:
 class IcosahedronPrimData : public PrimitiveData {
 public:
 	// 正二十面体プリミティブデータ
-	static const int MaxPrimitives = 1; // 正二十面体プリミティブ最大数
+	static const int MaxPrimitives = 6; // 正二十面体プリミティブ最大数
 	IcosahedronPrimitive3D Data[MaxPrimitives];
 	// 正二十面体プリミティブ専用セットアップ
 	void SetupIcosahedronPrimitive();
@@ -140,7 +140,7 @@ private: // 正八面体プリミティブ
 	std::unique_ptr<OctahedronPrimData> OctaPrim = nullptr;
 
 private: //	正二十面体プリミティブ
-	const bool IcosaUse = false;
+	const bool IcosaUse = true;
 	std::unique_ptr<IcosahedronPrimData> IcosaPrim = nullptr;
 
 public:

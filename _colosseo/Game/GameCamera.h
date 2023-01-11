@@ -55,6 +55,7 @@ private:
 		float Height; // 中視点からの高さ
 		float MarkHeight;
 		float AgoHeight;
+		int isFixedTimer; // カメラを固定するタイマー
 		int NowFlame[3];  // [0] : Range  /  [1]  : Angle  /  [2] : Height
 		int EndFlame[3];
 		bool CanChange[3];
@@ -77,7 +78,12 @@ public:
 	void ChangeAngle(float Angle, int Flame);
 	void ChangeHeight(float Height, int Flame);
 	void Targeting(XMFLOAT3 Target, int Flame);
+	void TargetingCoercion(XMFLOAT3 Target, int Flame);
 	void TargetingInstantly(XMFLOAT3 Target);
 	float GetAngle() { return m_PosData.MarkAngle; }
+
+	void CameraFixedNowFlame(int Flame) {
+		m_PosData.isFixedTimer = Flame;
+	}
 };
 

@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "Game/ActionEffectsMgr.h"
 
 void GameScene::Initialize(SceneCommon* _Common)
 {
@@ -29,12 +30,15 @@ void GameScene::Initialize(SceneCommon* _Common)
 	}
 	m_WaitTimer = -1; // -1の時は次シーンに移行しない
 
+	Common->ResetCamera();
+
 	FadeInStart(30);
 }
 
 void GameScene::Update()
 {
 	Cursor::Instance()->Update();
+	ActionEffectsMgr::Instance()->Update();
 
 	if (Common->m_player.GetHP() <= 0) {
 		EndCount++;
@@ -118,7 +122,10 @@ void GameScene::Update()
 		Common->m_player.Update();
 		Common->m_enemys.Update();
 		Common->m_map.Update();
-		Common->m_cards.Update();
+		// ゲーム終了後にカード選択できないように
+		//if (EndCount > 1) {
+			Common->m_cards.Update();
+		//}
 		Common->m_Audiences.Update();
 
 		if (Turn == 2) {
@@ -152,6 +159,7 @@ void GameScene::Draw()
 	Common->m_cards.Draw();
 	Common->m_Audiences.Draw();
 	Common->m_GameUI.Draw();
+	ActionEffectsMgr::Instance()->Draw();
 
 	Common->m_map.Draw();
 	Cursor::Instance()->Draw();

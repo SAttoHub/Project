@@ -4,6 +4,8 @@
 
 using namespace DirectX;
 
+LightGroup* LightGroup::Ptr = nullptr;
+
 void LightGroup::StaticInitialize()
 {
 	//device nullptrチェック
@@ -17,6 +19,7 @@ LightGroup *LightGroup::Create()
 
 	//初期化
 	instance->Initialize();
+	Ptr = instance;
 
 	return instance;
 }

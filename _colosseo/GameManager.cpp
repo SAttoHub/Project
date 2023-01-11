@@ -15,7 +15,7 @@ GameManager::GameManager(DirectX3dObject* OBJECT, TexManager* TEX, Window* Win, 
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
-	DirectX3dObject::SetLightGroup(lightGroup);
+	DirectX3dObject::SetLightGroup(LightGroup::Ptr);
 	lightGroup->SetDirLightActive(0, true);//デフォルトでtrueになっているライトをfalseに
 	lightGroup->SetPointLightActive(0, true);
 	lightGroup->SetPointLightActive(1, true);
@@ -49,14 +49,14 @@ GameManager::GameManager(DirectX3dObject* OBJECT, TexManager* TEX, Window* Win, 
 	lightGroup->SetPointLightPos(6, XMFLOAT3{ 56.0f + 8.0f, 28.45f, 56.0f + 91.0f });
 	lightGroup->SetPointLightPos(7, XMFLOAT3{ 56.0f - 8.0f, 28.45f, 56.0f + 91.0f });
 
-	lightGroup->SetPointLightAtten(0, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(1, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(2, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(3, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(4, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(5, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(6, XMFLOAT3(0.02f, 0.02f, 0.02f));
-	lightGroup->SetPointLightAtten(7, XMFLOAT3(0.02f, 0.02f, 0.02f));
+	lightGroup->SetPointLightAtten(0, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(1, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(2, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(3, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(4, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(5, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(6, XMFLOAT3(0.015f, 0.015f, 0.015f));
+	lightGroup->SetPointLightAtten(7, XMFLOAT3(0.015f, 0.015f, 0.015f));
 
 
 	m_Scene.Initialize();

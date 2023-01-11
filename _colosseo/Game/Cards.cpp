@@ -243,11 +243,11 @@ void Cards::CardPhaseUpdate()
 	}
 
 	// Waitが0でない間はターンエンドできない
-	if (WaitTimer == 0) {
+	if (WaitTimer == 0 ) {
 		XMFLOAT2 point = Input::GetMousePos();
 		if (point.x >= LT.x && point.x <= LT.x + 160 * 1.5f &&
 			point.y >= LT.y && point.y <= LT.y + 64 * 1.5f) {
-			if (Input::isMouseTrigger(M_LEFT)) {
+			if (Input::isMouseTrigger(M_LEFT) && pEnemys->GetEnemyCount() != 0) {
 				TurnEnd = true;
 				isMyTurn = false;
 			}

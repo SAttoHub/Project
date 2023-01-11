@@ -70,3 +70,8 @@ void SceneCommon::MoveCamera()
 
 	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight + m_AddHeightValue, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 }
+
+void SceneCommon::ResetCamera()
+{
+	GameCamera::Instance()->Positioning(m_CameraRange, m_CameraAngle, m_CameraHeight + m_AddHeightValue, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+}

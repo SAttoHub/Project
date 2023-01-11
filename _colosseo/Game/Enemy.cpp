@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "Player.h"
 
+#include "ActionEffectsMgr.h"
+
 Enemy::Enemy()
 {
 	m_MapPos = { 0,0 };
@@ -138,6 +140,16 @@ void Enemy::Update()
 	}*/
 
 	WaitUpdate();
+
+	// 演出後に攻撃する
+	if (m_isNowAttack/* && !isWait()*/) {
+		AttackEffectUpdate();
+		/*m_isNowAttack = false;
+		pPlayer->DamageShake(m_Attack_Datas[m_AttackIndex].m_Damage);
+		pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
+		TurnEnd();*/
+	}
+
 	if (!isWait() && m_MyTurn) {
 		if (TurnEndFlag == false) {
 			Act();
@@ -439,9 +451,15 @@ void Enemy::Act()
 
 		// あとでAttackActに書き変える
 		// プレイヤーにダメージを与えてリアクションさせる
-		pPlayer->DamageShake(m_Attack_Datas[ActIndex].m_Damage);
+		//ActionEffectsMgr::Instance()->StartMagicEffect(GetModelPos(), pPlayer->GetModelPos());
+		//Wait(ActionEffectsMgr::Instance()->MAGIC_EFFECT_TIME);
+
+		m_isNowAttack = true;
+		m_AttackIndex = ActIndex;
+		AttackEffect();
+		/*pPlayer->DamageShake(m_Attack_Datas[ActIndex].m_Damage);
 		pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
-		TurnEnd();
+		TurnEnd();*/
 	}
 }
 
@@ -454,4 +472,80 @@ void Enemy::TurnEnd()
 	/*m_MyTurn = false;
 	m_Next = true;
 	m_Act = AC_Wait;*/
+}
+
+void Enemy::AttackEffect() {
+	m_AttackTimer = 0;
+	if (m_Attack_Datas[m_AttackIndex].m_Name == "魔法 - 1") {
+		XMFLOAT3 StartPos = GetModelPos();
+		StartPos.y += 3.0f;
+		ActionEffectsMgr::Instance()->StartMagicEffect(StartPos, pPlayer->GetModelPos());
+		Wait(ActionEffectsMgr::Instance()->MAGIC_EFFECT_TIME);
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "魔法 - 2") {
+		XMFLOAT3 StartPos = GetModelPos();
+		StartPos.y += 3.0f;
+		ActionEffectsMgr::Instance()->StartMagicEffect(StartPos, pPlayer->GetModelPos());
+		Wait(ActionEffectsMgr::Instance()->MAGIC_EFFECT_TIME);
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "攻撃 - 1") {
+		XMFLOAT3 StartPos = GetModelPos();
+		ActionEffectsMgr::Instance()->StartNoveceEffect(StartPos, pPlayer->GetModelPos());
+		Wait(ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME);
+
+		NoviceAttackReaction(GetMapPos(), pPlayer->GetMapPos());
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "攻撃 - 2") {
+		XMFLOAT3 StartPos = GetModelPos();
+		ActionEffectsMgr::Instance()->StartNoveceEffect(StartPos, pPlayer->GetModelPos());
+		Wait(ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME);
+
+		NoviceAttackReaction(GetMapPos(), pPlayer->GetMapPos());
+	}
+}
+
+void Enemy::AttackEffectUpdate() {
+	m_AttackTimer++;
+	if (m_Attack_Datas[m_AttackIndex].m_Name == "魔法 - 1") {
+		// 待ち時間が終わった
+		if (!isWait()) {
+			m_isNowAttack = false;
+			pPlayer->DamageShake(m_Attack_Datas[m_AttackIndex].m_Damage);
+			pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
+			TurnEnd();
+		}
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "魔法 - 2") {
+		// 待ち時間が終わった
+		if (!isWait()) {
+			m_isNowAttack = false;
+			pPlayer->DamageShake(m_Attack_Datas[m_AttackIndex].m_Damage);
+			pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
+			TurnEnd();
+		}
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "攻撃 - 1") {
+		// 攻撃する
+		if (m_AttackTimer == m_ReactionTrigger) {
+			pPlayer->DamageShake(m_Attack_Datas[m_AttackIndex].m_Damage);
+			pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
+		}
+		// 待ち時間が終わった
+		if (!isWait()) {
+			m_isNowAttack = false;
+			TurnEnd();
+		}
+	}
+	else if (m_Attack_Datas[m_AttackIndex].m_Name == "攻撃 - 2") {
+		// 攻撃する
+		if (m_AttackTimer == m_ReactionTrigger) {
+			pPlayer->DamageShake(m_Attack_Datas[m_AttackIndex].m_Damage);
+			pPlayer->DamageReaction(GetMapPos(), pPlayer->GetMapPos());
+		}
+		// 待ち時間が終わった
+		if(!isWait()){
+			m_isNowAttack = false;
+			TurnEnd();
+		}
+	}
 }

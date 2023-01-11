@@ -325,6 +325,12 @@
     <Filter Include="ソース ファイル\Game\Fade">
       <UniqueIdentifier>{6eab0553-2bc4-49aa-ae69-8cbd7e04fdfc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\ActionEffects">
+      <UniqueIdentifier>{8fa44bb0-d754-4ce0-853c-f119cf786322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\ActionEffects">
+      <UniqueIdentifier>{a4c3a5f5-0997-470b-bd1f-1097098a469c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -596,6 +602,18 @@
     </ClCompile>
     <ClCompile Include="FadeManger.cpp">
       <Filter>ソース ファイル\Game\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ActionEffectBase.cpp">
+      <Filter>ソース ファイル\Game\ActionEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ActionEffectsMgr.cpp">
+      <Filter>ソース ファイル\Game\ActionEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MagicAttackEffect.cpp">
+      <Filter>ソース ファイル\Game\ActionEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NoviceAttackEffect.cpp">
+      <Filter>ソース ファイル\Game\ActionEffects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -991,6 +1009,18 @@
     </ClInclude>
     <ClInclude Include="Game\Fade.h">
       <Filter>ヘッダー ファイル\Game\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionEffectsMgr.h">
+      <Filter>ヘッダー ファイル\Game\ActionEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ActionEffectBase.h">
+      <Filter>ヘッダー ファイル\Game\ActionEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MagicAttackEffect.h">
+      <Filter>ヘッダー ファイル\Game\ActionEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NoviceAttackEffect.h">
+      <Filter>ヘッダー ファイル\Game\ActionEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

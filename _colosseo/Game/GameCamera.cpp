@@ -135,24 +135,29 @@ void GameCamera::GameCameraUpdate()
 	}
 
 	/*--------- Position -----------*/
-	m_PosData.Range = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoRange, m_PosData.MarkRange,
-		m_PosData.NowFlame[0], m_PosData.EndFlame[0]);
-	m_PosData.Angle = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoAngle, m_PosData.MarkAngle,
-		m_PosData.NowFlame[1], m_PosData.EndFlame[1]);
-	m_PosData.Height = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoHeight, m_PosData.MarkHeight,
-		m_PosData.NowFlame[2], m_PosData.EndFlame[2]);
+	/*if (m_PosData.isFixedTimer > 0) {
+		m_PosData.isFixedTimer--;
+	}
+	else {*/
+		m_PosData.Range = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoRange, m_PosData.MarkRange,
+			m_PosData.NowFlame[0], m_PosData.EndFlame[0]);
+		m_PosData.Angle = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoAngle, m_PosData.MarkAngle,
+			m_PosData.NowFlame[1], m_PosData.EndFlame[1]);
+		m_PosData.Height = Ease::EaseFunc(EaseName::OutQuad, m_PosData.AgoHeight, m_PosData.MarkHeight,
+			m_PosData.NowFlame[2], m_PosData.EndFlame[2]);
 
-	if (m_PosData.NowFlame[0] == m_PosData.EndFlame[0]) m_PosData.CanChange[0] = true;
-	else m_PosData.NowFlame[0]++;
-	if (m_PosData.NowFlame[1] == m_PosData.EndFlame[1]) m_PosData.CanChange[1] = true;
-	else m_PosData.NowFlame[1]++;
-	if (m_PosData.NowFlame[2] == m_PosData.EndFlame[2]) m_PosData.CanChange[2] = true;
-	else m_PosData.NowFlame[2]++;
+		if (m_PosData.NowFlame[0] == m_PosData.EndFlame[0]) m_PosData.CanChange[0] = true;
+		else m_PosData.NowFlame[0]++;
+		if (m_PosData.NowFlame[1] == m_PosData.EndFlame[1]) m_PosData.CanChange[1] = true;
+		else m_PosData.NowFlame[1]++;
+		if (m_PosData.NowFlame[2] == m_PosData.EndFlame[2]) m_PosData.CanChange[2] = true;
+		else m_PosData.NowFlame[2]++;
 
-	XMFLOAT2 CamPosXZ = Smath::AngleToDirectionVector(m_PosData.Angle + 180.0f);
-	CamPosXZ = CamPosXZ * m_PosData.Range;
-	 
-	m_PosData.Position = m_TargetData.Target + XMFLOAT3{ CamPosXZ.x, m_PosData.Height, CamPosXZ.y };
+		XMFLOAT2 CamPosXZ = Smath::AngleToDirectionVector(m_PosData.Angle + 180.0f);
+		CamPosXZ = CamPosXZ * m_PosData.Range;
+
+		m_PosData.Position = m_TargetData.Target + XMFLOAT3{ CamPosXZ.x, m_PosData.Height, CamPosXZ.y };
+	//}
 
 	/*--------- Shake ----------*/
 	if (ShakeTimer != 0) {
@@ -243,6 +248,16 @@ void GameCamera::Targeting(XMFLOAT3 Target, int Flame)
 	m_TargetData.NowFlame = 0;
 	m_TargetData.EndFlame = Flame;
 	m_TargetData.CanChangeTarget = false;
+}
+
+void GameCamera::TargetingCoercion(XMFLOAT3 Target, int Flame)
+{
+	Target.y = Target.y + 4.0f;
+	m_TargetData.AgoTarget = Target;
+	m_TargetData.MarkTarget = Target;
+	m_TargetData.NowFlame = 0;
+	m_TargetData.EndFlame = Flame;
+	m_TargetData.CanChangeTarget = true;
 }
 
 void GameCamera::TargetingInstantly(XMFLOAT3 Target)

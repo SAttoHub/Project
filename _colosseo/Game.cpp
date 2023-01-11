@@ -134,6 +134,7 @@ void Game::Update()
 			PostDraw("Light_Depth");
 		}
 		//}
+		
 		// Bloom 合成時に使用する深度値の保存
 		if (PSf_isDraw("Bloom")) {
 			PreDraw("Bloom_Depth");
@@ -385,13 +386,13 @@ bool Game::PSf_isDraw(std::string RTName)
 		return true;
 		break;
 	case Game::PSf_Normal:
-		if (RTName == "Shadow" && (PSf_Counter == 1 || PSf_Counter == 0)) {
+		if (RTName == "Shadow"/* && (PSf_Counter == 1 || PSf_Counter == 0)*/) {
 			return true;
 		}
 		else if (RTName == "Bloom" && (PSf_Counter == 1 || PSf_Counter == 0)) {
 			return true;
 		}
-		else if (RTName == "DOF" && (PSf_Counter == 1)) {
+		else if (RTName == "DOF" /*&& (PSf_Counter == 1)*/) {
 			return true;
 		}
 		break;

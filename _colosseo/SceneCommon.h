@@ -41,5 +41,6 @@ public:
 	float m_CameraRange;
 	Camera_Dir m_CamDir;
 	void MoveCamera();
+	void ResetCamera();
 };
 

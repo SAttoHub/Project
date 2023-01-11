@@ -11,6 +11,8 @@
 
 class LightGroup
 {
+public:
+	static LightGroup* Ptr;
 private:
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	using XMFLOAT2 = DirectX::XMFLOAT2;

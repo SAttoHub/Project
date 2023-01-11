@@ -15,7 +15,8 @@ enum Reactions {
 	Reac_None,			// リアクションなし
 	Reac_Damage,		// ダメージ
 	Reac_Death,			// 死亡
-	Reac_Death_End		// 死亡終了後の削除待機
+	Reac_Death_End,		// 死亡終了後の削除待機
+	Reac_Novice_Attack  // 通常攻撃
 };
 
 class Map;
@@ -317,6 +318,9 @@ private:
 	/// <returns></returns>
 	XMFLOAT3 CameraOffsetDirGet();
 
+	// Wait()を使用しない時用タイマー
+	int m_NotUseWaitTimer = 0;
+
 protected:
 	// [一時保存用] リアクションの方向
 	XMFLOAT3 m_ReactionOffset = XMFLOAT3();
@@ -326,11 +330,19 @@ protected:
 	/// </summary>
 	void ReactionUpdate();
 
+	// リアクション中に攻撃する時の攻撃タイミングフレーム
+	int m_ReactionTrigger = 0;
+
 private:
 	/// <summary>
 	/// ダメージリアクション更新
 	/// </summary>
 	void DamageReactionUpdate();
+
+	/// <summary>
+	/// 攻撃リアクション更新
+	/// </summary>
+	void NoviceAttackReactionUpdate();
 
 	/// <summary>
 	/// 死亡リアクション更新
@@ -344,6 +356,13 @@ public:
 	/// <param name="_ReactionMakeDir">攻撃する側のマップ座標</param>
 	/// <param name="_ReactionDoDir">攻撃される側のマップ座標</param>
 	void DamageReaction(XMINT2 _ReactionMakeDir, XMINT2 _ReactionDoDir);
+
+	/// <summary>
+	/// 攻撃リアクションをさせる
+	/// </summary>
+	/// <param name="_ReactionMakeDir">攻撃する側のマップ座標</param>
+	/// <param name="_ReactionDoDir">攻撃される側のマップ座標</param>
+	void NoviceAttackReaction(XMINT2 _ReactionMakeDir, XMINT2 _ReactionDoDir);
 
 	/// <summary>
 	/// 現在のリアクション状態を取得
