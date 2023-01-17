@@ -1,4 +1,6 @@
 #include "PipelineManager.h"
+#include "CommonTime.h"
+
 int PipelineManager::m_NowSetPipeline = -1;
 int PipelineManager::PIPELINE_NUM = 0;
 ComPtr<ID3DBlob> PipelineManager::m_ErrorBlob;
@@ -217,6 +219,70 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			Shader->GetShaderAndCompile(L"Resource/shader/FBXVS.hlsl", "main", "vs_5_0"),
 			Shader->GetShaderAndCompile(L"Resource/shader/DepthPS.hlsl", "main", "ps_5_0"));
+	}
+	// FBX_揺れもの
+	{
+		//デスクリプタテーブルの設定
+		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+		//ルートパラメータの設定
+		CD3DX12_ROOT_PARAMETER rootparams[6] = {};
+		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		CommonTime::CreateRootParameter(&rootparams[5]); // 時間総合
+		CreatePipeline(FBXSHADER_YURE, BlendMode::BM_ALPHA, D3D12_CULL_MODE_NONE,
+			_countof(InputLayout), InputLayout,
+			_countof(rootparams), rootparams,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			Shader->GetShaderAndCompile(L"Resource/shader/FBX_Flag_VS.hlsl", "main", "vs_5_0"),
+			Shader->GetShaderAndCompile(L"Resource/shader/FBXPS.hlsl", "main", "ps_5_0"));
+	}
+	// FBX_Depth
+	{
+		//デスクリプタテーブルの設定
+		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+		//ルートパラメータの設定
+		CD3DX12_ROOT_PARAMETER rootparams[8] = {};
+		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
+		rootparams[6].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);//
+		CommonTime::CreateRootParameter(&rootparams[7]); // 時間総合
+		CreatePipeline(Depth_SHEADER_YURE, BlendMode::BM_ALPHA, D3D12_CULL_MODE_NONE,
+			_countof(InputLayout), InputLayout,
+			_countof(rootparams), rootparams,
+			DXGI_FORMAT_R32_FLOAT,
+			Shader->GetShaderAndCompile(L"Resource/shader/FBX_Flag_VS.hlsl", "main", "vs_5_0"),
+			Shader->GetShaderAndCompile(L"Resource/shader/Depth2.hlsl", "main", "ps_5_0"));
+	}
+	// FBX_ShadowDepth
+	{
+		//デスクリプタテーブルの設定
+		CD3DX12_DESCRIPTOR_RANGE descRangeSRV; //テクスチャ用
+		descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+		//ルートパラメータの設定
+		CD3DX12_ROOT_PARAMETER rootparams[8] = {};
+		rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);//定数バッファビューとして初期化
+		rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+		rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);//ライト用
+		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
+		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
+		rootparams[6].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);//
+		CommonTime::CreateRootParameter(&rootparams[7]); // 時間総合
+		CreatePipeline(Shadow_Depth_SHEADER_YURE, BlendMode::BM_ALPHA, D3D12_CULL_MODE_NONE,
+			_countof(InputLayout), InputLayout,
+			_countof(rootparams), rootparams,
+			DXGI_FORMAT_R32_FLOAT,
+			Shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_VS_Flag.hlsl", "main", "vs_5_0"),
+			Shader->GetShaderAndCompile(L"Resource/shader/Shadow_FBX_PS.hlsl", "main", "ps_5_0"));
 	}
 }
 

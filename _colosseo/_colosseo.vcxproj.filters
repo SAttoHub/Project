@@ -1228,6 +1228,12 @@
     <FxCompile Include="Resource\shader\FadeShader.hlsl">
       <Filter>リソース ファイル\PostEffect\Fade</Filter>
     </FxCompile>
+    <FxCompile Include="Resource\shader\FBX_Flag_VS.hlsl">
+      <Filter>リソース ファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\shader\Shadow_FBX_VS_Flag.hlsl">
+      <Filter>リソース ファイル\FBX\深度値描画用\shadowMap用</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\FBX.hlsli">

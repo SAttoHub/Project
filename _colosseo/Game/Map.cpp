@@ -127,6 +127,19 @@ Map::Map()
 	m_StageModel_wall_piller->UseShadow = true;
 	m_StageModel_wall_piller->UseDOF = true;
 
+	int modelData_Flag = LoadModelOBJ("Colosseum_Flag", "stage");
+	m_StageModel_Flag = DirectX3dObject::CreateObject(GetModelData(modelData_Flag),
+		XMFLOAT3(0, 0, 0), FBXSHADER_YURE);
+	m_StageModel_Flag->rotation.y = 90.0f;
+	m_StageModel_Flag->scale.x = 8.0f;
+	m_StageModel_Flag->scale.y = 8.0f;
+	m_StageModel_Flag->scale.z = 8.0f;
+	m_StageModel_Flag->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_Flag->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
+	m_StageModel_Flag->UseShadow = true;
+	m_StageModel_Flag->UseDOF = true;
+	
+
 
 	// Pillar
 	{
@@ -324,6 +337,9 @@ void Map::Draw()
 	Drawobject3d(m_StageModel_floor_aud);
 	Drawobject3d(m_StageModel_wall);
 	Drawobject3d(m_StageModel_wall_piller);
+
+	Drawobject3d(m_StageModel_Flag);
+	
 	//Drawobject3d(m_StageModel_tree);
 	Drawobject3d(torch);
 	Drawobject3d(torchBloom);
@@ -371,6 +387,9 @@ void Map::ShadowDraw()
 	ShadowDepthDrawobject3d(m_StageModel_floor_aud);
 	ShadowDepthDrawobject3d(m_StageModel_wall);
 	ShadowDepthDrawobject3d(m_StageModel_wall_piller);
+
+	ShadowDepthDrawobject3d(m_StageModel_Flag);
+
 	//ShadowDepthDrawobject3d(m_StageModel_tree);
 	ShadowDepthDrawobject3d(torch);
 	ShadowDepthDrawobject3d(m_Pillar);
@@ -385,6 +404,8 @@ void Map::DepthDraw()
 	DepthDrawobject3d(m_StageModel_floor_aud);
 	DepthDrawobject3d(m_StageModel_wall);
 	DepthDrawobject3d(m_StageModel_wall_piller);
+
+	DepthDrawobject3d(m_StageModel_Flag);
 
 	//DepthDrawobject3d(m_StageModel_tree);
 	DepthDrawobject3d(torch);
@@ -401,6 +422,8 @@ void Map::DOFDepthDraw()
 	DOFDepthDrawobject3d(m_StageModel_floor_aud);
 	DOFDepthDrawobject3d(m_StageModel_wall);
 	DOFDepthDrawobject3d(m_StageModel_wall_piller);
+
+	DOFDepthDrawobject3d(m_StageModel_Flag);
 
 	//DOFDepthDrawobject3d(m_StageModel_tree);
 	DOFDepthDrawobject3d(torch);

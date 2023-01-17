@@ -8,6 +8,7 @@
 #include "..\..\DepthOfField.h"
 
 #include "..\..\RenderManager.h"
+#include "..\..\CommonTime.h"
 
 My_F_List<Object3d> DirectX3dObject::object3ds;
 My_F_List<InstanceObjectsData> DirectX3dObject::InstanceObject3ds;
@@ -1207,6 +1208,10 @@ void Drawobject3d(Object3d *object) {
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
 	}
 
+	if (object->shaderNumber == FBXSHADER_YURE) {
+		CommonTime::Draw(5);
+	}
+
 	// ライトの描画
 	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
 
@@ -1249,9 +1254,16 @@ void DepthDrawobject3d(Object3d *object, bool blB)
 
 	//if (PipelineManager::m_NowSetPipeline != Depth_SHEADER) {
 	//	PipelineManager::m_NowSetPipeline = Depth_SHEADER;
+	if (object->shaderNumber == FBXSHADER_YURE) {
+		DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Depth_SHEADER_YURE));
+		//パイプラインステートの設定コマンド
+		DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Depth_SHEADER_YURE));
+	}
+	else {
 		DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Depth_SHEADER));
 		//パイプラインステートの設定コマンド
 		DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Depth_SHEADER));
+	}
 	//}
 
 	//プリミティブ形状の設定コマンド
@@ -1278,6 +1290,10 @@ void DepthDrawobject3d(Object3d *object, bool blB)
 		DirectXBase::cmdList->SetGraphicsRootConstantBufferView(5, object->constBuffTime->GetGPUVirtualAddress());
 	//}
 	//DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
+
+	if (object->shaderNumber == FBXSHADER_YURE) {
+		CommonTime::Draw(7);
+	}
 
 	// ライトの描画
 	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);
@@ -1321,9 +1337,16 @@ void ShadowDepthDrawobject3d(Object3d *object, bool blB)
 
 	//if (PipelineManager::m_NowSetPipeline != Shadow_Depth_SHEADER) {
 	//	PipelineManager::m_NowSetPipeline = Shadow_Depth_SHEADER;
+	if (object->shaderNumber == FBXSHADER_YURE) {
+		DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Shadow_Depth_SHEADER_YURE));
+		//パイプラインステートの設定コマンド
+		DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Shadow_Depth_SHEADER_YURE));
+	}
+	else {
 		DirectXBase::cmdList->SetGraphicsRootSignature(PipelineManager::GetRootSignature(Shadow_Depth_SHEADER));
 		//パイプラインステートの設定コマンド
 		DirectXBase::cmdList->SetPipelineState(PipelineManager::GetPipelineState(Shadow_Depth_SHEADER));
+	}
 	//}
 
 	//プリミティブ形状の設定コマンド
@@ -1347,6 +1370,10 @@ void ShadowDepthDrawobject3d(Object3d *object, bool blB)
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(4, object->constBuffSkin->GetGPUVirtualAddress());
 
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(6, object->constBuffShadow->GetGPUVirtualAddress());
+
+	if (object->shaderNumber == FBXSHADER_YURE) {
+		CommonTime::Draw(7);
+	}
 
 	// ライトの描画
 	DirectX3dObject::lightGroup->Draw(DirectXBase::cmdList.Get(), 3);

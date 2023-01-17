@@ -38,7 +38,7 @@ void GameCamera::Initialize()
 
 void GameCamera::Update()
 {
-		/*if (Input::isKeyTrigger(DIK_P)) {
+		if (Input::isKeyTrigger(DIK_P)) {
 			Mode = CM_Debug;
 			Camera::isCameraStop = false;
 			DebugCamPos = XMFLOAT3(0, 0, 0);
@@ -49,7 +49,7 @@ void GameCamera::Update()
 		}
 		if (Input::isKeyTrigger(DIK_R)) {
 			Camera::isCameraStop == true ? Camera::isCameraStop = false : Camera::isCameraStop = true;
-		}*/
+		}
 	/*if (Input::isKeyTrigger(DIK_L)) {
 		isShadowHosei == true ? isShadowHosei = false : isShadowHosei = true;
 	}*/
