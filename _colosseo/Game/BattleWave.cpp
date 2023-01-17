@@ -77,9 +77,9 @@ bool BattleWave::NextWaveStart()
 	}
 	WaveData* Wave = &Waves[NowWaveNum];
 	for (auto& enemy : Wave->EnemysData) {
-		if (enemy.MapPos == pPlayer->GetMapPos()) {
+		/*if (enemy.MapPos == pPlayer->GetMapPos()) {
 			continue;
-		}
+		}*/
 		pEnemys->GenerateEnemy(enemy.MapPos, enemy.Type);
 	}
 	return true;

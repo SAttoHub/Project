@@ -719,9 +719,6 @@
     <ClInclude Include="Gaussian.h">
       <Filter>ヘッダー ファイル\PostEffect\GaussianXY兼用</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>ヘッダー ファイル\Base</Filter>
-    </ClInclude>
     <ClInclude Include="DepthOfField.h">
       <Filter>ヘッダー ファイル\PostEffect\DOF</Filter>
     </ClInclude>

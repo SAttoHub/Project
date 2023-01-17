@@ -27,7 +27,7 @@ void SceneCommon::Initialize()
 	GameCamera::Instance()->Targeting(m_map.Center, 1);
 
 	m_CamDir = C_FRONTRINGHT;
-	m_CameraAngle = 45.0f;
+	m_CameraAngle = 90.0f;
 	m_CameraHeight = 15.0f;
 	m_CameraRange = 30.0f;
 }

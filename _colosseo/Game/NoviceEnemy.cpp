@@ -6,13 +6,13 @@ NoviceEnemy::NoviceEnemy()
 	m_Name = "Œ•“¬m";
 	m_JobName = "Œ•m";
 
-	m_HP = 2;
+	m_HP = 3;
 	m_MaxHP = m_HP;
 
 	m_Attack_Datas.emplace_back("UŒ‚ - 1", 1, 1, 0, Abnormality::None, 0);
-	m_Attack_Datas.emplace_back("UŒ‚ - 2", 1, 3, 1, Abnormality::None, 0);
+	m_Attack_Datas.emplace_back("UŒ‚ - 2", 2, 3, 1, Abnormality::None, 0);
 
-	m_Attack_Datas[0].SetAttackRange(2, false);
+	m_Attack_Datas[0].SetAttackRange(1, false);
 	m_Attack_Datas[1].SetAttackRange(1, false);
 
 	m_StartUp.m_MoveCost = 3;

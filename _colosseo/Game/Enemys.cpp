@@ -24,6 +24,13 @@ void Enemys::SetPlayer(Player *player)
 
 void Enemys::GenerateEnemy(XMINT2 MapPos, int Type)
 {
+	if (MapPos == pPlayer->GetMapPos()) {
+		MapPos.x += 1;
+	}
+	if (MapPos == XMINT2(4, 4) || MapPos == XMINT2(9, 4) || MapPos == XMINT2(4, 9) || MapPos == XMINT2(9, 9)) {
+		MapPos.x += 1;
+	}
+
 	if (Type == NoviceEn) {
 		NoviceEnemy en;
 		en.SetMapPos(MapPos);

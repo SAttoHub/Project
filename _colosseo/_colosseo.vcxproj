@@ -206,7 +206,6 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="CommonTime.h" />
-    <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Depth.h" />
     <ClInclude Include="Depth2.h" />
     <ClInclude Include="DepthOfField.h" />

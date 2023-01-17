@@ -12,6 +12,8 @@ class GameScene : public SceneBase
 
 	int ClearTex;
 
+	int WaveFade;
+
 public:
 	void Initialize(SceneCommon* _Common) override;
 	void Update() override;

@@ -66,14 +66,24 @@ XMFLOAT3 Charactor::GetWorldPos()
 
 void Charactor::ShadowDraw()
 {
-	ShadowDepthDrawobject3d(m_pModel);
-	ShadowDepthDrawobject3d(m_pModel, false);
+	if (GameCamera::Instance()->isShadowHosei) {
+		ShadowDepthDrawobject3d(m_pModel);
+		ShadowDepthDrawobject3d(m_pModel, false);
+	}
+	else {
+		ShadowDepthDrawobject3d(m_pModel, false);
+	}
 }
 
 void Charactor::DepthDraw()
 {
-	DepthDrawobject3d(m_pModel);
-	DepthDrawobject3d(m_pModel, false);
+	if (GameCamera::Instance()->isShadowHosei) {
+		DepthDrawobject3d(m_pModel);
+		DepthDrawobject3d(m_pModel, false);
+	}
+	else {
+		DepthDrawobject3d(m_pModel, false);
+	}
 }
 
 void Charactor::DOFDepthDraw()

@@ -85,5 +85,7 @@ public:
 	void CameraFixedNowFlame(int Flame) {
 		m_PosData.isFixedTimer = Flame;
 	}
+
+	bool isShadowHosei = true;
 };
 

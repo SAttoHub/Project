@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-	m_MapPos = { 3,3 };
+	m_MapPos = { 6,6 };
 	m_HP = 100;
 	m_MaxHP = 100;
 
@@ -57,7 +57,7 @@ void Player::Draw()
 
 void Player::Reset()
 {
-	m_MapPos = { 3,3 };
+	m_MapPos = { 6,6 };
 	m_HP = 100;
 	m_ReactionOffset = XMFLOAT3();
 	m_NowReaction = Reactions::Reac_None;

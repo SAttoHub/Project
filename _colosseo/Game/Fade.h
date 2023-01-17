@@ -13,11 +13,15 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 
 	int NormalFade;
+
+	int NextWaveFade;
 public:
 	Fade();
 	~Fade();
 	void LoadFadeResouces();
 	void DrawNormalFade(int Flame, int MaxFlame);
 	void DrawNormalFadeIn(int Flame, int MaxFlame);
+
+	void DrawWaveFade(int Flame, int MaxFlame);
 };
 

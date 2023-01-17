@@ -7,7 +7,7 @@
 #pragma comment(lib,"dxgi.lib")
 #include "Window.h"
 #include <wrl.h>
-#include "d3dx12.h"
+#include <d3dx12.h>
 
 using namespace Microsoft::WRL;
 

@@ -33,29 +33,53 @@ void StageSelect::LoadTextStage(std::string FileName)
 	if (FileName == "1-1") {
 		WaveData TestWave1;
 		TestWave1.WaveName = "1";
-		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(4, 6)));
-		TestWave1.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(8, 7)));
-		//TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceBoss, XMINT2(4, 7)));
-		//TestWave1.EnemysData.emplace_back(WaveEnemy(MagicBoss, XMINT2(5, 7)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(7, 8)));
 		m_Wave.Waves.emplace_back(TestWave1);
+	}
+	else if(FileName == "2") {
+		WaveData TestWave1;
+		TestWave1.WaveName = "1";
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(4, 8)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(8, 4)));
+		WaveData TestWave2;
+		TestWave2.WaveName = "1";
+		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(8, 9)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(8, 8)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(9, 8)));
+		m_Wave.Waves.emplace_back(TestWave1);
+		m_Wave.Waves.emplace_back(TestWave2);
+	}
+	else if (FileName == "3") {
+		WaveData TestWave1;
+		TestWave1.WaveName = "1";
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(7, 7)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(8, 8)));
+		WaveData TestWave2;
+		TestWave2.WaveName = "1";
+		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(4, 7)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceBoss, XMINT2(7, 7)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(5, 4)));
+		m_Wave.Waves.emplace_back(TestWave1);
+		m_Wave.Waves.emplace_back(TestWave2);
 	}
 	else if(FileName == "Boss") {
 		WaveData TestWave1;
 		TestWave1.WaveName = "1";
-		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(4, 7)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(7, 6)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(6, 7)));
 		TestWave1.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(5, 7)));
 		WaveData TestWave2;
 		TestWave2.WaveName = "2";
 		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(4, 7)));
-		TestWave2.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(5, 7)));
-		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(6, 7)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(MagicEn, XMINT2(7, 7)));
+		TestWave2.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(5, 4)));
 		m_Wave.Waves.emplace_back(TestWave1);
 		m_Wave.Waves.emplace_back(TestWave2);
 		WaveData TestWave3;
 		TestWave3.WaveName = "Boss";
-		TestWave3.EnemysData.emplace_back(WaveEnemy(NoviceBoss, XMINT2(4, 7)));
-		TestWave3.EnemysData.emplace_back(WaveEnemy(MagicBoss, XMINT2(5, 7)));
-		m_Wave.Waves.emplace_back(TestWave1);
+		TestWave3.EnemysData.emplace_back(WaveEnemy(NoviceBoss, XMINT2(8, 10)));
+		TestWave3.EnemysData.emplace_back(WaveEnemy(MagicBoss, XMINT2(10, 8)));
+		m_Wave.Waves.emplace_back(TestWave3);
 	}
 	else {
 		WaveData TestWave1;

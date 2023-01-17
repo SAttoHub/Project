@@ -13,7 +13,7 @@ void GameScene::Initialize(SceneCommon* _Common)
 
 	ClearTex = TexManager::LoadTexture("Resource/image/StageClear.png");
 
-	GameCamera::Instance()->Positioning(30.0f, 45.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
+	GameCamera::Instance()->Positioning(30.0f, 90.0f, 40.0f, GameCamera::Instance()->DEFAULT_FLAME_TIME);
 	GameCamera::Instance()->Targeting(Common->m_map.ChangePos(Common->m_player.GetMapPos()), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 
 	m_BattleWave->NowWaveNum = -1;
@@ -32,6 +32,8 @@ void GameScene::Initialize(SceneCommon* _Common)
 
 	Common->ResetCamera();
 
+	WaveFade = 0;
+
 	FadeInStart(30);
 }
 
@@ -39,6 +41,11 @@ void GameScene::Update()
 {
 	Cursor::Instance()->Update();
 	ActionEffectsMgr::Instance()->Update();
+
+	// (一時)Wave間フェード用
+	if (WaveFade > 0) {
+		WaveFade++;
+	}
 
 	if (Common->m_player.GetHP() <= 0) {
 		EndCount++;
@@ -78,6 +85,9 @@ void GameScene::Update()
 				}
 			}
 		}
+		else {
+			WaveFade = 1;
+		}
 
 		//NowWave++;
 		//if (NowWave == 1) {
@@ -106,6 +116,10 @@ void GameScene::Update()
 		//	NowWave--;
 		//}
 	}
+
+	/*if (Input::isKeyTrigger(DIK_K)) {
+		WaveFade = 1;
+	}*/
 
 	/*if (Common->m_player.GetHP() <= 0) {
 		DrawStrings::Instance()->DrawFormatString(XMFLOAT2(450, 300), 64, XMFLOAT4(1, 1, 1, 1),
@@ -173,6 +187,14 @@ void GameScene::Draw()
 			"R : タイトルへ");*/
 		DrawGraph(XMFLOAT2(0, 0), XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT), ClearTex);
 	}
+
+	if (WaveFade > 0) {
+		Fade::Instance()->DrawWaveFade(WaveFade, 30);
+		if (WaveFade > 30) {
+			WaveFade = 0;
+		}
+	}
+
 	FadeDraw();
 }
 

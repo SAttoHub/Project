@@ -35,6 +35,10 @@ private:
 
 	Object3d* m_StageModel_floor = nullptr;
 
+	Object3d* m_StageModel_floor_aud = nullptr;
+	Object3d* m_StageModel_wall = nullptr;
+	Object3d* m_StageModel_wall_piller = nullptr;
+
 	InstanceObjectsData* m_Pillar = nullptr;
 	struct pillarData {
 		XMFLOAT3 Pos;

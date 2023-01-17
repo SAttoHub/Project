@@ -90,6 +90,44 @@ Map::Map()
 	m_StageModel_floor->UseShadow = true;
 	m_StageModel_floor->UseDOF = true;
 
+
+	int modelData_floor_aud = LoadModelOBJ("Colosseum_Floor_Aud", "stage");
+	m_StageModel_floor_aud = DirectX3dObject::CreateObject(GetModelData(modelData_floor_aud),
+		XMFLOAT3(0, 0, 0), FBXSHADER);
+	m_StageModel_floor_aud->rotation.y = 90.0f;
+	m_StageModel_floor_aud->scale.x = 8.0f;
+	m_StageModel_floor_aud->scale.y = 8.0f;
+	m_StageModel_floor_aud->scale.z = 8.0f;
+	m_StageModel_floor_aud->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_floor_aud->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
+	m_StageModel_floor_aud->UseShadow = true;
+	m_StageModel_floor_aud->UseDOF = true;
+
+	int modelData_wall = LoadModelOBJ("Colosseum_Wall", "stage");
+	m_StageModel_wall = DirectX3dObject::CreateObject(GetModelData(modelData_wall),
+		XMFLOAT3(0, 0, 0), FBXSHADER);
+	m_StageModel_wall->rotation.y = 90.0f;
+	m_StageModel_wall->scale.x = 8.0f;
+	m_StageModel_wall->scale.y = 8.0f;
+	m_StageModel_wall->scale.z = 8.0f;
+	m_StageModel_wall->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_wall->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
+	m_StageModel_wall->UseShadow = true;
+	m_StageModel_wall->UseDOF = true;
+
+	int modelData_wall_piller = LoadModelOBJ("Colosseum_Wall_Piller", "stage");
+	m_StageModel_wall_piller = DirectX3dObject::CreateObject(GetModelData(modelData_wall_piller),
+		XMFLOAT3(0, 0, 0), FBXSHADER);
+	m_StageModel_wall_piller->rotation.y = 90.0f;
+	m_StageModel_wall_piller->scale.x = 8.0f;
+	m_StageModel_wall_piller->scale.y = 8.0f;
+	m_StageModel_wall_piller->scale.z = 8.0f;
+	m_StageModel_wall_piller->position.x = 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f;
+	m_StageModel_wall_piller->position.z = 32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f;
+	m_StageModel_wall_piller->UseShadow = true;
+	m_StageModel_wall_piller->UseDOF = true;
+
+
 	// Pillar
 	{
 		XMFLOAT3 Center = { 32.0f * (float(m_MAP_SIZE_X) / 2.0f) / 4.0f, 0.0f,  32.0f * (float(m_MAP_SIZE_Z) / 2.0f) / 4.0f };
@@ -282,6 +320,10 @@ void Map::Draw()
 	Drawobject3d(m_StageModel);
 	Drawobject3d(m_StageModel_saku);
 	Drawobject3d(m_StageModel_floor);
+
+	Drawobject3d(m_StageModel_floor_aud);
+	Drawobject3d(m_StageModel_wall);
+	Drawobject3d(m_StageModel_wall_piller);
 	//Drawobject3d(m_StageModel_tree);
 	Drawobject3d(torch);
 	Drawobject3d(torchBloom);
@@ -325,6 +367,10 @@ void Map::ShadowDraw()
 	ShadowDepthDrawobject3d(m_StageModel);
 	ShadowDepthDrawobject3d(m_StageModel_saku);
 	ShadowDepthDrawobject3d(m_StageModel_floor);
+
+	ShadowDepthDrawobject3d(m_StageModel_floor_aud);
+	ShadowDepthDrawobject3d(m_StageModel_wall);
+	ShadowDepthDrawobject3d(m_StageModel_wall_piller);
 	//ShadowDepthDrawobject3d(m_StageModel_tree);
 	ShadowDepthDrawobject3d(torch);
 	ShadowDepthDrawobject3d(m_Pillar);
@@ -335,6 +381,11 @@ void Map::DepthDraw()
 	DepthDrawobject3d(m_StageModel);
 	DepthDrawobject3d(m_StageModel_saku);
 	DepthDrawobject3d(m_StageModel_floor);
+
+	DepthDrawobject3d(m_StageModel_floor_aud);
+	DepthDrawobject3d(m_StageModel_wall);
+	DepthDrawobject3d(m_StageModel_wall_piller);
+
 	//DepthDrawobject3d(m_StageModel_tree);
 	DepthDrawobject3d(torch);
 	DepthDrawobject3d(torchBloom);
@@ -346,6 +397,11 @@ void Map::DOFDepthDraw()
 	DOFDepthDrawobject3d(m_StageModel);
 	DOFDepthDrawobject3d(m_StageModel_saku);
 	DOFDepthDrawobject3d(m_StageModel_floor);
+
+	DOFDepthDrawobject3d(m_StageModel_floor_aud);
+	DOFDepthDrawobject3d(m_StageModel_wall);
+	DOFDepthDrawobject3d(m_StageModel_wall_piller);
+
 	//DOFDepthDrawobject3d(m_StageModel_tree);
 	DOFDepthDrawobject3d(torch);
 	DOFDepthDrawobject3d(ChipGuide);
