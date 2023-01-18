@@ -42,14 +42,25 @@ void Player::Update()
 {
 	WaitUpdate();
 
+	if (Input::isKeyTrigger(DIK_J)) {
+		int hoge = int(m_NowDir) + 1;
+		if (hoge >= int(Chara_Dir::MAX)) {
+			hoge = hoge - int(Chara_Dir::MAX);
+		}
+		m_NowDir = Chara_Dir(hoge);
+	}
+
 	ReactionUpdate();
 	m_pModel->position = GetWorldPos() + m_ReactionOffset;
 	SetDirFromCamera();
-	m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
+	//m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
+	//m_pModel->material.texNumber = m_Image[(int)GetDrawDir()];
 }
 
 void Player::Draw()
 {
+	m_pModel->position = GetWorldPos() + m_ReactionOffset;
+	m_pModel->material.texNumber = m_Image[(int)GetDrawDir()];
 	Drawobject3d(m_pModel);
 	/*DrawStrings::Instance()->DrawFormatString(XMFLOAT2(10, 400), 32, XMFLOAT4(1, 1, 1, 1),
 		"PlayerHP : %d", m_HP);*/

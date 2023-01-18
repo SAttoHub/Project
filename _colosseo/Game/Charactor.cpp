@@ -9,6 +9,15 @@
 const float Charactor::DAMAGE_REACTION_OFFSET_RANGE = 4.0f;
 const int Charactor::DAMAGE_REACTION_TIME = 10;
 
+Charactor::Chara_Dir Charactor::GetDrawDir()
+{
+	int Result = int(m_NowDir) + int(m_DirFromCamera);
+	if (Result >= int(Chara_Dir::MAX)) {
+		Result = Result - int(Chara_Dir::MAX);
+	}
+	return Chara_Dir(Result);
+}
+
 void Charactor::SetDirFromCamera()
 {
 	// オブジェクトの回転角度から正面を求める
@@ -66,23 +75,45 @@ XMFLOAT3 Charactor::GetWorldPos()
 
 void Charactor::ShadowDraw()
 {
+	//// モデル座標XZとカメラ座標XZ
+	//XMFLOAT2 modelPosXZ = XMFLOAT2(m_pModel->position.x, m_pModel->position.z);
+	//XMFLOAT2 cameraPosXZ = XMFLOAT2(Camera::eye.x, Camera::eye.z);
+	//// モデル→カメラベクトルを正規化する
+	//XMFLOAT2 norm = Normalize2D(modelPosXZ - cameraPosXZ);
+	//m_pModel->position = GetWorldPos() + m_ReactionOffset;
+	//m_pModel->position.x += norm.x * 5.0f;
+	//m_pModel->position.z += norm.y * 5.0f;
+
+	//m_pModel->material.texNumber = m_Image[int(m_NowDir)];
+
 	if (GameCamera::Instance()->isShadowHosei) {
 		ShadowDepthDrawobject3d(m_pModel);
-		ShadowDepthDrawobject3d(m_pModel, false);
+		//ShadowDepthDrawobject3d(m_pModel, false);
 	}
 	else {
-		ShadowDepthDrawobject3d(m_pModel, false);
+		//ShadowDepthDrawobject3d(m_pModel, false);
 	}
 }
 
 void Charactor::DepthDraw()
 {
+	//// モデル座標XZとカメラ座標XZ
+	//XMFLOAT2 modelPosXZ = XMFLOAT2(m_pModel->position.x, m_pModel->position.z);
+	//XMFLOAT2 cameraPosXZ = XMFLOAT2(Camera::eye.x, Camera::eye.z);
+	//// モデル→カメラベクトルを正規化する
+	//XMFLOAT2 norm = Normalize2D(modelPosXZ - cameraPosXZ);
+	//m_pModel->position = GetWorldPos() + m_ReactionOffset;
+	//m_pModel->position.x += norm.x * 5.0f;
+	//m_pModel->position.z += norm.y * 5.0f;
+
+
+	//m_pModel->material.texNumber = m_Image[int(m_NowDir)];
 	if (GameCamera::Instance()->isShadowHosei) {
 		DepthDrawobject3d(m_pModel);
-		DepthDrawobject3d(m_pModel, false);
+		//DepthDrawobject3d(m_pModel, false);
 	}
 	else {
-		DepthDrawobject3d(m_pModel, false);
+		//DepthDrawobject3d(m_pModel, false);
 	}
 }
 

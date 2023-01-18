@@ -168,21 +168,23 @@ void Enemy::Update()
 
 	m_pModel->position = GetWorldPos() + m_ReactionOffset;
 	SetDirFromCamera();
-	m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
+	//m_pModel->material.texNumber = m_Image[(int)m_DirFromCamera];
+	m_pModel->material.texNumber = m_Image[(int)GetDrawDir()];
 	if (m_MyTurn) {
 		m_pModel->color.x = 1.0f;
 		m_pModel->color.y = 1.0f;
 		m_pModel->color.z = 1.0f;
 	}
 	else {
-		m_pModel->color.x = 0.5f;
-		m_pModel->color.y = 0.5f;
-		m_pModel->color.z = 0.5f;
+		m_pModel->color.x = 0.8f;
+		m_pModel->color.y = 0.8f;
+		m_pModel->color.z = 0.8f;
 	}
 }
 
 void Enemy::Draw()
 {
+	m_pModel->material.texNumber = m_Image[(int)GetDrawDir()];
 	if (m_MyTurn) {
 		m_pModel->color.x = 1.0f;
 		m_pModel->color.y = 1.0f;
@@ -190,9 +192,9 @@ void Enemy::Draw()
 		m_pMap->DrawGuide(GetMapPos(), ColorConvert(228, 86, 83, 255), GuidePriority::NOW_ACT_UNIT);
 	}
 	else {
-		m_pModel->color.x = 0.5f;
-		m_pModel->color.y = 0.5f;
-		m_pModel->color.z = 0.5f;
+		m_pModel->color.x = 0.8f;
+		m_pModel->color.y = 0.8f;
+		m_pModel->color.z = 0.8f;
 	}
 	Drawobject3d(m_pModel);
 }
@@ -383,6 +385,27 @@ void Enemy::Act()
 		if (m_pMap->CostTable[p.x][p.y] <= m_MoveCost) {
 			// 移動コスト分コストを引く
 			m_MoveCost -= m_pMap->CostTable[p.x][p.y];
+			// 移動した方向に向きを変更する
+			if (p.x == m_MapPos.x) {
+				if (p.y > m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::BACK);
+				}
+				else if (p.y < m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::FRONT);
+				}
+			}
+			else {
+				if (p.x > m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::RINGHT);
+				}
+				else if (p.x < m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::LEFT);
+				}
+			}
 			// 移動する
 			SetMapPos(XMINT2(p.x, p.y));
 			// 移動したのでルートを詰める
@@ -493,12 +516,60 @@ void Enemy::AttackEffect() {
 		ActionEffectsMgr::Instance()->StartNoveceEffect(StartPos, pPlayer->GetModelPos());
 		Wait(ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME);
 
+		//攻撃した方向に向きを変更
+		if (m_Attack_Datas[m_AttackIndex].m_IsLinear == true) {
+			if (pPlayer->GetMapPos().x == m_MapPos.x) {
+				if (pPlayer->GetMapPos().y > m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::BACK);
+				}
+				else if (pPlayer->GetMapPos().y < m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::FRONT);
+				}
+			}
+			else {
+				if (pPlayer->GetMapPos().x > m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::RINGHT);
+				}
+				else if (pPlayer->GetMapPos().x < m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::LEFT);
+				}
+			}
+		}
+
 		NoviceAttackReaction(GetMapPos(), pPlayer->GetMapPos());
 	}
 	else if (m_Attack_Datas[m_AttackIndex].m_Name == "攻撃 - 2") {
 		XMFLOAT3 StartPos = GetModelPos();
 		ActionEffectsMgr::Instance()->StartNoveceEffect(StartPos, pPlayer->GetModelPos());
 		Wait(ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME);
+
+		//攻撃した方向に向きを変更
+		if (m_Attack_Datas[m_AttackIndex].m_IsLinear == true) {
+			if (pPlayer->GetMapPos().x == m_MapPos.x) {
+				if (pPlayer->GetMapPos().y > m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::BACK);
+				}
+				else if (pPlayer->GetMapPos().y < m_MapPos.y) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::FRONT);
+				}
+			}
+			else {
+				if (pPlayer->GetMapPos().x > m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::RINGHT);
+				}
+				else if (pPlayer->GetMapPos().x < m_MapPos.x) {
+					// 向きを設定
+					SetDir(Charactor::Chara_Dir::LEFT);
+				}
+			}
+		}
 
 		NoviceAttackReaction(GetMapPos(), pPlayer->GetMapPos());
 	}

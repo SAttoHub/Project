@@ -134,6 +134,14 @@ void Cards::Draw()
 				TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));
 		}
 	}
+
+	// 方向決定時
+	if (NowPhase == 2) {
+		for (auto& data : CanSelectChips) {
+			pMap->DrawGuide(data, ColorConvert(0, 183, 206, 255), GuidePriority::MOVE_OR_ATTACK, false);
+		}
+	}
+
 	if (isMyTurn) {
 		pMap->DrawGuide(pPlayer->GetMapPos(), ColorConvert(171, 225, 250, 255), GuidePriority::NOW_ACT_UNIT);
 	}
@@ -190,6 +198,9 @@ void Cards::PlayerTurnUpdate()
 	}
 	else if (NowPhase == 1) {
 		CardEffectPhaseUpdate();
+	}
+	else if (NowPhase == 2) {
+		CardAfterPhaseUpdate();
 	}
 }
 
@@ -299,6 +310,28 @@ void Cards::CardEffectPhaseUpdate()
 			else {
 				Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
 				if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
+					// 攻撃した方向に向きを変更
+					if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
+						if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
+							// 向きを設定
+							pPlayer->SetDir(Charactor::Chara_Dir::BACK);
+						}
+						else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
+							// 向きを設定
+							pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
+						}
+					}
+					else {
+						if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
+							// 向きを設定
+							pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
+						}
+						else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
+							// 向きを設定
+							pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
+						}
+					}
+					//
 					en->Damage(1);
 					m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
 					m_UseCardType = CardType::NONE;
@@ -325,6 +358,13 @@ void Cards::CardEffectPhaseUpdate()
 				GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 				PreCheckChipOld = XMINT2(-1, -1);
 				PreCheckChip = XMINT2(-2, -2);
+
+				// 移動後に向きを変更できる
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -1));
+				NowPhase = 2;
 			}
 		}
 	}
@@ -336,6 +376,60 @@ void Cards::CardEffectPhaseUpdate()
 	//	// TargetTagの付いているColliderと衝突した
 	//}
 
+}
+
+void Cards::CardAfterPhaseUpdate()
+{
+	// 現在は向き変更のみ対応
+	// 選択マスの移動
+	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
+		if (Input::isKeyTrigger(DIK_UP)) {
+			m_NowSelectChip.y++;
+		}
+		if (Input::isKeyTrigger(DIK_DOWN)) {
+			m_NowSelectChip.y--;
+		}
+		if (Input::isKeyTrigger(DIK_LEFT)) {
+			m_NowSelectChip.x--;
+		}
+		if (Input::isKeyTrigger(DIK_RIGHT)) {
+			m_NowSelectChip.x++;
+		}
+	}
+	else {
+		m_NowSelectChip = pMap->NowHitChip;
+	}
+
+	// 向きを決定
+	if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
+		// 選択マスが対象範囲内か
+		if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
+			// 範囲内なら
+			if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
+				if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
+					// 向きを設定
+					pPlayer->SetDir(Charactor::Chara_Dir::BACK);
+				}
+				else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
+					// 向きを設定
+					pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
+				}
+			}
+			else {
+				if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
+					// 向きを設定
+					pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
+				}
+				else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
+					// 向きを設定
+					pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
+				}
+			}
+			// 終了
+			NowPhase = 0;
+		}
+
+	}
 }
 
 void Cards::Reset()

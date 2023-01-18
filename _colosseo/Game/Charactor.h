@@ -115,7 +115,7 @@ public:
 // 向き関連
 //----------------------------------------------------------------
 
-protected:
+public:
 	/*------------------------------------------------
 						BACK
 			BACKRINGHT			BACKLEFT
@@ -131,9 +131,10 @@ protected:
 		BACK,
 		BACKLEFT,
 		LEFT,
-		FRONTLEFT
+		FRONTLEFT,
+		MAX
 	};
-
+protected:
 	// 現在向いている方向
 	Chara_Dir m_NowDir = Chara_Dir::FRONT;
 
@@ -146,6 +147,13 @@ public:
 	/// </summary>
 	/// <param name="_Dir"> 向き </param>
 	void SetDir(Chara_Dir _Dir) { m_NowDir = _Dir; }
+
+
+	/// <summary>
+	/// 描画する向きを取得する
+	/// </summary>
+	/// <returns></returns>
+	Chara_Dir GetDrawDir();
 
 	/// <summary>
 	/// カメラから見た向きを更新する

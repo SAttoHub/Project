@@ -1177,6 +1177,8 @@ void Drawobject3d(Object3d *object) {
 	//定数バッファビューをセット
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, object->constBuffB0->GetGPUVirtualAddress());
 	DirectXBase::cmdList->SetGraphicsRootConstantBufferView(1, object->material.constBuffB1->GetGPUVirtualAddress());
+
+	//int object->material.texNumber
 	//シェーダーリソースビュー
 	DirectXBase::cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
 		TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),

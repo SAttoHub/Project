@@ -46,6 +46,7 @@ public:
 	
 	std::vector<int> m_Deck;
 
+	// 0 : カード選択  1 : カード処理　2 : カード後処理(移動後の向き変更等)
 	int NowPhase = 0;
 	CardType m_UseCardType = CardType::NONE;
 	int m_UseCardIndex = 0;
@@ -73,6 +74,7 @@ public:
 	void PlayerTurnUpdate();
 	void CardPhaseUpdate();
 	void CardEffectPhaseUpdate();
+	void CardAfterPhaseUpdate();
 
 	void Reset(); // 仮リセット
 

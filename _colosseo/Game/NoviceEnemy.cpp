@@ -12,8 +12,8 @@ NoviceEnemy::NoviceEnemy()
 	m_Attack_Datas.emplace_back("UŒ‚ - 1", 1, 1, 0, Abnormality::None, 0);
 	m_Attack_Datas.emplace_back("UŒ‚ - 2", 2, 3, 1, Abnormality::None, 0);
 
-	m_Attack_Datas[0].SetAttackRange(1, false);
-	m_Attack_Datas[1].SetAttackRange(1, false);
+	m_Attack_Datas[0].SetAttackRange(1, true);
+	m_Attack_Datas[1].SetAttackRange(1, true);
 
 	m_StartUp.m_MoveCost = 3;
 
