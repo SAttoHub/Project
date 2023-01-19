@@ -2,6 +2,9 @@
 #include "..\Input.h"
 #include "GameCamera.h"
 
+#include "NormalMoveCard.h"
+#include "NormalAttackCard.h"
+
 Cards::Cards()
 {
 
@@ -24,6 +27,9 @@ Cards::Cards()
 	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 200);
 
 	isMyTurn = false;
+
+
+	m_Cards.reserve(16);
 }
 
 Cards::~Cards()
@@ -36,11 +42,28 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	pPlayer = _Player;
 	pEnemys = _Enemys;
 	pMap = _Map;
+	/*m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
+
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		delete m_Cards[i];
+	}
+	m_Cards.clear();
+
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+
+	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[2]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[3]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[4]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 
 	m_Cards[0]->Initialize(0, 5);
 	m_Cards[1]->Initialize(1, 5);
@@ -82,18 +105,6 @@ void Cards::Draw()
 	}
 
 	if (m_UseCardType != CardType::NONE) {
-		//if (m_NowSelectChip.x != -1) {
-		//	/*DrawCube(XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE, 0, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE),
-		//		XMFLOAT3(float(m_NowSelectChip.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 5.1f, float(m_NowSelectChip.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
-		//		ColorConvert(255, 255, 0, 255));*/
-		//	pMap->DrawGuide(m_NowSelectChip, ColorConvert(255, 255, 0, 255), false);
-		//}
-		//for (auto& data : CanSelectChips) {
-		//	/*DrawCube(XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE, 0, float(data.y) * ChipData::CHIP_SIZE),
-		//		XMFLOAT3(float(data.x) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE, 2.1f, float(data.y) * ChipData::CHIP_SIZE + ChipData::CHIP_SIZE),
-		//		ColorConvert(0, 255, 0, 150));*/
-		//	pMap->DrawGuide(data, ColorConvert(0, 255, 0, 255), false);
-		//}
 		switch (m_UseCardType)
 		{
 		case CardType::DEFAULT_ATTACK:
@@ -149,12 +160,35 @@ void Cards::Draw()
 
 void Cards::StartTurn()
 {
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		delete m_Cards[i];
+	}
+
 	m_Cards.clear();
+	/*m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
+
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+
+	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[2]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[3]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[4]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+
+	m_Cards[0]->Initialize(0, 5);
+	m_Cards[1]->Initialize(1, 5);
+	m_Cards[2]->Initialize(2, 5);
+	m_Cards[3]->Initialize(3, 5);
+	m_Cards[4]->Initialize(4, 5);
+
 
 	m_UseCardType = CardType::NONE;
 	NowPhase = 0;
@@ -214,11 +248,28 @@ void Cards::CardPhaseUpdate()
 					m_UseCardIndex = i;
 					m_Cards[i]->Active = true;
 					m_NowSelectChip = pPlayer->GetMapPos();
-					NowPhase = 1;
 					PreCheckChipOld = XMINT2(-1, -1);
 					PreCheckChip = XMINT2(-2, -2);
 
+					// 選択カードのアップデート
 					if (m_UseCardType == CardType::DEFAULT_ATTACK) {
+						m_Cards[i]->SelectTrigger(pPlayer->GetMapPos(), this);
+						PreDamage = m_Cards[i]->m_PreDamage;
+					}
+					else if (m_UseCardType == CardType::DEFAULT_MOVE) {
+						m_Cards[i]->SelectTrigger(pPlayer->GetMapPos(), this);
+						PreDamage = m_Cards[i]->m_PreDamage;
+						for (int x = 0; x < CanSelectChips.size(); x++) {
+							if (pEnemys->GetEnemy(CanSelectChips[x]) != nullptr) {
+								CanSelectChips.erase(CanSelectChips.begin() + x);
+							}
+						}
+					}
+					m_Cards[i]->SetSelectData(m_NowSelectChip, PreCheckChip);
+					m_Cards[i]->UpdatePhese1();
+
+
+					/*if (m_UseCardType == CardType::DEFAULT_ATTACK) {
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
 						AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
@@ -245,11 +296,19 @@ void Cards::CardPhaseUpdate()
 								CanSelectChips.erase(CanSelectChips.begin() + x);
 							}
 						}
-					}
+					}*/
 
 					break;
 				}
 			}
+		}
+	}
+
+	// フェーズエンドフラグが立っているなら
+	if (m_UseCardIndex != -1) {
+		if (m_Cards[m_UseCardIndex]->m_PheseChange) {
+			m_Cards[m_UseCardIndex]->m_PheseChange = false;
+			NowPhase = 1;
 		}
 	}
 
@@ -279,6 +338,8 @@ void Cards::CardEffectPhaseUpdate()
 		PreDamage = 0;
 		PreCheckChipOld = XMINT2(-1, -1);
 		PreCheckChip = XMINT2(-2, -2);
+
+		m_UseCardIndex = -1;
 	}
 	if (Input::GetMouseMove() == Input::MouseMove((LONG)0, (LONG)0, (LONG)0)) {
 		if (Input::isKeyTrigger(DIK_UP)) {
@@ -297,65 +358,85 @@ void Cards::CardEffectPhaseUpdate()
 	else {
 		m_NowSelectChip = pMap->NowHitChip;
 	}
+
+
+	// 選択中の
+
 	if (m_UseCardType == CardType::DEFAULT_ATTACK) {
-		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
-			// 選択一度目はカードを発動しない
-			PreCheckChip = m_NowSelectChip;
-			if (PreCheckChipOld != PreCheckChip) {
-				PreCheckChipOld = PreCheckChip;
-				Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
-				if (en) PreChipExistEnemy = true;
-				else PreChipExistEnemy = false;
-			}
-			else {
-				Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
-				if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
-					// 攻撃した方向に向きを変更
-					if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
-						if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
-							// 向きを設定
-							pPlayer->SetDir(Charactor::Chara_Dir::BACK);
-						}
-						else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
-							// 向きを設定
-							pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
-						}
-					}
-					else {
-						if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
-							// 向きを設定
-							pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
-						}
-						else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
-							// 向きを設定
-							pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
-						}
-					}
-					//
-					en->Damage(1);
-					m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
-					m_UseCardType = CardType::NONE;
-					PreDamage = 0;
-					NowPhase = 0;
-					CanSelectChips.clear();
-					PreCheckChipOld = XMINT2(-1, -1);
-					PreCheckChip = XMINT2(-2, -2);
-					en->DamageReaction(pPlayer->GetMapPos(), en->GetMapPos());
-					Wait(10);
-				}
-			}
-		}
+		m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
+		m_Cards[m_UseCardIndex]->UpdatePhese2();
+		//en->Damage(1);
+		//m_UseCardType = CardType::NONE;
+		//PreDamage = 0;
+		////NowPhase = 0;
+		//CanSelectChips.clear();
+		//PreCheckChipOld = XMINT2(-1, -1);
+		//PreCheckChip = XMINT2(-2, -2);
+		//en->DamageReaction(pPlayer->GetMapPos(), en->GetMapPos());
+		Wait(10);
+
+
+		//if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
+		//	// 選択一度目はカードを発動しない
+		//	if (PreCheckChipOld != PreCheckChip) {
+		//		PreCheckChipOld = PreCheckChip;
+		//		Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
+		//		if (en) PreChipExistEnemy = true;
+		//		else PreChipExistEnemy = false;
+		//	}
+		//	else {
+		//		Enemy* en = pEnemys->GetEnemy(m_NowSelectChip);
+		//		if (en != nullptr && ExistInCanSelectChips(m_NowSelectChip)) {
+		//			// 攻撃した方向に向きを変更
+		//			if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
+		//				if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
+		//					// 向きを設定
+		//					pPlayer->SetDir(Charactor::Chara_Dir::BACK);
+		//				}
+		//				else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
+		//					// 向きを設定
+		//					pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
+		//				}
+		//			}
+		//			else {
+		//				if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
+		//					// 向きを設定
+		//					pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
+		//				}
+		//				else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
+		//					// 向きを設定
+		//					pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
+		//				}
+		//			}
+		//			//
+		//			en->Damage(1);
+		//			m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+		//			m_UseCardType = CardType::NONE;
+		//			PreDamage = 0;
+		//			NowPhase = 0;
+		//			CanSelectChips.clear();
+		//			PreCheckChipOld = XMINT2(-1, -1);
+		//			PreCheckChip = XMINT2(-2, -2);
+		//			en->DamageReaction(pPlayer->GetMapPos(), en->GetMapPos());
+		//			Wait(10);
+		//		}
+		//	}
+		//}
 	}
 	else if (m_UseCardType == CardType::DEFAULT_MOVE) {
 		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
+			// 選択したマスが移動可能なら
 			if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
-				m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
-				pPlayer->SetMapPos(m_NowSelectChip);
-				m_UseCardType = CardType::NONE;
+				m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
+				m_Cards[m_UseCardIndex]->UpdatePhese2();
+				//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+
+				//pPlayer->SetMapPos(m_NowSelectChip);
+				//m_UseCardType = CardType::NONE;
 				PreDamage = 0;
-				NowPhase = 0;
+				//NowPhase = 0;
 				CanSelectChips.clear();
-				GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				//GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
 				PreCheckChipOld = XMINT2(-1, -1);
 				PreCheckChip = XMINT2(-2, -2);
 
@@ -364,7 +445,32 @@ void Cards::CardEffectPhaseUpdate()
 				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
 				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
 				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -1));
-				NowPhase = 2;
+				//NowPhase = 2;
+			}
+		}
+	}
+
+	// 各カード処理用のパラメータ更新
+	if (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip) {
+		// 前回どのマスを選択していたか
+		PreCheckChip = m_NowSelectChip;
+	}
+
+	// フェーズエンドフラグが立っているなら
+	if (m_UseCardIndex != -1) {
+		if (m_Cards[m_UseCardIndex]->m_PheseChange) {
+			m_Cards[m_UseCardIndex]->m_PheseChange = false;
+			NowPhase = 2;
+			if (m_Cards[m_UseCardIndex]->m_PheseCount == NowPhase) {
+				NowPhase = 0;
+				//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+				delete m_Cards[m_UseCardIndex];
+				m_Cards.erase(m_Cards.begin() + m_UseCardIndex);
+				m_UseCardType = CardType::NONE;
+				PreDamage = 0;
+				CanSelectChips.clear();
+				PreCheckChipOld = XMINT2(-1, -1);
+				PreCheckChip = XMINT2(-2, -2);
 			}
 		}
 	}
@@ -400,46 +506,94 @@ void Cards::CardAfterPhaseUpdate()
 		m_NowSelectChip = pMap->NowHitChip;
 	}
 
-	// 向きを決定
-	if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
-		// 選択マスが対象範囲内か
-		if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
-			// 範囲内なら
-			if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
-				if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
-					// 向きを設定
-					pPlayer->SetDir(Charactor::Chara_Dir::BACK);
-				}
-				else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
-					// 向きを設定
-					pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
-				}
-			}
-			else {
-				if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
-					// 向きを設定
-					pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
-				}
-				else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
-					// 向きを設定
-					pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
-				}
-			}
-			// 終了
-			NowPhase = 0;
-		}
 
+	if (m_UseCardType == CardType::DEFAULT_MOVE) {
+		m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
+		m_Cards[m_UseCardIndex]->UpdatePhese3();
+	}
+
+	// 向きを決定
+	//if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
+	//	// 選択マスが対象範囲内か
+	//	if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
+	//		// 範囲内なら
+	//		if (m_NowSelectChip.x == pPlayer->GetMapPos().x) {
+	//			if (m_NowSelectChip.y > pPlayer->GetMapPos().y) {
+	//				// 向きを設定
+	//				pPlayer->SetDir(Charactor::Chara_Dir::BACK);
+	//			}
+	//			else if (m_NowSelectChip.y < pPlayer->GetMapPos().y) {
+	//				// 向きを設定
+	//				pPlayer->SetDir(Charactor::Chara_Dir::FRONT);
+	//			}
+	//		}
+	//		else {
+	//			if (m_NowSelectChip.x > pPlayer->GetMapPos().x) {
+	//				// 向きを設定
+	//				pPlayer->SetDir(Charactor::Chara_Dir::RINGHT);
+	//			}
+	//			else if (m_NowSelectChip.x < pPlayer->GetMapPos().x) {
+	//				// 向きを設定
+	//				pPlayer->SetDir(Charactor::Chara_Dir::LEFT);
+	//			}
+	//		}
+	//		// 終了
+	//		//NowPhase = 0;
+	//	}
+
+	//}
+
+
+	// フェーズエンドフラグが立っているなら
+	if (m_UseCardIndex != -1) {
+		if (m_Cards[m_UseCardIndex]->m_PheseChange) {
+			m_Cards[m_UseCardIndex]->m_PheseChange = false;
+			NowPhase = 0;
+			//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+
+			delete m_Cards[m_UseCardIndex];
+			m_Cards.erase(m_Cards.begin() + m_UseCardIndex);
+
+			m_UseCardType = CardType::NONE;
+			/*if (m_Cards[m_UseCardIndex]->m_PheseCount == NowPhase) {
+				NowPhase = 0;
+				m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+			}*/
+		}
 	}
 }
 
 void Cards::Reset()
 {
+	for (int i = 0; i < int(m_Cards.size()); i++) {
+		delete m_Cards[i];
+	}
+
 	m_Cards.clear();
+	/*m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
-	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
+	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));*/
+
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalAttackCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NormalMoveCard());
+
+	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[2]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[3]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[4]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+
+	m_Cards[0]->Initialize(0, 5);
+	m_Cards[1]->Initialize(1, 5);
+	m_Cards[2]->Initialize(2, 5);
+	m_Cards[3]->Initialize(3, 5);
+	m_Cards[4]->Initialize(4, 5);
+
 	for (int i = 0; i < int(m_Cards.size()); i++) {
 		m_Cards[i]->Initialize(i, int(m_Cards.size()));
 	}

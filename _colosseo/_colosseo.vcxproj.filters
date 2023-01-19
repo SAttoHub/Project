@@ -331,6 +331,9 @@
     <Filter Include="ソース ファイル\Game\ActionEffects">
       <UniqueIdentifier>{a4c3a5f5-0997-470b-bd1f-1097098a469c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Card\Cards">
+      <UniqueIdentifier>{a6864d86-9c35-4635-9b9a-18a82ff6338b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -614,6 +617,12 @@
     </ClCompile>
     <ClCompile Include="Game\NoviceAttackEffect.cpp">
       <Filter>ソース ファイル\Game\ActionEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NormalAttackCard.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NormalMoveCard.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1018,6 +1027,12 @@
     </ClInclude>
     <ClInclude Include="Game\NoviceAttackEffect.h">
       <Filter>ヘッダー ファイル\Game\ActionEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NormalAttackCard.h">
+      <Filter>ヘッダー ファイル\Game\Card\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NormalMoveCard.h">
+      <Filter>ヘッダー ファイル\Game\Card\Cards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

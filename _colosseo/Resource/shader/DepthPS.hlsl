@@ -75,6 +75,9 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float4 col = float4(0.0f,0.0f,0.0f,1.0f);
 
+	cam.z = cam.z / cam.w;
+	obj.z = obj.z / obj.w;
+
 	// ”íÊŠE[“x‚Ì”ÍˆÍ“à‚ğ 0.0f ` 1.0f ‚É•ÏŠ·
 	if (sa(cam.z, obj.z) < ParamF.x) {
 		col.r = 0.0f;

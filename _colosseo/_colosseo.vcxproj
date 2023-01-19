@@ -156,6 +156,8 @@
     <ClCompile Include="Game\MagicBossEnemy.cpp" />
     <ClCompile Include="Game\MagicEnemy.cpp" />
     <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\NormalAttackCard.cpp" />
+    <ClCompile Include="Game\NormalMoveCard.cpp" />
     <ClCompile Include="Game\NoviceAttackEffect.cpp" />
     <ClCompile Include="Game\NoviceBossEnemy.cpp" />
     <ClCompile Include="Game\NoviceEnemy.cpp" />
@@ -289,6 +291,8 @@
     <ClInclude Include="Game\MagicBossEnemy.h" />
     <ClInclude Include="Game\MagicEnemy.h" />
     <ClInclude Include="Game\Map.h" />
+    <ClInclude Include="Game\NormalAttackCard.h" />
+    <ClInclude Include="Game\NormalMoveCard.h" />
     <ClInclude Include="Game\NoviceAttackEffect.h" />
     <ClInclude Include="Game\NoviceBossEnemy.h" />
     <ClInclude Include="Game\NoviceEnemy.h" />

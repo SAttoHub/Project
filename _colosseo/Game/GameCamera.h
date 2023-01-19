@@ -81,6 +81,7 @@ public:
 	void TargetingCoercion(XMFLOAT3 Target, int Flame);
 	void TargetingInstantly(XMFLOAT3 Target);
 	float GetAngle() { return m_PosData.MarkAngle; }
+	float GeTtargetDistance();
 
 	void CameraFixedNowFlame(int Flame) {
 		m_PosData.isFixedTimer = Flame;

@@ -20,7 +20,8 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
-	My_F_List<Card> m_Cards;
+	//My_F_List<Card*> m_Cards;
+	std::vector<Card*> m_Cards;
 
 private:
 	Player *pPlayer = nullptr;

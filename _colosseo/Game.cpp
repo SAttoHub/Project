@@ -18,7 +18,7 @@ void Game::Initialize()
 	//îÌé äEê[ìx
 	InterpSize = 380.0f;
 	Focus = 30.0f;
-	FocusSize = 20.0f;
+	FocusSize = 68.0f;
 	UseFlag = true;
 	GaussianEffectX = std::make_unique<Gaussian>();
 	GaussianEffectX->Initialize(0);
@@ -234,6 +234,7 @@ void Game::Update()
 	ImGui::End();
 	*/
 
+	Focus = GameCamera::Instance()->GeTtargetDistance();
 	
 	/*float AddY = -200;
 
@@ -247,7 +248,7 @@ void Game::Update()
 	if (ImGui::Button("Reset")) {
 		InterpSize = 380.0f;
 		Focus = 30.0f;
-		FocusSize = 20.0f;
+		FocusSize = 68.0f;
 		UseFlag = true;
 	}
 	ImGui::End();*/

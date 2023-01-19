@@ -1,13 +1,11 @@
 #include "Card.h"
+#include "Player.h"
+#include "Enemys.h"
+#include "Map.h"
 
-Card::Card(CardType Type)
+Card::Card()
 {
-	width = 100.0f;
-	height = 200.0f;
-	LeftTop = {};
-	HitCursor = false;
-	m_Type = Type;
-	Active = false;
+	ConstructInitialize();
 
 	switch (m_Type)
 	{
@@ -97,6 +95,46 @@ void Card::Draw(int index, int MaxIdx)
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));
 	}
 }
+
+void Card::ConstructInitialize()
+{
+	width = 100.0f;
+	height = 200.0f;
+	LeftTop = {};
+	HitCursor = false;
+	Active = false;
+}
+
+void Card::SetPlEnPtr(Player* _pPlayer, Enemys* _pEnemys, Map* _pMap)
+{
+	pPlayer = _pPlayer;
+	pEnemys = _pEnemys;
+	pMap = _pMap;
+}
+
+bool Card::CanPhaseEnd()
+{
+	// WaitTimerが0より大きい時にm_WaitTimerを減少させる
+	m_WaitTimer < 0 ? m_WaitTimer = 0 : m_WaitTimer--;
+	
+	// ターンが終了できる場合
+	if (m_isPheseEnd && m_WaitTimer <= 0) {
+		m_PheseChange = true;
+		return true;
+	}
+
+	return false;
+}
+
+void Card::PheseEndFunc(int _WaitFlame)
+{
+	// フェーズ終了フラグを立てる
+	m_isPheseEnd = true;
+	// 待機フレームを設定する
+	m_WaitTimer = _WaitFlame;
+}
+
+
 
 void Card::Initialize(int index, int MaxIdx)
 {

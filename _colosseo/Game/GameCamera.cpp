@@ -274,3 +274,8 @@ void GameCamera::TargetingInstantly(XMFLOAT3 Target)
 	m_TargetData.EndFlame = 0;
 	m_TargetData.CanChangeTarget = true;
 }
+
+float GameCamera::GeTtargetDistance()
+{
+	return float(Smath::distance_XMF3(m_PosData.Position, m_TargetData.Target));
+}

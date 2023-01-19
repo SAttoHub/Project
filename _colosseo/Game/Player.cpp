@@ -43,11 +43,12 @@ void Player::Update()
 	WaitUpdate();
 
 	if (Input::isKeyTrigger(DIK_J)) {
-		int hoge = int(m_NowDir) + 1;
+		/*int hoge = int(m_NowDir) + 1;
 		if (hoge >= int(Chara_Dir::MAX)) {
 			hoge = hoge - int(Chara_Dir::MAX);
 		}
-		m_NowDir = Chara_Dir(hoge);
+		m_NowDir = Chara_Dir(hoge);*/
+		m_HP = 1;
 	}
 
 	ReactionUpdate();
