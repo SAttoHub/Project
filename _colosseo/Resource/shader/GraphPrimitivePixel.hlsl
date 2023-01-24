@@ -4,7 +4,7 @@ SamplerState smp : register(s0);
 
 float4 main(GSOutput input) : SV_TARGET
 {
-	float4 aaa = tex.Sample(smp, input.uv);
+	//float4 aaa = tex.Sample(smp, input.uv);
 
 	/*aaa.x = aaa.x * 1.2f;
 	aaa.y = aaa.y * 1.2f;
@@ -15,5 +15,5 @@ float4 main(GSOutput input) : SV_TARGET
 	if (aaa.y > 1.0f) aaa.y = 1.0f;
 	if (aaa.z > 1.0f) aaa.z = 1.0f;
 	if (aaa.w > 1.0f) aaa.w = 1.0f;*/
-	return aaa * input.color;
+	return tex.Sample(smp, input.uv) * input.color;
 }

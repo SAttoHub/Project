@@ -15,7 +15,8 @@ class Cards;
 enum class CardType {
 	NONE,
 	DEFAULT_ATTACK,
-	DEFAULT_MOVE
+	DEFAULT_MOVE,
+	NEXT_EN_JUMP
 };
 
 //-------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@ public:
 	// デストラクタ
 	~NormalAttackCard();
 
+	// 描画
 	void Draw(int index, int MaxIdx) override;
 	
 	// -----------------------------------

@@ -1,13 +1,13 @@
 #pragma once
 #include "Card.h"
 
-class NormalMoveCard : public Card {
+class NextEnemyJumpCard : public Card {
 
 public:
 	// コンストラクタ
-	NormalMoveCard();
+	NextEnemyJumpCard();
 	// デストラクタ
-	~NormalMoveCard();
+	~NextEnemyJumpCard();
 
 	// 描画
 	void Draw(int index, int MaxIdx) override;
@@ -53,6 +53,8 @@ public:
 	/// /// <param name="RefPoint">選択可能マスを生成する基準のマップ座標</param>
 	/// <param name="AddCanSelectChips">Chipsクラス</param>
 	void SelectTrigger(XMINT2 RefPoint, Cards* pCards) override;
+
+	void SelectTriggerEn(XMINT2 RefPoint, std::vector<XMINT2> TargetPos, Cards* pCards);
 
 
 	// -----------------------------------

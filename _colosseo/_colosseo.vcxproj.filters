@@ -334,6 +334,15 @@
     <Filter Include="ヘッダー ファイル\Game\Card\Cards">
       <UniqueIdentifier>{a6864d86-9c35-4635-9b9a-18a82ff6338b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Card\Cards">
+      <UniqueIdentifier>{98d8f59c-3b9b-461a-8dce-954f501fd9b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Base\JSON">
+      <UniqueIdentifier>{efb948cd-0620-4437-8a68-830a6e418d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base\JSON">
+      <UniqueIdentifier>{8c68ed44-08a3-44a8-99bb-c350a6654ea2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -552,9 +561,6 @@
     <ClCompile Include="Game\EnemyParamUI.cpp">
       <Filter>ソース ファイル\Game\GameUI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameUIsManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\PlayerParamUI.cpp">
       <Filter>ソース ファイル\Game\GameUI</Filter>
     </ClCompile>
@@ -569,9 +575,6 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\Game\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadJsonManager.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CommonTime.cpp">
       <Filter>ソース ファイル</Filter>
@@ -619,9 +622,18 @@
       <Filter>ソース ファイル\Game\ActionEffects</Filter>
     </ClCompile>
     <ClCompile Include="Game\NormalAttackCard.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Game\Card\Cards</Filter>
     </ClCompile>
     <ClCompile Include="Game\NormalMoveCard.cpp">
+      <Filter>ソース ファイル\Game\Card\Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameUIsManager.cpp">
+      <Filter>ソース ファイル\Game\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadJsonManager.cpp">
+      <Filter>ソース ファイル\Base\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NextEnemyJumpCard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -983,9 +995,6 @@
     <ClInclude Include="TitleScene.h">
       <Filter>ヘッダー ファイル\Game\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="LoadJsonManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CommonTime.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -1032,6 +1041,12 @@
       <Filter>ヘッダー ファイル\Game\Card\Cards</Filter>
     </ClInclude>
     <ClInclude Include="Game\NormalMoveCard.h">
+      <Filter>ヘッダー ファイル\Game\Card\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadJsonManager.h">
+      <Filter>ヘッダー ファイル\Base\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NextEnemyJumpCard.h">
       <Filter>ヘッダー ファイル\Game\Card\Cards</Filter>
     </ClInclude>
   </ItemGroup>

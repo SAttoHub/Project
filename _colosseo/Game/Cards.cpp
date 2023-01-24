@@ -4,6 +4,7 @@
 
 #include "NormalMoveCard.h"
 #include "NormalAttackCard.h"
+#include "NextEnemyJumpCard.h"
 
 Cards::Cards()
 {
@@ -57,7 +58,7 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	m_Cards.emplace_back(new NormalAttackCard());
 	m_Cards.emplace_back(new NormalMoveCard());
 	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NextEnemyJumpCard());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
@@ -120,6 +121,11 @@ void Cards::Draw()
 				pMap->DrawGuide(data, ColorConvert(0, 183, 206, 255), GuidePriority::MOVE_OR_ATTACK, false);
 			}
 			break;
+		case CardType::NEXT_EN_JUMP:
+			for (auto& data : CanSelectChips) {
+				pMap->DrawGuide(data, ColorConvert(0, 183, 206, 255), GuidePriority::MOVE_OR_ATTACK, false);
+			}
+			break;
 		default:
 			break;
 		}
@@ -175,7 +181,7 @@ void Cards::StartTurn()
 	m_Cards.emplace_back(new NormalAttackCard());
 	m_Cards.emplace_back(new NormalMoveCard());
 	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NextEnemyJumpCard());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
@@ -258,6 +264,23 @@ void Cards::CardPhaseUpdate()
 					}
 					else if (m_UseCardType == CardType::DEFAULT_MOVE) {
 						m_Cards[i]->SelectTrigger(pPlayer->GetMapPos(), this);
+						PreDamage = m_Cards[i]->m_PreDamage;
+						for (int x = 0; x < CanSelectChips.size(); x++) {
+							if (pEnemys->GetEnemy(CanSelectChips[x]) != nullptr) {
+								CanSelectChips.erase(CanSelectChips.begin() + x);
+							}
+						}
+					}
+					else if (m_UseCardType == CardType::NEXT_EN_JUMP) {
+						NextEnemyJumpCard *Ptr = dynamic_cast<NextEnemyJumpCard*>(m_Cards[i]);
+
+						std::vector<XMINT2> hoge;
+						for (auto& data : pEnemys->m_Enemy) {
+							hoge.emplace_back(data.GetMapPos());
+						}
+
+						Ptr->SelectTriggerEn(pPlayer->GetMapPos(), hoge, this);
+
 						PreDamage = m_Cards[i]->m_PreDamage;
 						for (int x = 0; x < CanSelectChips.size(); x++) {
 							if (pEnemys->GetEnemy(CanSelectChips[x]) != nullptr) {
@@ -449,6 +472,32 @@ void Cards::CardEffectPhaseUpdate()
 			}
 		}
 	}
+	else if (m_UseCardType == CardType::NEXT_EN_JUMP) {
+		if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
+			// 選択したマスが移動可能なら
+			if (pMap->InMap(m_NowSelectChip) && ExistInCanSelectChips(m_NowSelectChip)) {
+				m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
+				m_Cards[m_UseCardIndex]->UpdatePhese2();
+				//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
+
+				//pPlayer->SetMapPos(m_NowSelectChip);
+				//m_UseCardType = CardType::NONE;
+				PreDamage = 0;
+				//NowPhase = 0;
+				CanSelectChips.clear();
+				//GameCamera::Instance()->Targeting(pMap->ChangePos(m_NowSelectChip), GameCamera::Instance()->DEFAULT_FLAME_TIME);
+				PreCheckChipOld = XMINT2(-1, -1);
+				PreCheckChip = XMINT2(-2, -2);
+
+				// 移動後に向きを変更できる
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(1, 0));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(-1, 0));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, 1));
+				AddCanSelectChips(pPlayer->GetMapPos() + XMINT2(0, -1));
+				//NowPhase = 2;
+			}
+		}
+	}
 
 	// 各カード処理用のパラメータ更新
 	if (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip) {
@@ -511,6 +560,10 @@ void Cards::CardAfterPhaseUpdate()
 		m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
 		m_Cards[m_UseCardIndex]->UpdatePhese3();
 	}
+	else if (m_UseCardType == CardType::NEXT_EN_JUMP) {
+		m_Cards[m_UseCardIndex]->SetSelectData(m_NowSelectChip, PreCheckChip);
+		m_Cards[m_UseCardIndex]->UpdatePhese3();
+	}
 
 	// 向きを決定
 	//if (Input::isKeyTrigger(DIK_RETURN) || (Input::isMouseTrigger(M_LEFT) && pMap->isHitChip)) {
@@ -554,6 +607,7 @@ void Cards::CardAfterPhaseUpdate()
 			delete m_Cards[m_UseCardIndex];
 			m_Cards.erase(m_Cards.begin() + m_UseCardIndex);
 
+			CanSelectChips.clear();
 			m_UseCardType = CardType::NONE;
 			/*if (m_Cards[m_UseCardIndex]->m_PheseCount == NowPhase) {
 				NowPhase = 0;
@@ -580,7 +634,7 @@ void Cards::Reset()
 	m_Cards.emplace_back(new NormalAttackCard());
 	m_Cards.emplace_back(new NormalMoveCard());
 	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
+	m_Cards.emplace_back(new NextEnemyJumpCard());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
