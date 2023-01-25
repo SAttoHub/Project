@@ -49,16 +49,17 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
 
-	for (int i = 0; i < int(m_Cards.size()); i++) {
-		delete m_Cards[i];
-	}
+	//for (int i = 0; i < int(m_Cards.size()); i++) {
+	//	delete m_Cards[i];
+	//}
 	m_Cards.clear();
 
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NextEnemyJumpCard());
+
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
@@ -166,9 +167,9 @@ void Cards::Draw()
 
 void Cards::StartTurn()
 {
-	for (int i = 0; i < int(m_Cards.size()); i++) {
+	/*for (int i = 0; i < int(m_Cards.size()); i++) {
 		delete m_Cards[i];
-	}
+	}*/
 
 	m_Cards.clear();
 	/*m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
@@ -177,11 +178,11 @@ void Cards::StartTurn()
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
 
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NextEnemyJumpCard());
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
@@ -272,7 +273,7 @@ void Cards::CardPhaseUpdate()
 						}
 					}
 					else if (m_UseCardType == CardType::NEXT_EN_JUMP) {
-						NextEnemyJumpCard *Ptr = dynamic_cast<NextEnemyJumpCard*>(m_Cards[i]);
+						NextEnemyJumpCard *Ptr = dynamic_cast<NextEnemyJumpCard*>(m_Cards[i].get());
 
 						std::vector<XMINT2> hoge;
 						for (auto& data : pEnemys->m_Enemy) {
@@ -513,7 +514,7 @@ void Cards::CardEffectPhaseUpdate()
 			if (m_Cards[m_UseCardIndex]->m_PheseCount == NowPhase) {
 				NowPhase = 0;
 				//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
-				delete m_Cards[m_UseCardIndex];
+				//delete m_Cards[m_UseCardIndex];
 				m_Cards.erase(m_Cards.begin() + m_UseCardIndex);
 				m_UseCardType = CardType::NONE;
 				PreDamage = 0;
@@ -604,7 +605,7 @@ void Cards::CardAfterPhaseUpdate()
 			NowPhase = 0;
 			//m_Cards.erase_after(std::next(m_Cards.before_begin(), m_UseCardIndex));
 
-			delete m_Cards[m_UseCardIndex];
+			//delete m_Cards[m_UseCardIndex];
 			m_Cards.erase(m_Cards.begin() + m_UseCardIndex);
 
 			CanSelectChips.clear();
@@ -619,9 +620,9 @@ void Cards::CardAfterPhaseUpdate()
 
 void Cards::Reset()
 {
-	for (int i = 0; i < int(m_Cards.size()); i++) {
+	/*for (int i = 0; i < int(m_Cards.size()); i++) {
 		delete m_Cards[i];
-	}
+	}*/
 
 	m_Cards.clear();
 	/*m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
@@ -630,11 +631,11 @@ void Cards::Reset()
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));*/
 
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalAttackCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NormalMoveCard());
-	m_Cards.emplace_back(new NextEnemyJumpCard());
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 
 	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);

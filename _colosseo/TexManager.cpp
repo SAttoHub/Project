@@ -137,14 +137,14 @@ int TexManager::GetStringTexture(TCHAR *moji)
 	// フォントを読み込む
 	// フォントを使えるようにする
 	DESIGNVECTOR design = DESIGNVECTOR();
-	AddFontResourceEx(
-		TEXT("Resource/APJapanesefontF.ttf"), //ttfファイルへのパス
+	int count = AddFontResourceEx(
+		TEXT("Resource/Corporate-Logo-Bold-ver3.otf"), //ttfファイルへのパス
 		FR_PRIVATE,
 		&design
 	);
 
 	// フォントの生成
-	int fontSize = 1024; // 260
+	int fontSize = 520; // 260
 	int fontWeight = 500;
 	LOGFONT lf = {
 		fontSize,0,0,0,fontWeight,0,0,0,
@@ -153,13 +153,10 @@ int TexManager::GetStringTexture(TCHAR *moji)
 		CLIP_DEFAULT_PRECIS,
 		PROOF_QUALITY,
 		FIXED_PITCH | FF_MODERN,
-		TEXT("あんずもじ湛")
+		TEXT("コーポレート・ロゴ ver3 Bold")
 	};
 	HFONT hFont = CreateFontIndirect(&lf);
-	if (!(hFont))
-	{
-		int aaa = 0;
-	}
+
 	HDC hdc = GetDC(NULL);
 	HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
 	//UINT code = (UINT)moji;     // テクスチャに書き込む文字

@@ -171,7 +171,7 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
 		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
 		rootparams[6].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);//
-		CreatePipeline(Depth_SHEADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_BACK,
+		CreatePipeline(Depth_SHEADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_NONE,
 			_countof(InputLayout), InputLayout,
 			_countof(rootparams), rootparams,
 			DXGI_FORMAT_R32_FLOAT,
@@ -192,7 +192,7 @@ PipelineManager::PipelineManager(ShaderManager *Shader) {
 		rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);//スキニング用
 		rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);//時間
 		rootparams[6].InitAsConstantBufferView(5, 0, D3D12_SHADER_VISIBILITY_ALL);//
-		CreatePipeline(Shadow_Depth_SHEADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_BACK,
+		CreatePipeline(Shadow_Depth_SHEADER, BlendMode::BM_ALPHA, D3D12_CULL_MODE_NONE,
 			_countof(InputLayout), InputLayout,
 			_countof(rootparams), rootparams,
 			DXGI_FORMAT_R32_FLOAT,
