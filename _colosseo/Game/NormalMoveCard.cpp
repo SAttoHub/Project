@@ -34,6 +34,7 @@ void NormalMoveCard::Draw(int index, int MaxIdx)
 
 	if (Active) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 0, 1, 0.5f))));
+		//DrawGraphBloom(LeftTop, LeftTop + XMFLOAT2(width, height), Graph);
 	}
 	else if (HitCursor) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));

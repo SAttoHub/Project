@@ -10,7 +10,7 @@ NextEnemyJumpCard::NextEnemyJumpCard()
 	m_Type = CardType::NEXT_EN_JUMP;
 	//Graph = TexManager::LoadTexture("Resource/image/MOVE_CARD.png");
 
-	Graph = TexManager::GetColor(XMFLOAT4(255, 0, 0, 255));
+	Graph = TexManager::LoadTexture("Resource/image/NEXT_EN_JUMP_CARD.png");
 
 	// çUåÇÉJÅ[ÉhÇ»ÇÃÇ≈çUåÇóÕÇê›íË
 	m_PreDamage = 0;
@@ -36,6 +36,7 @@ void NextEnemyJumpCard::Draw(int index, int MaxIdx)
 
 	if (Active) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 0, 1, 0.5f))));
+		//DrawGraphBloom(LeftTop, LeftTop + XMFLOAT2(width, height), Graph);
 	}
 	else if (HitCursor) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));

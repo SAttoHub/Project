@@ -59,6 +59,20 @@ void Enemys::GenerateEnemy(XMINT2 MapPos, int Type)
 		en.SetPlayer(pPlayer);
 		m_Enemy.emplace_back(en);
 	}
+	else if (Type == ScoutEn) {
+		ScoutEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
+	else if (Type == ScoutBoss) {
+		ScoutBossEnemy en;
+		en.SetMapPos(MapPos);
+		en.SetMap(pMap);
+		en.SetPlayer(pPlayer);
+		m_Enemy.emplace_back(en);
+	}
 }
 
 Enemy *Enemys::GetEnemy(XMINT2 MapPos)

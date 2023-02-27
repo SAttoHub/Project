@@ -6,6 +6,95 @@
 #include "NormalAttackCard.h"
 #include "NextEnemyJumpCard.h"
 
+int Cards::CardTexture[int(CardType::CARD_TYPE_MAX)];
+
+void Cards::ResetDeck()
+{
+	m_Deck_Common.clear();
+	m_Deck_Common.emplace_back(CardType::DEFAULT_ATTACK, short(20));
+	m_Deck_Common.emplace_back(CardType::DEFAULT_MOVE, short(20));
+}
+
+void Cards::ResetDeck_Battle()
+{
+	m_Deck_Battle.clear();
+
+	//std::copy(m_Deck_Common.begin(), m_Deck_Common.end(), m_Deck_Battle.begin());
+	for (int i = 0; i < m_Deck_Common.size(); i++) {
+		for (int j = 0; j < m_Deck_Common[i].Count; j++) {
+			m_Deck_Battle.emplace_back(m_Deck_Common[i].Type);
+		}
+	}
+  	std::shuffle(m_Deck_Battle.begin(), m_Deck_Battle.end(), *RandomFactory::Instance()->GetMT());
+}
+
+void Cards::DrawDeck()
+{
+	// デッキなかった時用
+	if (m_Deck_Battle.size() <= 0) {
+		ResetDeck_Battle();
+	}
+
+	CardType _Type = m_Deck_Battle[0];
+	if (_Type == CardType::DEFAULT_ATTACK) {
+		m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	}
+	else if (_Type == CardType::DEFAULT_MOVE) {
+		m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	}
+	else if (_Type == CardType::NEXT_EN_JUMP) {
+		m_Cards.emplace_back(std::make_unique<NextEnemyJumpCard>());
+	}
+	m_Cards[m_Cards.size() - 1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	m_Cards[m_Cards.size() - 1]->Initialize(int(m_Cards.size()) - 1, 5);
+
+	// 引いたカードを削除
+	m_Deck_Battle.erase(m_Deck_Battle.begin());
+}
+
+void Cards::ResetHaveCard()
+{
+	m_Card_Have.clear();
+	m_Card_Have.emplace_back(CardType::DEFAULT_ATTACK, short(25));
+	m_Card_Have.emplace_back(CardType::DEFAULT_MOVE, short(25));
+	m_Card_Have.emplace_back(CardType::NEXT_EN_JUMP, short(50));
+}
+
+void Cards::GetCard(CardType _Type, int _Count)
+{
+	// 既に1枚以上持ってるなら枚数を加算
+	for (auto& data : m_Card_Have) {
+		if (data.Type == _Type) {
+			data.Count += short(_Count);
+			return;
+		}
+	}
+	// 一枚も持ってないなら要素を追加
+	m_Card_Have.emplace_back(_Type, short(_Count));
+}
+
+int Cards::GetDeckCount()
+{
+	int Result = 0;
+	for (auto& data : m_Deck_Common) {
+		Result += data.Count;
+	}
+	return Result;
+}
+
+void Cards::AddDeck(CardType _Type)
+{
+	// 既に1枚以上持ってるなら枚数を加算
+	for (auto& data : m_Deck_Common) {
+		if (data.Type == _Type) {
+			data.Count += short(1);
+			return;
+		}
+	}
+	// 一枚も持ってないなら要素を追加
+	m_Deck_Common.emplace_back(_Type, short(1));
+}
+
 Cards::Cards()
 {
 
@@ -24,6 +113,7 @@ Cards::Cards()
 	TurnEnd = false;
 
 	TurnEndButton = TexManager::LoadTexture("Resource/image/TurnEnd.png");
+	DeckTexture = TexManager::LoadTexture("Resource/image/Deck.png");
 
 	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 200);
 
@@ -31,6 +121,16 @@ Cards::Cards()
 
 
 	m_Cards.reserve(16);
+
+	// デッキのリセット
+	ResetDeck();
+	ResetHaveCard();
+
+
+	CardTexture[int(CardType::NONE)] = TexManager::LoadTexture("Resource/image/NEXT_EN_JUMP_CARD.png");
+	CardTexture[int(CardType::DEFAULT_ATTACK)] = TexManager::LoadTexture("Resource/image/ATK_CARD.png");
+	CardTexture[int(CardType::DEFAULT_MOVE)] = TexManager::LoadTexture("Resource/image/MOVE_CARD.png");
+	CardTexture[int(CardType::NEXT_EN_JUMP)] = TexManager::LoadTexture("Resource/image/NEXT_EN_JUMP_CARD.png");
 }
 
 Cards::~Cards()
@@ -52,26 +152,33 @@ void Cards::Initialize(Player *_Player, Enemys *_Enemys, Map *_Map)
 	//for (int i = 0; i < int(m_Cards.size()); i++) {
 	//	delete m_Cards[i];
 	//}
+
+	// バトルシーン用デッキのリセット
+	ResetDeck_Battle();
+
 	m_Cards.clear();
 
+	for (int i = 0; i < 5; i++) {
+		DrawDeck();
+	}
 
-	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
-	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
-	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
-	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
-	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	//m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	//m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	//m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	//m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
+	//m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 
-	m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
-	m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
-	m_Cards[2]->SetPlEnPtr(pPlayer, pEnemys, pMap);
-	m_Cards[3]->SetPlEnPtr(pPlayer, pEnemys, pMap);
-	m_Cards[4]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	//m_Cards[0]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	//m_Cards[1]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	//m_Cards[2]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	//m_Cards[3]->SetPlEnPtr(pPlayer, pEnemys, pMap);
+	//m_Cards[4]->SetPlEnPtr(pPlayer, pEnemys, pMap);
 
-	m_Cards[0]->Initialize(0, 5);
-	m_Cards[1]->Initialize(1, 5);
-	m_Cards[2]->Initialize(2, 5);
-	m_Cards[3]->Initialize(3, 5);
-	m_Cards[4]->Initialize(4, 5);
+	//m_Cards[0]->Initialize(0, 5);
+	//m_Cards[1]->Initialize(1, 5);
+	//m_Cards[2]->Initialize(2, 5);
+	//m_Cards[3]->Initialize(3, 5);
+	//m_Cards[4]->Initialize(4, 5);
 
 	/*for (int i = 0; i < 5; i++) {
 		m_Cards[i]->Initialize(i, 5);
@@ -153,6 +260,16 @@ void Cards::Draw()
 		}
 	}
 
+	// デッキ残り枚数描画
+	DrawGraph(XMFLOAT2(1074, 649),
+		XMFLOAT2(1274, 710),
+		DeckTexture);
+	const XMFLOAT4 WHITE_COL_B = ColorConvert(XMFLOAT4(230.0f, 242.0f, 255.0f, 255.0f));
+
+	// デッキ残り枚数
+	DrawStrings::Instance()->DrawFormatString(XMFLOAT2(1193.0f, 664.0f), 32, WHITE_COL_B, "%d", int(m_Deck_Battle.size()));
+	
+
 	// 方向決定時
 	if (NowPhase == 2) {
 		for (auto& data : CanSelectChips) {
@@ -171,14 +288,26 @@ void Cards::StartTurn()
 		delete m_Cards[i];
 	}*/
 
-	m_Cards.clear();
+	/*m_Cards.clear();
+
+	for (int i = 0; i < 5; i++) {
+		DrawDeck();
+	}*/
+
+	// 5枚になるようにドロー
+	int _c = 5 - int(m_Cards.size());
+	if (_c < 0) _c = 0;
+	for (int i = 0; i < _c; i++) {
+		DrawDeck();
+	}
+
 	/*m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.push_front(Card(CardType::DEFAULT_MOVE));*/
 
-	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	/*m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
 	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
 	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
@@ -194,14 +323,14 @@ void Cards::StartTurn()
 	m_Cards[1]->Initialize(1, 5);
 	m_Cards[2]->Initialize(2, 5);
 	m_Cards[3]->Initialize(3, 5);
-	m_Cards[4]->Initialize(4, 5);
+	m_Cards[4]->Initialize(4, 5);*/
 
 
 	m_UseCardType = CardType::NONE;
 	NowPhase = 0;
-	for (int i = 0; i < int(m_Cards.size()); i++) {
+	/*for (int i = 0; i < int(m_Cards.size()); i++) {
 		m_Cards[i]->Initialize(i, int(m_Cards.size()));
-	}
+	}*/
 	TurnEnd = false;
 
 	isMyTurn = true;
@@ -624,14 +753,22 @@ void Cards::Reset()
 		delete m_Cards[i];
 	}*/
 
+	// バトルシーン用デッキのリセット
+	ResetDeck_Battle();
+
 	m_Cards.clear();
+
+	for (int i = 0; i < 5; i++) {
+		DrawDeck();
+	}
+
 	/*m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_ATTACK));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));
 	m_Cards.emplace_front(Card(CardType::DEFAULT_MOVE));*/
 
-	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
+	/*m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
 	m_Cards.emplace_back(std::make_unique<NormalAttackCard>());
 	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
 	m_Cards.emplace_back(std::make_unique<NormalMoveCard>());
@@ -651,7 +788,7 @@ void Cards::Reset()
 
 	for (int i = 0; i < int(m_Cards.size()); i++) {
 		m_Cards[i]->Initialize(i, int(m_Cards.size()));
-	}
+	}*/
 
 	m_UseCardType = CardType::NONE;
 	NowPhase = 0;
@@ -659,5 +796,5 @@ void Cards::Reset()
 
 	LT = XMFLOAT2(WINDOW_WIDTH - 300, WINDOW_HEIGHT - 200);
 
-	isMyTurn = false;
+	isMyTurn = true;
 }

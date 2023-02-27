@@ -20,6 +20,7 @@ void GameScene::Initialize(SceneCommon* _Common)
 	m_BattleWave->NextWaveStart();
 	//m_BattleWave->StartWave("Test1");
 	Common->m_Audiences.SummonAudience(245);
+	Common->m_cards.Reset();
 
 	m_IsNext = false;
 	if (Common->m_StageSelect.GetNowStageData().m_StageName == "Boss") {

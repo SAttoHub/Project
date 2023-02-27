@@ -394,6 +394,7 @@ void Primitive2D::Update()
 		GraphData[i].Active = false;
 		GraphData[i].TextureNumber = 0;
 		GraphData[i].isBack = false;
+		GraphData[i].isBloom = false;
 	}
 	//for (int i = 0; i < MaxLinePrimitives; i++) {
 	//	LineData[i].Data.pos1 = XMFLOAT3{ 0,0,0 };
@@ -541,7 +542,7 @@ void Primitive2D::GraphDrawAll()
 	HRESULT result;
 	int activeCount = 0;
 	for (int i = 0; i < MaxGraphPrimitives; i++) {
-		if (GraphData[i].Active && GraphData[i].isBack == false) {
+		if (GraphData[i].Active && GraphData[i].isBack == false && GraphData[i].isBloom == false) {
 
 			activeCount++;
 		}
@@ -557,7 +558,7 @@ void Primitive2D::GraphDrawAll()
 	}
 	//画像の描画
 	for (int i = 0; i < MaxGraphPrimitives; i++) {
-		if (GraphData[i].Active && GraphData[i].isBack == false) {
+		if (GraphData[i].Active && GraphData[i].isBack == false && GraphData[i].isBloom == false) {
 			GraphPrimitive::Graph *vertMap = nullptr;
 			result = GraphVertBuff[i]->Map(0, nullptr, (void **)&vertMap);
 			XMFLOAT3 pos1, pos2;
@@ -670,6 +671,81 @@ void Primitive2D::BackGraphDrawAll()
 			DirectXBase::cmdList->IASetVertexBuffers(0, 1, &BackGraphvbView[i]);
 			//デスクリプタヒープをセット
 			ID3D12DescriptorHeap *ppHeaps[] = { TexManager::TextureDescHeap.Get() };
+			DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+			//定数バッファビューをセット
+			DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
+			//シェーダーリソースビュー
+			DirectXBase::cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+				TexManager::TextureDescHeap->GetGPUDescriptorHandleForHeapStart(),
+				GraphData[i].TextureNumber,
+				DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+
+			//描画コマンド
+			DirectXBase::cmdList->DrawInstanced(1, 1, 0, 0);
+		}
+	}
+}
+
+void Primitive2D::BloomGraphDrawAll()
+{
+	HRESULT result;
+	int activeCount = 0;
+	for (int i = 0; i < MaxGraphPrimitives; i++) {
+		if (GraphData[i].Active && GraphData[i].isBloom) {
+
+			activeCount++;
+		}
+	}
+	if (activeCount == 0) {
+		return;
+	}
+	//定数バッファへデータ転送
+	ConstBufferData* constMap0 = nullptr;
+	if (SUCCEEDED(ConstBuff0->Map(0, nullptr, (void**)&constMap0))) {
+		constMap0->mat = Camera::matView * Camera::matProjection;
+		ConstBuff0->Unmap(0, nullptr);
+	}
+	//画像の描画
+	for (int i = 0; i < MaxGraphPrimitives; i++) {
+		if (GraphData[i].Active && GraphData[i].isBloom == true) {
+			GraphPrimitive::Graph* vertMap = nullptr;
+			result = BackGraphVertBuff[i]->Map(0, nullptr, (void**)&vertMap);
+			XMFLOAT3 pos1, pos2;
+			if (SUCCEEDED(result)) {
+				if (GraphData[i].Active) {
+					if (!GraphData[i].Data.Draw3D) {
+						pos1 = XMFLOAT3{ GraphData[i].Data.pos1.x / DirectXBase::Win_Width * 2 , GraphData[i].Data.pos1.y / DirectXBase::Win_Height * 2, 0.0f };
+						pos2 = XMFLOAT3{ GraphData[i].Data.pos2.x / DirectXBase::Win_Width * 2, GraphData[i].Data.pos2.y / DirectXBase::Win_Height * 2, 0.0f };
+					}
+					else {
+						pos1 = GraphData[i].Data.pos1;
+						pos2 = GraphData[i].Data.pos2;
+					}
+
+					vertMap->pos1 = pos1;
+					vertMap->pos2 = pos2;
+					vertMap->color = GraphData[i].Data.color;
+					vertMap->Draw3D = GraphData[i].Data.Draw3D;
+					vertMap++;
+				}
+			}
+			BackGraphVertBuff[i]->Unmap(0, nullptr);
+			if (i == 0) {
+				//ビューポートの設定コマンド
+				DirectXBase::cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, DirectXBase::Win_Width, DirectXBase::Win_Height));
+				//シザー矩形の設定コマンド
+				DirectXBase::cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, LONG(DirectXBase::Win_Width), LONG(DirectXBase::Win_Height)));
+				//ルートシグネチャ
+				DirectXBase::cmdList->SetGraphicsRootSignature(GraphRootsignature.Get());
+				//パイプラインステートの設定コマンド
+				DirectXBase::cmdList->SetPipelineState(GraphPipelinestate.Get());
+
+				DirectXBase::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+			}
+			//頂点バッファの設定
+			DirectXBase::cmdList->IASetVertexBuffers(0, 1, &BackGraphvbView[i]);
+			//デスクリプタヒープをセット
+			ID3D12DescriptorHeap* ppHeaps[] = { TexManager::TextureDescHeap.Get() };
 			DirectXBase::cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 			//定数バッファビューをセット
 			DirectXBase::cmdList->SetGraphicsRootConstantBufferView(0, ConstBuff0->GetGPUVirtualAddress());
@@ -926,6 +1002,84 @@ void Primitive2D::DrawGraphBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber,
 	GraphData[Num].Active = true;
 	GraphData[Num].TextureNumber = TextureNumber;
 	GraphData[Num].isBack = true;
+}
+
+void Primitive2D::DrawGraphBloom(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, XMFLOAT4 color)
+{
+	int Num = 0;
+	for (int i = 0; i < MaxGraphPrimitives; i++) {
+		if (GraphData[i].Active == false) break;
+		Num++;
+	}
+	assert(Num <= MaxGraphPrimitives);
+
+	//左上頂点を右下頂点を算出
+	float x1 = pos1.x;
+	float x2 = pos2.x;
+	if (x1 < x2) {
+		x1 = pos2.x;
+		x2 = pos1.x;
+	}
+	float y1 = pos1.y;
+	float y2 = pos2.y;
+	if (y1 < y2) {
+		y1 = pos2.y;
+		y2 = pos1.y;
+	}
+	XMFLOAT3 p1 = { x1, y1, 0 };
+	XMFLOAT3 p2 = { x2, y2, 0 };
+
+	this->GraphData[Num].Data.pos1 = p1;
+	this->GraphData[Num].Data.pos2 = p2;
+	this->GraphData[Num].Data.color = color;
+	this->GraphData[Num].Data.Draw3D = false;
+	GraphData[Num].Active = true;
+	GraphData[Num].TextureNumber = TextureNumber;
+	GraphData[Num].isBloom = true;
+}
+
+void Primitive2D::DrawGraphBloom(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color, bool Draw3D)
+{
+	int Num = 0;
+	for (int i = 0; i < MaxGraphPrimitives; i++) {
+		if (GraphData[i].Active == false) break;
+		Num++;
+	}
+	assert(Num <= MaxGraphPrimitives);
+
+	//左上頂点を右下頂点を算出
+	float x1 = pos1.x;
+	float x2 = pos2.x;
+	if (x1 < x2) {
+		x1 = pos2.x;
+		x2 = pos1.x;
+	}
+	float y1 = pos1.y;
+	float y2 = pos2.y;
+	if (y1 < y2) {
+		y1 = pos2.y;
+		y2 = pos1.y;
+	}
+	XMFLOAT3 p1 = { 0, 0, 0 };
+	XMFLOAT3 p2 = { 0, 0, 0 };
+	if (Draw3D) {
+		float z1 = pos1.z;
+		float z2 = pos2.z;
+		p1 = { x1, y1, z1 };
+		p2 = { x2, y2, z2 };
+	}
+	else {
+		p1 = { x1, y1, 0 };
+		p2 = { x2, y2, 0 };
+	}
+
+	this->GraphData[Num].Data.pos1 = p1;
+	this->GraphData[Num].Data.pos2 = p2;
+	this->GraphData[Num].Data.color = color;
+	this->GraphData[Num].Data.Draw3D = Draw3D;
+	GraphData[Num].Active = true;
+	GraphData[Num].TextureNumber = TextureNumber;
+	GraphData[Num].isBloom = true;
 }
 
 /*

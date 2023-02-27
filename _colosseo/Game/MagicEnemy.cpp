@@ -6,7 +6,7 @@ MagicEnemy::MagicEnemy()
 	m_Name = "–‚pg‚¢";
 	m_JobName = "–‚pt";
 
-	m_HP = 2;
+	m_HP = 1;
 	m_MaxHP = m_HP;
 
 	m_Attack_Datas.emplace_back("–‚–@ - 1", 3, 1, 0, Abnormality::None, 0);

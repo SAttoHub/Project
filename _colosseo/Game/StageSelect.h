@@ -25,11 +25,12 @@ public:
 	BattleWave* GetWaveData() {
 		return &m_Wave;
 	}
-private:
 	enum class StageType {
 		None,
-		Battle
+		Battle,
+		Shop
 	};
+private:
 	struct StageData {
 		StageType m_StageType = StageType::None;
 		std::string m_StageName = "None";
@@ -43,6 +44,7 @@ private:
 		}
 	};
 	int BattleImg = 0;
+	int ShopImg = 0;
 	int BossImg = 0;
 	int StageSelectImg = 0;
 
@@ -71,4 +73,14 @@ public:
 	StageData GetNowStageData() {
 		return Stages[m_NowStageNum.x][m_NowStageNum.y];
 	}
+
+	// 次のステージ
+	StageType m_NextStageType = StageType::None;
+
+	// 実装中
+	/*
+public:
+	// そのステージで得られる経験値
+	int m_StageExp;
+	*/
 };

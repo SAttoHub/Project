@@ -39,6 +39,9 @@ public:
 	static int LoadTexture(const char *filename);
 	static int LoadTexture2(const std::string& directoryPath, const std::string& filename);
 	static int TexManager::LoadTexture3(const std::string &filename);
+
+
+	static int LoadTextureDDS(const char* filename);
 	//色テクスチャ
 	static int GetColor(XMFLOAT4 color);
 	//文字テクスチャ

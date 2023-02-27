@@ -16,6 +16,7 @@ void StageSelect::Initialize(Enemys* en, Player* pl)
 	pEnemys = en;
 
 	BattleImg = TexManager::LoadTexture("Resource/image/SL_Battle.png");
+	ShopImg = TexManager::LoadTexture("Resource/image/SL_REST.png");
 	BossImg = TexManager::LoadTexture("Resource/image/SL_Boss.png");
 	StageSelectImg = TexManager::LoadTexture("Resource/image/StageSelect.png");
 
@@ -29,11 +30,13 @@ void StageSelect::LoadTextStage(std::string FileName)
 	/*--------- 仮コード --------*/
 	m_Wave.Waves.clear();
 	m_Wave.SetPLandENPtr(pEnemys, pPlayer);
+	m_NextStageType = StageType::Battle;
 
 	if (FileName == "1-1") {
 		WaveData TestWave1;
 		TestWave1.WaveName = "1";
-		TestWave1.EnemysData.emplace_back(WaveEnemy(NoviceEn, XMINT2(7, 8)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(ScoutEn, XMINT2(7, 8)));
+		TestWave1.EnemysData.emplace_back(WaveEnemy(ScoutBoss, XMINT2(7, 7)));
 		m_Wave.Waves.emplace_back(TestWave1);
 	}
 	else if(FileName == "2") {
@@ -81,6 +84,9 @@ void StageSelect::LoadTextStage(std::string FileName)
 		TestWave3.EnemysData.emplace_back(WaveEnemy(MagicBoss, XMINT2(10, 8)));
 		m_Wave.Waves.emplace_back(TestWave3);
 	}
+	else if (FileName == "Shop") {
+		m_NextStageType = StageType::Shop;
+	}
 	else {
 		WaveData TestWave1;
 		TestWave1.WaveName = "1";
@@ -95,6 +101,7 @@ void StageSelect::LoadTextStage(std::string FileName)
 
 void StageSelect::SetStagesData()
 {
+
 	Stages[0][2] = StageData(StageType::Battle, "1-1");
 
 	Stages[1][1] = StageData(StageType::Battle, "2");
@@ -102,9 +109,9 @@ void StageSelect::SetStagesData()
 	Stages[1][3] = StageData(StageType::Battle, "2");
 
 	Stages[2][0] = StageData(StageType::Battle, "3");
-	Stages[2][1] = StageData(StageType::Battle, "3");
+	Stages[2][1] = StageData(StageType::Shop, "Shop");
 	Stages[2][2] = StageData(StageType::Battle, "3");
-	Stages[2][3] = StageData(StageType::Battle, "3");
+	Stages[2][3] = StageData(StageType::Shop, "Shop");
 	Stages[2][4] = StageData(StageType::Battle, "3");
 
 	/*Stages[3][0] = StageData(StageType::Battle, "4");
@@ -233,6 +240,10 @@ void StageSelect::Draw()
 					DrawGraph(XMFLOAT2(Offset.x - Size.x / 2.0f, Offset.y - Size.y / 2.0f),
 						XMFLOAT2(Offset.x + Size.x / 2.0f, Offset.y + Size.y / 2.0f), BattleImg);
 				}
+			}
+			else if (Stages[x][y].m_StageType == StageType::Shop) {
+				DrawGraph(XMFLOAT2(Offset.x - Size.x / 2.0f, Offset.y - Size.y / 2.0f),
+					XMFLOAT2(Offset.x + Size.x / 2.0f, Offset.y + Size.y / 2.0f), ShopImg);
 			}
 
 			// 最初のステージ選択限定処理

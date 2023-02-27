@@ -16,7 +16,8 @@ enum class CardType {
 	NONE,
 	DEFAULT_ATTACK,
 	DEFAULT_MOVE,
-	NEXT_EN_JUMP
+	NEXT_EN_JUMP,
+	CARD_TYPE_MAX
 };
 
 //-------------------------------------------------------------------------------------------------------------

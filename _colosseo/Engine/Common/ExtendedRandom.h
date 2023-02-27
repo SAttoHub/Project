@@ -39,6 +39,8 @@ public:
 		mt = new std::mt19937(Seed);
 	}
 
+	std::mt19937* GetMT() { return mt; }
+
 	int GetRand(const int &min, const int &max) {
 		//—”‚Ì‘å‚«‚³‚ğæ“¾
 		int RandMax = max, RandMin = min;

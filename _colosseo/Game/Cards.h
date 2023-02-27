@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <vector>
 #include "Card.h"
 #include "..\Engine\Common\Containers\MyFList.h"
@@ -22,14 +23,52 @@ private:
 public:
 	//My_F_List<Card*> m_Cards;
 	//std::vector<Card*> m_Cards;
+	// 手札
 	std::vector<std::unique_ptr<Card>> m_Cards;
 
+	const short MAX_DECK_COUNT = 40;
+	// デッキ
+	struct DeckCard {
+		// カードタイプ
+		CardType Type;
+		// 枚数
+		short Count;
+		DeckCard(CardType _Type, short _Count) : Type(_Type), Count(_Count) {};
+
+		bool operator<(const DeckCard& right) const {
+			return Type < right.Type;
+		}
+	};
+	// デッキ
+	std::vector<DeckCard> m_Deck_Common;
+	// デッキ(バトルシーン用)
+	std::vector<CardType> m_Deck_Battle;
+	// 所持カード数
+	std::vector<DeckCard> m_Card_Have;
+
+private:
+	// デッキのリセット
+	void ResetDeck();
+	// バトルシーンのデッキリセット
+	void ResetDeck_Battle();
+	// 一枚引く
+	void DrawDeck();
+	// 所持カードのリセット
+	void ResetHaveCard();
+public:
+	// カードを入手する
+	void GetCard(CardType _Type, int _Count);
+	// デッキの枚数を取得
+	int GetDeckCount();
+	// デッキにカードを追加
+	void AddDeck(CardType _Type);
 private:
 	Player *pPlayer = nullptr;
 	Enemys *pEnemys = nullptr;
 	Map *pMap = nullptr;
 
 	int TurnEndButton = 0;
+	int DeckTexture = 0;
 	bool isMyTurn = false;
 
 	// 攻撃で与えるダメージの予想値(防御力計算前)
@@ -83,5 +122,9 @@ public:
 public:
 	// 攻撃で与えるダメージの予想値(防御力計算前)ゲッタ
 	int GetPreDamage() { return PreDamage; }
+
+
+	// カード画像
+	static int CardTexture[int(CardType::CARD_TYPE_MAX)];
 };
 

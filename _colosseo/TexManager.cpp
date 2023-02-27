@@ -15,6 +15,78 @@ void TexManager::TextureDescHeapCreate() {
 	DirectXBase::dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&TextureDescHeap));
 }
 
+int TexManager::LoadTextureDDS(const char* filename)
+{
+	//読み込み済みなら既にあるものを返す
+	for (int i = 0; i < 2048; ++i) {
+		if (TextureData[i].FileName == filename) {
+			return TextureData[i].TexNum;
+		}
+	}
+	HRESULT result;
+	TexNum < TextureSRVCount ? TexNum++ : 0;
+	TextureData[TexNum].TexNum = TexNum;
+	TextureData[TexNum].FileName = filename;
+	//TexMetadata metadata{};
+	//ScratchImage scratchImg{};
+	//  char -> wchar_t
+	size_t newsize = strlen(filename) + 1;
+	wchar_t* FileName = new wchar_t[newsize];
+	// Convert char* string to a wchar_t* string.
+	size_t convertedChars = 0;
+	mbstowcs_s(&convertedChars, FileName, newsize, filename, _TRUNCATE);
+
+	//WICテクスチャのロード
+	result = LoadFromDDSFile(
+		FileName,
+		DDS_FLAGS_NONE,
+		&TextureData[TexNum].metadata, TextureData[TexNum].scratchImg
+	);
+
+	TextureData[TexNum].img = TextureData[TexNum].scratchImg.GetImage(0, 0, 0);
+	//テクスチャバッファの作成
+	CD3DX12_RESOURCE_DESC texresDesc{}; //リソース設定
+	texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+		TextureData[TexNum].metadata.format,
+		TextureData[TexNum].metadata.width,
+		(UINT)TextureData[TexNum].metadata.height,
+		(UINT16)TextureData[TexNum].metadata.arraySize,
+		(UINT16)TextureData[TexNum].metadata.mipLevels
+	);
+	result = DirectXBase::dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
+		D3D12_HEAP_FLAG_NONE,
+		&texresDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ, //テクスチャ用指定
+		nullptr,
+		IID_PPV_ARGS(&TextureData[TexNum].TextureBuff)
+	);
+
+	result = TextureData[TexNum].TextureBuff->WriteToSubresource(
+		0,
+		nullptr, //全領域へコピー
+		TextureData[TexNum].img->pixels, //元データアドレス
+		(UINT)TextureData[TexNum].img->rowPitch, //1ラインサイズ
+		(UINT)TextureData[TexNum].img->slicePitch //全サイズ
+	);
+	//シェーダーリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; //設定構造体
+	srvDesc.Format = TextureData[TexNum].metadata.format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; //2Dテクスチャ
+	srvDesc.Texture2D.MipLevels = 1;
+	//シェーダーリソースビュー作成
+	DirectXBase::dev->CreateShaderResourceView(TextureData[TexNum].TextureBuff.Get(), //ビューと関連付けるバッファ
+		&srvDesc, //テクスチャ設定情報
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(
+			TextureDescHeap->GetCPUDescriptorHandleForHeapStart(),
+			TexNum,
+			DirectXBase::dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+		)
+	);
+	return TexNum;
+}
+
 int TexManager::GetColor(XMFLOAT4 color) {
 	//colorを0～1に丸める
 	color.x < 0 ? color.x = 0 : color.x > 255 ? color.x = 255 : 0;

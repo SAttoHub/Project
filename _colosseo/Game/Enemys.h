@@ -6,6 +6,8 @@
 #include "MagicEnemy.h"
 #include "NoviceBossEnemy.h"
 #include "MagicBossEnemy.h"
+#include "ScoutEnemy.h"
+#include "ScoutBossEnemy.h"
 
 class Player;
 
@@ -13,7 +15,9 @@ enum EnemyType {
 	NoviceEn = 1,
 	MagicEn,
 	NoviceBoss,
-	MagicBoss
+	MagicBoss,
+	ScoutEn,
+	ScoutBoss
 };
 
 //-------------------------------------------------------------------------------------------------------------

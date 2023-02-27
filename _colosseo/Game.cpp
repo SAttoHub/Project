@@ -161,6 +161,7 @@ void Game::Update()
 		if (PSf_isDraw("Bloom")) {
 			PreDraw("Bloom_Base_Color");
 			game->BloomDraw();
+			Primitive2D::Instance()->BloomGraphDrawAll();
 			PostDraw("Bloom_Base_Color");
 			// Bloom 色テクスチャの X 方向にブラーをかける
 			PreDraw("Bloom_Gauss_X", false);
@@ -311,7 +312,6 @@ void Game::Update()
 
 	// 2Dプリミティブ描画
 	Primitive2D::Instance()->Draw();
-
 
 	//// Fade用画面保存
 	//if (FadeManger::Instance()->m_SaveFlag == true) {

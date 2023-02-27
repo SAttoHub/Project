@@ -7,7 +7,9 @@ void TitleScene::Initialize(SceneCommon* _Common)
 	//m_NextScene = SCENE_ID::GAME;
 	m_NextScene = SCENE_ID::STAGE_SELECT;
 
-	TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
+	//TitleTex = TexManager::LoadTexture("Resource/image/Title.png");
+	TitleTex = TexManager::LoadTextureDDS("Resource/image/Title.dds");
+
 	m_WaitTimer = -1; // -1‚ÌŽž‚ÍŽŸƒV[ƒ“‚ÉˆÚs‚µ‚È‚¢
 
 	Common->m_StageSelect.Start();

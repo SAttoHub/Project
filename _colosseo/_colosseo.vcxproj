@@ -136,6 +136,7 @@
     <ClCompile Include="Game\Audiences.cpp" />
     <ClCompile Include="Game\BattleWave.cpp" />
     <ClCompile Include="Game\Card.cpp" />
+    <ClCompile Include="Game\CardGetEff.cpp" />
     <ClCompile Include="Game\Cards.cpp" />
     <ClCompile Include="Game\Charactor.cpp" />
     <ClCompile Include="Game\ChipData.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Game\Collider\GamePointCollider.cpp" />
     <ClCompile Include="Game\Collider\GameRayCollider.cpp" />
     <ClCompile Include="Game\Cursor.cpp" />
+    <ClCompile Include="Game\DeckEdit.cpp" />
     <ClCompile Include="Game\Enemy.cpp" />
     <ClCompile Include="Game\EnemyParamUI.cpp" />
     <ClCompile Include="Game\Enemys.cpp" />
@@ -164,6 +166,9 @@
     <ClCompile Include="Game\NoviceEnemy.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\PlayerParamUI.cpp" />
+    <ClCompile Include="Game\ScoutBossEnemy.cpp" />
+    <ClCompile Include="Game\ScoutEnemy.cpp" />
+    <ClCompile Include="Game\Shop.cpp" />
     <ClCompile Include="Game\StageSelect.cpp" />
     <ClCompile Include="Game\TargetPoint.cpp" />
     <ClCompile Include="Gaussian.cpp" />
@@ -194,6 +199,7 @@
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="ShopScene.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="TexManager.cpp" />
@@ -272,6 +278,7 @@
     <ClInclude Include="Game\Audiences.h" />
     <ClInclude Include="Game\BattleWave.h" />
     <ClInclude Include="Game\Card.h" />
+    <ClInclude Include="Game\CardGetEff.h" />
     <ClInclude Include="Game\Cards.h" />
     <ClInclude Include="Game\Charactor.h" />
     <ClInclude Include="Game\ChipData.h" />
@@ -282,6 +289,7 @@
     <ClInclude Include="Game\Collider\GamePointCollider.h" />
     <ClInclude Include="Game\Collider\GameRayCollider.h" />
     <ClInclude Include="Game\Cursor.h" />
+    <ClInclude Include="Game\DeckEdit.h" />
     <ClInclude Include="Game\Enemy.h" />
     <ClInclude Include="Game\EnemyParamUI.h" />
     <ClInclude Include="Game\Enemys.h" />
@@ -300,6 +308,9 @@
     <ClInclude Include="Game\NoviceEnemy.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\PlayerParamUI.h" />
+    <ClInclude Include="Game\ScoutBossEnemy.h" />
+    <ClInclude Include="Game\ScoutEnemy.h" />
+    <ClInclude Include="Game\Shop.h" />
     <ClInclude Include="Game\StageSelect.h" />
     <ClInclude Include="Game\TargetPoint.h" />
     <ClInclude Include="Gaussian.h" />
@@ -332,6 +343,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShopScene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="StageSelectScene.h" />

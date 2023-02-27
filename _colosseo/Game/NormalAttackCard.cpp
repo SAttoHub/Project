@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemys.h"
 #include "Cards.h"
+#include "ActionEffectsMgr.h"
 
 NormalAttackCard::NormalAttackCard()
 {
@@ -34,6 +35,7 @@ void NormalAttackCard::Draw(int index, int MaxIdx)
 
 	if (Active) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 0, 1, 0.5f))));
+		//DrawGraphBloom(LeftTop, LeftTop + XMFLOAT2(width, height), Graph);
 	}
 	else if (HitCursor) {
 		DrawGraph(LeftTop - XMFLOAT2(3, 3), LeftTop + XMFLOAT2(width, height) + XMFLOAT2(3, 3), TexManager::GetColor(ColorConvert2(XMFLOAT4(1, 1, 0, 0.5f))));
@@ -80,6 +82,7 @@ void NormalAttackCard::Phese1End()
 
 void NormalAttackCard::Phese2Start()
 {
+	Timer = 0;
 }
 
 void NormalAttackCard::UpdatePhese2()
@@ -94,19 +97,33 @@ void NormalAttackCard::UpdatePhese2()
 		if (m_PreCheckChip == m_NowCheckChip) {
 			// 敵
 			Enemy* en = pEnemys->GetEnemy(m_NowCheckChip);
+			Pen = en;
 			if (en == nullptr) {
 				return;
 			}
 
-			ChangePlayerDir(pPlayer);
-
-			en->Damage(m_PreDamage);
-			en->DamageReaction(pPlayer->GetMapPos(), en->GetMapPos());
-
-			// フェーズ即終了
-			PheseEndFunc(0);
+			if (Timer == 0) {
+				ChangePlayerDir(pPlayer);
+				ActionEffectsMgr::Instance()->StartNoveceEffect(pPlayer->GetModelPos(), en->GetModelPos());
+				Timer = ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME;
+				pPlayer->NoviceAttackReaction(pPlayer->GetMapPos(), en->GetMapPos());
+			}
 		}
 	}
+	if (Pen != nullptr) {
+		if (Timer == ActionEffectsMgr::Instance()->NOVICE_EFFECT_TIME - 15) {
+			Pen->Damage(m_PreDamage);
+			Pen->DamageReaction(pPlayer->GetMapPos(), Pen->GetMapPos());
+		}
+		if (Timer > 0) {
+			Timer--;
+			if (Timer == 0) {
+				// フェーズ即終了
+				PheseEndFunc(0);
+			}
+		}
+	}
+
 	// フェーズ終了時限定処理
 	if (CanPhaseEnd()) {
 		m_WaitTimer = 0;

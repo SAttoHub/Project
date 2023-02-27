@@ -1,8 +1,12 @@
 #pragma once
 #include "Card.h"
 
+class Enemy;
+
 class NormalAttackCard : public Card {
 
+	int Timer = 0;
+	Enemy* Pen;
 public:
 	// コンストラクタ
 	NormalAttackCard();

@@ -89,6 +89,7 @@ public:
 	//void LineDrawAll();
 	void GraphDrawAll();
 	void BackGraphDrawAll();
+	void BloomGraphDrawAll();
 	//void LineDrawAll();
 	void Draw();
 	void BackDraw();
@@ -99,6 +100,8 @@ public:
 	void DrawGraph(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f }, bool Draw3D = false);
 	void DrawGraphBack(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void DrawGraphBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f }, bool Draw3D = false);
+	void DrawGraphBloom(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
+	void DrawGraphBloom(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f }, bool Draw3D = false);
 	//void DrawLine(XMFLOAT2 pos1, XMFLOAT2 pos2, XMFLOAT4 color);
 	//void DrawLine(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color);
 	//void DrawGrid(XMFLOAT3 pos1, XMFLOAT3 pos2, float interval, XMFLOAT4 color);

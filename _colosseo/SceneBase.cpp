@@ -1,18 +1,22 @@
 #include "SceneBase.h"
 
-void SceneBase::FadeStart(int _Time)
+void SceneBase::FadeStart(int _Time, bool _isSceneChange)
 {
 	if (!m_isOut) {
 		m_isOut = true;
+		m_isIn = false;
+		m_isSceneChange = _isSceneChange;
 		m_Timer = 0;
 		m_EndTimer = _Time;
 	}
 }
 
-void SceneBase::FadeInStart(int _Time)
+void SceneBase::FadeInStart(int _Time, bool _isSceneChange)
 {
 	if (!m_isIn) {
 		m_isIn = true;
+		m_isOut = false;
+		m_isSceneChange = _isSceneChange;
 		m_Timer = 0;
 		m_EndTimer = _Time;
 	}
@@ -25,7 +29,9 @@ void SceneBase::SceneTimeUpdate()
 			m_Timer++;
 		}
 		else {
-			m_IsNext = true;
+			if (m_isSceneChange) {
+				m_IsNext = true;
+			}
 			m_isOut = false;
 			m_Timer = 0;
 		}

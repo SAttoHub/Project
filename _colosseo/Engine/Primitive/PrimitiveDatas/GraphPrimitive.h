@@ -20,4 +20,5 @@ public:
 	bool Active;
 	int TextureNumber;
 	bool isBack;
+	bool isBloom;
 };

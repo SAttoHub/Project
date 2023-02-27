@@ -15,6 +15,7 @@ public:
 	enum SCENE_ID {
 		TITLE,
 		STAGE_SELECT,
+		SHOP,
 		GAME
 	};
 
@@ -26,10 +27,12 @@ protected:
 
 	bool m_isOut;
 	bool m_isIn;
+	// そのフェードでシーン切り替えを行うか
+	bool m_isSceneChange;
 	int m_Timer;
 	int m_EndTimer;
-	void FadeStart(int _Time);
-	void FadeInStart(int _Time);
+	void FadeStart(int _Time, bool _isSceneChange = true);
+	void FadeInStart(int _Time, bool _isSceneChange = true);
 	void SceneTimeUpdate();
 	void FadeDraw();
 public:

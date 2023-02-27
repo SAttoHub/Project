@@ -214,6 +214,74 @@ static void DrawGraphEffColorBack(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumbe
 	Primitive2D::Instance()->DrawGraphBack(pos1, pos2, TextureNumber, color, false);
 }
 #pragma endregion
+
+#pragma region DrawGraphBloom
+
+/// <summary>
+/// スクリーン上に画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+static void DrawGraphBloom(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, XMFLOAT4{ 1.0f,1.0f,1.0f,1.0f });
+}
+
+/// <summary>
+/// スクリーン上に画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+static void DrawGraphBloom(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, XMFLOAT4{ 1.0f,1.0f,1.0f,1.0f }, false);
+}
+
+/// <summary>
+/// スクリーン上にアルファ値を指定して画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+/// <param name="alpha">アルファ値</param>
+static void DrawGraphEffAlphaBloom(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, float alpha) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, XMFLOAT4{ 1.0f,1.0f,1.0f,alpha });
+}
+
+/// <summary>
+/// スクリーン上にアルファ値を指定して画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+/// <param name="alpha">アルファ値</param>
+static void DrawGraphEffAlphaBloom(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, float alpha) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, XMFLOAT4{ 1.0f,1.0f,1.0f,alpha }, false);
+}
+
+/// <summary>
+/// スクリーン上に色影響値を指定して画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+/// <param name="color">影響させる色</param>
+static void DrawGraphEffColorBloom(XMFLOAT2 pos1, XMFLOAT2 pos2, int TextureNumber, XMFLOAT4 color) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, color);
+}
+
+/// <summary>
+/// スクリーン上に色影響値を指定して画像付きの板ポリを描画する
+/// </summary>
+/// <param name="pos1">基準となる頂点座標１</param>
+/// <param name="pos2">基準となる頂点座標２</param>
+/// <param name="TextureNumber">画像ハンドル</param>
+/// <param name="color">影響させる色</param>
+static void DrawGraphEffColorBloom(XMFLOAT3 pos1, XMFLOAT3 pos2, int TextureNumber, XMFLOAT4 color) {
+	Primitive2D::Instance()->DrawGraphBloom(pos1, pos2, TextureNumber, color, false);
+}
+#pragma endregion
+
 #pragma endregion
 
 #pragma region 3D
